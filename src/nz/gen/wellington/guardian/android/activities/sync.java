@@ -11,6 +11,7 @@ import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -52,15 +53,19 @@ public class sync extends Activity implements OnClickListener {
 		switch (src.getId()) {
 		case R.id.buttonStart:
 			Log.d(TAG, "Starting content update service service");
-			TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(getBaseContext());
+			TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();
 			
 			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this);
 			articleDAO.evictSections();
 			List<Section> sections = articleDAO.getSections();
-			for (Section section : sections) {
-				Log.i(TAG, "Injecting section into update queue: " + section.getName());
-				taskQueue.addTask(new UpdateSectionArticlesTask(articleDAO, section));
+			if (sections != null) {
+				for (Section section : sections) {
+					Log.i(TAG, "Injecting section into update queue: " + section.getName());
+					taskQueue.addTask(new UpdateSectionArticlesTask(articleDAO, section));
+				}
 			}
+			
+			startService(new Intent(this, ContentUpdateService.class));			
 			break;
 		}
 		updateStatus();
@@ -68,7 +73,7 @@ public class sync extends Activity implements OnClickListener {
 
 	
 	public void updateStatus() {
-		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(getBaseContext());		
+		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();		
 		
 		TextView status = (TextView) findViewById(R.id.Status);		
 		status.setText(Integer.toString(taskQueue.getSize()) + " article sets to load");

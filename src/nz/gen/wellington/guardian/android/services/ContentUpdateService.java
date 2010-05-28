@@ -1,14 +1,8 @@
 package nz.gen.wellington.guardian.android.services;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.sync;
-import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
-import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -26,73 +20,75 @@ public class ContentUpdateService extends Service {
 
     private NotificationManager notificationManager;
     
-    private LinkedList<Runnable> tasks;
     private Thread thread;
+    
     private boolean running;
+    private boolean inBatch;
+
+    private TaskQueue taskQueue;
     private Runnable internalRunnable;
-    
-    
-    private class InternalRunnable implements Runnable {
-    	public void run() {
-	    	 internalRun();
-	     }
-    }
+
+   
     
     @Override
     public void onCreate() {
     	notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
     	Log.i(TAG, "Started content update service");
 
-    	tasks = new LinkedList<Runnable>();
+    	taskQueue = ArticleDAOFactory.getTaskQueue();
     	internalRunnable = new InternalRunnable();
-    	
-    	if (!running) {
-   	       thread = new Thread(internalRunnable);
-   	       thread.setDaemon(true);
-   	       running = true;
-   	       thread.start();
-   	   	}   	
+
+    	 inBatch = false;
+    	 if (!running) {
+			   thread = new Thread(internalRunnable);
+			   thread.setDaemon(true);
+			   running = true;
+			   thread.start();
+		   }    	
     }
     
+    private class InternalRunnable implements Runnable {
+    	public void run() {
+    		internalRun();
+    	}
+    }    
     
     private void internalRun() {
     	while(running) {
-	       Runnable task = getNextTask();
-	       try {
-	         task.run();
-	       } catch (Throwable t) {
-	       }
-    	}
+    		Runnable task = getNextTask();
+    		task.run();
+    	} 	
     }
+ 
     
-	
-    
-    public void stop() {
-	     running = false;
-	   }
-	 
-	  public void addTask(Runnable task) {
-	     synchronized(tasks) {
-	         tasks.addFirst(task);
-	         tasks.notify(); // notify any waiting threads
-	     }
-	   }
-	  
-	   private Runnable getNextTask() {
+    private Runnable getNextTask() {
 		   Log.i(TAG, "Getting next task");
-	     synchronized(tasks) {
-	       if (tasks.isEmpty()) {
+		   if (taskQueue.getSize() == 0 && !inBatch) {
+			   inBatch = true;
+		   }
+		   synchronized(taskQueue) {
+	       if (taskQueue.isEmpty()) {
+	    	   if (inBatch) {
+	    		   sendNotification(38);	// TODO
+	    		   inBatch = false;
+	    	   }
 	         try {
-	           tasks.wait();
+	  		   Log.i(TAG, "Waiting for next task");
+	           taskQueue.wait();
 	         } catch (InterruptedException e) {
 	           stop();
 	         }
 	       }
-	       return tasks.removeLast();
-	     }
-	   }
+	       return taskQueue.removeLast();
+		   }
+    }
 	 
 	   
+	private void stop() {
+		//running = false;
+	}
+
+
 	@Override
 	public void onDestroy() {
 		Log.i(TAG, "Stopping content update service");
@@ -100,38 +96,12 @@ public class ContentUpdateService extends Service {
 		super.onDestroy();
 	}
 
+	
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
+	}
 		
-	// TODO needs to garbage collect author and tags pages.
-	private void reloadAll() {
-		while (true) {
-			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this);
-			Log.i(TAG, "Refetching Top Stories");
-			articleDAO.evictSections();
-			List<Section> sections = articleDAO.getSections();
-			
-			int sectionCount = 0;
-			for (Section section : sections) {
-				articleDAO.evictArticleSet(new SectionArticleSet(section));
-				Log.i(TAG, "Fetching section articles: " + section.getName());
-				sectionCount = sectionCount + 1;
-				articleDAO.getSectionItems(section);
-			}		
-			Log.i(TAG, "Done");
-			sendNotification(sectionCount);
-			
-			sleepForMinutes(10);	// TODO push to a preferences.
-		}
-	}
-
-
-	private void sleepForMinutes(int minutes) {
-		try {
-			Thread.sleep(1000 * 60 * minutes);
-		} catch (InterruptedException e) {
-			Log.w(TAG, "Interrupted sleep");
-		}
-	}
-
 
 	private void sendNotification(int sectionCount) {		
 		int icon = R.drawable.notification_icon;	// TODO resize icon
@@ -151,10 +121,6 @@ public class ContentUpdateService extends Service {
 	}
 
 
-	@Override
-	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	
 }
