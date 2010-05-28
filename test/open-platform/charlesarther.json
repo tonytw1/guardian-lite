@@ -1,0 +1,824 @@
+{
+  "response":{
+    "status":"ok",
+    "userTier":"approved",
+    "total":1898,
+    "startIndex":1,
+    "pageSize":10,
+    "currentPage":1,
+    "pages":190,
+    "orderBy":"newest",
+    "results":[{
+      "id":"technology/blog/2010/may/24/twitter-to-block-paid-tweets-api",
+      "sectionId":"technology",
+      "sectionName":"Technology",
+      "webPublicationDate":"2010-05-24T17:54:40+01:00",
+      "webTitle":"Twitter says it will block 'paid tweets' pushed into timelines via API",
+      "webUrl":"http://www.guardian.co.uk/technology/blog/2010/may/24/twitter-to-block-paid-tweets-api",
+      "apiUrl":"http://content.guardianapis.com/technology/blog/2010/may/24/twitter-to-block-paid-tweets-api",
+      "fields":{
+        "headline":"Twitter says it will block 'paid tweets' pushed into timelines via API",
+        "body":"<p><a href=\"http://www.flickr.com/photos/29145102@N00/1309983368\"><br /><img src=\"http://farm2.static.flickr.com/1352/1309983368_1123f0e661.jpg\" alt=\"Wings of Mortality by Cyron.\" width=\"460\" /></a><br /><em>Dead magpie. Will the Twitter version follow? Photo by <a href=\"http://flickr.com/photos/cyron/\">Cyron</a> on Flickr. <a href=\"http://creativecommons.org/licenses/by/2.0/deed.en\">Some rights reserved</a></em></p><p>Twitter is culling would-be advertising platforms that try to jump on its popularity by tweeting advertising messages via particular users.</p><p>In a <a href=\"http://blog.twitter.com/2010/05/twitter-platform.html\">posting to its company blog today</a>, the company says (after a bit of shilly-shallying around on how important everyone has told it that clarity is; as though many companies get people saying \"What we'd really like is for your strategy to be a lot more confusing, with products that have no rhyme or reason\") that </p><blockquote><p>\"It is critical that the core experience of real-time introductions and information is protected for the user and with an eye toward long-term success for all advertisers, users and the Twitter ecosystem.\"</p></blockquote><p>Which means that... </p><blockquote><p>\"For this reason, aside from Promoted Tweets, we will not allow any third party to inject paid tweets into a timeline on any service that leverages the Twitter API. We are updating our Terms of Service to articulate clearly what we mean by this statement, and we encourage you to read the updated API Terms of Service to be released shortly.\"</p></blockquote><p>Nobody however can quite figure out yet which services there are which inject paid tweets <em>via the Twitter API</em>. Now, there are plenty which inject them into timelines of tweets - such as Magpie and Tweetup. What's not clear is whether that means they're doing it via the API.</p><p>It also means that apps which pay for themselves by including adverts which clearly aren't tweets (such as Iconfactory's Twitterrific) aren't affected; those aren't injected via the API, and they're not appearing as tweets.</p><p>So could it be Magpie? <a href=\"http://be-a-magpie.com/en/\">Magpie</a> portrays itself as a simple way to get your ad out there on Twitter: </p><blockquote><p>\"Advertising on Twitter with Magpie is easy. Within a few steps you can have your campaign up and running. Once you have identified the opportunity simply propose a message, identify the conversation you want to join, decide how much you want to spend and then fund your campaign. We then select relevant twitterers and invite them to participate.\"</p></blockquote><p>The question is whether sponsored tweets like that will have the boom lowered. Quite how Twitter is going to identify them is going to be interesting to watch, but it's clear that the company has now decided that it should be the one controlling where the ad revenues flow, and that if people want to advertise in actual tweets, they will have to go through them <a href=\"http://www.guardian.co.uk/technology/2010/apr/13/twitter-advertising-google\">using its \"Promoted Tweets\" feature</a>.</p><p>The analyst Michael Gartenberg says that <a href=\"http://www.tweetup.com/\">Tweetup</a> will also be a casualty; it lets advertisers buy search keywords. As <a href=\"http://www.fastcompany.com/1616728/twitter-ad-promoted-posts-advertising-twidroid-client-mobile-tweetup-seesmic-echofon\">Fast Company explained</a> when Promoted Tweets appeared, </p><blockquote><p>\"The advertising enters the picture when a lesser-known but still credible source wants to secure more followers. That could be a small company trying to spread word of mouth, a young writer or critic, or simply someone like me who feels his insights on The West Wing are as good (better than, really) any \"expert\" out there. That person pays a small fee, based on number of views, and will get a bump into the expert search results. Not necessarily stuck at the top, either; the money buys increased visibility, it doesn't buy intrusion.\"</p></blockquote><p>But now it looks like Twitter isn't going to allow anyone to do that. Again, the question is quite how it will filter out those added tweets - how it will distinguish from a group of people deciding it's #nickcleggsfault spontaneously and a group deciding that product X is <em>super tasty!</em> without human intervention (because humans don't scale, and Twitter must to make money). </p><p>Perhaps those will be revealed with the new terms of service. Between Facebook promising to update its privacy/publicity settings, and Twitter locking out the advertising platforms, it's an interesting time for the big names.</p><img alt='' src='http://hits.guardian.co.uk/b/ss/guardiangu-apidev/1/H.20.3/98867?ns=guardian&pageName=Twitter+says+it+will+block+%27paid+tweets%27+pushed+into+timelines+via+API+Article+1403448&ch=Technology&c2=&c4=Twitter+%28Technology%29%2CTechnology+blog%2CCharles+Arthur%2CTechnology%2CPDA+blog%2CMedia%2CArticle+%28Content+type%29&c3=guardian.co.uk&c6=Charles+Arthur&c7=10-May-24&c8=1403448&c9=Article' width='1' height='1' /><div class=\"gu_advert\">\n            <a href=\"http://oas.guardian.co.uk/RealMedia/ads/click_nx.ads/guardianapis.com/technology/oas.html/@Bottom\">\n              <img src=\"http://oas.guardian.co.uk/RealMedia/ads/adstream_nx.ads/guardianapis.com/technology/oas.html/@Bottom\" alt=\"Ads by The Guardian\"></img>\n            </a>\n          </div><!-- Guardian Watermark: technology/blog/2010/may/24/twitter-to-block-paid-tweets-api|2010-05-24T22:56:07+01:00|7e4b91afee78a1632a6af4b39e2fcd8b6bf290f3 -->",
+        "trailText":"<p>The microblogging service is beginning to flex its muscles against advertising platforms that use it - but it's not clear who its first targets are</p>",
+        "shortUrl":"http://gu.com/p/2h84f",
+        "standfirst":"The microblogging service is beginning to flex its muscles against advertising platforms that use it - but it's not clear who its first targets are",
+        "byline":"Charles Arthur",
+        "publication":"guardian.co.uk"
+      },
+      "tags":[{
+        "id":"technology/twitter",
+        "type":"keyword",
+        "webTitle":"Twitter",
+        "webUrl":"http://www.guardian.co.uk/technology/twitter",
+        "apiUrl":"http://content.guardianapis.com/technology/twitter",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/blog",
+        "type":"blog",
+        "webTitle":"Technology blog",
+        "webUrl":"http://www.guardian.co.uk/technology/blog",
+        "apiUrl":"http://content.guardianapis.com/technology/blog",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"profile/charlesarthur",
+        "type":"contributor",
+        "webTitle":"Charles Arthur",
+        "webUrl":"http://www.guardian.co.uk/profile/charlesarthur",
+        "apiUrl":"http://content.guardianapis.com/profile/charlesarthur"
+      },{
+        "id":"technology/technology",
+        "type":"keyword",
+        "webTitle":"Technology",
+        "webUrl":"http://www.guardian.co.uk/technology/technology",
+        "apiUrl":"http://content.guardianapis.com/technology/technology",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"media/pda",
+        "type":"blog",
+        "webTitle":"PDA",
+        "webUrl":"http://www.guardian.co.uk/media/pda",
+        "apiUrl":"http://content.guardianapis.com/media/pda",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"media/media",
+        "type":"keyword",
+        "webTitle":"Media",
+        "webUrl":"http://www.guardian.co.uk/media/media",
+        "apiUrl":"http://content.guardianapis.com/media/media",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"type/article",
+        "type":"type",
+        "webTitle":"Article",
+        "webUrl":"http://www.guardian.co.uk/articles",
+        "apiUrl":"http://content.guardianapis.com/articles"
+      }]
+    },{
+      "id":"technology/2010/may/24/facebook-revise-privacy-zuckerberg",
+      "sectionId":"technology",
+      "sectionName":"Technology",
+      "webPublicationDate":"2010-05-24T15:01:12+01:00",
+      "webTitle":"Facebook to tweak privacy settings, says Zuckerberg",
+      "webUrl":"http://www.guardian.co.uk/technology/2010/may/24/facebook-revise-privacy-zuckerberg",
+      "apiUrl":"http://content.guardianapis.com/technology/2010/may/24/facebook-revise-privacy-zuckerberg",
+      "fields":{
+        "headline":"Facebook to tweak privacy settings, says Zuckerberg",
+        "body":"<p>Facebook is to revise its privacy settings within weeks to make it simpler for people to keep their information private, according to Mark Zuckerberg, its founder and chief executive of the giant social network.</p><p>Acknowledging a growing level of irritation among the site's 450m users, Zuckerberg said: \"Simply put, many of you thought our controls [for determining who could see information about you] were too complex. Our intention was to give you lots of granular controls; but that may not have been what many of you wanted. We just missed the mark.\"</p><p>But Zuckerberg insisted that concerns that Facebook is selling personal data to advertisers were misplaced. \"We do not give advertisers access to your personal information,\" he said. \"We do not and never will sell any of your information to anyone.\"</p><p>Writing <a href=\"http://www.washingtonpost.com/wp-dyn/content/article/2010/05/23/AR2010052303828.html\" title=\"in the Washington Post\">in the Washington Post</a>, the 26-year-old insisted that Facebook will \"keep listening\" to users' concerns.</p><p>However, he stopped short of offering users the choice of opting in to having all their information spread throughout the social network and the internet \u2013 which may mean that the new settings will not satisfy users after all.</p><p>Facebook makes money principally by selling advertising space on users' pages; the adverts can be tailored to the interests or experiences of the users without the advertiser knowing who it is being sent to. Thus someone who says their favourite band is U2 might see adverts for a new album or concert tour by the band, though the advertiser will not have known precisely who was targeted.</p><p>A rising number of people have expressed dissatisfaction with the social network's ever-changing privacy policy, which has grown in complexity since the site began in 2004 \u2013 and has also seen the default settings for sharing information go from \"friends only\" to \"the entire internet\" for almost everything that people put on it.</p><p>The ease with which people can find out anything about people who are unaware of the settings has been demonstrated by a site which uses Facebook's new connectivity to its underlying database, launched on 21 April.</p><p><a href=\"http://youropenbook.org\" title=\"Youropenbook\">Youropenbook</a>, which has the tagline \"Facebook helps you connect and share with the people in your life. Whether you want to or not\", says that it wants Facebook to restore the privacy of information \"so that this website and others like it no longer work\".</p><p>The site's creators say there are two fundamental problems with Facebook now: \"First, they do not do a good job of indicating how public each piece of information you share on the site will be. Second, <a href=\"http://mattmckeon.com/facebook-privacy/\" title=\"they change the rules far too often\">they change the rules far too often</a>. If you understood Facebook's privacy settings two years ago (or even six months ago), that information would be worse than useless with today's bewildering settings.\"</p><p>Others think it is time to give up Facebook: one group has come up with a \"Quit Facebook Day\" idea, urging people to delete their accounts on 31 May.</p><p>Zuckerberg insists in the Washington Post article that Facebook will always be a free service \u2013 which suggests that it will have to continue to rely on selling advertising space targeted at users' interests and activities. That, in turn, means that at least some of the user information must be shared with advertisers, even in anonymised form. And that, in turn, must mean a limit on some of the limits that users can put on sharing their data.</p><p>He does not retreat in the article from his frequently-expressed view that sharing information is beneficial. \"Six years ago, we built Facebook around a few simple ideas,\" he writes. \"People want to share and stay connected with their friends and the people around them. If we give people control over what they share, they will want to share more. If people share more, the world will become more open and connected. And a world that's more open and connected is a better world. These are still our core principles today.\"</p><p>No date has been put on the release of the new privacy settings.</p><p>\u2022 <a href=\"http://www.guardian.co.uk/technology/2010/may/19/facebook-privacy-settings-control\" title=\"How to control your Facebook privacy settings\">How to control your Facebook privacy settings</a> \u2013 from sharing everything to locking down your photos to deleting your account.</p><img alt='' src='http://hits.guardian.co.uk/b/ss/guardiangu-apidev/1/H.20.3/98867?ns=guardian&pageName=Facebook+to+tweak+privacy+settings%2C+says+Zuckerberg+Article+1403291&ch=Technology&c2=&c4=Facebook%2CTechnology%2CMark+Zuckerberg+%28Technology%29%2CCharles+Arthur%2CInternet%2CPrivacy+and+the+net%2CSocial+networking%2CMedia%2CDigital+media%2CArticle+%28Content+type%29&c3=guardian.co.uk&c6=Charles+Arthur%2C+technology+editor&c7=10-May-24&c8=1403291&c9=Article' width='1' height='1' /><div class=\"gu_advert\">\n            <a href=\"http://oas.guardian.co.uk/RealMedia/ads/click_nx.ads/guardianapis.com/technology/oas.html/@Bottom\">\n              <img src=\"http://oas.guardian.co.uk/RealMedia/ads/adstream_nx.ads/guardianapis.com/technology/oas.html/@Bottom\" alt=\"Ads by The Guardian\"></img>\n            </a>\n          </div><!-- Guardian Watermark: technology/2010/may/24/facebook-revise-privacy-zuckerberg|2010-05-24T22:56:07+01:00|ccbaac0de13fe14a7b35586d93066343f2b80643 -->",
+        "trailText":"<p>The social networking website 'missed the mark' on privacy controls, says founder Mark Zuckerberg</p>",
+        "shortUrl":"http://gu.com/p/2h7pk",
+        "standfirst":"The social networking website 'missed the mark' on privacy controls, says founder Mark Zuckerberg",
+        "thumbnail":"http://static.guim.co.uk/sys-images/Technology/Pix/pictures/2010/5/24/1274709609092/Facebook-Zuckerberg-002.jpg",
+        "byline":"Charles Arthur, technology editor",
+        "publication":"guardian.co.uk"
+      },
+      "tags":[{
+        "id":"technology/facebook",
+        "type":"keyword",
+        "webTitle":"Facebook",
+        "webUrl":"http://www.guardian.co.uk/technology/facebook",
+        "apiUrl":"http://content.guardianapis.com/technology/facebook",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/technology",
+        "type":"keyword",
+        "webTitle":"Technology",
+        "webUrl":"http://www.guardian.co.uk/technology/technology",
+        "apiUrl":"http://content.guardianapis.com/technology/technology",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/mark-zuckerberg",
+        "type":"keyword",
+        "webTitle":"Mark Zuckerberg",
+        "webUrl":"http://www.guardian.co.uk/technology/mark-zuckerberg",
+        "apiUrl":"http://content.guardianapis.com/technology/mark-zuckerberg",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"profile/charlesarthur",
+        "type":"contributor",
+        "webTitle":"Charles Arthur",
+        "webUrl":"http://www.guardian.co.uk/profile/charlesarthur",
+        "apiUrl":"http://content.guardianapis.com/profile/charlesarthur"
+      },{
+        "id":"technology/internet",
+        "type":"keyword",
+        "webTitle":"Internet",
+        "webUrl":"http://www.guardian.co.uk/technology/internet",
+        "apiUrl":"http://content.guardianapis.com/technology/internet",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/privacy-and-the-net",
+        "type":"keyword",
+        "webTitle":"Privacy and the net",
+        "webUrl":"http://www.guardian.co.uk/technology/privacy-and-the-net",
+        "apiUrl":"http://content.guardianapis.com/technology/privacy-and-the-net",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"media/socialnetworking",
+        "type":"keyword",
+        "webTitle":"Social networking",
+        "webUrl":"http://www.guardian.co.uk/media/socialnetworking",
+        "apiUrl":"http://content.guardianapis.com/media/socialnetworking",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"media/media",
+        "type":"keyword",
+        "webTitle":"Media",
+        "webUrl":"http://www.guardian.co.uk/media/media",
+        "apiUrl":"http://content.guardianapis.com/media/media",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"media/digital-media",
+        "type":"keyword",
+        "webTitle":"Digital media",
+        "webUrl":"http://www.guardian.co.uk/media/digital-media",
+        "apiUrl":"http://content.guardianapis.com/media/digital-media",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"type/article",
+        "type":"type",
+        "webTitle":"Article",
+        "webUrl":"http://www.guardian.co.uk/articles",
+        "apiUrl":"http://content.guardianapis.com/articles"
+      }]
+    },{
+      "id":"technology/2010/may/24/becta-government-closure",
+      "sectionId":"technology",
+      "sectionName":"Technology",
+      "webPublicationDate":"2010-05-24T14:37:24+01:00",
+      "webTitle":"Government to close Becta",
+      "webUrl":"http://www.guardian.co.uk/technology/2010/may/24/becta-government-closure",
+      "apiUrl":"http://content.guardianapis.com/technology/2010/may/24/becta-government-closure",
+      "fields":{
+        "headline":"Government to close Becta",
+        "body":"<p>The Treasury's decision to close the education ICT agency <a href=\"http://www.becta.org.uk/\" title=\"Becta\">Becta</a> by November, cutting £80m from this financial year's government budget, has dismayed its 240 staff \u2013 and some teachers who found its work especially useful because it provided a central platform for standardising on technology.</p><p>The move has been made as part of the government's <a href=\"http://www.guardian.co.uk/news/datablog/2010/may/24/coalition-government-public-finance\" title=\"wider programme of cuts worth £6.2bn\">wider programme of cuts worth £6.2bn</a> for 2010-11.</p><p>\"Naturally we are very disappointed at the government's decision,\" said Becta's chairman, Graham Badman, and chief executive, Stephen Crowne. \"Becta is a very effective organisation with an international reputation, delivering valuable services to schools, colleges and children.</p><p>\"Our procurement arrangements save the schools and colleges many times more than Becta costs to run. Our Home Access programme will give laptops and broadband to over 200,000 of the poorest children. Our top priorities now are to make sure we have an orderly and fair process for staff, and that as far as possible schools, colleges and children continue to benefit from the savings and support that Becta has provided.\"</p><p>The organisation employs 240 staff and 120 contractors. On its site, Becta says that £1.5bn has been spent through its procurement agreements since 2002, and that this has saved the education system £223m \u2013 which would be an average of about £28m per year. It also says it has achieved cost savings of £55m for educational institutions and providers including schools, local authorities and the skills sector in the past year alone.</p><p>Early reactions were that Becta has been useful, and that closing it will lead to losses in expertise which will have to be made up by extra spending elsewhere. Paul Wareing, now an iPhone developer but for eight years a Becta employee, mourned its passing. He cited achievements such as the creation of the National Grid for Learning, launched in 1998, which provided a gateway to online educational resources; the Self-Review Framework, which let schools assess their own use of ICT; and Laptops for Teachers, which got teachers who might have been unfamiliar with computers to use them.</p><p>\"It was the envy of the world,\" <a href=\"http://twitter.com/paulwareing/status/14608089964\" title=\"Wareing wrote on Twitter\">Wareing wrote on Twitter</a>. \"The cost of its loss will be much more than the saving of its cost.\" He pointed to its initiatives such as work-based learning, offender learning, adult and community lending as well as schools and home access which will be ended \u2013 or shifted to other, less prepared agencies.</p><p>Fred Garnett, another Becta supporter, <a href=\"http://twitter.com/fredgarnett/status/14613133380\" title=\"commented\">commented</a>: \"[The] Becta closure won't save £62m &amp; must hit Home Access &amp; inclusion initiatives. The use of inaccurate term quango indicates sleazy politics.\"</p><p>Becta was also seen as having played an important role in driving down the cost of computers to schools. In 2005 it produced a paper suggesting that schools could halve their IT bills by adopting open source software rather than Microsoft's Windows and other applications. In 2008, it suggested that schools should adopt more open source software \u2013 which led to Microsoft dropping some of its costs for licensing software to schools.</p><p>Other teachers contacted the Guardian to cite Becta's ICT Baseline, which let teachers rate their ICT provision, as an example of good practice put in place by Becta.</p><p>The question now is whether the closure will indeed reduce overall costs of public sector spending.</p><p>Becta, formerly known as the British Educational and Communications Technology Association, was set up in 1988 to promote the effective use of ICT in education. It has admitted that, although schools are being kitted out with the latest technology, only one in five is using it effectively.</p><p>The agency already faced a budget cut of almost half its £112.5m annual spend over the next two years. The money was provided by the former Department for Children Schools and Families.</p><p>The <a href=\"http://www.hm-treasury.gov.uk/d/press_04_10.pdf\" title=\"official Treasury document on the cuts\">official Treasury document on the cuts</a> says that they aim to \"cut Whitehall waste and protect schools spending\".</p><p>Becta has been promoting Home Access, the former Labour government's scheme to bridge the \"digital divide\" by ensuring all children have a computer at home. It has encouraged English secondary schools to integrate the online reports into virtual learning environments so parents can see what their children are doing in the classroom.</p><p>It has also been promoting the adoption of ICT to enable people studying for diplomas in vocational subjects to move between schools, colleges and work placements.</p><img alt='' src='http://hits.guardian.co.uk/b/ss/guardiangu-apidev/1/H.20.3/98867?ns=guardian&pageName=Government+to+close+Becta+Article+1403277&ch=Technology&c2=&c4=Computing+%28Technology%29%2CTechnology%2CCharles+Arthur%2CEducation%2CUK+news%2CPolitics%2CArticle+%28Content+type%29&c3=guardian.co.uk&c6=Charles+Arthur%2C+technology+editor&c7=10-May-24&c8=1403277&c9=Article' width='1' height='1' /><div class=\"gu_advert\">\n            <a href=\"http://oas.guardian.co.uk/RealMedia/ads/click_nx.ads/guardianapis.com/technology/oas.html/@Bottom\">\n              <img src=\"http://oas.guardian.co.uk/RealMedia/ads/adstream_nx.ads/guardianapis.com/technology/oas.html/@Bottom\" alt=\"Ads by The Guardian\"></img>\n            </a>\n          </div><!-- Guardian Watermark: technology/2010/may/24/becta-government-closure|2010-05-24T22:56:07+01:00|4c213f01210bc493f87a0e65f40437e890337d0a -->",
+        "trailText":"<p>Closure of school IT qango set to save £80m, but 240 staff to lose jobs</p>",
+        "shortUrl":"http://gu.com/p/2h7p6",
+        "standfirst":"Closure of school IT qango set to save £80m, but 240 staff to lose jobs",
+        "byline":"Charles Arthur, technology editor",
+        "publication":"guardian.co.uk"
+      },
+      "tags":[{
+        "id":"technology/computing",
+        "type":"keyword",
+        "webTitle":"Computing",
+        "webUrl":"http://www.guardian.co.uk/technology/computing",
+        "apiUrl":"http://content.guardianapis.com/technology/computing",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/technology",
+        "type":"keyword",
+        "webTitle":"Technology",
+        "webUrl":"http://www.guardian.co.uk/technology/technology",
+        "apiUrl":"http://content.guardianapis.com/technology/technology",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"profile/charlesarthur",
+        "type":"contributor",
+        "webTitle":"Charles Arthur",
+        "webUrl":"http://www.guardian.co.uk/profile/charlesarthur",
+        "apiUrl":"http://content.guardianapis.com/profile/charlesarthur"
+      },{
+        "id":"education/education",
+        "type":"keyword",
+        "webTitle":"Education",
+        "webUrl":"http://www.guardian.co.uk/education/education",
+        "apiUrl":"http://content.guardianapis.com/education/education",
+        "sectionId":"education",
+        "sectionName":"Education"
+      },{
+        "id":"uk/uk",
+        "type":"keyword",
+        "webTitle":"UK news",
+        "webUrl":"http://www.guardian.co.uk/uk/uk",
+        "apiUrl":"http://content.guardianapis.com/uk/uk",
+        "sectionId":"uk",
+        "sectionName":"UK news"
+      },{
+        "id":"politics/politics",
+        "type":"keyword",
+        "webTitle":"Politics",
+        "webUrl":"http://www.guardian.co.uk/politics/politics",
+        "apiUrl":"http://content.guardianapis.com/politics/politics",
+        "sectionId":"politics",
+        "sectionName":"Politics"
+      },{
+        "id":"type/article",
+        "type":"type",
+        "webTitle":"Article",
+        "webUrl":"http://www.guardian.co.uk/articles",
+        "apiUrl":"http://content.guardianapis.com/articles"
+      }]
+    },{
+      "id":"technology/blog/2010/may/24/twitter-influencers-visualisation",
+      "sectionId":"technology",
+      "sectionName":"Technology",
+      "webPublicationDate":"2010-05-24T11:35:27+01:00",
+      "webTitle":"The big bang visualisation of the top 140 Twitter influencers",
+      "webUrl":"http://www.guardian.co.uk/technology/blog/2010/may/24/twitter-influencers-visualisation",
+      "apiUrl":"http://content.guardianapis.com/technology/blog/2010/may/24/twitter-influencers-visualisation",
+      "fields":{
+        "headline":"The big bang visualisation of the top 140 Twitter influencers",
+        "body":"<p>Back at the dawn of microblogging time, when Twitter had only just started, there were only three users who mattered: Biz Stone, Evan Williams and Jack Dorsey - the three key people behind the service. Now there are more than a hundred million users - but the key influencers in this huge network can be quite easily identified.</p><p>Now the team at Information Architects have decided to come up with <a href=\"http://informationarchitects.jp/c140/\">a neat Twitter visualisation</a>, akin to <a href=\"http://www.bl.uk/learning/histcitizen/fpage/science/science.html\">The Independent's classic 1992 \"How the universe began\" graphic</a>, of the top 140 Twitter influencers, \"sorted by #name #handle #category #influence #activity\" and by when they joined the service (which determines how close to the centre they are).</p><p>The size of the blob indicates how many followers; \"influence\" is measured by... actually, they don't explain, though possibly it's using something like the <a href=\"http://twinfluence.com/about.php\">Twiinfluence algorithm</a>.</p><p>Interesting to see who's in there: Stone and Williams, of course, but also latecomer <a href=\"http://twitter.com/marissamayer\">Marissa Mayer</a> (VP of search product and user experience at Google), who only joined in July 2009, and <a href=\"http://twitter.com/ericschmidt\">Eric Schmidt</a>, CEO of Google (December 2009) - and of course there's always <a href=\"http://twitter.com/billgates\">Bill Gates</a>, who didn't get on board until January 2010. And of course <a href=\"http://www.twitter.com/stephenfry\">Stephen Fry</a> and indeed <a href=\"http://www.twitter.com/wossy\">Jonathan Ross</a>.</p><p>You can get the <a href=\"http://informationarchitects.jp/c140_0_9.pdf\">PDF (1.1MB)</a> or buy it from them for $99 because, as they remark, \"we're convinced that our print is way superior to what you can do with your plotter\". And you will need a plotter - the graphic is 84cm by 119cm.</p><p>We're happy to see that @guardiantech is in there, showing up in something like the place <a href=\"http://www.sslmit.unibo.it/zat/images/cartography/Milky-Way_map_500pc_grid.gif\">where Kappa Velorum would be in the Milky Way</a>. (We've highlighted it below to help.)</p><p>Does this make any difference? Well.. it might do, if this list of the top 140 were made into a list. Anybody up for that, we wonder?</p><img alt='' src='http://hits.guardian.co.uk/b/ss/guardiangu-apidev/1/H.20.3/98867?ns=guardian&pageName=The+big+bang+visualisation+of+the+top+140+Twitter+influencers+Article+1403193&ch=Technology&c2=&c4=Twitter+%28Technology%29%2CTechnology+blog%2CTechnology%2CBlogpost+%28Tone%29%2CCharles+Arthur%2CPDA+blog%2CSocial+networking%2CDigital+media%2CMedia%2CArticle+%28Content+type%29&c3=guardian.co.uk&c6=Charles+Arthur&c7=10-May-24&c8=1403193&c9=Article' width='1' height='1' /><div class=\"gu_advert\">\n            <a href=\"http://oas.guardian.co.uk/RealMedia/ads/click_nx.ads/guardianapis.com/technology/oas.html/@Bottom\">\n              <img src=\"http://oas.guardian.co.uk/RealMedia/ads/adstream_nx.ads/guardianapis.com/technology/oas.html/@Bottom\" alt=\"Ads by The Guardian\"></img>\n            </a>\n          </div><!-- Guardian Watermark: technology/blog/2010/may/24/twitter-influencers-visualisation|2010-05-24T22:56:07+01:00|683fe58df96f073fd681292b906075f7044d60a7 -->",
+        "trailText":"<p>The Information Architects team have come up with a way of looking at Twitter that echoes maps of how the universe began</p>",
+        "shortUrl":"http://gu.com/p/2h7m3",
+        "standfirst":"The Information Architects team have come up with a way of looking at Twitter that echoes maps of how the universe began",
+        "thumbnail":"http://static.guim.co.uk/sys-images/Media/Pix/pictures/2010/5/24/1274698915906/Twitters-big-bang-002.jpg",
+        "byline":"Charles Arthur",
+        "publication":"guardian.co.uk"
+      },
+      "tags":[{
+        "id":"technology/twitter",
+        "type":"keyword",
+        "webTitle":"Twitter",
+        "webUrl":"http://www.guardian.co.uk/technology/twitter",
+        "apiUrl":"http://content.guardianapis.com/technology/twitter",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/blog",
+        "type":"blog",
+        "webTitle":"Technology blog",
+        "webUrl":"http://www.guardian.co.uk/technology/blog",
+        "apiUrl":"http://content.guardianapis.com/technology/blog",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/technology",
+        "type":"keyword",
+        "webTitle":"Technology",
+        "webUrl":"http://www.guardian.co.uk/technology/technology",
+        "apiUrl":"http://content.guardianapis.com/technology/technology",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"tone/blog",
+        "type":"tone",
+        "webTitle":"Blogposts",
+        "webUrl":"http://www.guardian.co.uk/tone/blog",
+        "apiUrl":"http://content.guardianapis.com/tone/blog"
+      },{
+        "id":"profile/charlesarthur",
+        "type":"contributor",
+        "webTitle":"Charles Arthur",
+        "webUrl":"http://www.guardian.co.uk/profile/charlesarthur",
+        "apiUrl":"http://content.guardianapis.com/profile/charlesarthur"
+      },{
+        "id":"media/pda",
+        "type":"blog",
+        "webTitle":"PDA",
+        "webUrl":"http://www.guardian.co.uk/media/pda",
+        "apiUrl":"http://content.guardianapis.com/media/pda",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"media/socialnetworking",
+        "type":"keyword",
+        "webTitle":"Social networking",
+        "webUrl":"http://www.guardian.co.uk/media/socialnetworking",
+        "apiUrl":"http://content.guardianapis.com/media/socialnetworking",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"media/digital-media",
+        "type":"keyword",
+        "webTitle":"Digital media",
+        "webUrl":"http://www.guardian.co.uk/media/digital-media",
+        "apiUrl":"http://content.guardianapis.com/media/digital-media",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"media/media",
+        "type":"keyword",
+        "webTitle":"Media",
+        "webUrl":"http://www.guardian.co.uk/media/media",
+        "apiUrl":"http://content.guardianapis.com/media/media",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"type/article",
+        "type":"type",
+        "webTitle":"Article",
+        "webUrl":"http://www.guardian.co.uk/articles",
+        "apiUrl":"http://content.guardianapis.com/articles"
+      }]
+    },{
+      "id":"technology/blog/2010/may/24/technology-links-newsbucket",
+      "sectionId":"technology",
+      "sectionName":"Technology",
+      "webPublicationDate":"2010-05-24T06:30:00+01:00",
+      "webTitle":"The Technology newsbucket: iPad's halo, getting online, HTML5 crammer, open web and more",
+      "webUrl":"http://www.guardian.co.uk/technology/blog/2010/may/24/technology-links-newsbucket",
+      "apiUrl":"http://content.guardianapis.com/technology/blog/2010/may/24/technology-links-newsbucket",
+      "fields":{
+        "headline":"The Technology newsbucket: iPad's halo, getting online, HTML5 crammer, open web and more",
+        "body":"<p><a href=\"http://www.flickr.com/photos/56966627@N00/4550744375\"><br /><img src=\"http://farm5.static.flickr.com/4059/4550744375_e8907f8848.jpg\" alt=\"www.flickr-1.jpeg by courtneyBolton.\" width=\"460\" /></a><br /><em>Want v Need. Photo by <a href=\"http://flickr.com/photos/courtneybolton/\">courtneyBolton</a> on Flickr. <a href=\"http://creativecommons.org/licenses/by-sa/2.0/deed.en\">Some rights reserved</a></em></p><p>A quick burst of 25 links for you to chew over, as picked by the Technology team</p><p><a href=\"http://www.computerworld.com/s/article/9177090/iPad_halo_effect_pushes_Mac_sales_use_ChangeWave_says\">iPad 'halo' effect pushes Mac sales, use, ChangeWave says &gt;&gt; Computerworld</a><br />Though iPad sales are cannibalizing some Mac sales, \"Our latest [computer buying plans] poll showed a four-point surge for the Mac, the biggest in the last three years. The iPad has a halo effect on the Mac because of all the surrounding publicity about the iPad and the additional floor traffic at Apple's stores.\"</p><p><a href=\"http://raceonline2012.wordpress.com/2010/05/23/letter-to-the-editor-of-the-observer/\">Letter to the Editor of The Observer &gt;&gt; Raceonline2012's Blog</a><br />Martha Lane Fox on the importance of getting everyone online. That's her target for 2012.</p><p><a href=\"http://mindymcadams.com/tojou/2010/tips-for-html5-part-4-new-tags/\">Tips for HTML5, part 4: New tags &gt;&gt; Teaching Online</a><br />How's it going with the HTML5 cramming?</p><p><a href=\"http://googleappengine.blogspot.com/2010/05/microapps-from-guardian-and-google.html\">MicroApps from The Guardian and Google AppEngine - Both ready for business &gt;&gt; Google App Engine blog</a><br />Spot the Daring Fireball T-shirt among the Guardian team thinking <em>really hard</em></p><p><a href=\"http://i.imgur.com/eQVPh.jpg\">That's a lot to Like &gt;&gt; Facebook</a><br />There's no limit on the URL length you can \"Like\" in Facebook. Which can lead to slight problems..</p><p><a href=\"http://www.nytimes.com/2010/05/23/magazine/23FOB-medium-t.html\">The Death of the Open Web &gt;&gt; NYTimes.com</a><br />A widely discussed piece because it captures the zeitgeist (at least for a small number of rich middle-class Americans), even though logically it doesn't make any sense</p><p><a href=\"http://quietbabylon.posterous.com/virginia-heffernan-and-the-exaggerated-death\">Virginia Heffernan and the exaggerated death of the open web &gt;&gt; Quiet Babylonian</a><br />Tim Maly points out some of the basic errors in Virginia Heffernan's \"open web\" essay</p><p><a href=\"http://thewayoftheweb.net/2010/05/the-death-of-the-open-web-has-been-somewhat-exaggerated/\">The death of the Open Web has been somewhat exaggerated &gt;&gt; Way Of The Web</a><br />Another perspective on the NYT Heffernan piece: \"There have been initial sucesses with some applications [for the iPad], but at the same time, many people are reporting that they're increasing using the fast browser to surf the web just as effectively \u2013 if not moreso than many of the lacklustre apps rushed out for launch.\"</p><p><a href=\"http://www.nytimes.com/2010/05/23/technology/23goog.html?pagewanted=all\">Sure, It's Big. But Is That Bad? &gt;&gt; New York Times</a><br />US anti-trust regulators are watching Google...</p><p><a href=\"http://www.huffingtonpost.com/ja-konrath/is-print-dead_b_583959.html\">J.A. Konrath: Is Print Dead? &gt;&gt; Huffington Post</a><br />Funny roundtable at a meeting of Obsolete Anonymous with Print Industry, VHS Tapes, CDs and many more....</p><p><a href=\"http://daringfireball.net/2010/05/post_io_thoughts\">Post-I/O Thoughts &gt;&gt; Daring Fireball</a><br />John Gruber points out that Apple is still syncing devices to PCs. \"Relying upon a PC is ipso facto not 'post-PC', and the challenge for Apple is that they've never demonstrated the sort of expertise needed to do this via the cloud. Over-the-air syncing, backup, and system updates need to be something that 'just happens'.</p><p><a href=\"http://www.adobe.com/devnet/flashplayer/articles/mobile_demos_fp10.1.html\">Flash Player 10.1 prerelease software demos and interviews &gt;&gt; Adobe</a><br />Adobe's Flash Player Developer Center shows 10.1 running on a variety of devices including Android and Palm phones, HP's slate, Dell's Mini 5 tablet...</p><p><a href=\"http://www.friedbeef.com/how-to-check-if-your-gmail-account-has-been-hacked/\">How to Check if Your Gmail Account Has Been Hacked &gt;&gt; FriedBeef's Tech</a><br />Six simple illustrated bits to check....</p><p><a href=\"http://technologizer.com/2010/05/21/encrypted-search-comes-to-google/\">Encrypted Search Comes to Google &gt;&gt; Technologizer</a><br />Simple as adding https: instead of http: to the front of the URL. Surprisingly, it's beta.</p><p><a href=\"http://blog.newsweek.com/blogs/techtonicshifts/archive/2010/05/20/sayonara-iphone-why-i-m-switching-to-android.aspx\">Sayonara, iPhone: Why I'm Switching to Android - Techtonic Shifts Blog &gt;&gt; Newsweek</a><br />Dan Lyons (aka Fake Steve Jobs) watched Google laughing at Apple and joins in by giving the old fruit company a good kicking</p><p><a href=\"http://www.theregister.co.uk/2010/05/21/dell_nhs_pork/\">Dell begs ToryDems to keep NHS IT project &gt;&gt; The Register</a><br />\"Harry Greenspun, Dell's \"chief medical officer\", warned PublicTechnology.net there was a danger the baby was being thrown out with the bath water. He said there was a need to make the technology easier to use and manage, but there were still benefits to be had from increasing computer use in the health service.\"</p><p><a href=\"http://www.dailytech.com/Russian+AntiSpam+Chief+Caught+Spamming/article18423.htm\">Russian Anti-Spam Chief Caught Spamming &gt;&gt; DailyTech</a><br />Accused of doing what it says on the tin.</p><p><a href=\"http://digitaldaily.allthingsd.com/20100521/why-will-google-tv-be-any-different-from-webtv-or-aol-tv-or-msntv-or/\">Why Will Google TV Be Any Different From WebTV? Or AOL TV? Or MSNTV? Or\u2026 &gt;&gt; AllThingsD</a><br />Actually, we're not sure.</p><p><a href=\"http://m.zdnet.com/blog/microsoft/where-in-the-world-is-j-allard/6256\">Where in the world is J Allard? &gt;&gt; ZDNet</a><br />The guy who made the Xbox happen at Microsoft, and the Zune, is apparently on a sabbatical and not expected to return. Your bets on where he'll turn up if that's the case?</p><p><a href=\"http://paidcontent.co.uk/article/419-condems-wont-repeat-uks-digital-economy-act/\">ConDems Won't Repeal UK's Digital Economy Act &gt;&gt; paidContent:UK</a><br />Just in case you actually thought that any incoming government would take the time to go back over legislation which it didn't object to. Look, even the Dangerous Dogs Act is untouched.</p><p><a href=\"http://blogs.adobe.com/flashplatform/2010/05/flash_player_101_on_google_tv.html\">Flash Player 10.1 on Google TV &gt;&gt; Adobe Flash Platform Blog</a><br />A video shows Google TV in action, running Adobe Flash. Question: if it's in the US, how is it showing video from the BBC... unless it's locally cached?</p><p><a href=\"http://www.streamingmedia.com/Articles/Editorial/Featured-Articles/First-Look-H.264-and-VP8-Compared-67266.aspx\">First Look: H.264 and VP8 Compared &gt;&gt; streamingmedia.com</a><br />Quality looks much the same....</p><p><a href=\"http://www.xkcd.org/743/\">Infrastructures &gt;&gt; xkcd</a><br />\"You're probably autistic.\"</p><p><a href=\"http://www.theregister.co.uk/2010/05/21/ibm_usb_malware_snafu/\">IBM hands out malware-stuffed USB at security conference &gt;&gt; The Register</a><br />\"Big Blue does not identify the strain of malware involved in the attack beyond saying it's a type of virus widely detected for at least two years which takes advantage of Windows autorun to spread...\"</p><p><a href=\"http://www.businesswire.com/news/home/20100520005396/en/American-European-Angel-Investors-Game-Changing-Social-Impact\">American and European Angel Investors Back Game-Changing Social Impact Videogame &gt;&gt; BusinessWire</a><br />American and European Angel Investors Back Game-Changing Social Impact Videogame</p><p>You can follow <a href=\"http://delicious.com/guardianista\">Guardian Technology's linkbucket on delicious</a></p><img alt='' src='http://hits.guardian.co.uk/b/ss/guardiangu-apidev/1/H.20.3/98867?ns=guardian&pageName=The+Technology+newsbucket%3A+iPad%27s+halo%2C+getting+online%2C+HTML5+crammer%2C+open+web+and+more+Article+1403089&ch=Technology&c2=&c4=Technology+blog%2CTechnology%2CNewsbucket+%28series%29%2CCharles+Arthur%2CBlogpost+%28Tone%29%2CArticle+%28Content+type%29&c3=guardian.co.uk&c6=Charles+Arthur&c7=10-May-24&c8=1403089&c9=Article' width='1' height='1' /><div class=\"gu_advert\">\n            <a href=\"http://oas.guardian.co.uk/RealMedia/ads/click_nx.ads/guardianapis.com/technology/oas.html/@Bottom\">\n              <img src=\"http://oas.guardian.co.uk/RealMedia/ads/adstream_nx.ads/guardianapis.com/technology/oas.html/@Bottom\" alt=\"Ads by The Guardian\"></img>\n            </a>\n          </div><!-- Guardian Watermark: technology/blog/2010/may/24/technology-links-newsbucket|2010-05-24T22:56:07+01:00|298f1caa4d3ca9955df4ab27e4fabe209f3a3fea -->",
+        "trailText":"<p>Plus Russian anti-spam spamming, the round table of dead media, is the iPad post-PC?, Flash shows off, checking for Gmail hacks and more</p>",
+        "shortUrl":"http://gu.com/p/2h7t7",
+        "standfirst":"Plus Russian anti-spam spamming, the round table of dead media, is the iPad post-PC?, Flash shows off, checking for Gmail hacks and more",
+        "byline":"Charles Arthur",
+        "publication":"guardian.co.uk"
+      },
+      "tags":[{
+        "id":"technology/blog",
+        "type":"blog",
+        "webTitle":"Technology blog",
+        "webUrl":"http://www.guardian.co.uk/technology/blog",
+        "apiUrl":"http://content.guardianapis.com/technology/blog",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/technology",
+        "type":"keyword",
+        "webTitle":"Technology",
+        "webUrl":"http://www.guardian.co.uk/technology/technology",
+        "apiUrl":"http://content.guardianapis.com/technology/technology",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"media/series/newsbucket",
+        "type":"series",
+        "webTitle":"Newsbucket",
+        "webUrl":"http://www.guardian.co.uk/media/series/newsbucket",
+        "apiUrl":"http://content.guardianapis.com/media/series/newsbucket",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"profile/charlesarthur",
+        "type":"contributor",
+        "webTitle":"Charles Arthur",
+        "webUrl":"http://www.guardian.co.uk/profile/charlesarthur",
+        "apiUrl":"http://content.guardianapis.com/profile/charlesarthur"
+      },{
+        "id":"tone/blog",
+        "type":"tone",
+        "webTitle":"Blogposts",
+        "webUrl":"http://www.guardian.co.uk/tone/blog",
+        "apiUrl":"http://content.guardianapis.com/tone/blog"
+      },{
+        "id":"type/article",
+        "type":"type",
+        "webTitle":"Article",
+        "webUrl":"http://www.guardian.co.uk/articles",
+        "apiUrl":"http://content.guardianapis.com/articles"
+      }]
+    },{
+      "id":"technology/blog/2010/may/21/google-admod-acquisition-approved-apple",
+      "sectionId":"technology",
+      "sectionName":"Technology",
+      "webPublicationDate":"2010-05-21T18:39:17+01:00",
+      "webTitle":"Google's $750m purchase of AdMob approved - because of Apple",
+      "webUrl":"http://www.guardian.co.uk/technology/blog/2010/may/21/google-admod-acquisition-approved-apple",
+      "apiUrl":"http://content.guardianapis.com/technology/blog/2010/may/21/google-admod-acquisition-approved-apple",
+      "fields":{
+        "headline":"Google's $750m purchase of AdMob approved - because of Apple",
+        "body":"<p><br />Google's $750m acquisition of the advertising network company AdMod has been approved by the US Federal Trade Commission - because Apple's entry into the mobile advertising market with its iAds product suggests there is already enough competition.</p><p>After six months' deliberation, following Google's announcement of its intent to buy the company in November, the <a href=\"http://www.ftc.gov/opa/2010/05/ggladmob.shtm\">FTC said today</a> that the acquisition \"is unlikely to harm competition in the emerging market for mobile advertising networks.\"</p><p>The FTC said that although the combination of the two leading mobile advertising networks - Google and AdMob - raised serious antitrust issues, those were overshadowed by recent developments in the market, most notably a move by \"Apple Computer\" (as it called it - although the company has been \"Apple Inc\" for more than a year) to launch its own, competing mobile ad network. </p><p>Google's not the only one; a number of companies are trying to develop smartphone platforms to compete for advertising services with Google's Android and Apple's iPhone. \"These firms would have a strong incentive to facilitate competition among mobile advertising networks,\" the FTC noted.</p><p>Apple is thought to have wanted to buy AdMob itself - but Google trumped it with a rapid bid. That drove Apple instead to <a href=\"http://www.guardian.co.uk/technology/2010/jan/10/google-nexus-one-apple-iphone\">buy Quattro Wireless for a reported $275m</a>. Quattro and AdMob both offered the same sort of functionality: a means of serving mobile advertising.</p><p>Apple has rolled Quattro's offering into its iAds product, which will be part of the <a href=\"http://www.guardian.co.uk/technology/gamesblog/2010/apr/09/apple-iphone-game-center\">iPhone 4.0 upgrade due this summer</a>.</p><p>Eric Schmidt of Google had expected that Apple's acquisition would ease Google's path with the FTC - and was proved right. \"As a result of Apple's entry (into the market), AdMob's success to date on the iPhone platform is unlikely to be an accurate predictor of AdMob's competitive significance going forward, whether AdMob is owned by Google or not,\" the Commission's statement explains.</p><p>The FTC notes that Google and AdMob have competed head-to-head for the past few years, with a notable increase in intensity during the past year. \"This competition has spurred innovation and allowed mobile publishers to keep a large share of the revenue generated from the sale of their ad space. The companies also have economies of scale that give them a major advantage over smaller rivals in the business.\"</p><p>\"These concerns, however, were outweighed by recent evidence that Apple is poised to become a strong competitor in the mobile advertising market, the FTC's statement says. Apple recently acquired Quattro Wireless and used it to launch its own iAd service. In addition, Apple can leverage its close relationships with application developers and users, its access to a large amount of proprietary user data, and its ownership of iPhone software development tools and control over the iPhone developers' license agreement.\"</p><p>That's two companies in the mobile advertising space - so now what will Microsoft, which must need to get some skin in the game, do? And how about Nokia, which sells more smartphones than anyone else, yet doesn't seem to have worked out how to profit enough from them?</p><img alt='' src='http://hits.guardian.co.uk/b/ss/guardiangu-apidev/1/H.20.3/98867?ns=guardian&pageName=Google%27s+%24750m+purchase+of+AdMob+approved+-+because+of+Apple+Article+1402748&ch=Technology&c2=&c4=Google+%28Technology%29%2CApple+%28Technology%29%2CTechnology+blog%2CTechnology%2CCharles+Arthur%2CAdvertising+%28media%29%2CMedia%2CArticle+%28Content+type%29&c3=guardian.co.uk&c6=Charles+Arthur&c7=10-May-21&c8=1402748&c9=Article' width='1' height='1' /><div class=\"gu_advert\">\n            <a href=\"http://oas.guardian.co.uk/RealMedia/ads/click_nx.ads/guardianapis.com/technology/oas.html/@Bottom\">\n              <img src=\"http://oas.guardian.co.uk/RealMedia/ads/adstream_nx.ads/guardianapis.com/technology/oas.html/@Bottom\" alt=\"Ads by The Guardian\"></img>\n            </a>\n          </div><!-- Guardian Watermark: technology/blog/2010/may/21/google-admod-acquisition-approved-apple|2010-05-24T22:56:07+01:00|c6212caa3cf24de6206fb56a2fc76317966af784 -->",
+        "trailText":"<p>US FTC clears acquisition of mobile advertising company, citing competition from Apple - which bought rival Quattro two months after Google swooped on AdMob</p>",
+        "shortUrl":"http://gu.com/p/2h75h",
+        "standfirst":"US FTC clears acquisition of mobile advertising company, citing competition from Apple - which bought rival Quattro two months after Google swooped on AdMob",
+        "byline":"Charles Arthur",
+        "publication":"guardian.co.uk"
+      },
+      "tags":[{
+        "id":"technology/google",
+        "type":"keyword",
+        "webTitle":"Google",
+        "webUrl":"http://www.guardian.co.uk/technology/google",
+        "apiUrl":"http://content.guardianapis.com/technology/google",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/apple",
+        "type":"keyword",
+        "webTitle":"Apple",
+        "webUrl":"http://www.guardian.co.uk/technology/apple",
+        "apiUrl":"http://content.guardianapis.com/technology/apple",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/blog",
+        "type":"blog",
+        "webTitle":"Technology blog",
+        "webUrl":"http://www.guardian.co.uk/technology/blog",
+        "apiUrl":"http://content.guardianapis.com/technology/blog",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/technology",
+        "type":"keyword",
+        "webTitle":"Technology",
+        "webUrl":"http://www.guardian.co.uk/technology/technology",
+        "apiUrl":"http://content.guardianapis.com/technology/technology",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"profile/charlesarthur",
+        "type":"contributor",
+        "webTitle":"Charles Arthur",
+        "webUrl":"http://www.guardian.co.uk/profile/charlesarthur",
+        "apiUrl":"http://content.guardianapis.com/profile/charlesarthur"
+      },{
+        "id":"media/advertising",
+        "type":"keyword",
+        "webTitle":"Advertising",
+        "webUrl":"http://www.guardian.co.uk/media/advertising",
+        "apiUrl":"http://content.guardianapis.com/media/advertising",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"media/media",
+        "type":"keyword",
+        "webTitle":"Media",
+        "webUrl":"http://www.guardian.co.uk/media/media",
+        "apiUrl":"http://content.guardianapis.com/media/media",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"type/article",
+        "type":"type",
+        "webTitle":"Article",
+        "webUrl":"http://www.guardian.co.uk/articles",
+        "apiUrl":"http://content.guardianapis.com/articles"
+      }]
+    },{
+      "id":"technology/2010/may/21/google-tv",
+      "sectionId":"technology",
+      "sectionName":"Technology",
+      "webPublicationDate":"2010-05-21T17:48:02+01:00",
+      "webTitle":"Now for Google's next trick \u2026 taking over your television viewing",
+      "webUrl":"http://www.guardian.co.uk/technology/2010/may/21/google-tv",
+      "apiUrl":"http://content.guardianapis.com/technology/2010/may/21/google-tv",
+      "fields":{
+        "headline":"Now for Google's next trick \u2026 taking over your television viewing",
+        "body":"<p></p><p>The company most people use to search the internet wants to be the company that delivers your TV programmes \u2013 and sells the adverts to run alongside them. That's Google, which has announced the launch of <a href=\"http://www.google.com/tv\" title=\"\">Google TV,</a> hoping to marry the technology of  television with the internet.</p><p>It wants to turn your TV set \u2013 or the set-top box above it \u2013 into a computer capable of turning web video into a TV signal so that you can range across the internet.</p><p>\"We've been waiting a long, long time for this day,\" Eric Schmidt, the chief executive of Google, told the Google I/O conference in San Francisco, where the company was showing off its latest technology offerings. \"It took a lot to make this happen.\"</p><p>In particular, it needed \"extraordinarily fast\" computer processors that had just become available, he said. But he admitted: \"It's much harder to link up a 50-year-old technology and a brand new technology than those of us from the brand new technology thought.\"</p><p>There are plenty of examples of companies trying to marry the internet to TV but ending with them as divorced as ever. Microsoft has tried twice, with WebTV and its mildly successful Media Center. Apple has AppleTV, a set-top box that even Steve Jobs dismisses as \"a hobby\". Then there's Joost (which discontinued its application last year), Yahoo Connected Life, Digeo and Intel's Viiv. None has penetrated the public consciousness.</p><p>Google insists it can work: \"Imagine turning on the TV and getting all the channels and shows you normally watch and all of the websites you browse all day \u2013 including your favourite video, music and photo sites,\" it says in a Googleblog <a href=\"http://googleblog.blogspot.com/2010/05/announcing-google-tv-tv-meets-web-web.html\" title=\"\">post</a>. \"We're excited to announce that we've done just that \u2026 Want to check out that funny YouTube video on your 48-inch screen? It's just a quick search away.\"</p><p>Despite appearances from Sony and Logitech, the first products are not expected until later this year \u2013 and some analysts think Google may be aiming for one of the net's \"zero-billion dollar markets\".</p><p>\"The road to interactive TV is littered with failures, mainly because people never get the user experience right,\" said Alx Klive, chief executive of WorldTV.com, who has been in the field of \"internet television\" since 1995. \"Too many companies don't understand the difference between sitting in front of a laptop, and sitting 10ft away from a TV. It's very hard to change people's habits: we've been watching TV in pretty much the same way for 60 years.\"</p><p>All that has changed, he suggests, is the addition of remote controls and, more recently, hard drive devices such as Sky+ and TiVo, which store the programme as a digital file so you can pause and rewind programs.</p><p>The key problem, said Klive, was finding enough content on the web to fill an evening. \"What we've found is that on average if people can't find something that's at least 40 minutes long online, they won't bother,\" he said.</p><p>But James Governor, of RedMonk Consulting in Maine, said Google was on to a winner. \"We are going to get integrated internet TV. I think that the integration of data-driven sports experiences will drive this in the US \u2013 where statistics matter so much for baseball, rather like statistics do for cricket here.\"</p><p>But there's another worry: if your TV becomes a computer, what happens when it crashes, its software is corrupted during an update, or it is attacked by malware? Though the latter risk remains unknown until the products are available, Kline said the second problem had already affected a Blu-ray DVD player bought in the US.</p><p>Governorsaid crashing was not a problem. \"Anyone who's got a Virgin Media or Sky box knows what it's like to have to unplug them and restart them. It's really not a big deal.\"</p><img alt='' src='http://hits.guardian.co.uk/b/ss/guardiangu-apidev/1/H.20.3/98867?ns=guardian&pageName=Now+for+Google%27s+next+trick+%E2%80%A6+taking+over+your+television+viewing+Article+1402686&ch=Technology&c2=&c4=Google+%28Technology%29%2CTelevision+%28Technology%29%2CInternet%2CTechnology+sector+%28business+sector%29%2CTechnology%2CTelevision+and+radio+TV%2CTelevision+industry+%28Media%29%2CMedia%2CUK+news%2CWorld+news%2CCharles+Arthur%2CNews+%28Tone%29%2CArticle+%28Content+type%29&c3=The+Guardian&c6=Charles+Arthur%2C+technology+editor&c7=10-May-21&c8=1402686&c9=Article' width='1' height='1' /><div class=\"gu_advert\">\n            <a href=\"http://oas.guardian.co.uk/RealMedia/ads/click_nx.ads/guardianapis.com/technology/oas.html/@Bottom\">\n              <img src=\"http://oas.guardian.co.uk/RealMedia/ads/adstream_nx.ads/guardianapis.com/technology/oas.html/@Bottom\" alt=\"Ads by The Guardian\"></img>\n            </a>\n          </div><!-- Guardian Watermark: technology/2010/may/21/google-tv|2010-05-24T22:56:07+01:00|8ccdaf2bf4df1019d61d6e22bbbfda088be38f69 -->",
+        "trailText":"World's dominant internet search company wants to deliver TV programmes \u2011 and the adverts \u2013 in a marriage of technology",
+        "shortUrl":"http://gu.com/p/2h739",
+        "standfirst":"World's dominant internet search company wants to deliver TV programmes \u2011 and the adverts \u2013 in a marriage of technology",
+        "thumbnail":"http://static.guim.co.uk/sys-images/Guardian/About/General/2010/5/21/1274459840063/Eric-Schmidt-introduces-G-002.jpg",
+        "byline":"Charles Arthur, technology editor",
+        "publication":"The Guardian"
+      },
+      "tags":[{
+        "id":"technology/google",
+        "type":"keyword",
+        "webTitle":"Google",
+        "webUrl":"http://www.guardian.co.uk/technology/google",
+        "apiUrl":"http://content.guardianapis.com/technology/google",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/television",
+        "type":"keyword",
+        "webTitle":"Television",
+        "webUrl":"http://www.guardian.co.uk/technology/television",
+        "apiUrl":"http://content.guardianapis.com/technology/television",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/internet",
+        "type":"keyword",
+        "webTitle":"Internet",
+        "webUrl":"http://www.guardian.co.uk/technology/internet",
+        "apiUrl":"http://content.guardianapis.com/technology/internet",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"business/technology",
+        "type":"keyword",
+        "webTitle":"Technology sector",
+        "webUrl":"http://www.guardian.co.uk/business/technology",
+        "apiUrl":"http://content.guardianapis.com/business/technology",
+        "sectionId":"business",
+        "sectionName":"Business"
+      },{
+        "id":"technology/technology",
+        "type":"keyword",
+        "webTitle":"Technology",
+        "webUrl":"http://www.guardian.co.uk/technology/technology",
+        "apiUrl":"http://content.guardianapis.com/technology/technology",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"tv-and-radio/tv-and-radio",
+        "type":"keyword",
+        "webTitle":"Television & radio",
+        "webUrl":"http://www.guardian.co.uk/tv-and-radio/tv-and-radio",
+        "apiUrl":"http://content.guardianapis.com/tv-and-radio/tv-and-radio",
+        "sectionId":"tv-and-radio",
+        "sectionName":"Television &amp; radio"
+      },{
+        "id":"media/television",
+        "type":"keyword",
+        "webTitle":"Television industry",
+        "webUrl":"http://www.guardian.co.uk/media/television",
+        "apiUrl":"http://content.guardianapis.com/media/television",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"media/media",
+        "type":"keyword",
+        "webTitle":"Media",
+        "webUrl":"http://www.guardian.co.uk/media/media",
+        "apiUrl":"http://content.guardianapis.com/media/media",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"uk/uk",
+        "type":"keyword",
+        "webTitle":"UK news",
+        "webUrl":"http://www.guardian.co.uk/uk/uk",
+        "apiUrl":"http://content.guardianapis.com/uk/uk",
+        "sectionId":"uk",
+        "sectionName":"UK news"
+      },{
+        "id":"world/world",
+        "type":"keyword",
+        "webTitle":"World news",
+        "webUrl":"http://www.guardian.co.uk/world/world",
+        "apiUrl":"http://content.guardianapis.com/world/world",
+        "sectionId":"world",
+        "sectionName":"World news"
+      },{
+        "id":"profile/charlesarthur",
+        "type":"contributor",
+        "webTitle":"Charles Arthur",
+        "webUrl":"http://www.guardian.co.uk/profile/charlesarthur",
+        "apiUrl":"http://content.guardianapis.com/profile/charlesarthur"
+      },{
+        "id":"tone/news",
+        "type":"tone",
+        "webTitle":"News",
+        "webUrl":"http://www.guardian.co.uk/tone/news",
+        "apiUrl":"http://content.guardianapis.com/tone/news"
+      },{
+        "id":"type/article",
+        "type":"type",
+        "webTitle":"Article",
+        "webUrl":"http://www.guardian.co.uk/articles",
+        "apiUrl":"http://content.guardianapis.com/articles"
+      }]
+    },{
+      "id":"technology/2010/may/21/google-street-view-uk-data",
+      "sectionId":"technology",
+      "sectionName":"Technology",
+      "webPublicationDate":"2010-05-21T16:09:41+01:00",
+      "webTitle":"Google keeps Street View's UK Wi-Fi data as privacy group seeks legal action",
+      "webUrl":"http://www.guardian.co.uk/technology/2010/may/21/google-street-view-uk-data",
+      "apiUrl":"http://content.guardianapis.com/technology/2010/may/21/google-street-view-uk-data",
+      "fields":{
+        "headline":"Google keeps Street View's UK Wi-Fi data as privacy group seeks legal action",
+        "body":"<p>Google is to retain data captured from UK home wireless networks while carrying out its Street View mapping <del>until it receives more specific instructions from the UK Information Commissioner</del>, it said today.</p><p><em>Update: the ICO said it has already told Google that the data can be deleted - but Google stated it will not do so yet.</em></p><p>The company also faces the threat from the advocacy group Privacy International that it might be liable under the Regulation of Investigatory Powers Act (RIPA) for unlawful interception of users' data \u2013 and that the group may try to get the police to instigate an investigation.</p><p>Google is already facing criminal investigations in Germany over its capture of the data from open Wi-Fi networks and faces further investigations from a number of European countries for possible breaches of data protection laws and, possibly, computer hacking.</p><p>It has deleted the data that was collected in Ireland, Denmark and Austria, according to those countries' wishes. That means there cannot be any threat of prosecution in those countries as any evidence for a court case is unavailable.</p><p>In a statement released on Friday, the company said: \"Following requests from the Irish, Danish and Austrian data protection authorities we can confirm that we have deleted payload data identified as coming from those countries. We can also confirm that, as requested, we are keeping data from Belgium, France, Italy, Spain, Germany, Switzerland and the Czech Republic.</p><p>\"Given that there is some uncertainty about deletion generally \u2013 for example, one data protection authority changed its instruction from delete to retain in the last 24 hours \u2013 we think it makes sense to keep the remaining country data while we work through these issues.\"</p><p>Google later clarified that it is retaining the data for the UK <del>so that the Information Commissioner's Office (ICO) can inspect it as required</del>. The data is being held in secure isolation. However the ICO restated that it has not required its preservation, reiterating a statement from earlier this week: \"there does not seem to be any reason to keep the data concerned for evidential purposes. Therefore, in line with the data protection requirement that personal data should be held for no longer than necessary, we have asked Google to ensure that these data are deleted as soon as reasonably possible.\"</p><p>Google has insisted that it was trying to map the existence of the networks, which use the Wi-Fi standard, but that it accidentally left in computer code which collected actual data from unsecured networks.</p><p>The German <del>prosecutors</del> data protection authorities have requested access to one of the hard drives used in the data gathering \u2013 though Google has so far refused. German data protection officials have given the company until 26 May to hand over the system.</p><p>Google admitted last week that it collected 600GB of data from unsecured Wi-Fi networks around the world while collecting photos to Street View</p><p>The UK Information Commissioner Christopher Graham <a href=\"http://www.guardian.co.uk/technology/2010/may/20/information-commissioner-war-google\" title=\"\">said on Thursday</a> that the ICO did not want to \"declare war\" on Google over the matter and that it thought its response \u2013 which was initially to accede to Google's offer to delete the data \u2013 was \"proportionate\".</p><p>However, Google now appears to have decided to delay the deletion while it makes sure that no investigations have been opened; otherwise it might be deemed to have destroyed evidence.</p><p>Privacy International <a href=\"http://www.privacyinternational.org/article.shtml?cmd[347]=x-347-566323\" title=\"\">says</a> that deleting the data would be \"irresponsible\" until its content has been investigated to see whether it does infringe the law. \"We have directly put Google on notice that it is likely to be imminently subject to civil or criminal legal action as a result of the Wi-Fi interception,\" it wrote on its blog. \"To eliminate the data would constitute destruction of evidence.\" It urged the ICO to rescind its earlier order to destroy the data: \"We urge the commissioner to immediately rescind the order and allow Google to place the data in secure storage until such time as the legal questions are resolved.</p><p>\"In the absence of a commitment from both Google and the commissioners to temporarily secure the data, Privacy International will seek a prosecution for unlawful interception under the Regulation of Investigatory Powers Act. In those circumstances there would be no question of destroying the data.\"<br /><em><br />Updated with statement from UK ICO that it is not seeking retention of data.</em><br /><em>Update with clarification that it is German data protection authorities, not prosecutors, who are seeking access to hard drive.</em></p><img alt='' src='http://hits.guardian.co.uk/b/ss/guardiangu-apidev/1/H.20.3/98867?ns=guardian&pageName=Google+keeps+Street+View%27s+UK+Wi-Fi+data+as+privacy+group+seeks+legal+action+Article+1402595&ch=Technology&c2=&c4=Google+%28Technology%29%2CGoogle+Street+View+%28Technology%29%2CData+protection+%28Govt.%2Findustrial+use+of+data%29%2CPrivacy+and+the+net%2CTechnology%2CPrivacy%2CCharles+Arthur%2CUK+news%2CNews+%28Tone%29%2CzPrivacy+%28News%29%2CArticle+%28Content+type%29&c3=guardian.co.uk&c6=Charles+Arthur%2C+technology+editor&c7=10-May-21&c8=1402595&c9=Article' width='1' height='1' /><div class=\"gu_advert\">\n            <a href=\"http://oas.guardian.co.uk/RealMedia/ads/click_nx.ads/guardianapis.com/technology/oas.html/@Bottom\">\n              <img src=\"http://oas.guardian.co.uk/RealMedia/ads/adstream_nx.ads/guardianapis.com/technology/oas.html/@Bottom\" alt=\"Ads by The Guardian\"></img>\n            </a>\n          </div><!-- Guardian Watermark: technology/2010/may/21/google-street-view-uk-data|2010-05-24T22:56:07+01:00|244e3b315f93c13541332a575915d2df00de1fbe -->",
+        "trailText":"<p>Search giant securely storing data captured from home Wi-Fi networks by Street View cars pending more specific instructions</p>",
+        "shortUrl":"http://gu.com/p/2h6qq",
+        "standfirst":"Search giant securely storing data captured from home Wi-Fi networks by Street View cars pending more specific instructions",
+        "byline":"Charles Arthur, technology editor",
+        "publication":"guardian.co.uk"
+      },
+      "tags":[{
+        "id":"technology/google",
+        "type":"keyword",
+        "webTitle":"Google",
+        "webUrl":"http://www.guardian.co.uk/technology/google",
+        "apiUrl":"http://content.guardianapis.com/technology/google",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/google-street-view",
+        "type":"keyword",
+        "webTitle":"Google Street View",
+        "webUrl":"http://www.guardian.co.uk/technology/google-street-view",
+        "apiUrl":"http://content.guardianapis.com/technology/google-street-view",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/data-protection",
+        "type":"keyword",
+        "webTitle":"Data protection",
+        "webUrl":"http://www.guardian.co.uk/technology/data-protection",
+        "apiUrl":"http://content.guardianapis.com/technology/data-protection",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/privacy-and-the-net",
+        "type":"keyword",
+        "webTitle":"Privacy and the net",
+        "webUrl":"http://www.guardian.co.uk/technology/privacy-and-the-net",
+        "apiUrl":"http://content.guardianapis.com/technology/privacy-and-the-net",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/technology",
+        "type":"keyword",
+        "webTitle":"Technology",
+        "webUrl":"http://www.guardian.co.uk/technology/technology",
+        "apiUrl":"http://content.guardianapis.com/technology/technology",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"uk/privacy",
+        "type":"keyword",
+        "webTitle":"Privacy",
+        "webUrl":"http://www.guardian.co.uk/uk/privacy",
+        "apiUrl":"http://content.guardianapis.com/uk/privacy",
+        "sectionId":"uk",
+        "sectionName":"UK news"
+      },{
+        "id":"profile/charlesarthur",
+        "type":"contributor",
+        "webTitle":"Charles Arthur",
+        "webUrl":"http://www.guardian.co.uk/profile/charlesarthur",
+        "apiUrl":"http://content.guardianapis.com/profile/charlesarthur"
+      },{
+        "id":"uk/uk",
+        "type":"keyword",
+        "webTitle":"UK news",
+        "webUrl":"http://www.guardian.co.uk/uk/uk",
+        "apiUrl":"http://content.guardianapis.com/uk/uk",
+        "sectionId":"uk",
+        "sectionName":"UK news"
+      },{
+        "id":"tone/news",
+        "type":"tone",
+        "webTitle":"News",
+        "webUrl":"http://www.guardian.co.uk/tone/news",
+        "apiUrl":"http://content.guardianapis.com/tone/news"
+      },{
+        "id":"world/privacy",
+        "type":"keyword",
+        "webTitle":"Privacy",
+        "webUrl":"http://www.guardian.co.uk/world/privacy",
+        "apiUrl":"http://content.guardianapis.com/world/privacy",
+        "sectionId":"world",
+        "sectionName":"World news"
+      },{
+        "id":"type/article",
+        "type":"type",
+        "webTitle":"Article",
+        "webUrl":"http://www.guardian.co.uk/articles",
+        "apiUrl":"http://content.guardianapis.com/articles"
+      }]
+    },{
+      "id":"technology/blog/2010/may/21/technology-links-newsbucket",
+      "sectionId":"technology",
+      "sectionName":"Technology",
+      "webPublicationDate":"2010-05-21T06:30:00+01:00",
+      "webTitle":"The Technology newsbucket: new social networkzzz, privacy woes, Android 2.2 hands-on and more",
+      "webUrl":"http://www.guardian.co.uk/technology/blog/2010/may/21/technology-links-newsbucket",
+      "apiUrl":"http://content.guardianapis.com/technology/blog/2010/may/21/technology-links-newsbucket",
+      "fields":{
+        "headline":"The Technology newsbucket: new social networkzzz, privacy woes, Android 2.2 hands-on and more",
+        "body":"<p><a href=\"http://www.flickr.com/photos/14529257@N03/4615686777\"><br /><img src=\"http://farm4.static.flickr.com/3402/4615686777_281794ceec.jpg\" alt=\"onion by Art By Steve Johnson.\" width=\"460\" /></a><br /><em>Photo by <a href=\"http://flickr.com/photos/14529257@N03/\">Art By Steve Johnson</a> on Flickr. <a href=\"http://creativecommons.org/licenses/by/2.0/deed.en\">Some rights reserved</a></em></p><p>A quick burst of 13 links for you to chew over, as picked by the Technology team</p><p><a href=\"http://www.theonion.com/articles/new-social-networking-site-changing-the-way-oh-chr,17465/\">New Social Networking Site Changing The Way Oh, Christ, Forget It &gt;&gt; The Onion</a><br />We'd remind you that The Onion is satirical. So obviously this completely doesn't reflect you know, whatever.</p><p><a href=\"http://www.privacyinternational.org/article.shtml?cmd[347]=x-347-566323\">An open letter to EU privacy commissioners regarding deletion of Google WiFi data &gt;&gt; Privacy International</a><br />\"A number of European privacy and data protection regulators have instructed Google to irrevocably destroy all WiFi data collected since 2007 in the course of the company's StreetView project.&#10;&#10;\"Privacy International believes this instruction is based on advice that is ill-informed and irresponsible, as the action may be unlawful.\"</p><p><a href=\"http://thenextweb.com/socialmedia/2010/05/20/twitter-responds-to-missing-rts-saga/\">Twitter responds to missing RT's saga &gt;&gt; TheNextWeb</a><br />Twitter had been filtering out retweets as duplicates; but users don't like it, so it's been changed back. Though \"eliminating explicitly duplicative content from search results in a more intelligent way is something we plan to work on more in the long term.\" Be warned.</p><p><a href=\"http://blogs.techrepublic.com.com/hiner/?p=4492&amp;tag=content;leftCol\">Apple iPad: The five biggest annoyances &gt;&gt; TechRepublic.com</a><br />Well, four apart from the One You Already Thought Of - which isn't the top reason.</p><p><a href=\"http://www.theregister.co.uk/2010/05/19/flash_5_minute_rule/\">Flash memory and the five-minute rule &gt;&gt; The Register</a><br />Flash memory begins to intrude into the space for caching that previously had to be filled either by disk or RAM.</p><p><a href=\"http://www.marco.org/616147756\">Mobile OS web-browsing share &gt;&gt; Marco.org</a><br />Only for the sites within tumblr.com, but still interesting. The Windows/Macintosh ratio is, frankly, astonishing.</p><p><a href=\"http://www.engadget.com/2010/05/20/android-2-2-froyo-beta-hands-on-flash-10-1-wifi-hotspots-an/\">Android 2.2 'Froyo' beta hands-on: Flash 10.1, WiFi hotspots, and some killer benchmark scores &gt;&gt; Engadget</a><br />Cut to the Flash: \"We have to say, it's really something to have a mobile browser that doesn't pop up little cubes with question marks all over the web, but we found that rediscovering Flash was much like reuniting with a high school friend; at first you've so much to catch up on, but then you realize how far you've grown apart. Adobe's pre-vetted list of Flash-enabled sites do a good job of showing off the technology, but we still can't help but think the interactive elements still have a lot of catching up to do. As for video, the stream is good quality but gets fairly choppy - especially when you check out something \"not optimized for mobile viewing.\" Some of the HTML5 footage we've seen via the same device shows up in crisper detail and fluidity.\"</p><p><a href=\"http://www.guardian.co.uk/technology/2010/may/20/google-tv\">Google TV brings net to sets &gt;&gt; Guardian Technology</a><br />Will theoretically work with any TV set. You have to love the computer industry's eternal optimism about the word \"theoretically\".</p><p><a href=\"http://www.engadget.com/2010/05/19/the-fate-of-a-generation-of-workers-foxconn-undercover-fully-tr/\">The fate of a generation of workers: Foxconn undercover fully translated &gt;&gt; Engadget</a><br />What life is really like in Foxconn, the Chinese company which manufactures all sorts of computer equipment makers including Apple</p><p><a href=\"http://www.itjoblog.co.uk/2010/05/googlewave.html\">Why Google Wave may not make waves after all &gt;&gt; ITJobLog</a><br />Wave was meant to replace email, notes Danny Bradbury: \"But everyone uses email. Unless you're very important to someone, sending them an invitation to a Google Wave that could possibly require them to set up an account before they can even use it is going to be time prohibitive, and will probably mean you don't get a response at all, other than, 'just mail me, will you?'\"</p><p><a href=\"http://news.cnet.com/8301-13860_3-20005323-56.html\">Parallels starts selling Windows 7 upgrade tool &gt;&gt; Beyond Binary - CNET News</a><br />\"The Parallels product is designed to move any version of Windows XP or Vista to any version of Windows 7 and run the older operating system inside a virtual machine that is largely invisible to the person using the software. However, in many cases the user is not properly licensed to be running both copies of Windows,\" says Ina Fried</p><p><a href=\"http://www.zdnet.com/blog/microsoft/capgemini-now-championing-microsoft-bpos-over-google-apps/6272\">CapGemini now championing Microsoft BPOS over Google Apps &gt;&gt; ZD Net</a><br />A Google Apps supplier says \"\"We believe BPOS will be the right solution for the vast majority of our clients,\" reports Mary-Jo Foley.</p><p><a href=\"http://x264dev.multimedia.cx/?p=377\">The first in-depth technical analysis of VP8 &gt;&gt; Diary Of An x264 Developer</a><br />Good analysis of the Google-backed Matroska-based video file format using the On2 VP8 codec</p><p>You can follow <a href=\"http://delicious.com/guardianista\">Guardian Technology's linkbucket on delicious</a></p><img alt='' src='http://hits.guardian.co.uk/b/ss/guardiangu-apidev/1/H.20.3/98867?ns=guardian&pageName=The+Technology+newsbucket%3A+new+social+networkzzz%2C+privacy+woes%2C+Android+2.2+hands-on+and+more+Article+1402273&ch=Technology&c2=&c4=Technology+blog%2CNewsbucket+%28series%29%2CTechnology%2CCharles+Arthur%2CBlogpost+%28Tone%29%2CArticle+%28Content+type%29&c3=guardian.co.uk&c6=Charles+Arthur&c7=10-May-21&c8=1402273&c9=Article' width='1' height='1' /><div class=\"gu_advert\">\n            <a href=\"http://oas.guardian.co.uk/RealMedia/ads/click_nx.ads/guardianapis.com/technology/oas.html/@Bottom\">\n              <img src=\"http://oas.guardian.co.uk/RealMedia/ads/adstream_nx.ads/guardianapis.com/technology/oas.html/@Bottom\" alt=\"Ads by The Guardian\"></img>\n            </a>\n          </div><!-- Guardian Watermark: technology/blog/2010/may/21/technology-links-newsbucket|2010-05-24T22:56:07+01:00|ba42301d219873f2ecbc935c698fefaaea339386 -->",
+        "trailText":"<p>Plus mobile browser market share, Twitter RTs lost and found, Google TV, how flash memory is replacing disk, and more</p>",
+        "shortUrl":"http://gu.com/p/2h6fx",
+        "standfirst":"Plus mobile browser market share, Twitter RTs lost and found, Google TV, how flash memory is replacing disk, and more",
+        "byline":"Charles Arthur",
+        "publication":"guardian.co.uk"
+      },
+      "tags":[{
+        "id":"technology/blog",
+        "type":"blog",
+        "webTitle":"Technology blog",
+        "webUrl":"http://www.guardian.co.uk/technology/blog",
+        "apiUrl":"http://content.guardianapis.com/technology/blog",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"media/series/newsbucket",
+        "type":"series",
+        "webTitle":"Newsbucket",
+        "webUrl":"http://www.guardian.co.uk/media/series/newsbucket",
+        "apiUrl":"http://content.guardianapis.com/media/series/newsbucket",
+        "sectionId":"media",
+        "sectionName":"Media"
+      },{
+        "id":"technology/technology",
+        "type":"keyword",
+        "webTitle":"Technology",
+        "webUrl":"http://www.guardian.co.uk/technology/technology",
+        "apiUrl":"http://content.guardianapis.com/technology/technology",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"profile/charlesarthur",
+        "type":"contributor",
+        "webTitle":"Charles Arthur",
+        "webUrl":"http://www.guardian.co.uk/profile/charlesarthur",
+        "apiUrl":"http://content.guardianapis.com/profile/charlesarthur"
+      },{
+        "id":"tone/blog",
+        "type":"tone",
+        "webTitle":"Blogposts",
+        "webUrl":"http://www.guardian.co.uk/tone/blog",
+        "apiUrl":"http://content.guardianapis.com/tone/blog"
+      },{
+        "id":"type/article",
+        "type":"type",
+        "webTitle":"Article",
+        "webUrl":"http://www.guardian.co.uk/articles",
+        "apiUrl":"http://content.guardianapis.com/articles"
+      }]
+    },{
+      "id":"technology/blog/2010/may/20/apple-steve-jobs-vp8-patent",
+      "sectionId":"technology",
+      "sectionName":"Technology",
+      "webPublicationDate":"2010-05-20T23:21:21+01:00",
+      "webTitle":"Google's VP8 gets thumbs down from Apple's Jobs via email",
+      "webUrl":"http://www.guardian.co.uk/technology/blog/2010/may/20/apple-steve-jobs-vp8-patent",
+      "apiUrl":"http://content.guardianapis.com/technology/blog/2010/may/20/apple-steve-jobs-vp8-patent",
+      "fields":{
+        "headline":"Google's VP8 gets thumbs down from Apple's Jobs via email",
+        "body":"<p>Google's announcement that it is making the VP8 video codec available for free as an open source product has not won the approval of Steve Jobs - who has pointed to a blog post by an H.264 developer which says that the codec is \"significantly weaker\" for compression and decoding than H.264, which Apple backs and uses for HTML5 video.</p><p>In an email apparently sent at 4.30am California time to <a href=\"http://www.theregister.co.uk/2010/05/20/jobs_on_vp8/\">a reader of The Register technology news site</a>, Jobs simply points to the post at <a href=\"http://x264dev.multimedia.cx/?p=377\">http://x264dev.multimedia.cx/?p=377</a> in response to the question </p><p>\"Hey Steve - What did you make of the recent VP8 announcement?\" from Kris Bloe, a software developer from Leeds.</p><p>(Note that this conforms to what is becoming the template for getting an answer from Jobs - contains no links, asks straightforward questions, is a bit open-ended.)</p><p>Google announced that it was <a href=\"http://www.guardian.co.uk/technology/blog/2010/may/19/google-apple\">making VP8 open source</a> only on Wednesday - but it has led to fevered reactions since. Adobe is delighted, as it can use Flash within VP8. Others have said that the \"specification\" barely exists: the post that Jobs points to says, in part:</p><blockquote><p>\"The spec consists largely of C code copy-pasted from the VP8 source code \u2014 up to and including TODOs, \"optimizations\", and even C-specific hacks, such as workarounds for the undefined behavior of signed right shift on negative numbers. In many places it is simply outright opaque. <em>Copy-pasted C code is not a spec.</em>\"</p></blockquote><p>Yet Google has already starting putting YouTube videos into this spec, making it part of a larger web media project it calls WebM, which will be built into its Chrome browser - and which will be taken up by Mozilla's Firefox (which so far has been sticking to Ogg Theora, because it had no patents, but has now <a href=\"http://hacks.mozilla.org/2010/05/firefox-youtube-and-webm/\">admitted that that lagged in quality</a>). Internet Explorer 9 will let people install VP8 if they want - but its native support will be for H.264.</p><p>The key questions then become: will VP8 come in for scrutiny from patent attornies? The answer there is \"quite certainly\" - even if not Apple's or Microsoft's, there are sure to be people out there who will scour the code in the hope of finding an infringement and hence a payday.</p><p>The blogpost Jobs points to comes from the open source X.264 project, which aims to build a free encoding system for H.264 video. There are already open source decoders for it - notably <a href=\"http://www.ffmpeg.org/\">FFmpeg</a>. </p><p>So Jobs doesn't think that VP8 is as good as H.264 - and what Jobs thinks tends to reflect what Apple's engineers think, as they will be driving information to him (Apple is a very meetings-intensive company). That, plus the fact that the patent <del>trolls</del> investigators will be delightedly printing out the code for VP8 to see whether they can find something it infringes, means that video on the web breaks down to a few choices: Adobe's Flash (owned by Adobe); H.264 (patented like mad); VP8 (open source but at some risk of patent threats).</p><p>Meanwhile, if any of you have had email exchanges with Steve Jobs (his email is in the wild by now), do let us know. Remember: simple, but deep, questions do best.</p><img alt='' src='http://hits.guardian.co.uk/b/ss/guardiangu-apidev/1/H.20.3/98867?ns=guardian&pageName=Google%27s+VP8+gets+thumbs+down+from+Apple%27s+Jobs+via+email+Article+1402289&ch=Technology&c2=&c4=Apple+%28Technology%29%2CSteve+Jobs+%28Technology%29%2CTechnology+blog%2CTechnology%2CBlogpost+%28Tone%29%2CCharles+Arthur%2CArticle+%28Content+type%29&c3=guardian.co.uk&c6=Charles+Arthur&c7=10-May-20&c8=1402289&c9=Article' width='1' height='1' /><div class=\"gu_advert\">\n            <a href=\"http://oas.guardian.co.uk/RealMedia/ads/click_nx.ads/guardianapis.com/technology/oas.html/@Bottom\">\n              <img src=\"http://oas.guardian.co.uk/RealMedia/ads/adstream_nx.ads/guardianapis.com/technology/oas.html/@Bottom\" alt=\"Ads by The Guardian\"></img>\n            </a>\n          </div><!-- Guardian Watermark: technology/blog/2010/may/20/apple-steve-jobs-vp8-patent|2010-05-24T22:56:07+01:00|db87e5a0465965d3139d3167048c5107fe62aba1 -->",
+        "trailText":"<p>The battle is well and truly joined as the perceived pitfalls of the open-sourced video codec come under the microscope</p>",
+        "shortUrl":"http://gu.com/p/2h6fh",
+        "standfirst":"The battle is well and truly joined as the perceived pitfalls of the open-sourced video codec come under the microscope",
+        "byline":"Charles Arthur",
+        "publication":"guardian.co.uk"
+      },
+      "tags":[{
+        "id":"technology/apple",
+        "type":"keyword",
+        "webTitle":"Apple",
+        "webUrl":"http://www.guardian.co.uk/technology/apple",
+        "apiUrl":"http://content.guardianapis.com/technology/apple",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/stevejobs",
+        "type":"keyword",
+        "webTitle":"Steve Jobs",
+        "webUrl":"http://www.guardian.co.uk/technology/stevejobs",
+        "apiUrl":"http://content.guardianapis.com/technology/stevejobs",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/blog",
+        "type":"blog",
+        "webTitle":"Technology blog",
+        "webUrl":"http://www.guardian.co.uk/technology/blog",
+        "apiUrl":"http://content.guardianapis.com/technology/blog",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"technology/technology",
+        "type":"keyword",
+        "webTitle":"Technology",
+        "webUrl":"http://www.guardian.co.uk/technology/technology",
+        "apiUrl":"http://content.guardianapis.com/technology/technology",
+        "sectionId":"technology",
+        "sectionName":"Technology"
+      },{
+        "id":"tone/blog",
+        "type":"tone",
+        "webTitle":"Blogposts",
+        "webUrl":"http://www.guardian.co.uk/tone/blog",
+        "apiUrl":"http://content.guardianapis.com/tone/blog"
+      },{
+        "id":"profile/charlesarthur",
+        "type":"contributor",
+        "webTitle":"Charles Arthur",
+        "webUrl":"http://www.guardian.co.uk/profile/charlesarthur",
+        "apiUrl":"http://content.guardianapis.com/profile/charlesarthur"
+      },{
+        "id":"type/article",
+        "type":"type",
+        "webTitle":"Article",
+        "webUrl":"http://www.guardian.co.uk/articles",
+        "apiUrl":"http://content.guardianapis.com/articles"
+      }]
+    }]
+  }
+}

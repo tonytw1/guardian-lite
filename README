@@ -1,0 +1,56 @@
+A basic Android based article viewer for the Guardian Content API.
+
+Provides the latest articles for each Guardian section and allows
+navigation to the latest articles for specific contributor and keyword tags.
+Provides download all functionality and on demand caching to the local file system.
+
+Requirements
+- Android 1.5 or better
+- Content API key (enter under the Settings menu option).
+
+
+Design goals:
+
+- Caching for offline use and fast page viewing
+Content needs to be available when offline (ie. on the Tube).
+Content needs to cached locally for quick navigation as online
+browsing feels frustracting.
+
+- Grab and go syncing.
+The client needs to be able to grab as much content, as quickly as possible 
+when prompted to. 
+
+- Viewing of content should not be dependant on the download completing fully.
+This is an acknowledgement that alot of users will be using the app 
+on an irregular basis - it needs to be able to fetch content 
+and get itself into a usable state ASAP.
+
+- The user should be able to kill downloads at any point and still have 
+access to what was actually downloaded.
+- The app should be usable (all be it without a full content set)
+while a download is in progress. Use Android background processes 
+to achieve this.
+- Downloads should fetch the bare minimum (ie. the article text) first and
+then go back for images as time permits.
+
+
+- Regular updates
+Play to the strength of the Content API, in that it constantly updated.
+Display news in descending date order and allow for it to be updated regularly.
+Provide a background process to apply top ups.
+
+- Make content discoverable.
+The Guardian offers thousands of keyword and contributer tags;
+too many to make discoverable through menus etc.
+
+Therefore, display related keyword and contributor links on articles navigated to by top level section. 
+Allow users to access this content on demand, if it is not locally cached and a network link is available.
+Allow users to add these discovered tags to the list of content to sync.
+
+
+TODO
+
+- Progress display and start/stop controls for content update process.
+- Hide invalid sections and articles with no distribution rights.
+- UI formatting.
+- Marking sections, keywords and contributors for syncing
