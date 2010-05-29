@@ -3,6 +3,7 @@ package nz.gen.wellington.guardian.android.activities;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ListAuthorAdapter;
 import nz.gen.wellington.guardian.android.activities.ui.ListKeywordAdapter;
+import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import android.app.Activity;
@@ -56,7 +57,7 @@ public class article extends Activity {
         standfirst.setText(article.getStandfirst());
         description.setText(article.getDescription());
         
-        ImageDAO imageDAO = new ImageDAO();
+        ImageDAO imageDAO = ArticleDAOFactory.getImageDao();
     	ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
     	if (article.getThumbnailUrl() != null) {
     		Bitmap bitmap = imageDAO.getImage(article.getThumbnailUrl());
