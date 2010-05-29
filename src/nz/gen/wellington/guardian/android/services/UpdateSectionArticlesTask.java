@@ -29,8 +29,9 @@ public class UpdateSectionArticlesTask implements Runnable {
 		if (sectionItems != null) {
 			ImageDAO imageDAO = ArticleDAOFactory.getImageDao();
 			for (Article article : sectionItems) {
-				if (article.getThumbnailUrl() != null) {
-					imageDAO.fetchLiveImage(article.getThumbnailUrl());
+				if (article.getThumbnailUrl() != null) {					
+					ArticleDAOFactory.getTaskQueue().addTask(
+							new ThumbnailFetchTask(article.getThumbnailUrl()));
 				}
 			}
 		}
