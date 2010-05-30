@@ -15,7 +15,7 @@ public class InMemoryArticleCache {
 		this.articleSetArticles = new HashMap<String,  List<Article>>();
 	}
 		
-	public List<Article> getArticleSetArticles(ArticleSet articleSet) {		
+	public List<Article> getArticleSetArticles(ArticleSet articleSet) {
 		return articleSetArticles.get(articleSet.getApiUrl());
 	}
 	
@@ -25,6 +25,10 @@ public class InMemoryArticleCache {
 	
 	public void evictArticleSet(ArticleSet articleSet) {
 		articleSetArticles.remove(articleSet.getApiUrl());		
+	}
+	
+	public void clear() {
+		articleSetArticles.clear();
 	}
 
 }

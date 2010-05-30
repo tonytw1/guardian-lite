@@ -107,10 +107,15 @@ public class ArticleDAO {
 		fileBasedSectionCache.clear();
 	}
 	
+	public void evictAll() {
+		fileBasedArticleCache.clear();
+		articleCache.clear();
+	}
+	
 	
 	public void evictArticleSet(ArticleSet articleSet) {
-		articleCache.evictArticleSet(articleSet);
 		fileBasedArticleCache.clear(articleSet);
+		articleCache.evictArticleSet(articleSet);
 	}
 
 	
