@@ -1,5 +1,7 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ContentSource;
@@ -18,7 +20,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	
 	private String apiKey;
 	public HttpFetcher httpFetcher;
-	protected OpenPlatformJSONParser jsonParser;	
+	protected OpenPlatformJSONParser jsonParser;
 	
 	
 	public OpenPlatformJSONApi(String apiKey) {
@@ -31,6 +33,11 @@ public class OpenPlatformJSONApi implements ContentSource {
 	
 	@Override
 	public List<Article> getArticles(ArticleSet articleSet) {
+		if (apiKey == null) {
+			Log.w(TAG, "API key not set");
+			return null;
+		}
+		
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
 		final String json = getJSON(buildContentQueryUrl(articleSet));
 		if (json != null) {	
@@ -52,14 +59,33 @@ public class OpenPlatformJSONApi implements ContentSource {
 
 	@Override
 	public List<Section> getSections() {
+		if (apiKey == null) {
+			Log.w(TAG, "API key not set");
+			return null;
+		}
 		Log.i(TAG, "Fetching section list from Open Platform api");
 		String jsonString = getJSON(SECTIONS_JSON_URL);
 		if (jsonString != null) {
-			return jsonParser.parseSectionsJSON(jsonString);
+			List<Section> sections = jsonParser.parseSectionsJSON(jsonString);
+			if (sections != null) {
+				return stripJunkSections(sections);
+			}
 		}
 		return null;
 	}
 	
+
+	private List<Section> stripJunkSections(List<Section> parseSectionsJSON) {
+		List<Section> goodSections = new ArrayList<Section>();
+		List<String> badSections = Arrays.asList("Community", "Crosswords", "Extra", "Help", "Info", "Local", "From the Guardian", "From the Observer", "Weather");
+		for (Section section : goodSections) {
+			if (badSections.contains(section.getName())) {
+				goodSections.add(section);				
+			}
+		}
+		return goodSections;
+	}
+
 
 	private String buildContentItemQueryUrl(String id) {
 		StringBuilder url = new StringBuilder("http://content.guardianapis.com/"); // TODO should use the apiUrl Field
