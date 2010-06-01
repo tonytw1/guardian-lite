@@ -4,7 +4,6 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
-import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
@@ -33,7 +32,12 @@ public class UpdateSectionArticlesTask implements Runnable {
 			for (Article article : sectionItems) {
 				if (article.getThumbnailUrl() != null) {					
 					ArticleDAOFactory.getTaskQueue().addTask(
-							new ThumbnailFetchTask(article.getThumbnailUrl(), context));
+							new ImageFetchTask(article.getThumbnailUrl(), context));
+				}
+				
+				if (article.getMainImageUrl() != null) {					
+					ArticleDAOFactory.getTaskQueue().addTask(
+							new ImageFetchTask(article.getMainImageUrl(), context));
 				}
 			}
 		}

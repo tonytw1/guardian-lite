@@ -50,7 +50,37 @@ public class OpenPlatformJSONParser {
 		return null;		
 	}
 
-	
+	public String parseArticleJSONForMainPictureUrl(String jsonString) {
+		try {
+			JSONObject json = new JSONObject(jsonString);
+			if (!isResponseOk(json)) {
+				return null;				
+			}
+			
+			JSONObject response = json.getJSONObject("response");
+			JSONObject content = response.getJSONObject("content");
+			
+			if (content.has("mediaAssets")) {				
+				JSONArray mediaAssets = content.getJSONArray("mediaAssets");
+			
+				// TODO better targeting.
+				if (mediaAssets.length() > 0) {
+					JSONObject first = mediaAssets.getJSONObject(0);
+					if (first.has("file") && first.has("type")) {						
+						if (first.getString("type").equals("picture")) {
+							return first.getString("file");							
+						}
+					}
+				}
+				
+			}
+			return null;
+						
+		} catch (JSONException e) {
+			Log.e(TAG, "JSONException while parsing article: " + e.getMessage());
+			return null;
+		}
+	}
 	
 	private Article extractArticle(JSONObject result) throws JSONException {		
 		Article article = new Article();

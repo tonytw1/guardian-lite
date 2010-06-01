@@ -35,6 +35,14 @@ public class OpenPlatformJSONParserTest extends TestCase {
 	}
 		
 	
+	public void testCanParseSingleItemForMediaElement() throws Exception {
+		final String jsonString = loadContent("open-platform/article_with_media_elements.json").toString();
+		
+		String mainPictureUrl = parser.parseArticleJSONForMainPictureUrl(jsonString);	
+		assertEquals("http://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/6/1/1275408861105/Charles-Dickens-005.jpg", mainPictureUrl);
+	}
+	
+	
 	@Test
 	public void testCanParseSectionsJSON() throws Exception {
 		final String jsonString = loadContent("open-platform/sections.json").toString();		

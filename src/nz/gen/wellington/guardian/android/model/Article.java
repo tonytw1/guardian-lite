@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 
 public class Article implements Serializable {
 
-	private static final long serialVersionUID = 4L;
+	private static final long serialVersionUID = 5L;
 	
 	String id;
 	String title;
@@ -18,6 +18,7 @@ public class Article implements Serializable {
 	List<Author> authors;
 	List<Keyword> keywords;
 	String thumbnailUrl;
+	String mainImageUrl;
 
 	
 	public Article() {
@@ -93,4 +94,12 @@ public class Article implements Serializable {
 		this.thumbnailUrl = thumbnailUrl;
 	}
 
+	public String getMainImageUrl() {
+		return mainImageUrl;
+	}
+
+	public void setMainImageUrl(String mainImageUrl) {
+		this.mainImageUrl = mainImageUrl;
+	}
+	
 }

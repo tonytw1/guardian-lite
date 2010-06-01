@@ -9,6 +9,7 @@ import nz.gen.wellington.guardian.android.model.Article;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -39,7 +40,7 @@ public class article extends Activity {
 			populateArticle(article);
 		} else {
         	Toast.makeText(this, "Could not load article", Toast.LENGTH_SHORT).show();
-		}			
+		}
 	}
 
 		
@@ -59,8 +60,11 @@ public class article extends Activity {
         
         ImageDAO imageDAO = ArticleDAOFactory.getImageDao(this);
     	ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
-    	if (article.getThumbnailUrl() != null && imageDAO.isAvailableLocally(article.getThumbnailUrl())) {
-    		Bitmap bitmap = imageDAO.getImage(article.getThumbnailUrl());
+    	
+    	final String mainImageUrl = article.getMainImageUrl();
+    	Log.i("article", "main picture url is: " + mainImageUrl);
+		if (mainImageUrl != null && imageDAO.isAvailableLocally(mainImageUrl)) {
+    		Bitmap bitmap = imageDAO.getImage(mainImageUrl);
     		if (bitmap != null) {
     			imageView.setImageBitmap(bitmap);		
     		}

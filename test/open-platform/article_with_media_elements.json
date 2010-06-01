@@ -1,0 +1,30 @@
+{
+  "response":{
+    "status":"ok",
+    "userTier":"partner",
+    "total":1,
+    "content":{
+      "id":"books/2010/jun/01/sothebys-auction-first-editions-books",
+      "sectionId":"books",
+      "sectionName":"Books",
+      "webPublicationDate":"2010-06-01T17:54:39+01:00",
+      "webTitle":"Sotheby's to auction 'knockout' collection of first-edition books",
+      "webUrl":"http://www.guardian.co.uk/books/2010/jun/01/sothebys-auction-first-editions-books",
+      "apiUrl":"http://content.guardianapis.com/books/2010/jun/01/sothebys-auction-first-editions-books",
+      "mediaAssets":[{
+        "type":"picture",
+        "rel":"body",
+        "index":1,
+        "file":"http://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/6/1/1275408861105/Charles-Dickens-005.jpg",
+        "fields":{
+          "source":"AP",
+          "credit":"AP",
+          "height":"276",
+          "altText":"Charles Dickens",
+          "caption":"Charles Dickens. Photograph: AP",
+          "width":"460"
+        }
+      }]
+    }
+  }
+}

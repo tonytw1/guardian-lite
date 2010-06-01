@@ -34,7 +34,18 @@ public class OpenPlatformJSONApi implements ContentSource {
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
 		final String json = getJSON(buildContentQueryUrl(articleSet));
 		if (json != null) {	
-			return jsonParser.parseArticlesJSON(json);
+			List<Article> articles = jsonParser.parseArticlesJSON(json);
+
+			// TODO key level checking - only do if your key has this.
+			for (Article article : articles) {
+				String itemApiUrl = buildContentItemQueryUrl(article.getId());
+				final String itemJson = getJSON(itemApiUrl);
+				if (itemJson != null) {
+					article.setMainImageUrl(jsonParser.parseArticleJSONForMainPictureUrl(itemJson));
+					Log.i(TAG, "Found article main picture: " + article.getMainImageUrl());
+				}
+			}
+			return articles;
 		}
 		return null;
 	}
@@ -48,6 +59,17 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		return null;
 	}
+	
+
+	private String buildContentItemQueryUrl(String id) {
+		StringBuilder url = new StringBuilder("http://content.guardianapis.com/"); // TODO should use the apiUrl Field
+		url.append(id);
+		url.append("?show-media=all");
+		url.append("&api-key=" + apiKey);
+		url.append("&format=json");
+		return url.toString();
+	}
+	
 	
 	private String buildContentQueryUrl(ArticleSet articleSet) {		
 		StringBuilder url = new StringBuilder(articleSet.getApiUrl());

@@ -61,6 +61,7 @@ public class FileBasedArticleCache {
 	}
 	
 	
+	// TODO only clear article json files
 	public void clear() {
 		Log.i(TAG, "Clearing all cache files");
 		File cacheDir = context.getCacheDir();
