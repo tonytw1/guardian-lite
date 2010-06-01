@@ -8,9 +8,11 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
+import nz.gen.wellington.guardian.android.services.ThumbnailFetchTask;
 import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,11 +60,12 @@ public class sync extends Activity implements OnClickListener {
 			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this);
 			articleDAO.evictSections();
 			articleDAO.evictAll();
+			
 			List<Section> sections = articleDAO.getSections();
 			if (sections != null) {
 				for (Section section : sections) {
 					Log.i(TAG, "Injecting section into update queue: " + section.getName());
-					taskQueue.addTask(new UpdateSectionArticlesTask(articleDAO, section));
+					taskQueue.addTask(new UpdateSectionArticlesTask(articleDAO, section, this));
 				}
 			}
 			

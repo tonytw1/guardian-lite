@@ -57,12 +57,12 @@ public class article extends Activity {
         standfirst.setText(article.getStandfirst());
         description.setText(article.getDescription());
         
-        ImageDAO imageDAO = ArticleDAOFactory.getImageDao();
+        ImageDAO imageDAO = ArticleDAOFactory.getImageDao(this);
     	ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
-    	if (article.getThumbnailUrl() != null) {
+    	if (article.getThumbnailUrl() != null && imageDAO.isAvailableLocally(article.getThumbnailUrl())) {
     		Bitmap bitmap = imageDAO.getImage(article.getThumbnailUrl());
     		if (bitmap != null) {
-    			imageView.setImageBitmap(bitmap);    			    			
+    			imageView.setImageBitmap(bitmap);		
     		}
     	}
         

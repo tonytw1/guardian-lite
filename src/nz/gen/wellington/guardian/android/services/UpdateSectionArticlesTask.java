@@ -8,6 +8,7 @@ import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
+import android.content.Context;
 import android.util.Log;
 
 public class UpdateSectionArticlesTask implements Runnable {
@@ -15,10 +16,12 @@ public class UpdateSectionArticlesTask implements Runnable {
 	private static final String TAG = "UpdateSectionArticlesTask";
 	private ArticleDAO articleDAO;
 	private Section section;
+	private Context context;
 
-	public UpdateSectionArticlesTask(ArticleDAO articleDAO, Section section) {
+	public UpdateSectionArticlesTask(ArticleDAO articleDAO, Section section, Context context) {
 		this.articleDAO = articleDAO;
 		this.section = section;
+		this.context = context;
 	}
 
 	@Override
@@ -27,11 +30,10 @@ public class UpdateSectionArticlesTask implements Runnable {
 		Log.i(TAG, "Fetching section articles: " + section.getName());
 		List<Article> sectionItems = articleDAO.getSectionItems(section);
 		if (sectionItems != null) {
-			ImageDAO imageDAO = ArticleDAOFactory.getImageDao();
 			for (Article article : sectionItems) {
 				if (article.getThumbnailUrl() != null) {					
 					ArticleDAOFactory.getTaskQueue().addTask(
-							new ThumbnailFetchTask(article.getThumbnailUrl()));
+							new ThumbnailFetchTask(article.getThumbnailUrl(), context));
 				}
 			}
 		}

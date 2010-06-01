@@ -23,9 +23,9 @@ public class ArticleDAOFactory {
 		return taskQueue;		
 	}
 
-	public static ImageDAO getImageDao() {
+	public static ImageDAO getImageDao(Context context) {
 		if (imageDAO == null) {
-			imageDAO = new ImageDAO();
+			imageDAO = new ImageDAO(context);
 		}
 		return imageDAO;	
 	}
