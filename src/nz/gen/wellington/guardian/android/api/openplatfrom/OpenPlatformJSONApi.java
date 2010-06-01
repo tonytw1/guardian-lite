@@ -16,7 +16,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	private static final String TAG = "OpenPlatformJSONApi";
 	
 	private static final String SECTIONS_JSON_URL = "http://content.guardianapis.com/sections?format=json";
-	private static final int PAGE_SIZE = 10;	// TODO push to a preference
+	private static final int PAGE_SIZE = 20;	// TODO push to a preference
 	
 	private String apiKey;
 	public HttpFetcher httpFetcher;
@@ -81,11 +81,11 @@ public class OpenPlatformJSONApi implements ContentSource {
 	}
 	
 
-	private List<Section> stripJunkSections(List<Section> parseSectionsJSON) {
+	private List<Section> stripJunkSections(List<Section> sections) {
 		List<Section> goodSections = new ArrayList<Section>();
 		List<String> badSections = Arrays.asList("Community", "Crosswords", "Extra", "Help", "Info", "Local", "From the Guardian", "From the Observer", "Weather");
-		for (Section section : goodSections) {
-			if (badSections.contains(section.getName())) {
+		for (Section section : sections) {
+			if (!badSections.contains(section.getName())) {
 				goodSections.add(section);				
 			}
 		}
