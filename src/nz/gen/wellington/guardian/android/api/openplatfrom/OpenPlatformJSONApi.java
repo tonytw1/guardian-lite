@@ -16,7 +16,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	private static final String TAG = "OpenPlatformJSONApi";
 	
 	private static final String SECTIONS_JSON_URL = "http://content.guardianapis.com/sections?format=json";
-	private static final int PAGE_SIZE = 10;
+	private static final int PAGE_SIZE = 10;	// TODO push to a preference
 	
 	private String apiKey;
 	public HttpFetcher httpFetcher;
@@ -42,19 +42,25 @@ public class OpenPlatformJSONApi implements ContentSource {
 		final String json = getJSON(buildContentQueryUrl(articleSet));
 		if (json != null) {	
 			List<Article> articles = jsonParser.parseArticlesJSON(json);
-
-			// TODO key level checking - only do if your key has this.
-			for (Article article : articles) {
-				String itemApiUrl = buildContentItemQueryUrl(article.getId());
-				final String itemJson = getJSON(itemApiUrl);
-				if (itemJson != null) {
-					article.setMainImageUrl(jsonParser.parseArticleJSONForMainPictureUrl(itemJson));
-					Log.i(TAG, "Found article main picture: " + article.getMainImageUrl());
+			if (articles != null) {			
+				// TODO key level checking - only do if your key has this.
+				for (Article article : articles) {
+					queryForMainPictureUrl(article);
 				}
+				return articles;
 			}
-			return articles;
 		}
 		return null;
+	}
+
+
+	private void queryForMainPictureUrl(Article article) {
+		String itemApiUrl = buildContentItemQueryUrl(article.getId());
+		final String itemJson = getJSON(itemApiUrl);
+		if (itemJson != null) {
+			article.setMainImageUrl(jsonParser.parseArticleJSONForMainPictureUrl(itemJson));
+			Log.i(TAG, "Found article main picture: " + article.getMainImageUrl());
+		}
 	}
 
 	@Override
