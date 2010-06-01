@@ -10,6 +10,8 @@ import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Keyword;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -23,6 +25,9 @@ public class keyword extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.main);		
 				
 		final Keyword keyword = (Keyword) this.getIntent().getExtras().get("keyword");
@@ -39,7 +44,7 @@ public class keyword extends Activity {
 		if (articles != null) {
 			List<Article> newsitems = articles;				
 			ListView listView = (ListView) findViewById(R.id.ArticlesListView); 
-			adapter = new ListArticleAdapter(this, ArticleImageDecorator.decorateNewsitemsWithThumbnails(newsitems));		   
+			adapter = new ListArticleAdapter(this, ArticleImageDecorator.decorateNewsitemsWithThumbnails(newsitems, this));		   
 			listView.setAdapter(adapter);
 		}
 	}

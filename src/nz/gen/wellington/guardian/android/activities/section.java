@@ -10,6 +10,8 @@ import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -21,8 +23,11 @@ public class section extends Activity {
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        super.onCreate(savedInstanceState);        
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		setContentView(R.layout.main);
         
     	final Section section = (Section) this.getIntent().getExtras().get("section");
 		this.setTitle(section.getName());
@@ -35,7 +40,7 @@ public class section extends Activity {
 		if (articles != null) {			
 			List<Article> newsitems = articles;	
 			ListView listView = (ListView) findViewById(R.id.ArticlesListView);    		   
-			adapter = new ListArticleAdapter(this, ArticleImageDecorator.decorateNewsitemsWithThumbnails(newsitems));		   
+			adapter = new ListArticleAdapter(this, ArticleImageDecorator.decorateNewsitemsWithThumbnails(newsitems, this));		   
 			listView.setAdapter(adapter);
 		} else {
 			Toast.makeText(this, "Could not load section articles", Toast.LENGTH_SHORT).show();
