@@ -23,35 +23,28 @@ public class FileBasedSectionCache {
 		this.context = context;
 	}
 
-	public void putSections(List<Section> sections) {		
-		final String filepath = SECTIONS_JSON;		
-		Log.i(TAG, "Writing to disk: " + filepath);
-		FileOutputStream fos = null;
-		ObjectOutputStream out = null;
+	
+	public void putSections(List<Section> sections) {				
 		try {
-			fos = context.openFileOutput(filepath, Context.MODE_PRIVATE);
-			out = new ObjectOutputStream(fos);
+			FileOutputStream fos = FileService.getFileOutputStream(context, SECTIONS_JSON);
+			ObjectOutputStream out = new ObjectOutputStream(fos);
 			out.writeObject(sections);
 			out.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
-		}	
+		}
 	}
-		
+	
+	
 	@SuppressWarnings("unchecked")
 	public List<Section> getSections() {
-		if (!isLocallyCached(SECTIONS_JSON)) {
+		if (!FileService.isLocallyCached(context, SECTIONS_JSON)) {
 			return null;
-		}
-		
-		final String filepath = SECTIONS_JSON;
-		Log.i(TAG, "Reading from disk: " + filepath);
-
-		FileInputStream fis = null;
-		ObjectInputStream in = null;
+		}		
+		Log.i(TAG, "Reading from disk: " + SECTIONS_JSON);
 		try {
-			fis = context.openFileInput(filepath);
-			in = new ObjectInputStream(fis);
+			FileInputStream fis = FileService.getFileInputStream(context, SECTIONS_JSON);
+			ObjectInputStream in = new ObjectInputStream(fis);
 			List<Section> loaded = (List<Section>) in.readObject();
 			in.close();
 			return loaded;
@@ -67,7 +60,7 @@ public class FileBasedSectionCache {
 	
 	public void clear() {
 		Log.i(TAG, "Clearing sections");
-		if (isLocallyCached(SECTIONS_JSON)) {
+		if (FileService.isLocallyCached(context, SECTIONS_JSON)) {
 			File localFile = context.getFileStreamPath(SECTIONS_JSON);			
 			localFile.delete();
 			Log.i(TAG, "Cleared: " + SECTIONS_JSON);
@@ -75,10 +68,5 @@ public class FileBasedSectionCache {
 			Log.i(TAG, "No local copy to clear:" + SECTIONS_JSON);
 		}
 	}
-	
-	private boolean isLocallyCached(String filepath) {
-		File localFile = context.getFileStreamPath(filepath);
-		return localFile.exists() && localFile.canRead();
-	}
-	
+		
 }

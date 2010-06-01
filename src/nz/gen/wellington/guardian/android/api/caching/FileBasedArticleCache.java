@@ -23,47 +23,39 @@ public class FileBasedArticleCache {
 		this.context = context;
 	}
 
+	
 	public void putArticleSetArticles(ArticleSet articleSet, List<Article> articles) {		
-		final String filepath = this.getLocalFilename(articleSet.getApiUrl());		
-		Log.i(TAG, "Writing to disk: " + filepath);
-		FileOutputStream fos = null;
-		ObjectOutputStream out = null;
-		try {
-			File file = new File(context.getCacheDir() + "/" + filepath);
-			Log.i(TAG, "Writing to disk: " + file.getAbsolutePath());
-			fos = new FileOutputStream(file);
-			out = new ObjectOutputStream(fos);
+		Log.i(TAG, "Writing to disk: " + articleSet.getName());
+		try {	
+			FileOutputStream fos = FileService.getFileOutputStream(context, articleSet.getApiUrl());	
+			ObjectOutputStream out = new ObjectOutputStream(fos);			
 			out.writeObject(articles);
-			out.close();
+			out.close();			
 		} catch (IOException ex) {
-			ex.printStackTrace();
-		}	
+			Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName() + ex.getMessage());
+		}
 	}
 		
+	
 	@SuppressWarnings("unchecked")
 	public List<Article> getArticleSetArticles(ArticleSet articleSet) {
-		if (!isLocallyCached(articleSet.getApiUrl())) {
+		if (!FileService.isLocallyCached(context, articleSet.getApiUrl())) {
 			return null;
 		}
 		
-		final String filepath = this.getLocalFilename(articleSet.getApiUrl());
+		final String filepath = FileService.getLocalFilename(articleSet.getApiUrl());
 		Log.i(TAG, "Reading from disk: " + filepath);
-
-		FileInputStream fis = null;
-		ObjectInputStream in = null;
 		try {
-			File file = new File(context.getCacheDir() + "/" + filepath);
-			Log.i(TAG, "Reading from disk: " + file.getAbsolutePath());
-			fis = new FileInputStream(file);	// TODO null check
-			in = new ObjectInputStream(fis);
+			FileInputStream fis = FileService.getFileInputStream(context, articleSet.getApiUrl());
+			ObjectInputStream in = new ObjectInputStream(fis);
 			List<Article> loaded = (List<Article>) in.readObject();
 			in.close();
 			return loaded;
 			
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName() + ex.getMessage());
 		} catch (ClassNotFoundException ex) {
-			ex.printStackTrace();
+			Log.e(TAG, "Exception while writing article set: " + articleSet.getName() + ex.getMessage());
 		}
 		return null;
 	}
@@ -93,8 +85,8 @@ public class FileBasedArticleCache {
 	
 	public void clear(ArticleSet articleSet) {
 		Log.i(TAG, "Clearing article set: " + articleSet.getName());
-		final String filepath = getLocalFilename(articleSet.getApiUrl());
-		if (isLocallyCached(articleSet.getApiUrl())) {
+		final String filepath = FileService.getLocalFilename(articleSet.getApiUrl());
+		if (FileService.isLocallyCached(context, articleSet.getApiUrl())) {
 			File localFile = new File(context.getCacheDir() + filepath);			
 			localFile.delete();
 			Log.i(TAG, "Cleared: " + filepath);
@@ -102,15 +94,5 @@ public class FileBasedArticleCache {
 			Log.i(TAG, "No local copy to clear:" + filepath);
 		}
 	}
-	
-	private boolean isLocallyCached(String apiUrl) {
-		File localFile = new File(context.getCacheDir(), getLocalFilename(apiUrl));
-		Log.i(TAG, "Checking for local cache file at: " + localFile.getAbsolutePath());
-		return localFile.exists() && localFile.canRead();
-	}
 		
-	protected String getLocalFilename(String apiUrl) {
-		return apiUrl.replaceAll("/", "").replaceAll(":", "");
-	}
-	
 }
