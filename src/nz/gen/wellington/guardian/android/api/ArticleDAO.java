@@ -4,7 +4,6 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedSectionCache;
-import nz.gen.wellington.guardian.android.api.caching.InMemoryArticleCache;
 import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -23,7 +22,6 @@ public class ArticleDAO {
 	
 	ContentSource openPlatformApi;
 
-	InMemoryArticleCache articleCache;
 	InMemorySectionCache sectionCache;
 	FileBasedArticleCache fileBasedArticleCache;
 	FileBasedSectionCache fileBasedSectionCache;
@@ -31,7 +29,6 @@ public class ArticleDAO {
 	public ArticleDAO(Context context) {
 		this.openPlatformApi = ApiFactory.getOpenPlatformApi(context);
 
-		this.articleCache = CacheFactory.getArticleCache();
 		this.sectionCache = CacheFactory.getSectionCache();
 		this.fileBasedArticleCache = new FileBasedArticleCache(context);
 		this.fileBasedSectionCache = new FileBasedSectionCache(context);
@@ -77,14 +74,8 @@ public class ArticleDAO {
 	
 	private List<Article> getArticleSetArticles(ArticleSet articleSet) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
-
-		List<Article> articles = articleCache.getArticleSetArticles(articleSet);
-		if (articles != null) {
-			Log.i(TAG, "Got article cache hit for article set: " + articleSet.getName());
-			return articles;
-		}
 		
-		articles = fileBasedArticleCache.getArticleSetArticles(articleSet);
+		List<Article> articles = fileBasedArticleCache.getArticleSetArticles(articleSet);
 		if (articles != null) {
 			Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());
 			return articles;
@@ -93,7 +84,7 @@ public class ArticleDAO {
 		articles = openPlatformApi.getArticles(articleSet);		
 		if (articles != null) {
 			Log.i(TAG, "Got " + articles.size() + " articles from api call");
-			articleCache.putArticleSetArticles(articleSet, articles);
+			//articleCache.putArticleSetArticles(articleSet, articles);
 			fileBasedArticleCache.putArticleSetArticles(articleSet, articles);
 		} else {
 			Log.w(TAG, "Article api call failed");
@@ -109,13 +100,11 @@ public class ArticleDAO {
 	
 	public void evictAll() {
 		fileBasedArticleCache.clear();
-		articleCache.clear();
 	}
 	
 	
 	public void evictArticleSet(ArticleSet articleSet) {
 		fileBasedArticleCache.clear(articleSet);
-		articleCache.evictArticleSet(articleSet);
 	}
 
 	

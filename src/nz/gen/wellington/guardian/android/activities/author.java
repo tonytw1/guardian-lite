@@ -9,7 +9,6 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Author;
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
