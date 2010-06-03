@@ -16,20 +16,20 @@ public class ArticleImageDecorator {
 		List<ImageDecoratedArticle> decorated = new ArrayList<ImageDecoratedArticle>();
 		ImageDAO imageDAO = ArticleDAOFactory.getImageDao(context);
 		for (Article article : newsitems) {
-			applyThumbnailIfAvailableLocally(decorated, imageDAO, article);
+			decorated.add(applyThumbnailIfAvailableLocally(imageDAO, article));
 		}
 		return decorated;
 	}
 
 	
-	private static void applyThumbnailIfAvailableLocally(
-			List<ImageDecoratedArticle> decorated, ImageDAO imageDAO,
-			Article article) {
+	private static ImageDecoratedArticle applyThumbnailIfAvailableLocally(ImageDAO imageDAO, Article article) {
 		Bitmap image = null;		
 		if (article.getThumbnailUrl() != null && imageDAO.isAvailableLocally(article.getThumbnailUrl())) {
 			image = imageDAO.getImage(article.getThumbnailUrl());
+		} else if (article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl())) {
+			image = imageDAO.getImage(article.getThumbnailUrl());
 		}
-		decorated.add(new ImageDecoratedArticle(article, image));
+		return new ImageDecoratedArticle(article, image);		
 	}
 	
 }
