@@ -36,5 +36,11 @@ public class FileService {
 	public static String getLocalFilename(String url) {
 		return url.replaceAll("/", "").replaceAll(":", "");
 	}
+
+	public static void clear(Context context, String apiUrl) {
+		File localFile = new File(context.getCacheDir(), getLocalFilename(apiUrl));
+		Log.i(TAG, "Clearing: " + localFile.getAbsolutePath());
+		localFile.delete();
+	}
 	
 }

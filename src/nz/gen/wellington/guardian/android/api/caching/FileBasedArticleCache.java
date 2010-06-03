@@ -89,13 +89,10 @@ public class FileBasedArticleCache {
 	
 	public void clear(ArticleSet articleSet) {
 		Log.i(TAG, "Clearing article set: " + articleSet.getName());
-		final String filepath = FileService.getLocalFilename(articleSet.getApiUrl());
 		if (FileService.isLocallyCached(context, articleSet.getApiUrl())) {
-			File localFile = new File(context.getCacheDir() + filepath);			
-			localFile.delete();
-			Log.i(TAG, "Cleared: " + filepath);
+			FileService.clear(context, articleSet.getApiUrl());
 		} else {
-			Log.i(TAG, "No local copy to clear:" + filepath);
+			Log.i(TAG, "No local copy to clear:" + articleSet.getApiUrl());
 		}
 	}
 		
