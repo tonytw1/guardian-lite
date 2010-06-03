@@ -12,6 +12,8 @@ import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
+import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 
 public class OpenPlatformJSONApi implements ContentSource {
@@ -24,10 +26,11 @@ public class OpenPlatformJSONApi implements ContentSource {
 	private String apiKey;
 	public HttpFetcher httpFetcher;
 	protected OpenPlatformJSONParser jsonParser;
+	private Context context;
 	
-	
-	public OpenPlatformJSONApi(String apiKey) {
+	public OpenPlatformJSONApi(Context context, String apiKey) {
 		this.apiKey = apiKey;	// TODO not here - state gets stuck
+		this.context = context;
 		Log.d(TAG, "Apikey set from preferences to: " + apiKey);
 		httpFetcher = new HttpFetcher();
 		jsonParser = new  OpenPlatformJSONParser();
@@ -45,11 +48,16 @@ public class OpenPlatformJSONApi implements ContentSource {
 		final String json = getJSON(buildContentQueryUrl(articleSet));		
 		if (json != null) {	
 			List<Article> articles = jsonParser.parseArticlesJSON(json);			
-			if (articles != null) {				
-				if (!jsonParser.getUserTier(json).equals("partner"))  {
-					return articles;
-				}				
-				return getArticleMainPictureUrls(articles);
+			if (articles != null) {
+				
+				WifiManager wifiService = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);								
+				final boolean shouldDownloadMainImages = wifiService.isWifiEnabled() && !jsonParser.getUserTier(json).equals("partner");
+				if (shouldDownloadMainImages) {
+					Log.i(TAG, "Wifi is enabled - downloading full images");
+					return getArticleMainPictureUrls(articles);
+				}
+				Log.i(TAG, "Wifi is not enabled - not downloading full images");
+				return articles;
 			}
 		}
 		return null;

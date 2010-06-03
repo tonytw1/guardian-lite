@@ -10,7 +10,7 @@ public class ApiFactory {
 	public static ContentSource getOpenPlatformApi(Context context) {
 		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
 		final String apiKey = prefs.getString("apikey", null);
-		return new OpenPlatformJSONApi(apiKey);	
+		return new OpenPlatformJSONApi(context, apiKey);
 	}
 		
 }
