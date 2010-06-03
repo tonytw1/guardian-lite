@@ -181,6 +181,21 @@ public class OpenPlatformJSONParser {
 		}
 	}
 	
+	public String getUserTier(String jsonString) {
+		try {
+			JSONObject json = new JSONObject(jsonString); // TODO wasteful duplicate parsing
+			if (!isResponseOk(json)) {
+				return null;				
+			}
+			JSONObject response = json.getJSONObject("response");
+			if (response.has("userTier")) {
+				return response.getString("userTier");
+			}
+			return null;
+		} catch (JSONException e) {
+			return null;
+		}		
+	}
 	
 	private String getJsonFields(JSONObject jsonObject, String field) throws JSONException {
 		if (jsonObject.has(field)) {
@@ -188,5 +203,6 @@ public class OpenPlatformJSONParser {
 		}
 		return null;
 	}
+
 	
 }

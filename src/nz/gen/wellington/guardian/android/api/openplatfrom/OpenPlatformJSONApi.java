@@ -39,18 +39,26 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
-		final String json = getJSON(buildContentQueryUrl(articleSet));
+		final String json = getJSON(buildContentQueryUrl(articleSet));		
 		if (json != null) {	
-			List<Article> articles = jsonParser.parseArticlesJSON(json);
-			if (articles != null) {			
-				// TODO key level checking - only do if your key has this.
-				for (Article article : articles) {
-					queryForMainPictureUrl(article);
+			List<Article> articles = jsonParser.parseArticlesJSON(json);			
+			if (articles != null) {				
+				if (!jsonParser.getUserTier(json).equals("partner"))  {
+					return articles;
 				}
-				return articles;
+				
+				return getArticleMainPictureUrls(articles);
 			}
 		}
 		return null;
+	}
+
+
+	private List<Article> getArticleMainPictureUrls(List<Article> articles) {
+		for (Article article : articles) {
+			queryForMainPictureUrl(article);
+		}
+		return articles;
 	}
 
 
@@ -103,7 +111,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	}
 	
 	
-	private String buildContentQueryUrl(ArticleSet articleSet) {		
+	protected String buildContentQueryUrl(ArticleSet articleSet) {		
 		StringBuilder url = new StringBuilder(articleSet.getApiUrl());
 		url.append("?show-fields=all");
 		url.append("&show-tags=all");
