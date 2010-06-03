@@ -61,29 +61,8 @@ public class FileBasedArticleCache {
 	}
 	
 	
-	// TODO only clear article json files
-	// TODO move to file service?
 	public void clear() {
-		Log.i(TAG, "Clearing all cache files");
-		File cacheDir = context.getCacheDir();
-		if (cacheDir == null) {
-			Log.i(TAG, "No cache folder found");
-			return;
-		}
-		Log.i(TAG, "Cache dir path is: " + cacheDir.getPath());
-		Log.i(TAG, "Cache dir absolute path is: " + cacheDir.getAbsolutePath());
-		
-		File[] listFiles = cacheDir.listFiles();
-		Log.i(TAG, "Cache dir file count: " + listFiles.length);
-		for (int i = 0; i < listFiles.length; i++) {
-			File cacheFile = listFiles[i];
-			if (cacheFile.getPath().endsWith("json")) {	// TODO this is abit of a hack to preserve images.
-				Log.i(TAG, "Found cache file: " + cacheFile.getAbsolutePath());
-				if (cacheFile.delete()) {
-					Log.i(TAG, "Deleted cache file: " + cacheFile.getAbsolutePath());				
-				}
-			}
-		}
+		FileService.clearAll(context);
 	}
 
 	
