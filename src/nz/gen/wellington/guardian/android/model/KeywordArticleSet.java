@@ -3,9 +3,9 @@ package nz.gen.wellington.guardian.android.model;
 public class KeywordArticleSet implements ArticleSet {
 	
 	private static final long serialVersionUID = 1L;
-	private Keyword keyword;
+	private Tag keyword;
 
-	public KeywordArticleSet(Keyword keyword) {
+	public KeywordArticleSet(Tag keyword) {
 		this.keyword = keyword;
 	}
 
@@ -16,7 +16,7 @@ public class KeywordArticleSet implements ArticleSet {
 	
 	@Override
 	public String getApiUrl() {
-		return keyword.getApiUrl();
+		return keyword.getId();
 	}
 
 

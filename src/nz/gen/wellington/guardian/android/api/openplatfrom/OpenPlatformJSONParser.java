@@ -5,9 +5,8 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ArticleBodyCleaner;
 import nz.gen.wellington.guardian.android.model.Article;
-import nz.gen.wellington.guardian.android.model.Author;
-import nz.gen.wellington.guardian.android.model.Keyword;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.Tag;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.joda.time.format.DateTimeFormat;
@@ -128,17 +127,17 @@ public class OpenPlatformJSONParser {
 				final String type = tag.getString("type");
 								
 				if (type.equals(CONTRIBUTOR)) {
-					Author author = new Author(
+					Tag author = new Tag(
 						getJsonFields(tag, "webTitle"), 
-						getJsonFields(tag, "apiUrl"));
+						getJsonFields(tag, "id"));
 					article.addAuthor(author);
 					
 				} else if (type.equals(KEYWORD)) {
-					Keyword keyword = new Keyword(
+					Tag keyword = new Tag(
 							getJsonFields(tag, "webTitle"), 
-							getJsonFields(tag, "apiUrl"));
+							getJsonFields(tag, "id"));
 					article.addKeyword(keyword);
-				}				
+				}
 			}						
 		}
 		return;
@@ -159,8 +158,8 @@ public class OpenPlatformJSONParser {
 			for (int i=0; i < results.length(); i++) {				
 				JSONObject section = results.getJSONObject(i);				
 				final String sectionName = StringEscapeUtils.unescapeHtml(section.getString("webTitle"));
-				final String apiUrl =  section.getString("apiUrl");
-				sections.add(new Section(sectionName, apiUrl));
+				final String id =  section.getString("id");
+				sections.add(new Section(sectionName, id));
 			}				
 			return sections;			
 			

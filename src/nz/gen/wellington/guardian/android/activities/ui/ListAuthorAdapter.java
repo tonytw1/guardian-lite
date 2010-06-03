@@ -3,7 +3,7 @@ package nz.gen.wellington.guardian.android.activities.ui;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.model.Author;
+import nz.gen.wellington.guardian.android.model.Tag;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +13,11 @@ import android.widget.TextView;
 
 public class ListAuthorAdapter extends BaseAdapter {
 	
-	private List<Author> authors;
+	private List<Tag> authors;
 	private LayoutInflater mInflater;
 	
 	
-    public ListAuthorAdapter(Context context, List<Author> authors) {
+    public ListAuthorAdapter(Context context, List<Tag> authors) {
 		super();
 		mInflater = LayoutInflater.from(context);
 		this.authors = authors;

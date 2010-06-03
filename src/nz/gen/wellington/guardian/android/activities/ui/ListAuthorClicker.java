@@ -1,16 +1,16 @@
 package nz.gen.wellington.guardian.android.activities.ui;
 
 import nz.gen.wellington.guardian.android.activities.author;
-import nz.gen.wellington.guardian.android.model.Author;
+import nz.gen.wellington.guardian.android.model.Tag;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 public class ListAuthorClicker implements OnClickListener {
 
-	private Author author;
+	private Tag author;
 
-	public ListAuthorClicker(Author author) {
+	public ListAuthorClicker(Tag author) {
 		this.author = author;
 	}
 

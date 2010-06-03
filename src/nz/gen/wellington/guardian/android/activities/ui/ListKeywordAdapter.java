@@ -3,7 +3,7 @@ package nz.gen.wellington.guardian.android.activities.ui;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.model.Keyword;
+import nz.gen.wellington.guardian.android.model.Tag;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +13,11 @@ import android.widget.TextView;
 
 public class ListKeywordAdapter extends BaseAdapter {
 	
-	private List<Keyword> keywords;
+	private List<Tag> keywords;
 	private LayoutInflater mInflater;
 	
 	
-    public ListKeywordAdapter(Context context, List<Keyword> keywords) {
+    public ListKeywordAdapter(Context context, List<Tag> keywords) {
 		super();
 		mInflater = LayoutInflater.from(context);
 		this.keywords = keywords;

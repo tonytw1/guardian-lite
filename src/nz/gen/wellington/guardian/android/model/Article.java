@@ -15,15 +15,15 @@ public class Article implements Serializable {
 	String standfirst;
 	DateTime pubDate;
 	String description;
-	List<Author> authors;
-	List<Keyword> keywords;
+	List<Tag> authors;
+	List<Tag> keywords;
 	String thumbnailUrl;
 	String mainImageUrl;
 
 	
 	public Article() {
-		authors = new ArrayList<Author>();
-		keywords = new ArrayList<Keyword>();
+		authors = new ArrayList<Tag>();
+		keywords = new ArrayList<Tag>();
 	}
 	
 	public String getId() {
@@ -66,11 +66,11 @@ public class Article implements Serializable {
 		this.description = description;
 	}
 
-	public List<Author> getAuthors() {
+	public List<Tag> getAuthors() {
 		return authors;
 	}
 	
-	public void addAuthor(Author author) {
+	public void addAuthor(Tag author) {
 		authors.add(author);
 	}
 	
@@ -78,11 +78,11 @@ public class Article implements Serializable {
 		return authors.toString();
 	}
 	
-	public List<Keyword> getKeywords() {
+	public List<Tag> getKeywords() {
 		return keywords;
 	}
 
-	public void addKeyword(Keyword keyword) {
+	public void addKeyword(Tag keyword) {
 		keywords.add(keyword);
 	}
 

@@ -1,16 +1,16 @@
 package nz.gen.wellington.guardian.android.activities.ui;
 
 import nz.gen.wellington.guardian.android.activities.keyword;
-import nz.gen.wellington.guardian.android.model.Keyword;
+import nz.gen.wellington.guardian.android.model.Tag;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 public class ListKeywordClicker implements OnClickListener {
 
-	private Keyword keyword;
+	private Tag keyword;
 
-	public ListKeywordClicker(Keyword keyword) {
+	public ListKeywordClicker(Tag keyword) {
 		this.keyword = keyword;
 	}
 

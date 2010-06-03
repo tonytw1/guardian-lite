@@ -6,9 +6,9 @@ import java.io.Serializable;
 public class AuthorArticleSet implements ArticleSet, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Author author;
+	private Tag author;
 		
-	public AuthorArticleSet(Author author) {
+	public AuthorArticleSet(Tag author) {
 		this.author = author;
 	}
 
@@ -19,7 +19,7 @@ public class AuthorArticleSet implements ArticleSet, Serializable {
 	
 	@Override
 	public String getApiUrl() {
-		return author.getApiUrl();
+		return author.getId();
 	}
 
 }

@@ -2,23 +2,23 @@ package nz.gen.wellington.guardian.android.model;
 
 import java.io.Serializable;
 
-public class Keyword implements Serializable {
+public class Tag implements Serializable {
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	private String name;
-	private String apiUrl;
+	private String id;
 
-	public Keyword(String name, String apiUrl) {
+	public Tag(String name, String id) {
 		this.name = name;
-		this.apiUrl = apiUrl;
+		this.id = id;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public String getApiUrl() {
-		return apiUrl;
+	public String getId() {
+		return id;
 	}
 	
 	@Override

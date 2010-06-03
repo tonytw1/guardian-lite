@@ -25,7 +25,7 @@ public class ImageDecoratedArticle extends Article {
 		return article.getAuthorNames();
 	}
 
-	public List<Author> getAuthors() {
+	public List<Tag> getAuthors() {
 		return article.getAuthors();
 	}
 
@@ -37,7 +37,7 @@ public class ImageDecoratedArticle extends Article {
 		return article.getId();
 	}
 
-	public List<Keyword> getKeywords() {
+	public List<Tag> getKeywords() {
 		return article.getKeywords();
 	}
 

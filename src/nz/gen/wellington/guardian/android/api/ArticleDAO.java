@@ -7,12 +7,11 @@ import nz.gen.wellington.guardian.android.api.caching.FileBasedSectionCache;
 import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.Author;
 import nz.gen.wellington.guardian.android.model.AuthorArticleSet;
-import nz.gen.wellington.guardian.android.model.Keyword;
 import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
+import nz.gen.wellington.guardian.android.model.Tag;
 import android.content.Context;
 import android.util.Log;
 
@@ -41,12 +40,12 @@ public class ArticleDAO {
 	}
 	
 	
-	public List<Article> getAuthorItems(Author author) {
+	public List<Article> getAuthorItems(Tag author) {
 		ArticleSet authorArticleSet = new AuthorArticleSet(author);
 		return getArticleSetArticles(authorArticleSet);
 	}
 	
-	public List<Article> getKeywordItems(Keyword keyword) {
+	public List<Article> getKeywordItems(Tag keyword) {
 		ArticleSet keywordArticleSet = new KeywordArticleSet(keyword);
 		return getArticleSetArticles(keywordArticleSet);
 	}

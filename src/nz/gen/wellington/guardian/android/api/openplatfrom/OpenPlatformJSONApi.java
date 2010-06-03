@@ -7,7 +7,10 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.AuthorArticleSet;
+import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import android.util.Log;
 
@@ -16,7 +19,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	private static final String TAG = "OpenPlatformJSONApi";
 	
 	private static final String SECTIONS_JSON_URL = "http://content.guardianapis.com/sections?format=json";
-	private static final int PAGE_SIZE = 20;	// TODO push to a preference
+	private static final int PAGE_SIZE = 10;	// TODO push to a preference
 	
 	private String apiKey;
 	public HttpFetcher httpFetcher;
@@ -45,8 +48,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 			if (articles != null) {				
 				if (!jsonParser.getUserTier(json).equals("partner"))  {
 					return articles;
-				}
-				
+				}				
 				return getArticleMainPictureUrls(articles);
 			}
 		}
@@ -112,8 +114,21 @@ public class OpenPlatformJSONApi implements ContentSource {
 	
 	
 	protected String buildContentQueryUrl(ArticleSet articleSet) {		
-		StringBuilder url = new StringBuilder(articleSet.getApiUrl());
+		StringBuilder url = new StringBuilder("http://content.guardianapis.com/search");
 		url.append("?show-fields=all");
+		
+		if (articleSet instanceof SectionArticleSet) {
+			url.append("&section=" + articleSet.getApiUrl());			
+		}
+		
+		if (articleSet instanceof KeywordArticleSet) {
+			url.append("&tag=" + articleSet.getApiUrl());			
+		}
+		
+		if (articleSet instanceof AuthorArticleSet) {
+			url.append("&tag=" + articleSet.getApiUrl());			
+		}
+		
 		url.append("&show-tags=all");
 		url.append("&api-key=" + apiKey);
 		url.append("&page-size=" + PAGE_SIZE);

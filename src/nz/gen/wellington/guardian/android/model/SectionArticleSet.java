@@ -18,6 +18,6 @@ public class SectionArticleSet implements ArticleSet, Serializable {
 	
 	@Override
 	public String getApiUrl() {
-		return section.getApiUrl();
+		return section.getId();
 	}
 }

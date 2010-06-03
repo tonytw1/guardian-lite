@@ -4,14 +4,14 @@ import java.io.Serializable;
 
 public class Section implements Serializable {
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
+	String id;
 	String name;
-	String apiUrl;
 	
-	public Section(String name, String apiUrl) {
+	public Section(String name, String id) {
 		this.name = name;
-		this.apiUrl = apiUrl;
+		this.id = id;
 	}
 
 	public String getName() {
@@ -22,12 +22,12 @@ public class Section implements Serializable {
 		this.name = name;
 	}
 
-	public String getApiUrl() {
-		return apiUrl;
+	public String getId() {
+		return id;
 	}
 
-	public void setApiUrl(String apiUrl) {
-		this.apiUrl = apiUrl;
+	public void setId(String apiUrl) {
+		this.id = apiUrl;
 	}
 	
 }

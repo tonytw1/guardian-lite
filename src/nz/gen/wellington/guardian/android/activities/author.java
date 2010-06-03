@@ -7,7 +7,7 @@ import nz.gen.wellington.guardian.android.activities.ui.ArticleImageDecorator;
 import nz.gen.wellington.guardian.android.activities.ui.ListArticleAdapter;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Article;
-import nz.gen.wellington.guardian.android.model.Author;
+import nz.gen.wellington.guardian.android.model.Tag;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
@@ -30,7 +30,7 @@ public class author extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.main);		
 				
-		final Author author = (Author) this.getIntent().getExtras().get("author");
+		final Tag author = (Tag) this.getIntent().getExtras().get("author");
 		this.setTitle(author.getName());
 		
     	if (author != null) {
