@@ -13,7 +13,8 @@ import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import android.content.Context;
-import android.net.wifi.WifiManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 public class OpenPlatformJSONApi implements ContentSource {
@@ -48,13 +49,12 @@ public class OpenPlatformJSONApi implements ContentSource {
 		final String json = getJSON(buildContentQueryUrl(articleSet));		
 		if (json != null) {	
 			List<Article> articles = jsonParser.parseArticlesJSON(json);			
-			if (articles != null) {
-				
-				WifiManager wifiService = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);								
-				final boolean shouldDownloadMainImages = wifiService.isWifiEnabled() && !jsonParser.getUserTier(json).equals("partner");
-				if (shouldDownloadMainImages) {
-					Log.i(TAG, "Wifi is enabled - downloading full images");
-					return getArticleMainPictureUrls(articles);
+			if (articles != null) {				
+				if (jsonParser.getUserTier(json).equals("partner")) {
+					if (isWifiConnection()) {
+						Log.i(TAG, "Wifi is enabled - downloading full images");
+						return getArticleMainPictureUrls(articles);
+					}
 				}
 				Log.i(TAG, "Wifi is not enabled - not downloading full images");
 				return articles;
@@ -63,7 +63,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		return null;
 	}
 
-
+	
 	private List<Article> getArticleMainPictureUrls(List<Article> articles) {
 		for (Article article : articles) {
 			queryForMainPictureUrl(article);
@@ -148,5 +148,20 @@ public class OpenPlatformJSONApi implements ContentSource {
 	private String getJSON(String url) {
 		return httpFetcher.httpFetch(url);		
 	}
+	
+	
+	private boolean isWifiConnection() {
+		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		if (activeNetworkInfo == null) {
+			return false;
+		}		
+		if (activeNetworkInfo.getTypeName().equals("WIFI")) {
+			return true;
+		}
+		Log.i(TAG, "Active connection is of type: " + activeNetworkInfo.getTypeName());
+		return false;
+	}
 
+	
 }
