@@ -27,7 +27,7 @@ public class ArticleImageDecorator {
 		if (article.getThumbnailUrl() != null && imageDAO.isAvailableLocally(article.getThumbnailUrl())) {
 			image = imageDAO.getImage(article.getThumbnailUrl());
 		} else if (article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl())) {
-			image = imageDAO.getImage(article.getThumbnailUrl());
+			image = imageDAO.getImage(article.getMainImageUrl());
 		}
 		return new ImageDecoratedArticle(article, image);		
 	}
