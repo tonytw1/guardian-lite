@@ -1,7 +1,9 @@
 package nz.gen.wellington.guardian.android.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.activities.article;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedSectionCache;
 import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
@@ -104,6 +106,27 @@ public class ArticleDAO {
 	
 	public void evictArticleSet(ArticleSet articleSet) {
 		fileBasedArticleCache.clear(articleSet);
+	}
+
+
+	public List<Article> getTopStories() {
+		List<Article> topStories = new ArrayList<Article>();
+		List<Section> sections = getSections();
+		if (sections == null) {
+			Log.i(TAG, "No sections founds - could not calculate top stories");
+			return topStories;	// TODO should return null
+		}
+		
+		for (Section section : sections) {			
+			List<Article> sectionArticles = getArticleSetArticles(new SectionArticleSet(section));
+			if (sectionArticles != null && !sectionArticles.isEmpty()) {
+				Article article = sectionArticles.get(0);
+				Log.i(TAG, "Adding " + section.getName() + " article to top stories: " + article.getTitle());				
+				topStories.add(article);
+			}
+		}
+		
+		return topStories;
 	}
 
 	
