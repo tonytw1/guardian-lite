@@ -26,51 +26,55 @@ import android.util.Log;
 
 public class HttpFetcher {
 	
-	private static final String TAG = "HttpFetcher";
+	HttpClient client;
 	
-	public String httpFetch(String uri) {
+	private static final String TAG = "HttpFetcher";
+
+	
+	public HttpFetcher() {
+		client = new DefaultHttpClient();
+		((AbstractHttpClient) client)
+		.addRequestInterceptor(new HttpRequestInterceptor() {
+			public void process(final HttpRequest request,
+					final HttpContext context)
+					throws HttpException, IOException {
+				if (!request.containsHeader("Accept-Encoding")) {
+					request.addHeader("Accept-Encoding", "gzip");
+					Log.i(TAG, "Added gzip header");
+				}
+			}
+		});
+    			  
+		((AbstractHttpClient) client)
+		.addResponseInterceptor(new HttpResponseInterceptor() {
+			public void process(final HttpResponse response,
+					final HttpContext context)
+					throws HttpException, IOException {
+				HttpEntity entity = response.getEntity();
+				Header ceheader = entity.getContentEncoding();
+				if (ceheader != null) {
+					HeaderElement[] codecs = ceheader.getElements();
+					for (int i = 0; i < codecs.length; i++) {
+						if (codecs[i].getName().equalsIgnoreCase("gzip")) {
+							Log.i(TAG, "Got gzip response");
+							response.setEntity(new GzipDecompressingEntity(
+									response.getEntity()));
+							return;
+						}
+					}
+				}
+			}
+		});
+	}
+
+
+
+	public String httpFetch(String uri) {				
 		try {
-			Log.i(TAG, "Making http fetch of: " + uri);
-			HttpClient client = new DefaultHttpClient();
-			
-			((AbstractHttpClient) client)
-					.addRequestInterceptor(new HttpRequestInterceptor() {
-						public void process(final HttpRequest request,
-								final HttpContext context)
-								throws HttpException, IOException {
-							if (!request.containsHeader("Accept-Encoding")) {
-								request.addHeader("Accept-Encoding", "gzip");
-								Log.i(TAG, "Added gzip header");
-							}
-						}
-					});
-		        			  
-			((AbstractHttpClient) client)
-					.addResponseInterceptor(new HttpResponseInterceptor() {
-						public void process(final HttpResponse response,
-								final HttpContext context)
-								throws HttpException, IOException {
-							HttpEntity entity = response.getEntity();
-							Header ceheader = entity.getContentEncoding();
-							if (ceheader != null) {
-								HeaderElement[] codecs = ceheader.getElements();
-								for (int i = 0; i < codecs.length; i++) {
-									if (codecs[i].getName().equalsIgnoreCase("gzip")) {
-										Log.i(TAG, "Got gzip response");
-										response.setEntity(new GzipDecompressingEntity(
-												response.getEntity()));
-										return;
-									}
-								}
-							}
-						}
-					});
-			
-			HttpGet get = new HttpGet(uri);		
-			HttpResponse response = client.execute(get);
-			Log.i(TAG, "Content length was: " + response.getLastHeader("Content-Length"));
+			Log.i(TAG, "Making http fetch of: " + uri);						
+			HttpGet get = new HttpGet(uri);
 			ResponseHandler<String> responseHandler = new BasicResponseHandler();
-			return responseHandler.handleResponse(response); 
+			return responseHandler.handleResponse(client.execute(get)); 
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -84,12 +88,9 @@ public class HttpFetcher {
 	public byte[] httpFetchStream(String uri) {
 		try {
 			Log.i(TAG, "Making http fetch of image: " + uri);
-			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet(uri);
 		
-			HttpResponse response = client.execute(get);
-			
-			byte[] byteArray = EntityUtils.toByteArray(response.getEntity());
+			byte[] byteArray = EntityUtils.toByteArray(client.execute(get).getEntity());
 			return byteArray;
 			
 						
