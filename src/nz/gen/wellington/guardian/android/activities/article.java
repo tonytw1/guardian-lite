@@ -1,20 +1,22 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.activities.ui.ListAuthorAdapter;
-import nz.gen.wellington.guardian.android.activities.ui.ListKeywordAdapter;
+import nz.gen.wellington.guardian.android.activities.ui.ListKeywordClicker;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.Tag;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,13 +72,29 @@ public class article extends Activity {
     		}
     	}
         
-		ListView authorListView = (ListView) findViewById(R.id.AuthorsList);    		   
-		adapter = new ListAuthorAdapter(this, article.getAuthors());		   
-		authorListView.setAdapter(adapter);
+		LayoutInflater inflater = LayoutInflater.from(this);
+
 		
-		ListView tagListView = (ListView) findViewById(R.id.TagList);
-		adapter = new ListKeywordAdapter(this, article.getKeywords());		   
-		tagListView.setAdapter(adapter);
+		LinearLayout authorList = (LinearLayout) findViewById(R.id.AuthorList);
+		for (Tag tag : article.getAuthors()) {
+			View vi = inflater.inflate(R.layout.authorslist, null);			  
+			TextView titleText = (TextView) vi.findViewById(R.id.TagName);
+	    	titleText.setText(tag.getName());
+	    	ListKeywordClicker urlListener = new ListKeywordClicker(tag);
+	    	vi.setOnClickListener(urlListener);
+	    	authorList.addView(vi);
+		}
+		
+		LinearLayout tagList = (LinearLayout) findViewById(R.id.TagList);
+		for (Tag tag : article.getKeywords()) {
+			View vi = inflater.inflate(R.layout.authorslist, null);			  
+			TextView titleText = (TextView) vi.findViewById(R.id.TagName);
+	    	titleText.setText(tag.getName());
+	    	ListKeywordClicker urlListener = new ListKeywordClicker(tag);
+	    	vi.setOnClickListener(urlListener);
+	    	tagList.addView(vi);
+		}
+		
 	}
 
 }
