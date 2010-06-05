@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout android:id="@+id/LinearLayout01" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
- android:scrollbars="vertical" android:scrollbarAlwaysDrawVerticalTrack="true">
+ android:scrollbars="vertical" android:scrollbarAlwaysDrawVerticalTrack="true" android:orientation="vertical">
 <ScrollView android:id="@+id/ScrollView01" android:layout_width="wrap_content" android:layout_height="wrap_content" >
 
-<TableLayout android:id="@+id/TableLayout01" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"><TableRow android:id="@+id/TableRow01" android:layout_height="wrap_content" android:layout_width="fill_parent"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#fff" android:textSize="9pt" android:layout_gravity="left" android:id="@+id/Headline" android:text="Headline"></TextView></TableRow>
-<TableRow android:id="@+id/TableRow06" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="#300"><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ArticleImage" android:scaleType="centerInside"></ImageView></TableRow><TableRow android:id="@+id/TableRow05" android:layout_width="wrap_content" android:layout_height="wrap_content"><ListView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TagList"></ListView>
-</TableRow><TableRow android:id="@+id/TableRow03" android:layout_width="wrap_content" android:layout_height="wrap_content">
-
-<ListView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/AuthorsList" android:minHeight="40px"></ListView>
-
-</TableRow><TableRow android:id="@+id/TableRow02" android:layout_height="wrap_content" android:layout_width="fill_parent"><TextView android:layout_height="wrap_content" android:textSize="4pt" android:layout_width="wrap_content" android:text="pubDate" android:id="@+id/PubDate"></TextView></TableRow>
-<TableRow android:id="@+id/TableRow04" android:layout_height="wrap_content" android:layout_width="fill_parent" android:paddingBottom="20px"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Standfirst" android:editable="false" android:text="Standfirst"></TextView>
-
-
-</TableRow>
-
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Description" android:text="Description"></TextView>
-
-
-</TableLayout>
+<LinearLayout android:id="@+id/LinearLayout02" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_gravity="fill_horizontal" android:paddingRight="5px"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#fff" android:textSize="9pt" android:layout_gravity="left" android:id="@+id/Headline" android:text="Headline"></TextView><ImageView android:id="@+id/ArticleImage" android:layout_gravity="left" android:scaleType="centerInside" android:adjustViewBounds="true" android:layout_width="fill_parent" android:layout_height="fill_parent"></ImageView><ListView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TagList"></ListView><ListView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/AuthorsList" android:minHeight="40px"></ListView><TextView android:layout_height="wrap_content" android:textSize="4pt" android:layout_width="wrap_content" android:text="pubDate" android:id="@+id/PubDate"></TextView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Standfirst" android:editable="false" android:text="Standfirst"></TextView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Description" android:text="Description"></TextView></LinearLayout>
 	
+
 </ScrollView>
 </LinearLayout>
