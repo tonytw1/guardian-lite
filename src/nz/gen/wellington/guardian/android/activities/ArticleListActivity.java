@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public abstract class ArticleListActivity extends Activity {
 		
@@ -24,7 +25,7 @@ public abstract class ArticleListActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.main);
-	}
+	}	
 	
 	protected void populateNewsitemList(List<Article> articles) {
 		if (articles != null) {			
@@ -33,6 +34,11 @@ public abstract class ArticleListActivity extends Activity {
 			ListAdapter adapter = new ListArticleAdapter(this, ArticleImageDecorator.decorateNewsitemsWithThumbnails(newsitems, this));		   
 			listView.setAdapter(adapter);
 		}
+	}
+	
+	protected void setHeading(String headingText) {
+		TextView heading = (TextView) findViewById(R.id.Heading);
+		heading.setText(headingText);		
 	}
 	
 	

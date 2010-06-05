@@ -21,8 +21,8 @@ public class author extends ArticleListActivity {
 		super.onCreate(savedInstanceState);
 						
 		final Tag author = (Tag) this.getIntent().getExtras().get("author");
-		this.setTitle(author.getName());
-	
+    	setHeading(author.getName());
+
 		List<Article> articles = ArticleDAOFactory.getDao(this).getAuthorItems(author);
     	if (articles != null) {
     		populateNewsitemList(articles);

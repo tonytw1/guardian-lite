@@ -16,26 +16,27 @@ public final class R {
     }
     public static final class id {
         public static final int ArticleImage=0x7f060004;
-        public static final int ArticlesListView=0x7f06000e;
+        public static final int ArticlesListView=0x7f06000f;
         public static final int AuthorList=0x7f060005;
         public static final int Description=0x7f060008;
+        public static final int Heading=0x7f06000e;
         public static final int Headline=0x7f060003;
         public static final int LinearLayout01=0x7f060000;
         public static final int LinearLayout02=0x7f060002;
         public static final int PubDate=0x7f060006;
-        public static final int Refresh=0x7f060011;
+        public static final int Refresh=0x7f060012;
         public static final int ScrollView01=0x7f060001;
-        public static final int SectionImage=0x7f060013;
-        public static final int SectionName=0x7f060014;
-        public static final int SectionsListView=0x7f060012;
+        public static final int SectionImage=0x7f060014;
+        public static final int SectionName=0x7f060015;
+        public static final int SectionsListView=0x7f060013;
         public static final int Standfirst=0x7f060007;
-        public static final int Status=0x7f060010;
+        public static final int Status=0x7f060011;
         public static final int TagList=0x7f060009;
         public static final int TagName=0x7f06000a;
         public static final int TextView01=0x7f06000c;
         public static final int TextView02=0x7f06000d;
         public static final int TrailImage=0x7f06000b;
-        public static final int buttonStart=0x7f06000f;
+        public static final int buttonStart=0x7f060010;
     }
     public static final class layout {
         public static final int article=0x7f030000;

@@ -16,7 +16,7 @@ public class keyword extends ArticleListActivity {
 		super.onCreate(savedInstanceState);
 	
 		final Tag keyword = (Tag) this.getIntent().getExtras().get("keyword");
-		this.setTitle(keyword.getName());
+    	setHeading(keyword.getName());
 		
     	List<Article> articles = ArticleDAOFactory.getDao(this).getKeywordItems(keyword);
     	if (articles != null) {
