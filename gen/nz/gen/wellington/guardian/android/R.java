@@ -22,6 +22,7 @@ public final class R {
         public static final int Description=0x7f06000f;
         public static final int Headline=0x7f060004;
         public static final int LinearLayout01=0x7f060000;
+        public static final int LinearLayout02=0x7f060013;
         public static final int PubDate=0x7f06000c;
         public static final int Refresh=0x7f060018;
         public static final int ScrollView01=0x7f060001;
@@ -32,7 +33,6 @@ public final class R {
         public static final int Standfirst=0x7f06000e;
         public static final int Status=0x7f060017;
         public static final int TableLayout01=0x7f060002;
-        public static final int TableLayout02=0x7f060013;
         public static final int TableRow01=0x7f060003;
         public static final int TableRow02=0x7f06000b;
         public static final int TableRow03=0x7f060009;
