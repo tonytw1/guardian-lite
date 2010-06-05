@@ -26,10 +26,9 @@ public final class R {
         public static final int PubDate=0x7f060007;
         public static final int Refresh=0x7f060013;
         public static final int ScrollView01=0x7f060001;
-        public static final int SectionName=0x7f060017;
+        public static final int SectionImage=0x7f060015;
+        public static final int SectionName=0x7f060016;
         public static final int SectionsListView=0x7f060014;
-        public static final int SectionsTable=0x7f060015;
-        public static final int SectionsTableRow=0x7f060016;
         public static final int Standfirst=0x7f060008;
         public static final int Status=0x7f060012;
         public static final int TableLayout01=0x7f06000a;

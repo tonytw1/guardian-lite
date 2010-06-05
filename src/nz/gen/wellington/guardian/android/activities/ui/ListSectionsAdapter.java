@@ -37,7 +37,7 @@ public class ListSectionsAdapter extends BaseAdapter {
     	TextView titleText = (TextView) view.findViewById(R.id.SectionName);
     	titleText.setText(sections.get(position).getName());
     	
-    	ImageView imageView = (ImageView) view.findViewById(R.id.TrailImage);
+    	ImageView imageView = (ImageView) view.findViewById(R.id.SectionImage);
     	imageView.setImageResource(R.drawable.icon);
     	    	
     	SectionClicker sectionClickListener = new SectionClicker(sections.get(position));

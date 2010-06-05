@@ -101,5 +101,12 @@ public class Article implements Serializable {
 	public void setMainImageUrl(String mainImageUrl) {
 		this.mainImageUrl = mainImageUrl;
 	}
+
+	public String getPubDateString() {
+		if (this.pubDate != null) {
+			return pubDate.toString("EEEE d MMMM yyyy HH.mm");			
+		}
+		return null;
+	}
 	
 }

@@ -53,7 +53,7 @@ public class article extends Activity {
         
         headline.setText(article.getTitle());
         if (article.getPubDate() != null) {
-        	pubDate.setText(article.getPubDate().toString("dd MMM yyyy HH:mm"));
+        	pubDate.setText(article.getPubDateString());
         }
         standfirst.setText(article.getStandfirst());
         description.setText(article.getDescription());

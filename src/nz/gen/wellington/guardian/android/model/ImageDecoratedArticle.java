@@ -44,6 +44,10 @@ public class ImageDecoratedArticle extends Article {
 	public DateTime getPubDate() {
 		return article.getPubDate();
 	}
+	
+	public String getPubDateString() {
+		return article.getPubDateString();
+	}
 
 	public String getStandfirst() {
 		return article.getStandfirst();

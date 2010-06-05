@@ -40,7 +40,7 @@ public class ListArticleAdapter extends BaseAdapter {
        	
     	TextView pubDateText = (TextView) view.findViewById(R.id.TextView02);
     	if (article.getPubDate() != null) {
-    		pubDateText.setText(article.getPubDate().toString("dd MMM yyyy HH:mm"));
+    		pubDateText.setText(article.getPubDateString());
     	}
     	
     	ImageView imageView = (ImageView) view.findViewById(R.id.TrailImage);
