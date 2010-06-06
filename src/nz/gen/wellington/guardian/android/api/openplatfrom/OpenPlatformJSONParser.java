@@ -140,7 +140,13 @@ public class OpenPlatformJSONParser {
 							getJsonFields(tag, "id"));
 					article.addKeyword(keyword);
 				}
-			}						
+			}
+			
+			
+			if (tags.length() > 0) {
+				JSONObject tag = tags.getJSONObject(0);
+				article.setSectionId(getJsonFields(tag, "sectionId"));					
+			}
 		}
 		return;
 	}

@@ -1,13 +1,19 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ListKeywordClicker;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -73,9 +79,7 @@ public class article extends Activity {
     		}
     	}
         
-		LayoutInflater inflater = LayoutInflater.from(this);
-
-		
+		LayoutInflater inflater = LayoutInflater.from(this);		
 		LinearLayout authorList = (LinearLayout) findViewById(R.id.AuthorList);
 		for (Tag tag : article.getAuthors()) {
 			View vi = inflater.inflate(R.layout.authorslist, null);			  
@@ -96,6 +100,51 @@ public class article extends Activity {
 	    	tagList.addView(vi);
 		}
 		
+		List<Section> sections = ArticleDAOFactory.getDao(this).getSections();
+		if (sections != null) {
+			for (Section section : sections) {
+				if (section.getId().equals(article.getSectionId())) {
+					setHeading(section.getName());
+					setHeadingColour(getSectionColour(section));
+				}
+			}
+		}
 	}
-
+	
+	
+	protected void setHeading(String headingText) {
+		TextView heading = (TextView) findViewById(R.id.Heading);
+		heading.setText(headingText);		
+	}
+	
+	protected void setHeadingColour(String colour) {
+		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
+		heading.setBackgroundColor(Color.parseColor(colour));
+	}
+	
+	
+	private String getSectionColour(Section section) {
+		Map<String, String> sectionColours = new HashMap<String, String>();
+		
+		sectionColours.put("business", "#8F1AB6");
+		sectionColours.put("commentisfree", "#0061A6");
+		sectionColours.put("culture", "#D1008B");
+		sectionColours.put("environment", "#7BBB00");
+		sectionColours.put("lifeandstyle", "#FFC202");
+		sectionColours.put("money", "#8F1AB6");	
+		sectionColours.put("politics", "#801100");
+		sectionColours.put("media", "#801100");
+		sectionColours.put("education", "#801100");
+		sectionColours.put("society", "#801100");
+		sectionColours.put("science", "#801100");
+		sectionColours.put("sport", "#008000");
+		sectionColours.put("football", "#006000");
+		
+		if (sectionColours.containsKey(section.getId())) {
+			return sectionColours.get(section.getId());
+		}
+		
+		return "#D61D00";
+	}
+	
 }

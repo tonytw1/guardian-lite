@@ -67,9 +67,11 @@ public class ImageDecoratedArticle extends Article {
 	}
 
 	public String getByline() {
-		return article.getByline();
+		return article.getByline();		
 	}
 
-	
+	public String getSectionId() {
+		return article.getSectionId();
+	}
 	
 }

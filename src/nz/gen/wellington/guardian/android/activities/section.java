@@ -4,12 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class section extends ArticleListActivity {
@@ -33,7 +31,7 @@ public class section extends ArticleListActivity {
 	private String getSectionColour(Section section) {
 		Map<String, String> sectionColours = new HashMap<String, String>();
 		
-		sectionColours.put("business", " #8F1AB6");
+		sectionColours.put("business", "#8F1AB6");
 		sectionColours.put("commentisfree", "#0061A6");
 		sectionColours.put("culture", "#D1008B");
 		sectionColours.put("environment", "#7BBB00");
