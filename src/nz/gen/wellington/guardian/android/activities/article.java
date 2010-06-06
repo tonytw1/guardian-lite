@@ -49,7 +49,7 @@ public class article extends Activity {
 	private void populateArticle(Article article) {	
         TextView headline = (TextView) findViewById(R.id.Headline);
         TextView pubDate = (TextView) findViewById(R.id.PubDate);
-        
+        TextView byline = (TextView) findViewById(R.id.Byline);
         TextView standfirst = (TextView) findViewById(R.id.Standfirst);
         TextView description = (TextView) findViewById(R.id.Description);
         
@@ -57,6 +57,7 @@ public class article extends Activity {
         if (article.getPubDate() != null) {
         	pubDate.setText(article.getPubDateString());
         }
+        byline.setText(article.getByline());
         standfirst.setText(article.getStandfirst());
         description.setText(article.getDescription());
         

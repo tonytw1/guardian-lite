@@ -66,8 +66,10 @@ public class ImageDecoratedArticle extends Article {
 		return thumbnail;
 	}
 
-	public void setThumbnail(Bitmap thumbnail) {
-		this.thumbnail = thumbnail;
+	public String getByline() {
+		return article.getByline();
 	}
+
+	
 	
 }

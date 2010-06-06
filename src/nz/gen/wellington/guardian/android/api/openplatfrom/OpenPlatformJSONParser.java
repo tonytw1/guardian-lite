@@ -101,6 +101,8 @@ public class OpenPlatformJSONParser {
 			JSONObject fields = result.getJSONObject("fields");
 			if (fields != null) {
 				article.setTitle(getJsonFields(fields, "headline"));
+				article.setByline(
+						ArticleBodyCleaner.stripHtml(getJsonFields(fields, "byline")));
 				article.setStandfirst(
 						ArticleBodyCleaner.stripHtml(getJsonFields(fields, "standfirst")));
 				article.setDescription(

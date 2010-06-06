@@ -12,9 +12,11 @@ public class Article implements Serializable {
 	
 	String id;
 	String title;
-	String standfirst;
+	String byline;
 	DateTime pubDate;
+	String standfirst;
 	String description;
+	
 	List<Tag> authors;
 	List<Tag> keywords;
 	String thumbnailUrl;
@@ -108,5 +110,14 @@ public class Article implements Serializable {
 		}
 		return null;
 	}
+
+	public String getByline() {
+		return byline;
+	}
+
+	public void setByline(String byline) {
+		this.byline = byline;
+	}
+	
 	
 }
