@@ -16,8 +16,13 @@ public class keyword extends ArticleListActivity {
 		super.onCreate(savedInstanceState);
 	
 		final Tag keyword = (Tag) this.getIntent().getExtras().get("keyword");
-    	setHeading(keyword.getName());
 		
+		if (keyword.getSection() != null) {
+			setHeading(keyword.getSection().getName() + " - " + keyword.getName());
+			setHeadingColour(keyword.getSection().getColour());
+		} else {
+			setHeading(keyword.getName());
+		}
     	List<Article> articles = ArticleDAOFactory.getDao(this).getKeywordItems(keyword);
     	if (articles != null) {
     		populateNewsitemList(articles);

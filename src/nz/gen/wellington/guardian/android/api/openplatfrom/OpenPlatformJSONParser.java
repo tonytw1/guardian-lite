@@ -27,7 +27,7 @@ public class OpenPlatformJSONParser {
 	private static final String KEYWORD = "keyword";
 
 	
-	public List<Article> parseArticlesJSON(String jsonString) {
+	public List<Article> parseArticlesJSON(String jsonString, List<Section> sections) {
 		try {
 			JSONObject json = new JSONObject(jsonString);
 			if (!isResponseOk(json)) {
@@ -40,7 +40,7 @@ public class OpenPlatformJSONParser {
 			List<Article> articles = new ArrayList<Article>();
 			for (int i=0; i < results.length(); i++) {				
 				JSONObject result = results.getJSONObject(i);						
-				articles.add(extractArticle(result));
+				articles.add(extractArticle(result, sections));
 			}				
 			return articles;
 			
@@ -82,7 +82,7 @@ public class OpenPlatformJSONParser {
 		}
 	}
 	
-	private Article extractArticle(JSONObject result) throws JSONException {		
+	private Article extractArticle(JSONObject result, List<Section> sections) throws JSONException {		
 		Article article = new Article();
 		
 		final String guid = result.getString("id");
@@ -115,14 +115,14 @@ public class OpenPlatformJSONParser {
 		}
 		
 		if (result.has("tags")) {
-			processTags(result, article);
+			processTags(result, article, sections);
 		}
 		return article;
 	}
 	
 	
 	
-	private void processTags(JSONObject result, Article article) throws JSONException {
+	private void processTags(JSONObject result, Article article, List<Section> sections) throws JSONException {
 		JSONArray tags = result.getJSONArray("tags");
 		if (tags != null) {
 			for (int j=0; j < tags.length(); j++) {														
@@ -132,23 +132,39 @@ public class OpenPlatformJSONParser {
 				if (type.equals(CONTRIBUTOR)) {
 					Tag author = new Tag(
 						getJsonFields(tag, "webTitle"), 
-						getJsonFields(tag, "id"));
+						getJsonFields(tag, "id"), null);
 					article.addAuthor(author);
 					
 				} else if (type.equals(KEYWORD)) {
+					
+					Section tagSection = null;
+					final String sectionId = getJsonFields(tag, "sectionId");
+					for (Section section : sections) {
+						if (section.getId().equals(sectionId)) {
+							tagSection = section;
+						}
+					}
+					
+					
 					Tag keyword = new Tag(
 							getJsonFields(tag, "webTitle"), 
-							getJsonFields(tag, "id"));
+							getJsonFields(tag, "id"),
+							tagSection);
 					article.addKeyword(keyword);
 				}
 			}
-			
-			
+						
 			if (tags.length() > 0) {
 				JSONObject tag = tags.getJSONObject(0);
-				article.setSectionId(getJsonFields(tag, "sectionId"));					
+				final String sectionId = getJsonFields(tag, "sectionId");
+				for (Section section : sections) {
+					if (section.getId().equals(sectionId)) {
+						article.setSection(section);
+					}
+				}
 			}
 		}
+		
 		return;
 	}
 	
@@ -164,12 +180,13 @@ public class OpenPlatformJSONParser {
 			JSONArray results = response.getJSONArray("results");
 				
 			List<Section> sections = new ArrayList<Section>();
-			for (int i=0; i < results.length(); i++) {				
+			for (int i=0; i < results.length(); i++) {		
 				JSONObject section = results.getJSONObject(i);				
 				final String sectionName = StringEscapeUtils.unescapeHtml(section.getString("webTitle"));
 				final String id =  section.getString("id");
-				sections.add(new Section(sectionName, id, SectionColourMap.getColourForSection(id)));
+				sections.add(new Section(id, sectionName, SectionColourMap.getColourForSection(id)));
 			}
+			
 			return sections;			
 			
 		} catch (JSONException e) {

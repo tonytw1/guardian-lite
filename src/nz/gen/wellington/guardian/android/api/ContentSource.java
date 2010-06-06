@@ -13,7 +13,7 @@ import nz.gen.wellington.guardian.android.model.Section;
 
 public interface ContentSource {
 
-	public List<Article> getArticles(ArticleSet articleSet);
 	public List<Section> getSections();
+	List<Article> getArticles(ArticleSet articleSet, List<Section> sections);
 
 }
