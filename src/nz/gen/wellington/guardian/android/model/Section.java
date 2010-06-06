@@ -8,10 +8,14 @@ public class Section implements Serializable {
 	
 	String id;
 	String name;
+	String colour;
 	
-	public Section(String name, String id) {
-		this.name = name;
+	
+
+	public Section(String id, String name, String colour) {
 		this.id = id;
+		this.name = name;
+		this.colour = colour;
 	}
 
 	public String getName() {
@@ -28,6 +32,14 @@ public class Section implements Serializable {
 
 	public void setId(String apiUrl) {
 		this.id = apiUrl;
+	}
+
+	public String getColour() {
+		return colour;
+	}
+
+	public void setColour(String colour) {
+		this.colour = colour;
 	}
 	
 }

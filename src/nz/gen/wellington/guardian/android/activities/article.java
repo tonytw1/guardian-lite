@@ -105,46 +105,23 @@ public class article extends Activity {
 			for (Section section : sections) {
 				if (section.getId().equals(article.getSectionId())) {
 					setHeading(section.getName());
-					setHeadingColour(getSectionColour(section));
+					setHeadingColour(section.getColour());
 				}
 			}
 		}
 	}
 	
-	
+
+	// TODO duplication
 	protected void setHeading(String headingText) {
 		TextView heading = (TextView) findViewById(R.id.Heading);
 		heading.setText(headingText);		
 	}
 	
+	// TODO duplication
 	protected void setHeadingColour(String colour) {
 		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
 		heading.setBackgroundColor(Color.parseColor(colour));
-	}
-	
-	
-	private String getSectionColour(Section section) {
-		Map<String, String> sectionColours = new HashMap<String, String>();
-		
-		sectionColours.put("business", "#8F1AB6");
-		sectionColours.put("commentisfree", "#0061A6");
-		sectionColours.put("culture", "#D1008B");
-		sectionColours.put("environment", "#7BBB00");
-		sectionColours.put("lifeandstyle", "#FFC202");
-		sectionColours.put("money", "#8F1AB6");	
-		sectionColours.put("politics", "#801100");
-		sectionColours.put("media", "#801100");
-		sectionColours.put("education", "#801100");
-		sectionColours.put("society", "#801100");
-		sectionColours.put("science", "#801100");
-		sectionColours.put("sport", "#008000");
-		sectionColours.put("football", "#006000");
-		
-		if (sectionColours.containsKey(section.getId())) {
-			return sectionColours.get(section.getId());
-		}
-		
-		return "#D61D00";
 	}
 	
 }

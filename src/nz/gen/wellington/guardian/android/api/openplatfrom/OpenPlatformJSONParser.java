@@ -6,6 +6,7 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.api.ArticleBodyCleaner;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -167,8 +168,8 @@ public class OpenPlatformJSONParser {
 				JSONObject section = results.getJSONObject(i);				
 				final String sectionName = StringEscapeUtils.unescapeHtml(section.getString("webTitle"));
 				final String id =  section.getString("id");
-				sections.add(new Section(sectionName, id));
-			}				
+				sections.add(new Section(sectionName, id, SectionColourMap.getColourForSection(id)));
+			}
 			return sections;			
 			
 		} catch (JSONException e) {
