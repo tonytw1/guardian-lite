@@ -8,11 +8,13 @@ import nz.gen.wellington.guardian.android.activities.ui.ListArticleAdapter;
 import nz.gen.wellington.guardian.android.model.Article;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,6 +41,11 @@ public abstract class ArticleListActivity extends Activity {
 	protected void setHeading(String headingText) {
 		TextView heading = (TextView) findViewById(R.id.Heading);
 		heading.setText(headingText);		
+	}
+	
+	protected void setHeadingColour(String colour) {
+		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
+		heading.setBackgroundColor(Color.parseColor(colour));
 	}
 	
 	
