@@ -13,6 +13,8 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,8 +26,8 @@ public class sync extends Activity implements OnClickListener {
 	private static final String TAG = "reload";
 
 	Button start;
-	Button refresh;
-
+	Handler statusUpdateHandler;
+	
 	private NotificationManager notificationManager;
 		
 	
@@ -41,12 +43,20 @@ public class sync extends Activity implements OnClickListener {
         start = (Button) findViewById(R.id.buttonStart);        
         start.setOnClickListener(this);
         
-        refresh = (Button) findViewById(R.id.Refresh);        
-        refresh.setOnClickListener(this);
-        
-    	notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
     	notificationManager.cancel(ContentUpdateService.UPDATE_COMPLETE_NOTIFICATION_ID);	
-    	updateStatus();
+    	
+    	    	
+    	statusUpdateHandler = new Handler() {    		
+    		public void handleMessage(Message msg) {
+    			super.handleMessage(msg);
+    			Log.d(TAG, "Status update handler is updating status");
+    			updateStatus();
+    		}
+    	};
+    	    	
+    	Thread updateThread = new Thread(new StatusUpdateRunner());
+    	updateThread.start();    	
    	}
 
 	
@@ -71,21 +81,41 @@ public class sync extends Activity implements OnClickListener {
 			startService(new Intent(this, ContentUpdateService.class));			
 			break;
 		}
+		
 		updateStatus();
 	}
 	
 	
 	public void updateStatus() {
-		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();		
-		
-		String statusMessage = Integer.toString(taskQueue.getArticleSize()) + " article sets and " +
-			Integer.toString(taskQueue.getImageSize()) + " images to load.";
-				
-		TextView status = (TextView) findViewById(R.id.Status);		
+		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();
+
+		String statusMessage = Integer.toString(taskQueue.getArticleSize()) + " article sets and "
+				+ Integer.toString(taskQueue.getImageSize()) + " images to load.";
+
+		TextView status = (TextView) findViewById(R.id.Status);
 		status.setText(statusMessage);
-		
+
 		boolean canRun = taskQueue.isEmpty();
 		start.setEnabled(canRun);
 	}
+	
+	
+	class StatusUpdateRunner implements Runnable {
+		public void run() {
+			while (!Thread.currentThread().isInterrupted()) {
+				Message m = new Message();
+				m.what = 1;
+				sync.this.statusUpdateHandler.sendMessage(m);
+
+				try {
+					Thread.sleep(1000);
+
+				} catch (InterruptedException e) {					
+					Thread.currentThread().interrupt();
+				}
+			}
+		}
+	}
+	
 	
 }

@@ -28,11 +28,10 @@ public final class R {
         public static final int LinearLayout01=0x7f060000;
         public static final int LinearLayout02=0x7f060004;
         public static final int PubDate=0x7f06000a;
-        public static final int Refresh=0x7f060016;
         public static final int ScrollView01=0x7f060003;
-        public static final int SectionImage=0x7f060018;
-        public static final int SectionName=0x7f060019;
-        public static final int SectionsListView=0x7f060017;
+        public static final int SectionImage=0x7f060017;
+        public static final int SectionName=0x7f060018;
+        public static final int SectionsListView=0x7f060016;
         public static final int Standfirst=0x7f06000b;
         public static final int Status=0x7f060015;
         public static final int TagList=0x7f06000e;
