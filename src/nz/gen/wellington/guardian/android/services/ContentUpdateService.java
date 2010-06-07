@@ -3,6 +3,7 @@ package nz.gen.wellington.guardian.android.services;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.sync;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -27,7 +28,7 @@ public class ContentUpdateService extends Service {
 
     private TaskQueue taskQueue;
     private Runnable internalRunnable;
-
+    private ContentUpdateReport report;
    
     
     @Override
@@ -39,12 +40,14 @@ public class ContentUpdateService extends Service {
     	internalRunnable = new InternalRunnable();
 
     	 inBatch = false;
+    	 report = new ContentUpdateReport();
+    	 
     	 if (!running) {
 			   thread = new Thread(internalRunnable);
 			   thread.setDaemon(true);
 			   running = true;
 			   thread.start();
-		   }    	
+    	 }
     }
     
     private class InternalRunnable implements Runnable {
@@ -55,13 +58,18 @@ public class ContentUpdateService extends Service {
     
     private void internalRun() {
     	while(running) {
-    		Runnable task = getNextTask();
+    		ContentUpdateTaskRunnable task = getNextTask();   		
     		task.run();
+    		
+    		ContentUpdateReport taskReport = task.getReport();
+    		report.setSectionCount(report.getSectionCount() + taskReport.getSectionCount());
+    		report.setArticleCount(report.getArticleCount() + taskReport.getArticleCount());
+    		report.setImageCount(report.getImageCount() + taskReport.getImageCount());
     	} 	
     }
  
     
-    private Runnable getNextTask() {
+    private ContentUpdateTaskRunnable getNextTask() {
 		   Log.i(TAG, "Getting next task");
 		   if (taskQueue.getSize() == 0 && !inBatch) {
 			   inBatch = true;
@@ -69,7 +77,7 @@ public class ContentUpdateService extends Service {
 		   synchronized(taskQueue) {
 	       if (taskQueue.isEmpty()) {
 	    	   if (inBatch) {
-	    		   sendNotification(38);	// TODO
+	    		   sendNotification(report);
 	    		   inBatch = false;
 	    	   }
 	         try {
@@ -103,7 +111,7 @@ public class ContentUpdateService extends Service {
 	}
 		
 
-	private void sendNotification(int sectionCount) {		
+	private void sendNotification(ContentUpdateReport report) {		
 		int icon = R.drawable.notification_icon;	// TODO resize icon
 		CharSequence tickerText = "Content update complete";
 		long when = System.currentTimeMillis();
@@ -112,7 +120,9 @@ public class ContentUpdateService extends Service {
 		
 		Context context = getApplicationContext();
 		CharSequence contentTitle = "Content update complete";
-		CharSequence contentText = "Updated " + sectionCount + " sections";
+		CharSequence contentText = "Fetched " + report.getSectionCount() + " sections, " +
+			report.getArticleCount() + " articles and " + report.getImageCount() + " images.";
+		
 		Intent notificationIntent = new Intent(this, sync.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		

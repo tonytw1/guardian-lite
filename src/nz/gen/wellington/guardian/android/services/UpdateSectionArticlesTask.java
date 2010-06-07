@@ -5,22 +5,25 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import android.content.Context;
 import android.util.Log;
 
-public class UpdateSectionArticlesTask implements Runnable {
+public class UpdateSectionArticlesTask implements ContentUpdateTaskRunnable {
 
 	private static final String TAG = "UpdateSectionArticlesTask";
 	private ArticleDAO articleDAO;
 	private Section section;
 	private Context context;
+	private ContentUpdateReport report;
 
 	public UpdateSectionArticlesTask(ArticleDAO articleDAO, Section section, Context context) {
 		this.articleDAO = articleDAO;
 		this.section = section;
 		this.context = context;
+		this.report = new ContentUpdateReport();
 	}
 
 	@Override
@@ -39,8 +42,15 @@ public class UpdateSectionArticlesTask implements Runnable {
 					ArticleDAOFactory.getTaskQueue().addTask(
 							new ImageFetchTask(article.getMainImageUrl(), context));
 				}
+				report.setArticleCount(report.getArticleCount()+1);
 			}
 		}
+		report.setSectionCount(report.getSectionCount()+1);
 	}
-	
+
+	@Override
+	public ContentUpdateReport getReport() {
+		return report;
+	}
+		
 }

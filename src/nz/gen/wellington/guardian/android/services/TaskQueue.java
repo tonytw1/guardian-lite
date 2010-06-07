@@ -4,13 +4,13 @@ import java.util.LinkedList;
 
 public class TaskQueue {
 
-	private LinkedList<Runnable> tasks;
+	private LinkedList<ContentUpdateTaskRunnable> tasks;
 
 	public TaskQueue() {
-		tasks = new LinkedList<Runnable>();
+		tasks = new LinkedList<ContentUpdateTaskRunnable>();
 	}
 
-	public void addTask(Runnable task) {
+	public void addTask(ContentUpdateTaskRunnable task) {
 		synchronized (this) {
 			tasks.addFirst(task);
 			this.notify();
@@ -25,7 +25,7 @@ public class TaskQueue {
 		return tasks.isEmpty();
 	}
 
-	public Runnable removeLast() {
+	public ContentUpdateTaskRunnable removeLast() {
 		return tasks.removeLast();
 	}
 
