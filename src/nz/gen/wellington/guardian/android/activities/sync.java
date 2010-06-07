@@ -32,6 +32,7 @@ public class sync extends Activity implements OnClickListener {
 	public sync() {
 	}
 	
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +64,7 @@ public class sync extends Activity implements OnClickListener {
 			if (sections != null) {
 				for (Section section : sections) {
 					Log.i(TAG, "Injecting section into update queue: " + section.getName());
-					taskQueue.addTask(new UpdateSectionArticlesTask(articleDAO, section, this));
+					taskQueue.addArticleTask(new UpdateSectionArticlesTask(articleDAO, section, this));
 				}
 			}
 			
@@ -72,15 +73,18 @@ public class sync extends Activity implements OnClickListener {
 		}
 		updateStatus();
 	}
-
+	
 	
 	public void updateStatus() {
 		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();		
 		
+		String statusMessage = Integer.toString(taskQueue.getArticleSize()) + " article sets and " +
+			Integer.toString(taskQueue.getImageSize()) + " images to load.";
+				
 		TextView status = (TextView) findViewById(R.id.Status);		
-		status.setText(Integer.toString(taskQueue.getSize()) + " article sets to load");
+		status.setText(statusMessage);
 		
-		boolean canRun = taskQueue.getSize() == 0;
+		boolean canRun = taskQueue.isEmpty();
 		start.setEnabled(canRun);
 	}
 	

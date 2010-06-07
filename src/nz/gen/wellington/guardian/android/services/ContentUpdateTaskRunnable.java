@@ -4,6 +4,6 @@ import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 
 public interface ContentUpdateTaskRunnable extends Runnable {
 
-	public ContentUpdateReport getReport();
+	public void setReport(ContentUpdateReport report);
 	
 }

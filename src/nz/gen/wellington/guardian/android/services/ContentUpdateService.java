@@ -58,40 +58,38 @@ public class ContentUpdateService extends Service {
     
     private void internalRun() {
     	while(running) {
-    		ContentUpdateTaskRunnable task = getNextTask();   		
+    		ContentUpdateTaskRunnable task = getNextTask();
+    		task.setReport(report);
     		task.run();
-    		
-    		ContentUpdateReport taskReport = task.getReport();
-    		report.setSectionCount(report.getSectionCount() + taskReport.getSectionCount());
-    		report.setArticleCount(report.getArticleCount() + taskReport.getArticleCount());
-    		report.setImageCount(report.getImageCount() + taskReport.getImageCount());
+    		taskQueue.remove(task);
     	} 
     }
  
     
     private ContentUpdateTaskRunnable getNextTask() {
-		   Log.i(TAG, "Getting next task");
-		   if (taskQueue.getSize() == 0 && !inBatch) {
-			   inBatch = true;
-		   }
-		   synchronized(taskQueue) {
-	       if (taskQueue.isEmpty()) {
+    	Log.i(TAG, "Getting next task");
+    	if (taskQueue.isEmpty() && !inBatch) {
+    		inBatch = true;
+    	}
+    	synchronized(taskQueue) {
+    		if (taskQueue.isEmpty()) {
 	    	   if (inBatch) {
 	    		   sendNotification(report);
 	    		   inBatch = false;
 	    	   }
-	         try {
-	  		   Log.i(TAG, "Waiting for next task");
-	           taskQueue.wait();	           
-	           inBatch= true;
-	           report = new ContentUpdateReport();
+	        
+	    	   try {
+	    		   Log.i(TAG, "Waiting for next task");
+	    		   taskQueue.wait();	           
+	    		   inBatch= true;
+	    		   report = new ContentUpdateReport();
 	           
-	         } catch (InterruptedException e) {
-	           stop();
-	         }
+	    	   } catch (InterruptedException e) {
+	    		   stop();
+	    	   }
 	       }
-	       return taskQueue.removeLast();
-		   }
+	       return taskQueue.getNext();
+    	}
     }
 	 
 	   
@@ -123,8 +121,7 @@ public class ContentUpdateService extends Service {
 		
 		Context context = getApplicationContext();
 		CharSequence contentTitle = "Content update complete";
-		CharSequence contentText = "Fetched " + report.getSectionCount() + " sections, " +
-			report.getArticleCount() + " articles and " + report.getImageCount() + " images.";
+		CharSequence contentText = "Fetched " + report.getArticleCount() + " articles and " + report.getImageCount() + " images.";
 		
 		Intent notificationIntent = new Intent(this, sync.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);

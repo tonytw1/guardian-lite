@@ -23,7 +23,6 @@ public class UpdateSectionArticlesTask implements ContentUpdateTaskRunnable {
 		this.articleDAO = articleDAO;
 		this.section = section;
 		this.context = context;
-		this.report = new ContentUpdateReport();
 	}
 
 	@Override
@@ -34,13 +33,11 @@ public class UpdateSectionArticlesTask implements ContentUpdateTaskRunnable {
 		if (sectionItems != null) {
 			for (Article article : sectionItems) {
 				if (article.getThumbnailUrl() != null) {					
-					ArticleDAOFactory.getTaskQueue().addTask(
-							new ImageFetchTask(article.getThumbnailUrl(), context));
+					ArticleDAOFactory.getTaskQueue().addImageTask(new ImageFetchTask(article.getThumbnailUrl(), context));
 				}
 				
 				if (article.getMainImageUrl() != null) {					
-					ArticleDAOFactory.getTaskQueue().addTask(
-							new ImageFetchTask(article.getMainImageUrl(), context));
+					ArticleDAOFactory.getTaskQueue().addImageTask(new ImageFetchTask(article.getMainImageUrl(), context));
 				}
 				report.setArticleCount(report.getArticleCount()+1);
 			}
@@ -49,8 +46,8 @@ public class UpdateSectionArticlesTask implements ContentUpdateTaskRunnable {
 	}
 
 	@Override
-	public ContentUpdateReport getReport() {
-		return report;
+	public void setReport(ContentUpdateReport report) {
+		this.report = report;		
 	}
 		
 }

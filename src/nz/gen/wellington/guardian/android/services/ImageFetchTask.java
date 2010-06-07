@@ -14,9 +14,9 @@ public class ImageFetchTask implements ContentUpdateTaskRunnable {
 	public ImageFetchTask(String thumbnailUrl, Context context) {
 		this.url = thumbnailUrl;
 		this.context = context;
-		this.report = new ContentUpdateReport();
 	}
 
+	
 	@Override
 	public void run() {
 		ImageDAO imageDao = ArticleDAOFactory.getImageDao(context);
@@ -26,9 +26,10 @@ public class ImageFetchTask implements ContentUpdateTaskRunnable {
 		}
 	}
 
+
 	@Override
-	public ContentUpdateReport getReport() {
-		return report;
+	public void setReport(ContentUpdateReport report) {
+		this.report = report;		
 	}
 	
 }
