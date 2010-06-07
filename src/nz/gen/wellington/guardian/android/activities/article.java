@@ -1,15 +1,10 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ListKeywordClicker;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
-import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -52,7 +47,12 @@ public class article extends Activity {
 	}
 
 		
-	private void populateArticle(Article article) {	
+	private void populateArticle(Article article) {		
+		if (article.getSection() != null) {
+			setHeading(article.getSection().getName());
+			setHeadingColour(article.getSection().getColour());
+		}
+		
         TextView headline = (TextView) findViewById(R.id.Headline);
         TextView pubDate = (TextView) findViewById(R.id.PubDate);
         TextView byline = (TextView) findViewById(R.id.Byline);
@@ -98,53 +98,20 @@ public class article extends Activity {
 	    	ListKeywordClicker urlListener = new ListKeywordClicker(tag);
 	    	vi.setOnClickListener(urlListener);
 	    	tagList.addView(vi);
-		}
-		
-		List<Section> sections = ArticleDAOFactory.getDao(this).getSections();
-		if (sections != null) {
-			for (Section section : sections) {
-				if (section.getId().equals(article.getSectionId())) {
-					setHeading(section.getName());
-					setHeadingColour(getSectionColour(section));
-				}
-			}
-		}
+		}				
 	}
 	
-	
+
+	// TODO duplication
 	protected void setHeading(String headingText) {
 		TextView heading = (TextView) findViewById(R.id.Heading);
 		heading.setText(headingText);		
 	}
 	
+	// TODO duplication
 	protected void setHeadingColour(String colour) {
 		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
 		heading.setBackgroundColor(Color.parseColor(colour));
-	}
-	
-	
-	private String getSectionColour(Section section) {
-		Map<String, String> sectionColours = new HashMap<String, String>();
-		
-		sectionColours.put("business", "#8F1AB6");
-		sectionColours.put("commentisfree", "#0061A6");
-		sectionColours.put("culture", "#D1008B");
-		sectionColours.put("environment", "#7BBB00");
-		sectionColours.put("lifeandstyle", "#FFC202");
-		sectionColours.put("money", "#8F1AB6");	
-		sectionColours.put("politics", "#801100");
-		sectionColours.put("media", "#801100");
-		sectionColours.put("education", "#801100");
-		sectionColours.put("society", "#801100");
-		sectionColours.put("science", "#801100");
-		sectionColours.put("sport", "#008000");
-		sectionColours.put("football", "#006000");
-		
-		if (sectionColours.containsKey(section.getId())) {
-			return sectionColours.get(section.getId());
-		}
-		
-		return "#D61D00";
 	}
 	
 }

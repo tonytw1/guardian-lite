@@ -17,7 +17,7 @@ public class Article implements Serializable {
 	String standfirst;
 	String description;
 	
-	String sectionId;
+	Section section;
 	List<Tag> authors;
 	List<Tag> keywords;
 	String thumbnailUrl;
@@ -120,14 +120,12 @@ public class Article implements Serializable {
 		this.byline = byline;
 	}
 
-	public String getSectionId() {
-		return sectionId;
+	public Section getSection() {
+		return section;
 	}
 
-	public void setSectionId(String sectionId) {
-		this.sectionId = sectionId;
+	public void setSection(Section section) {
+		this.section = section;
 	}
-	
-	
 	
 }

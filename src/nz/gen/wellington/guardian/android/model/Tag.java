@@ -7,10 +7,12 @@ public class Tag implements Serializable {
 	private static final long serialVersionUID = 2L;
 	private String name;
 	private String id;
+	private Section section;
 
-	public Tag(String name, String id) {
+	public Tag(String name, String id, Section section) {
 		this.name = name;
 		this.id = id;
+		this.section = section;
 	}
 
 	public String getName() {
@@ -26,4 +28,12 @@ public class Tag implements Serializable {
 		return name;
 	}
 
+	public Section getSection() {
+		return section;
+	}
+
+	public void setSection(Section section) {
+		this.section = section;
+	}
+	
 }

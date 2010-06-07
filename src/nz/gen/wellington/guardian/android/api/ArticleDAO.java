@@ -82,15 +82,19 @@ public class ArticleDAO {
 			return articles;
 		}
 				
-		articles = openPlatformApi.getArticles(articleSet);		
-		if (articles != null) {
-			Log.i(TAG, "Got " + articles.size() + " articles from api call");
-			//articleCache.putArticleSetArticles(articleSet, articles);
-			fileBasedArticleCache.putArticleSetArticles(articleSet, articles);
-		} else {
-			Log.w(TAG, "Article api call failed");
+		List<Section> sections = this.getSections();
+		if (sections != null) {
+			articles = openPlatformApi.getArticles(articleSet, sections);		
+			if (articles != null) {
+				Log.i(TAG, "Got " + articles.size() + " articles from api call");
+				//articleCache.putArticleSetArticles(articleSet, articles);
+				fileBasedArticleCache.putArticleSetArticles(articleSet, articles);
+				return articles;
+			} else {
+				Log.w(TAG, "Article api call failed");
+			}
 		}
-		return articles;
+		return null;
 	}
 
 

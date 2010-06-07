@@ -23,7 +23,7 @@ public class OpenPlatformJSONParserTest extends TestCase {
 	@Test
 	public void testCanParseSectionContentResults() throws Exception {
 		final String jsonString = loadContent("open-platform/science.json").toString();		
-		List<Article> articles = parser.parseArticlesJSON(jsonString);		
+		List<Article> articles = parser.parseArticlesJSON(jsonString, null);		
 		assertEquals(10, articles.size());
 		
 		Article first = articles.get(0);

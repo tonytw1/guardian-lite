@@ -39,7 +39,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 
 	
 	@Override
-	public List<Article> getArticles(ArticleSet articleSet) {
+	public List<Article> getArticles(ArticleSet articleSet, List<Section> sections) {
 		if (apiKey == null) {
 			Log.w(TAG, "API key not set");
 			return null;
@@ -48,7 +48,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
 		final String json = getJSON(buildContentQueryUrl(articleSet));		
 		if (json != null) {	
-			List<Article> articles = jsonParser.parseArticlesJSON(json);			
+			List<Article> articles = jsonParser.parseArticlesJSON(json, sections);			
 			if (articles != null) {				
 				if (jsonParser.getUserTier(json).equals("partner")) {
 					if (isWifiConnection()) {
@@ -162,6 +162,5 @@ public class OpenPlatformJSONApi implements ContentSource {
 		Log.i(TAG, "Active connection is of type: " + activeNetworkInfo.getTypeName());
 		return false;
 	}
-
 	
 }
