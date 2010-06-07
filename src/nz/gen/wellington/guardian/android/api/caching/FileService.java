@@ -71,7 +71,7 @@ public class FileService {
 
 	// TODO make a preference - only use external if installed - external is the SD card right?
 	private static File getCacheDir(Context context) {
-		return Environment.getExternalStorageDirectory();
+		return context.getCacheDir();
 	}
 	
 }
