@@ -65,7 +65,7 @@ public class ContentUpdateService extends Service {
     		report.setSectionCount(report.getSectionCount() + taskReport.getSectionCount());
     		report.setArticleCount(report.getArticleCount() + taskReport.getArticleCount());
     		report.setImageCount(report.getImageCount() + taskReport.getImageCount());
-    	} 	
+    	} 
     }
  
     
@@ -82,7 +82,10 @@ public class ContentUpdateService extends Service {
 	    	   }
 	         try {
 	  		   Log.i(TAG, "Waiting for next task");
-	           taskQueue.wait();
+	           taskQueue.wait();	           
+	           inBatch= true;
+	           report = new ContentUpdateReport();
+	           
 	         } catch (InterruptedException e) {
 	           stop();
 	         }
