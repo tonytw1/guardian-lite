@@ -3,20 +3,16 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.activities.ui.ArticleImageDecorator;
-import nz.gen.wellington.guardian.android.activities.ui.ListArticleAdapter;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Article;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
-public class main extends Activity {
+public class main extends ArticleListActivity {
 	
 	ListAdapter adapter;
 		
@@ -27,13 +23,16 @@ public class main extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+            
+        List<Article> articles = ArticleDAOFactory.getDao(this).getTopStories();
+    	if (articles != null) {
+    		populateNewsitemList(articles);
+    	} else {
+    		Toast.makeText(this, "Could not load top stories", Toast.LENGTH_SHORT).show();   		    	}
    
 	}
 	
-	
-	
-	
-	
+		
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    menu.add(0, 1, 0, "Sync");
 	    menu.add(0, 2, 0, "Sections");
@@ -53,7 +52,7 @@ public class main extends Activity {
 	    case 3:
 	    	switchToPreferences();
 	    	return true;
-	    }	    	
+	    }
 	    return false;
 	}
 

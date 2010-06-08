@@ -9,6 +9,7 @@ import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
+import nz.gen.wellington.guardian.android.services.UpdateTopStoriesTask;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -65,6 +66,7 @@ public class sync extends Activity implements OnClickListener {
 			articleDAO.evictSections();
 			articleDAO.evictAll();
 			
+			
 			List<Section> sections = articleDAO.getSections();
 			if (sections != null) {
 				for (Section section : sections) {
@@ -72,6 +74,8 @@ public class sync extends Activity implements OnClickListener {
 					taskQueue.addArticleTask(new UpdateSectionArticlesTask(articleDAO, section, this));
 				}
 			}
+			taskQueue.addArticleTask(new UpdateTopStoriesTask(articleDAO, this));
+			
 			
 			startService(new Intent(this, ContentUpdateService.class));			
 			break;

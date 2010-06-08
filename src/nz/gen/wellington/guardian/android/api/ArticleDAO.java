@@ -14,6 +14,7 @@ import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import android.content.Context;
 import android.util.Log;
 
@@ -114,24 +115,11 @@ public class ArticleDAO {
 
 
 	public List<Article> getTopStories() {
-		List<Article> topStories = new ArrayList<Article>();
-		List<Section> sections = getSections();
-		if (sections == null) {
-			Log.i(TAG, "No sections founds - could not calculate top stories");
-			return topStories;	// TODO should return null
-		}
-		
-		for (Section section : sections) {			
-			List<Article> sectionArticles = getArticleSetArticles(new SectionArticleSet(section));
-			if (sectionArticles != null && !sectionArticles.isEmpty()) {
-				Article article = sectionArticles.get(0);
-				Log.i(TAG, "Adding " + section.getName() + " article to top stories: " + article.getTitle());				
-				topStories.add(article);
-			}
-		}
-		
-		return topStories;
+		return fileBasedArticleCache.getArticleSetArticles(new TopStoriesArticleSet());
 	}
-
-	
+		
+	public void saveTopStories(List<Article> topStories) {
+		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), topStories);		
+	}
+		
 }
