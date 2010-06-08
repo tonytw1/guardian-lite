@@ -41,11 +41,7 @@ public class UpdateSectionArticlesTask implements ContentUpdateTaskRunnable {
 				}
 				report.setArticleCount(report.getArticleCount()+1);
 			}
-			
-			if (sectionItems.size() > 0) {
-				report.addTopStories(sectionItems.get(0));
-			}
-			
+						
 		}
 		report.setSectionCount(report.getSectionCount()+1);
 	}

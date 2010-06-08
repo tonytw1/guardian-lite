@@ -62,11 +62,11 @@ public class sync extends Activity implements OnClickListener {
 			Log.d(TAG, "Starting content update service service");
 			TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();
 			
+			// TODO push to a background task
 			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this);
 			articleDAO.evictSections();
 			articleDAO.evictAll();
-			
-			
+						
 			List<Section> sections = articleDAO.getSections();
 			if (sections != null) {
 				for (Section section : sections) {

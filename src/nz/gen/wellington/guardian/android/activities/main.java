@@ -23,7 +23,10 @@ public class main extends ArticleListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-            
+        
+        setHeading("Most recent");
+    	setHeadingColour("#0061A6");
+    	
         List<Article> articles = ArticleDAOFactory.getDao(this).getTopStories();
     	if (articles != null) {
     		populateNewsitemList(articles);
