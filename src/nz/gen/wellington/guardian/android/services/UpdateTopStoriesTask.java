@@ -41,7 +41,7 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 		}
 		
 		Log.i(TAG, "Saving " + topStories.size() + " top stories");
-		articleDAO.saveTopStories(topStories);
+		articleDAO.saveTopStories(new ArrayList<Article>(topStories));
 		Log.i(TAG, "Done");
 	}
 

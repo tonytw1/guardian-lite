@@ -16,7 +16,7 @@ public class TaskQueue {
 	
 	public synchronized void addArticleTask(ContentUpdateTaskRunnable articleTask) {
 		synchronized (this) {
-			articleTasks.addFirst(articleTask);
+			articleTasks.add(articleTask);
 			this.notify();
 		}
 	}

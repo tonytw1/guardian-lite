@@ -31,7 +31,7 @@ public class main extends ArticleListActivity {
     	if (articles != null) {
     		populateNewsitemList(articles);
     	} else {
-    		Toast.makeText(this, "Could not load top stories", Toast.LENGTH_SHORT).show();   		    	}
+    		Toast.makeText(this, "Could not load top stories - you may need to sync", Toast.LENGTH_SHORT).show();   		    	}
    
 	}
 	

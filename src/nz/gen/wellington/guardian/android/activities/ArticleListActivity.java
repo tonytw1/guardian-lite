@@ -23,7 +23,6 @@ public abstract class ArticleListActivity extends Activity {
 		
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);        
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 	}	
@@ -49,9 +48,8 @@ public abstract class ArticleListActivity extends Activity {
 	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    menu.add(0, 1, 0, "Sync");
+	    menu.add(0, 1, 0, "Most recent");
 	    menu.add(0, 2, 0, "Sections");
-	    menu.add(0, 3, 0, "Settings");
 	    return true;
 	}
 	
@@ -59,32 +57,24 @@ public abstract class ArticleListActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {	   
 	    case 1: 	    	
-	    	swichToSync();
+	    	switchToMostRecent();
 	        return true;
 	    case 2: 	    	
 	    	switchToSections();
 	        return true;	 
-	    case 3:
-	    	switchToPreferences();
-	    	return true;
 	    }	    	
 	    return false;
 	}
 
 
-	private void swichToSync() {
-		Intent intent = new Intent(this, sync.class);
-		this.startActivity(intent);	
+	private void switchToMostRecent() {
+		Intent intent = new Intent(this, main.class);
+		this.startActivity(intent);
 	}
 	
 	private void switchToSections() {
 		Intent intent = new Intent(this, sections.class);
 		this.startActivity(intent);		
-	}
-	
-	private void switchToPreferences() {
-		Intent intent = new Intent(this, perferences.class);
-		this.startActivity(intent);	
 	}
 	
 }

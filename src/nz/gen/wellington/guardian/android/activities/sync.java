@@ -69,7 +69,7 @@ public class sync extends Activity implements OnClickListener {
 						
 			List<Section> sections = articleDAO.getSections();
 			if (sections != null) {
-				for (Section section : sections) {
+				for (Section section : sections.subList(0, 6)) {
 					Log.i(TAG, "Injecting section into update queue: " + section.getName());
 					taskQueue.addArticleTask(new UpdateSectionArticlesTask(articleDAO, section, this));
 				}
