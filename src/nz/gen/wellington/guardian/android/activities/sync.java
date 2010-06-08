@@ -23,9 +23,11 @@ import android.widget.TextView;
 
 public class sync extends Activity implements OnClickListener {
 	
-	private static final String TAG = "reload";
+	private static final String TAG = "sync";
 
 	Button start;
+	
+	StatusUpdateRunner statusUpdateRunner;
 	Handler statusUpdateHandler;
 	
 	private NotificationManager notificationManager;
@@ -38,25 +40,18 @@ public class sync extends Activity implements OnClickListener {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.reload);
+        setContentView(R.layout.sync);
         
         start = (Button) findViewById(R.id.buttonStart);        
         start.setOnClickListener(this);
         
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
     	notificationManager.cancel(ContentUpdateService.UPDATE_COMPLETE_NOTIFICATION_ID);	
-    	
-    	    	
-    	statusUpdateHandler = new Handler() {    		
-    		public void handleMessage(Message msg) {
-    			super.handleMessage(msg);
-    			Log.d(TAG, "Status update handler is updating status");
-    			updateStatus();
-    		}
-    	};
-    	    	
-    	Thread updateThread = new Thread(new StatusUpdateRunner());
-    	updateThread.start();    	
+    	    	    	
+    	statusUpdateHandler = new StatusUpdateHandler();    	
+    	statusUpdateRunner = new StatusUpdateRunner();
+    	Thread updateThread = new Thread(statusUpdateRunner);
+    	updateThread.start();
    	}
 
 	
@@ -86,6 +81,14 @@ public class sync extends Activity implements OnClickListener {
 	}
 	
 	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.d(TAG, "Stopping status update runner");
+		statusUpdateRunner.stop();
+	}
+
+	
 	public void updateStatus() {
 		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();
 
@@ -99,10 +102,31 @@ public class sync extends Activity implements OnClickListener {
 		start.setEnabled(canRun);
 	}
 	
+	class StatusUpdateHandler extends Handler {
+		
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			Log.d(TAG, "Status update handler is updating status");
+			updateStatus();
+		}
+		
+	}
+	
 	
 	class StatusUpdateRunner implements Runnable {
+		
+		private boolean running;
+				
+		public StatusUpdateRunner() {
+			running = true;
+		}
+
+		public void stop() {
+			this.running = false;			
+		}
+		
 		public void run() {
-			while (!Thread.currentThread().isInterrupted()) {
+			while (running && !Thread.currentThread().isInterrupted()) {
 				Message m = new Message();
 				m.what = 1;
 				sync.this.statusUpdateHandler.sendMessage(m);

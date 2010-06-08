@@ -29,17 +29,17 @@ public final class R {
         public static final int LinearLayout02=0x7f060004;
         public static final int PubDate=0x7f06000a;
         public static final int ScrollView01=0x7f060003;
-        public static final int SectionImage=0x7f060017;
-        public static final int SectionName=0x7f060018;
-        public static final int SectionsListView=0x7f060016;
+        public static final int SectionImage=0x7f060015;
+        public static final int SectionName=0x7f060016;
+        public static final int SectionsListView=0x7f060014;
         public static final int Standfirst=0x7f06000b;
-        public static final int Status=0x7f060015;
+        public static final int Status=0x7f060018;
         public static final int TagList=0x7f06000e;
         public static final int TagName=0x7f06000f;
         public static final int TextView01=0x7f060007;
         public static final int TextView02=0x7f060011;
         public static final int TrailImage=0x7f060010;
-        public static final int buttonStart=0x7f060014;
+        public static final int buttonStart=0x7f060017;
     }
     public static final class layout {
         public static final int article=0x7f030000;
@@ -47,9 +47,9 @@ public final class R {
         public static final int authorslist=0x7f030002;
         public static final int list=0x7f030003;
         public static final int main=0x7f030004;
-        public static final int reload=0x7f030005;
-        public static final int sections=0x7f030006;
-        public static final int sectionslist=0x7f030007;
+        public static final int sections=0x7f030005;
+        public static final int sectionslist=0x7f030006;
+        public static final int sync=0x7f030007;
     }
     public static final class string {
         public static final int app_name=0x7f050000;
