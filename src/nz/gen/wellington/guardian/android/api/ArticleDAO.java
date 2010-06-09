@@ -1,9 +1,7 @@
 package nz.gen.wellington.guardian.android.api;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.activities.article;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedSectionCache;
 import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
@@ -29,7 +27,7 @@ public class ArticleDAO {
 	FileBasedSectionCache fileBasedSectionCache;
 	
 	public ArticleDAO(Context context) {
-		this.openPlatformApi = ApiFactory.getOpenPlatformApi(context);
+		this.openPlatformApi = ArticleDAOFactory.getOpenPlatformApi(context);
 
 		this.sectionCache = CacheFactory.getSectionCache();
 		this.fileBasedArticleCache = new FileBasedArticleCache(context);

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ContentSource;
+import nz.gen.wellington.guardian.android.api.OpenPlatformApiKeyStore;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.AuthorArticleSet;
@@ -24,15 +25,15 @@ public class OpenPlatformJSONApi implements ContentSource {
 	private static final String SECTIONS_JSON_URL = "http://content.guardianapis.com/sections?format=json";
 	private static final int PAGE_SIZE = 10;	// TODO push to a preference
 	
-	private String apiKey;
+	private OpenPlatformApiKeyStore apiKeyStore;
 	public HttpFetcher httpFetcher;
 	protected OpenPlatformJSONParser jsonParser;
 	private Context context;
 	
-	public OpenPlatformJSONApi(Context context, String apiKey) {
-		this.apiKey = apiKey;	// TODO not here - state gets stuck
+	
+	public OpenPlatformJSONApi(Context context, OpenPlatformApiKeyStore apiKeyStore) {
+		this.apiKeyStore = apiKeyStore;
 		this.context = context;
-		Log.d(TAG, "Apikey set from preferences to: " + apiKey);
 		httpFetcher = new HttpFetcher();
 		jsonParser = new  OpenPlatformJSONParser();
 	}
@@ -40,7 +41,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	
 	@Override
 	public List<Article> getArticles(ArticleSet articleSet, List<Section> sections) {
-		if (apiKey == null) {
+		if (apiKeyStore.getApiKey() == null) {
 			Log.w(TAG, "API key not set");
 			return null;
 		}
@@ -83,7 +84,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 
 	@Override
 	public List<Section> getSections() {
-		if (apiKey == null) {
+		if (apiKeyStore.getApiKey() == null) {
 			Log.w(TAG, "API key not set");
 			return null;
 		}
@@ -115,7 +116,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		StringBuilder url = new StringBuilder("http://content.guardianapis.com/"); // TODO should use the apiUrl Field
 		url.append(id);
 		url.append("?show-media=all");
-		url.append("&api-key=" + apiKey);
+		url.append("&api-key=" + apiKeyStore.getApiKey());
 		url.append("&format=json");
 		return url.toString();
 	}
@@ -138,7 +139,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		
 		url.append("&show-tags=all");
-		url.append("&api-key=" + apiKey);
+		url.append("&api-key=" + apiKeyStore.getApiKey());
 		url.append("&page-size=" + PAGE_SIZE);
 		url.append("&tag=type%2Farticle");
 		url.append("&format=json");
@@ -150,6 +151,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	}
 	
 	
+	// TODO push to a helper class - which will let us evict context from this class
 	private boolean isWifiConnection() {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
