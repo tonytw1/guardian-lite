@@ -1,6 +1,5 @@
 package nz.gen.wellington.guardian.android.api.caching;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -60,9 +59,8 @@ public class FileBasedSectionCache {
 	
 	public void clear() {
 		Log.i(TAG, "Clearing sections");
-		if (FileService.isLocallyCached(context, SECTIONS_JSON)) {
-			File localFile = context.getFileStreamPath(SECTIONS_JSON);			
-			localFile.delete();
+		if (FileService.isLocallyCached(context, SECTIONS_JSON)) {			
+			FileService.clear(context, SECTIONS_JSON);
 			Log.i(TAG, "Cleared: " + SECTIONS_JSON);
 		} else {
 			Log.i(TAG, "No local copy to clear:" + SECTIONS_JSON);

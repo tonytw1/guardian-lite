@@ -1,6 +1,5 @@
 package nz.gen.wellington.guardian.android.api.caching;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;

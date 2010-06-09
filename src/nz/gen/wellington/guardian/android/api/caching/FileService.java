@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 
 public class FileService {
