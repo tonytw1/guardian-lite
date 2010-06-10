@@ -24,6 +24,7 @@ public class sync extends Activity implements OnClickListener {
 	private static final String TAG = "sync";
 
 	Button start;
+	Button stop;
 	
 	StatusUpdateRunner statusUpdateRunner;
 	Handler statusUpdateHandler;
@@ -42,6 +43,8 @@ public class sync extends Activity implements OnClickListener {
         
         start = (Button) findViewById(R.id.buttonStart);        
         start.setOnClickListener(this);
+        stop = (Button) findViewById(R.id.StopDownloadButton);        
+        stop.setOnClickListener(this);
         
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
     	notificationManager.cancel(ContentUpdateService.UPDATE_COMPLETE_NOTIFICATION_ID);	
@@ -54,10 +57,10 @@ public class sync extends Activity implements OnClickListener {
 
 	
 	public void onClick(View src) {		
+		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();
 		switch (src.getId()) {
 		case R.id.buttonStart:
 			Log.d(TAG, "Starting content update service service");
-			TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();
 						
 			taskQueue.addArticleTask(new UpdateSectionsTask(this.getApplicationContext()));
 
@@ -66,6 +69,9 @@ public class sync extends Activity implements OnClickListener {
 
 			startService(new Intent(this, ContentUpdateService.class));			
 			break;
+		
+		case R.id.StopDownloadButton: 
+			taskQueue.clear();
 		}
 		
 		updateStatus();
@@ -91,6 +97,7 @@ public class sync extends Activity implements OnClickListener {
 
 		boolean canRun = taskQueue.isEmpty();
 		start.setEnabled(canRun);
+		stop.setEnabled(!canRun);
 	}
 	
 	class StatusUpdateHandler extends Handler {

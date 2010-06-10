@@ -34,6 +34,7 @@ public final class R {
         public static final int SectionsListView=0x7f060014;
         public static final int Standfirst=0x7f06000b;
         public static final int Status=0x7f060018;
+        public static final int StopDownloadButton=0x7f060019;
         public static final int TagList=0x7f06000e;
         public static final int TagName=0x7f06000f;
         public static final int TextView01=0x7f060007;

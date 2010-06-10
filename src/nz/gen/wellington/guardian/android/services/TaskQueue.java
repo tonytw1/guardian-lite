@@ -28,6 +28,12 @@ public class TaskQueue {
 		}
 	}
 
+
+	public synchronized void clear() {
+		articleTasks.clear();
+		imageTasks.clear();
+	}
+
 	
 	public synchronized int getArticleSize() {
 		return articleTasks.size();
@@ -78,6 +84,5 @@ public class TaskQueue {
 	public boolean isEmpty() {
 		return isArticleEmpty() && isImageEmpty();
 	}
-
 	
 }
