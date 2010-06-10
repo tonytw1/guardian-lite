@@ -2,7 +2,7 @@
 <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:id="@+id/ArticleListLayout">
 	<LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:paddingTop="2px" android:paddingBottom="2px" android:paddingLeft="2px" android:background="#D61D00" android:id="@+id/HeadingLayout">
 <TextView android:text="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Heading" android:textStyle="bold" android:textColor="#fff"></TextView>
-</LinearLayout><ListView android:layout_width="wrap_content" android:layout_height="wrap_content" android:choiceMode="multipleChoice" android:id="@+id/ArticlesListView"></ListView>
+</LinearLayout><ListView android:layout_height="wrap_content" android:choiceMode="multipleChoice" android:id="@+id/ArticlesListView" android:layout_width="fill_parent"></ListView>
 
 
 
