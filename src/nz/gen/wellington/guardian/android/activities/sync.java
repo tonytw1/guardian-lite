@@ -1,12 +1,10 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateSectionsTask;
-import nz.gen.wellington.guardian.android.services.UpdateTopStoriesTask;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -63,10 +61,6 @@ public class sync extends Activity implements OnClickListener {
 			Log.d(TAG, "Starting content update service service");
 						
 			taskQueue.addArticleTask(new UpdateSectionsTask(this.getApplicationContext()));
-
-			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this);			
-			taskQueue.addArticleTask(new UpdateTopStoriesTask(articleDAO, this));
-
 			startService(new Intent(this, ContentUpdateService.class));			
 			break;
 		

@@ -26,11 +26,13 @@ public class UpdateSectionsTask implements ContentUpdateTaskRunnable {
 		
 		List<Section> sections = articleDAO.getSections();
 		if (sections != null) {
+			TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();
 			for (Section section : sections) {
 				Log.i(TAG, "Injecting section into update queue: " + section.getName());
-				ArticleDAOFactory.getTaskQueue().addArticleTask(new UpdateSectionArticlesTask(articleDAO, section, context));
+				taskQueue.addArticleTask(new UpdateSectionArticlesTask(section, context));
 			}
-		}
+			taskQueue.addArticleTask(new UpdateTopStoriesTask(articleDAO, context));
+		}		
 	}
 	
 	@Override

@@ -14,41 +14,43 @@ import android.util.Log;
 public class UpdateSectionArticlesTask implements ContentUpdateTaskRunnable {
 
 	private static final String TAG = "UpdateSectionArticlesTask";
-	private ArticleDAO articleDAO;
 	private Section section;
 	private Context context;
 	private ContentUpdateReport report;
-
-	public UpdateSectionArticlesTask(ArticleDAO articleDAO, Section section, Context context) {
-		this.articleDAO = articleDAO;
+	
+	public UpdateSectionArticlesTask(Section section, Context context) {
 		this.section = section;
 		this.context = context;
 	}
 
 	@Override
 	public void run() {
+		ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
 		articleDAO.evictArticleSet(new SectionArticleSet(section));
 		Log.i(TAG, "Fetching section articles: " + section.getName());
 		List<Article> sectionItems = articleDAO.getSectionItems(section);
 		if (sectionItems != null) {
 			for (Article article : sectionItems) {
-				if (article.getThumbnailUrl() != null) {					
-					ArticleDAOFactory.getTaskQueue().addImageTask(new ImageFetchTask(article.getThumbnailUrl(), context));
-				}
-				
-				if (article.getMainImageUrl() != null) {					
-					ArticleDAOFactory.getTaskQueue().addImageTask(new ImageFetchTask(article.getMainImageUrl(), context));
-				}
+				queueImageDownloadIsNotAvailableLocally(article.getThumbnailUrl());
+				queueImageDownloadIsNotAvailableLocally(article.getMainImageUrl());				
 				report.setArticleCount(report.getArticleCount()+1);
 			}
-						
 		}
 		report.setSectionCount(report.getSectionCount()+1);
 	}
 
 	@Override
 	public void setReport(ContentUpdateReport report) {
-		this.report = report;		
+		this.report = report;
+	}
+	
+	private void queueImageDownloadIsNotAvailableLocally(String imageUrl) {
+		if (imageUrl != null) {
+			if (!ArticleDAOFactory.getImageDao(context).isAvailableLocally(imageUrl)) {
+				Log.d(TAG, "Queuing file for fetching: " + imageUrl);
+				ArticleDAOFactory.getTaskQueue().addImageTask(new ImageFetchTask(imageUrl, context));
+			}
+		}
 	}
 		
 }
