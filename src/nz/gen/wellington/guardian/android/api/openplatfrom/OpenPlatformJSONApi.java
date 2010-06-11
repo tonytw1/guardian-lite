@@ -77,7 +77,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		String itemApiUrl = buildContentItemQueryUrl(article.getId());
 		final String itemJson = getJSON(itemApiUrl);
 		if (itemJson != null) {
-			article.setMainImageUrl(jsonParser.parseArticleJSONForMainPictureUrl(itemJson));
+			jsonParser.parseArticleJSONForMainPicture(itemJson, article);
 			Log.i(TAG, "Found article main picture: " + article.getMainImageUrl());
 		}
 	}

@@ -50,11 +50,11 @@ public class OpenPlatformJSONParser {
 		return null;		
 	}
 
-	public String parseArticleJSONForMainPictureUrl(String jsonString) {
+	public void parseArticleJSONForMainPicture(String jsonString, Article article) {
 		try {
 			JSONObject json = new JSONObject(jsonString);
 			if (!isResponseOk(json)) {
-				return null;				
+				return;			
 			}
 			
 			JSONObject response = json.getJSONObject("response");
@@ -66,19 +66,28 @@ public class OpenPlatformJSONParser {
 				// TODO better targeting.
 				if (mediaAssets.length() > 0) {
 					JSONObject first = mediaAssets.getJSONObject(0);
-					if (first.has("file") && first.has("type")) {						
-						if (first.getString("type").equals("picture")) {
-							return first.getString("file");							
+					if (first.has("file") && first.has("type")) {
+						
+						if (first.getString("type").equals("picture")) {			
+							final String mainImageUrl = (String) first.getString("file");
+							article.setMainImageUrl(mainImageUrl);
+							
+							if (first.has("fields")) {
+								JSONObject fields = first.getJSONObject("fields");
+								if (fields.has("caption")) {
+									article.setCaption(fields.getString("caption"));
+								}
+							}							
 						}
+						
 					}
 				}
-				
 			}
-			return null;
+			return;
 						
 		} catch (JSONException e) {
 			Log.e(TAG, "JSONException while parsing article: " + e.getMessage());
-			return null;
+			return;
 		}
 	}
 	

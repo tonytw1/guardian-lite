@@ -51,6 +51,7 @@ public class article extends Activity {
 		}
 		
         TextView headline = (TextView) findViewById(R.id.Headline);
+        TextView caption = (TextView) findViewById(R.id.Caption);
         TextView pubDate = (TextView) findViewById(R.id.PubDate);
         TextView byline = (TextView) findViewById(R.id.Byline);
         TextView standfirst = (TextView) findViewById(R.id.Standfirst);
@@ -67,8 +68,9 @@ public class article extends Activity {
         ImageDAO imageDAO = ArticleDAOFactory.getImageDao(this);
     	ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
     	
+    	caption.setText(article.getCaption());
     	final String mainImageUrl = article.getMainImageUrl();
-    	Log.i("article", "main picture url is: " + mainImageUrl);
+    	Log.d("article", "main picture url is: " + mainImageUrl);
 		if (mainImageUrl != null && imageDAO.isAvailableLocally(mainImageUrl)) {
     		Bitmap bitmap = imageDAO.getImage(mainImageUrl);
     		if (bitmap != null) {

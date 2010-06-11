@@ -20,7 +20,7 @@ public final class R {
         public static final int ArticlesListView=0x7f060013;
         public static final int AuthorList=0x7f06000d;
         public static final int Byline=0x7f060009;
-        public static final int Caption=0x7f060008;
+        public static final int Caption=0x7f060007;
         public static final int Description=0x7f06000c;
         public static final int Heading=0x7f060002;
         public static final int HeadingLayout=0x7f060001;
@@ -37,7 +37,7 @@ public final class R {
         public static final int StopDownloadButton=0x7f060019;
         public static final int TagList=0x7f06000e;
         public static final int TagName=0x7f06000f;
-        public static final int TextView01=0x7f060007;
+        public static final int TextView01=0x7f060008;
         public static final int TextView02=0x7f060011;
         public static final int TrailImage=0x7f060010;
         public static final int buttonStart=0x7f060017;

@@ -54,10 +54,9 @@ public abstract class ArticleListActivity extends Activity {
 
 	
 	protected void populateNewsitemList(List<Article> articles) {
-		if (articles != null) {			
-			List<Article> newsitems = articles;	
+		if (articles != null) {
 			ListView listView = (ListView) findViewById(R.id.ArticlesListView);
-			ListAdapter adapter = new ListArticleAdapter(this, ArticleImageDecorator.decorateNewsitemsWithThumbnails(newsitems, ArticleDAOFactory.getImageDao(this)));		   
+			ListAdapter adapter = new ListArticleAdapter(this, ArticleImageDecorator.decorateNewsitemsWithThumbnails(articles, ArticleDAOFactory.getImageDao(this)));		   
 			listView.setAdapter(adapter);
 		}
 	}
@@ -151,6 +150,10 @@ public abstract class ArticleListActivity extends Activity {
 				} else {
 					undecoratedArticles = articleDAO.getTopStories();				
 				}
+			}
+			
+			if (undecoratedArticles == null) {				
+				return;
 			}
 			
 			if (running) {

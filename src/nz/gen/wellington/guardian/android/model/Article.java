@@ -22,7 +22,7 @@ public class Article implements Serializable {
 	List<Tag> keywords;
 	String thumbnailUrl;
 	String mainImageUrl;
-
+	String caption;
 	
 	public Article() {
 		authors = new ArrayList<Tag>();
@@ -99,6 +99,14 @@ public class Article implements Serializable {
 
 	public String getMainImageUrl() {
 		return mainImageUrl;
+	}
+	
+	public String getCaption() {
+		return caption;
+	}
+
+	public void setCaption(String caption) {
+		this.caption = caption;
 	}
 
 	public void setMainImageUrl(String mainImageUrl) {
