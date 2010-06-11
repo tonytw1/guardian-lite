@@ -46,9 +46,12 @@ public class FileBasedArticleCache {
 		Log.i(TAG, "Reading from disk: " + filepath);
 		try {
 			FileInputStream fis = FileService.getFileInputStream(context, articleSet.getApiUrl());
+			
+			Log.i(TAG, "Reading from disk: " + filepath);
 			ObjectInputStream in = new ObjectInputStream(fis);
 			List<Article> loaded = (List<Article>) in.readObject();
 			in.close();
+			Log.i(TAG, "Finished reading from disk: " + filepath);
 			return loaded;
 			
 		} catch (IOException ex) {

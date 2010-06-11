@@ -1,6 +1,6 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
@@ -142,7 +142,7 @@ public abstract class ArticleListActivity extends Activity {
 		public void run() {
 			Log.d("UpdateArticlesRunner", "Loading articles");
 
-			List<Article> undecoratedArticles = new ArrayList<Article>();			
+			List<Article> undecoratedArticles = new LinkedList<Article>();			
 			if (running) {
 				if (section != null) {
 					undecoratedArticles = articleDAO.getSectionItems(section);

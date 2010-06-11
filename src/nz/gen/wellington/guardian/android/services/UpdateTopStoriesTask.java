@@ -1,7 +1,7 @@
 package nz.gen.wellington.guardian.android.services;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -41,7 +41,7 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 		}
 		
 		Log.i(TAG, "Saving " + topStories.size() + " top stories");
-		ArrayList<Article> results = new ArrayList<Article>(topStories.values());
+		LinkedList<Article> results = new LinkedList<Article>(topStories.values());
 		Collections.reverse(results);
 		articleDAO.saveTopStories(results);
 		Log.i(TAG, "Done");		

@@ -1,6 +1,6 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ArticleBodyCleaner;
@@ -37,7 +37,7 @@ public class OpenPlatformJSONParser {
 			JSONObject response = json.getJSONObject("response");
 			JSONArray results = response.getJSONArray("results");
 				
-			List<Article> articles = new ArrayList<Article>();
+			List<Article> articles = new LinkedList<Article>();
 			for (int i=0; i < results.length(); i++) {				
 				JSONObject result = results.getJSONObject(i);						
 				articles.add(extractArticle(result, sections));
@@ -179,7 +179,7 @@ public class OpenPlatformJSONParser {
 			JSONObject response = json.getJSONObject("response");
 			JSONArray results = response.getJSONArray("results");
 				
-			List<Section> sections = new ArrayList<Section>();
+			List<Section> sections = new LinkedList<Section>();
 			for (int i=0; i < results.length(); i++) {		
 				JSONObject section = results.getJSONObject(i);				
 				final String sectionName = StringEscapeUtils.unescapeHtml(section.getString("webTitle"));

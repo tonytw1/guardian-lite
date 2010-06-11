@@ -1,6 +1,6 @@
 package nz.gen.wellington.guardian.android.activities.ui;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ImageDAO;
@@ -11,7 +11,7 @@ import android.graphics.Bitmap;
 public class ArticleImageDecorator {
 
 	public static List<ImageDecoratedArticle> decorateNewsitemsWithThumbnails(List<Article> newsitems, ImageDAO imageDAO) {
-		List<ImageDecoratedArticle> decorated = new ArrayList<ImageDecoratedArticle>();
+		List<ImageDecoratedArticle> decorated = new LinkedList<ImageDecoratedArticle>();
 		for (Article article : newsitems) {
 			decorated.add(applyThumbnailIfAvailableLocally(imageDAO, article));
 		}

@@ -1,7 +1,7 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ContentSource;
@@ -101,7 +101,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	
 
 	private List<Section> stripJunkSections(List<Section> sections) {
-		List<Section> goodSections = new ArrayList<Section>();
+		List<Section> goodSections = new LinkedList<Section>();
 		List<String> badSections = Arrays.asList("Community", "Crosswords", "Extra", "Help", "Info", "Local", "From the Guardian", "From the Observer", "Weather");
 		for (Section section : sections) {
 			if (!badSections.contains(section.getName())) {
