@@ -10,8 +10,7 @@ public class keyword extends ArticleListActivity {
 
 	ListAdapter adapter;
 	Tag keyword;
-
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
@@ -25,15 +24,13 @@ public class keyword extends ArticleListActivity {
 		updateArticlesHandler = new UpdateArticlesHandler(this);
 	}
 	
-		
-	@Override
-	// TODO this works but is this the correct way todo it.
-	protected void onResume() {
-		super.onResume();
-		Thread loader = new Thread(new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), keyword, null));
+	
+	protected void onStart() {
+		super.onStart();
+		updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), keyword, null);
+		Thread loader = new Thread(updateArticlesRunner);
 		loader.start();
 		Log.d("UpdateArticlesHandler", "Loader started");
 	}
-
-	
+		
 }

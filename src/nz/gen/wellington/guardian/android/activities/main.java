@@ -11,9 +11,7 @@ import android.widget.ListAdapter;
 
 public class main extends ArticleListActivity {
 	
-	private static final String TAG = "main";
 	ListAdapter adapter;
-	UpdateArticlesRunner updateArticlesRunner;
 	
 	public main() {
 	}
@@ -39,15 +37,6 @@ public class main extends ArticleListActivity {
 		Log.d("UpdateArticlesHandler", "Loader started");
 	}
 	
-	
-	@Override
-	protected void onStop() {
-		super.onStop();
-		Log.d(TAG, "On stop - want to halt any running threads");
-		updateArticlesRunner.stop();
-		Log.d(TAG, "Loader stopped");
-	}
-
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    menu.add(0, 1, 0, "Sync");

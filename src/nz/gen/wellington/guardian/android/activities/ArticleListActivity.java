@@ -31,14 +31,27 @@ import android.widget.TextView;
 
 public abstract class ArticleListActivity extends Activity {
 	
+	private static final String TAG = "ArticleListActivity";
+	
 	Handler updateArticlesHandler;
+	UpdateArticlesRunner updateArticlesRunner;
 	List<ImageDecoratedArticle> articles;
 	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);        
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 	}	
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.d(TAG, "On stop - want to halt any running threads");
+		updateArticlesRunner.stop();
+		Log.d(TAG, "Loader stopped");
+	}
+
 	
 	protected void populateNewsitemList(List<Article> articles) {
 		if (articles != null) {			
