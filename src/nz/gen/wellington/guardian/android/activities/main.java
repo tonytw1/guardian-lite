@@ -11,7 +11,9 @@ import android.widget.ListAdapter;
 
 public class main extends ArticleListActivity {
 	
+	private static final String TAG = "main";
 	ListAdapter adapter;
+	UpdateArticlesRunner updateArticlesRunner;
 	
 	public main() {
 	}
@@ -27,12 +29,23 @@ public class main extends ArticleListActivity {
 	
 	
 	@Override
-	// TODO this works but is this the correct way todo it.
-	protected void onResume() {
-		super.onResume();
-		Thread loader = new Thread(new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), null, null));
+	// TODO this works but is this the correct way todo it
+	// http://developer.android.com/guide/topics/fundamentals.html#actlife says use a Broadcast listener
+	protected void onStart() {
+		super.onStart();
+		updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), null, null);
+		Thread loader = new Thread(updateArticlesRunner);
 		loader.start();
 		Log.d("UpdateArticlesHandler", "Loader started");
+	}
+	
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.d(TAG, "On stop - want to halt any running threads");
+		updateArticlesRunner.stop();
+		Log.d(TAG, "Loader stopped");
 	}
 
 	

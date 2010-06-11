@@ -112,7 +112,7 @@ public abstract class ArticleListActivity extends Activity {
 	
 	
 	class UpdateArticlesRunner implements Runnable {		
-		
+		boolean running;
 		ArticleDAO articleDAO;
 		ImageDAO imageDAO;
 		Tag tag;
@@ -123,25 +123,37 @@ public abstract class ArticleListActivity extends Activity {
 			this.imageDAO = imageDAO;
 			this.tag = tag;
 			this.section = section;
+			this.running = true;
 		}
 		
 		public void run() {
 			Log.d("UpdateArticlesRunner", "Loading articles");
 
 			List<Article> undecoratedArticles = new ArrayList<Article>();			
-			if (section != null) {
-				undecoratedArticles = articleDAO.getSectionItems(section);
-			} else if (tag != null) {
-				undecoratedArticles = articleDAO.getKeywordItems(tag);
-			} else {
-				undecoratedArticles = articleDAO.getTopStories();				
+			if (running) {
+				if (section != null) {
+					undecoratedArticles = articleDAO.getSectionItems(section);
+				} else if (tag != null) {
+					undecoratedArticles = articleDAO.getKeywordItems(tag);
+				} else {
+					undecoratedArticles = articleDAO.getTopStories();				
+				}
 			}
-			articles = ArticleImageDecorator.decorateNewsitemsWithThumbnails(undecoratedArticles, imageDAO);
-			Log.d("UpdateArticlesRunner", "Articles are available");
 			
-			Message m = new Message();
-			m.what = 1;
-			updateArticlesHandler.sendMessage(m);
+			if (running) {
+				articles = ArticleImageDecorator.decorateNewsitemsWithThumbnails(undecoratedArticles, imageDAO);
+				Log.d("UpdateArticlesRunner", "Articles are available");
+			}
+			
+			if (running) {
+				Message m = new Message();
+				m.what = 1;
+				updateArticlesHandler.sendMessage(m);
+			}
+		}
+
+		public void stop() {
+			this.running = false;
 		}
 	}
 	
