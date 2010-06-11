@@ -11,6 +11,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ImageDecoratedArticle;
+import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import android.app.Activity;
 import android.content.Context;
@@ -115,18 +116,22 @@ public abstract class ArticleListActivity extends Activity {
 		ArticleDAO articleDAO;
 		ImageDAO imageDAO;
 		Tag tag;
+		Section section;
 		
-		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, Tag tag) {
+		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, Tag tag, Section section) {
 			this.articleDAO = articleDAO;
 			this.imageDAO = imageDAO;
 			this.tag = tag;
+			this.section = section;
 		}
 		
 		public void run() {
 			Log.d("UpdateArticlesRunner", "Loading articles");
 
-			List<Article> undecoratedArticles = new ArrayList<Article>();
-			if (tag != null) {
+			List<Article> undecoratedArticles = new ArrayList<Article>();			
+			if (section != null) {
+				undecoratedArticles = articleDAO.getSectionItems(section);
+			} else if (tag != null) {
 				undecoratedArticles = articleDAO.getKeywordItems(tag);
 			} else {
 				undecoratedArticles = articleDAO.getTopStories();				
@@ -140,6 +145,5 @@ public abstract class ArticleListActivity extends Activity {
 		}
 	}
 	
-	
-	
+		
 }

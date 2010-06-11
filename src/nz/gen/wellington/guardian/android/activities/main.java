@@ -30,7 +30,7 @@ public class main extends ArticleListActivity {
 	// TODO this works but is this the correct way todo it.
 	protected void onResume() {
 		super.onResume();
-		Thread loader = new Thread(new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), null));
+		Thread loader = new Thread(new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), null, null));
 		loader.start();
 		Log.d("UpdateArticlesHandler", "Loader started");
 	}

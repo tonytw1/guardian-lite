@@ -4,10 +4,7 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.model.ImageDecoratedArticle;
-import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +16,7 @@ public class ListArticleAdapter extends BaseAdapter {
 	
 	private List<ImageDecoratedArticle> articles;
 	private LayoutInflater mInflater;
-	
-	private static final String TAG = "ListArticleAdapter";
-	
+		
     public ListArticleAdapter(Context context, List<ImageDecoratedArticle> articles) {
 		super();
 		mInflater = LayoutInflater.from(context);

@@ -14,8 +14,7 @@ public class keyword extends ArticleListActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	
+		super.onCreate(savedInstanceState);	
 		keyword = (Tag) this.getIntent().getExtras().get("keyword");		
 		if (keyword.getSection() != null) {
 			setHeading(keyword.getSection().getName() + " - " + keyword.getName());
@@ -31,11 +30,10 @@ public class keyword extends ArticleListActivity {
 	// TODO this works but is this the correct way todo it.
 	protected void onResume() {
 		super.onResume();
-		Thread loader = new Thread(new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), keyword));
+		Thread loader = new Thread(new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), keyword, null));
 		loader.start();
 		Log.d("UpdateArticlesHandler", "Loader started");
 	}
 
 	
-
 }
