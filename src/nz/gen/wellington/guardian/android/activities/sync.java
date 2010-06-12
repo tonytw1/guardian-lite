@@ -1,10 +1,15 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.List;
+
 import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
-import nz.gen.wellington.guardian.android.services.UpdateSectionsTask;
+import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
+import nz.gen.wellington.guardian.android.services.UpdateTopStoriesTask;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -59,9 +64,19 @@ public class sync extends Activity implements OnClickListener {
 		switch (src.getId()) {
 		case R.id.buttonStart:
 			Log.d(TAG, "Starting content update service service");
+			startService(new Intent(this, ContentUpdateService.class));
 						
-			taskQueue.addArticleTask(new UpdateSectionsTask(this.getApplicationContext()));
-			startService(new Intent(this, ContentUpdateService.class));			
+			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
+			List<Section> sections = articleDAO.getSections();
+			if (sections != null) {
+				for (Section section : sections) {
+					Log.i(TAG, "Injecting section into update queue: " + section.getName());
+					taskQueue.addArticleTask(new UpdateSectionArticlesTask(section, this.getApplicationContext()));
+				}
+			}
+			
+			Log.i(TAG, "Injecting update top stories task onto queue");
+			taskQueue.addArticleTask(new UpdateTopStoriesTask(articleDAO, this));			
 			break;
 		
 		case R.id.StopDownloadButton: 
