@@ -49,7 +49,6 @@ public abstract class ArticleListActivity extends Activity {
 	
 	
 	@Override
-	// TODO this works but is this the correct way todo it
 	protected void onStart() {
 		super.onStart();
 		
@@ -57,7 +56,7 @@ public abstract class ArticleListActivity extends Activity {
 		//mainPane.removeAllViews();
 		boolean mainPaneNeedsPopulating = mainPane.getChildCount() == 0;
 		if (mainPaneNeedsPopulating) {
-			updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), this);
+			updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this));
 			Thread loader = new Thread(updateArticlesRunner);
 			loader.start();
 			Log.d("UpdateArticlesHandler", "Loader started");			
@@ -211,13 +210,11 @@ public abstract class ArticleListActivity extends Activity {
 		boolean running;
 		ArticleDAO articleDAO;
 		ImageDAO imageDAO;
-		private Context context;
 		
-		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, Context context) {
+		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO) {
 			this.articleDAO = articleDAO;
 			this.imageDAO = imageDAO;
 			this.running = true;
-			this.context = context;
 		}
 		
 		public void run() {

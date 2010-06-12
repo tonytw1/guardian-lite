@@ -7,12 +7,9 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 
 public class main extends ArticleListActivity {
 	
@@ -26,7 +23,7 @@ public class main extends ArticleListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);        
         setHeading("Most recent");
-    	setHeadingColour("#0061A6");    	
+    	setHeadingColour("#0061A6");
     	updateArticlesHandler = new UpdateArticlesHandler(this);
 	}
 	
