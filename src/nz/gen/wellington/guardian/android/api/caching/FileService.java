@@ -1,9 +1,11 @@
 package nz.gen.wellington.guardian.android.api.caching;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 
 import android.content.Context;
 import android.util.Log;
@@ -42,11 +44,34 @@ public class FileService {
 		Log.i(TAG, "Clearing: " + localFile.getAbsolutePath());
 		localFile.delete();
 	}
+
 	
-	
-	// TODO only clear article json files
 	public static void clearAll(Context context) {		
-		Log.i(TAG, "Clearing all cache files");
+		Log.i(TAG, "Clearing all cache files");				
+		FileFilter allFilesFilter = new FileFilter() {				
+			@Override
+			public boolean accept(File file) {
+				return true;
+			}
+		};
+		deleteFiles(context, allFilesFilter);
+	}
+	
+	
+	public static void clearAllArticleSets(Context context) {		
+		Log.i(TAG, "Clearing all article set cache files");
+				
+		FileFilter jsonFilesFilter = new FileFilter() {				
+			@Override
+			public boolean accept(File file) {
+				return file.getPath().endsWith("json") && !file.getPath().endsWith("sections.json");
+			}
+		};		
+		deleteFiles(context, jsonFilesFilter);
+	}
+
+	
+	private static void deleteFiles(Context context, FileFilter jsonFilesFilter) {		
 		File cacheDir = getCacheDir(context);
 		if (cacheDir == null) {
 			Log.i(TAG, "No cache folder found");
@@ -54,19 +79,19 @@ public class FileService {
 		}
 		Log.i(TAG, "Cache dir path is: " + cacheDir.getPath());
 		Log.i(TAG, "Cache dir absolute path is: " + cacheDir.getAbsolutePath());
+				
 		
-		File[] listFiles = cacheDir.listFiles();
+		File[] listFiles = cacheDir.listFiles(jsonFilesFilter);
 		Log.i(TAG, "Cache dir file count: " + listFiles.length);
 		for (int i = 0; i < listFiles.length; i++) {
 			File cacheFile = listFiles[i];
-			if (cacheFile.getPath().endsWith("json")) {	// TODO this is abit of a hack to preserve images.
-				Log.i(TAG, "Found cache file: " + cacheFile.getAbsolutePath());
-				if (cacheFile.delete()) {
-					Log.i(TAG, "Deleted cache file: " + cacheFile.getAbsolutePath());				
-				}
-			}
-		}		
+			Log.i(TAG, "Found cache file: " + cacheFile.getAbsolutePath());
+			if (cacheFile.delete()) {
+				Log.i(TAG, "Deleted cache file: " + cacheFile.getAbsolutePath());				
+			}		
+		}
 	}
+	
 
 	// TODO make a preference - only use external if installed - external is the SD card right?
 	private static File getCacheDir(Context context) {
