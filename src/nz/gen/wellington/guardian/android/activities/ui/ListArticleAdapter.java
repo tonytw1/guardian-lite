@@ -36,7 +36,11 @@ public class ListArticleAdapter extends BaseAdapter {
     	TextView titleText = (TextView) view.findViewById(R.id.TextView01);
     	ImageDecoratedArticle article = articles.get(position);
 		titleText.setText(article.getTitle());
-       	
+		
+		if (article.getSection() != null) {
+			//titleText.setTextColor(Color.parseColor(SectionColourMap.getColourForSection(article.getSection().getId())));
+		}
+		
     	TextView pubDateText = (TextView) view.findViewById(R.id.TextView02);
     	if (article.getPubDate() != null) {
     		pubDateText.setText(article.getPubDateString());

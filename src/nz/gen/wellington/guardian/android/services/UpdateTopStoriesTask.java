@@ -41,10 +41,14 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 		}
 		
 		Log.i(TAG, "Saving " + topStories.size() + " top stories");
+				
 		LinkedList<Article> results = new LinkedList<Article>(topStories.values());
 		Collections.reverse(results);
+		if (results.size() > 10) {
+			results = new LinkedList<Article>(results.subList(0, 10));
+		}
 		articleDAO.saveTopStories(results);
-		Log.i(TAG, "Done");		
+		Log.i(TAG, "Done");
 	}
 
 	@Override

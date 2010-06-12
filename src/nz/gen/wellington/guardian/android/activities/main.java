@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 
 public class main extends ArticleListActivity {
 	
@@ -31,10 +32,13 @@ public class main extends ArticleListActivity {
 	// http://developer.android.com/guide/topics/fundamentals.html#actlife says use a Broadcast listener
 	protected void onStart() {
 		super.onStart();
-		updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), null, null);
-		Thread loader = new Thread(updateArticlesRunner);
-		loader.start();
-		Log.d("UpdateArticlesHandler", "Loader started");
+		ListView listView = (ListView) findViewById(R.id.ArticlesListView);
+		if (listView.getAdapter() == null) {
+			updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), null, null, this);
+			Thread loader = new Thread(updateArticlesRunner);
+			loader.start();
+			Log.d("UpdateArticlesHandler", "Loader started");			
+		}
 	}
 	
 	

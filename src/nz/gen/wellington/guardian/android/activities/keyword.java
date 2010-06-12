@@ -1,10 +1,12 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 
 public class keyword extends ArticleListActivity {
 
@@ -27,10 +29,13 @@ public class keyword extends ArticleListActivity {
 	
 	protected void onStart() {
 		super.onStart();
-		updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), keyword, null);
-		Thread loader = new Thread(updateArticlesRunner);
-		loader.start();
-		Log.d("UpdateArticlesHandler", "Loader started");
+		ListView listView = (ListView) findViewById(R.id.ArticlesListView);
+		if (listView.getAdapter() == null) {			
+			updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), keyword, null, this);
+			Thread loader = new Thread(updateArticlesRunner);
+			loader.start();
+			Log.d("UpdateArticlesHandler", "Loader started");
+		}
 	}
 		
 }

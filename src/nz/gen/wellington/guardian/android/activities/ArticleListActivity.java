@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public abstract class ArticleListActivity extends Activity {
 	
@@ -42,7 +43,7 @@ public abstract class ArticleListActivity extends Activity {
         super.onCreate(savedInstanceState);        
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
-	}	
+	}
 	
 	@Override
 	protected void onStop() {
@@ -129,13 +130,15 @@ public abstract class ArticleListActivity extends Activity {
 		ImageDAO imageDAO;
 		Tag tag;
 		Section section;
+		private Context context;
 		
-		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, Tag tag, Section section) {
+		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, Tag tag, Section section, Context context) {
 			this.articleDAO = articleDAO;
 			this.imageDAO = imageDAO;
 			this.tag = tag;
 			this.section = section;
 			this.running = true;
+			this.context = context;
 		}
 		
 		public void run() {
@@ -152,7 +155,8 @@ public abstract class ArticleListActivity extends Activity {
 				}
 			}
 			
-			if (undecoratedArticles == null) {				
+			if (undecoratedArticles == null) {
+				Toast.makeText(context, "Articles could not be loaded", Toast.LENGTH_SHORT).show();
 				return;
 			}
 			
