@@ -18,10 +18,10 @@ public final class R {
         public static final int ArticleImage=0x7f060006;
         public static final int ArticleListLayout=0x7f060013;
         public static final int AuthorList=0x7f06000d;
-        public static final int Button01=0x7f060010;
         public static final int Byline=0x7f060009;
         public static final int Caption=0x7f060007;
         public static final int Description=0x7f06000c;
+        public static final int Favourite=0x7f060010;
         public static final int Heading=0x7f060002;
         public static final int HeadingLayout=0x7f060001;
         public static final int Headline=0x7f060005;

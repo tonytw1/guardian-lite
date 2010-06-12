@@ -1,6 +1,9 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
@@ -8,11 +11,10 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
-import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.Tag;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,24 +37,25 @@ public abstract class ArticleListActivity extends Activity {
 	Handler updateArticlesHandler;
 	UpdateArticlesRunner updateArticlesRunner;
 	List<Article> articles;
+	Map<String, View> viewsWaitingForTrailImages;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);        
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
+		viewsWaitingForTrailImages = new HashMap<String, View>();
 	}
 	
 	
 	@Override
 	// TODO this works but is this the correct way todo it
-	// http://developer.android.com/guide/topics/fundamentals.html#actlife says use a Broadcast listener
 	protected void onStart() {
 		super.onStart();
 		
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);		
 		//mainPane.removeAllViews();
-		boolean mainPaneNeedsPopulating = mainPane.getChildCount() ==0;
+		boolean mainPaneNeedsPopulating = mainPane.getChildCount() == 0;
 		if (mainPaneNeedsPopulating) {
 			updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), this);
 			Thread loader = new Thread(updateArticlesRunner);
@@ -126,29 +130,55 @@ public abstract class ArticleListActivity extends Activity {
 		
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			Log.d("UpdateArticlesHandler", "Populating articles");
 			
-			LayoutInflater mInflater = LayoutInflater.from(context);
-			if (articles != null) {
-				LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);
-				for (Article article : articles) {
-					View view = mInflater.inflate(R.layout.list, null);					
-					populateArticleListView(article, view);	    	
-					mainpane.addView(view);
-				}				
-				View favourite = mInflater.inflate(R.layout.favourite, null);
-				mainpane.addView(favourite);
+			Log.d(TAG, "Message: " + msg.toString());
+			switch (msg.what) {	   
+			    case 1:  		
+					Log.d("UpdateArticlesHandler", "Populating articles");
 				
-			} else {
-				Log.d(TAG, "No articles to populate");
+					LayoutInflater mInflater = LayoutInflater.from(context);
+					if (articles != null) {
+						LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);
+						for (Article article : articles) {
+							View view = mInflater.inflate(R.layout.list, null);					
+							populateArticleListView(article, view);	    	
+							mainpane.addView(view);
+						}				
+						View favourite = mInflater.inflate(R.layout.favourite, null);
+						mainpane.addView(favourite);
+					
+					} else {
+						Log.d(TAG, "No articles to populate");
+					}
+					return;
+			    
+			    
+			    case 2: 
+			    	Toast.makeText(context, "Articles could not be loaded", Toast.LENGTH_SHORT).show();
+			    	return;
+			    
+			    
+			    case 3: 
+
+			    	Bundle data = msg.getData();
+			    	if (data.containsKey("url")) {
+			    		final String url = data.getString("url");
+			    		Log.d(TAG, "Pushing trail image: " + url);
+			    		if( viewsWaitingForTrailImages.containsKey(url)) {
+			    			View view = viewsWaitingForTrailImages.get(url);
+			    			ImageView trialImage = (ImageView) view.findViewById(R.id.TrailImage);
+			    			Bitmap image = ArticleDAOFactory.getImageDao(context).getImage(url);
+			    			trialImage.setImageBitmap(image);
+			    			viewsWaitingForTrailImages.remove(url);
+			    		}
+			    	}			    
+			    	return;
 			}
-			
 		}
 
 		private void populateArticleListView(Article article, View view) {
 			Log.d(TAG, "Populating view for article: " + article.getTitle());
 			TextView titleText = (TextView) view.findViewById(R.id.TextView01);
-			//ImageDecoratedArticle article = articles.get(position);
 			titleText.setText(article.getTitle());
 			
 			if (article.getSection() != null) {
@@ -160,8 +190,15 @@ public abstract class ArticleListActivity extends Activity {
 				pubDateText.setText(article.getPubDateString());
 			}
 			
-			//ImageView imageView = (ImageView) view.findViewById(R.id.TrailImage);
-			//getArticleThumbnail(article, imageView);
+			if (article.getThumbnailUrl() != null) {
+				Log.d(TAG, "Need trailimage: " + article.getThumbnailUrl());
+				viewsWaitingForTrailImages.put(article.getThumbnailUrl(), view);
+				Log.d(TAG, "Size: " + Integer.toString(viewsWaitingForTrailImages.keySet().size()));
+			
+			} else {
+    			ImageView trailImage = (ImageView) view.findViewById(R.id.TrailImage);
+    			trailImage.setImageResource(R.drawable.icon);    			
+			}
 			
 			ArticleClicker urlListener = new ArticleClicker(article);
 			view.setOnClickListener(urlListener);
@@ -187,24 +224,67 @@ public abstract class ArticleListActivity extends Activity {
 			Log.d("UpdateArticlesRunner", "Loading articles");
 
 			if (running) {
-				articles = loadArticles();				
+				articles = loadArticles();
 			}
 			
 			if (articles == null) {
-				Toast.makeText(context, "Articles could not be loaded", Toast.LENGTH_SHORT).show();
+				Message m = new Message();
+				m.what = 2;
+				Log.d(TAG, "Sending message; articles failed to load");
+				updateArticlesHandler.sendMessage(m);
 				return;
-			}
-			
-			if (running) {
-				//articles = ArticleImageDecorator.decorateNewsitemsWithThumbnails(undecoratedArticles, imageDAO);
-				//Log.d("UpdateArticlesRunner", "Articles are available");
-			}
-			
-			if (running) {
+
+			} else {
 				Message m = new Message();
 				m.what = 1;
-				updateArticlesHandler.sendMessage(m);
+				Log.d(TAG, "Sending message; articles are loaded");
+				updateArticlesHandler.sendMessage(m);								
 			}
+			
+			
+			List<String> requiredTrailImages = new LinkedList<String>();
+			for (Article article : articles) {
+				if (article.getThumbnailUrl() != null) {
+					Log.d(TAG, "Need trailimage: " + article.getThumbnailUrl());
+					requiredTrailImages.add(article.getThumbnailUrl());
+					Log.d(TAG, "Size: " + Integer.toString(requiredTrailImages.size()));
+				}
+			}
+			
+			List<String> downloadTrailImages = new LinkedList<String>();
+			if (running) {
+				Log.d(TAG, "Views awaiting trailimages: " + requiredTrailImages);
+				for (String trailImageUrl : requiredTrailImages) {
+					Log.d(TAG, "Loading trail image: " + trailImageUrl);
+					if (imageDAO.isAvailableLocally(trailImageUrl)) {
+						Message m = new Message();
+						m.what = 3;						
+					    Bundle bundle = new Bundle();
+                        bundle.putString("url", trailImageUrl); 
+						m.setData(bundle);					
+						Log.d(TAG, "Sending message; trailimage url is available locally: " + trailImageUrl);
+						updateArticlesHandler.sendMessage(m);
+					} else {
+						downloadTrailImages.add(trailImageUrl);
+					}
+				}		
+			}
+			
+			if (running) {			
+				for (String trailImageUrl : downloadTrailImages) {
+					Log.d(TAG, "Downloading trail image: " + downloadTrailImages);
+					imageDAO.fetchLiveImage(trailImageUrl);
+					Message m = new Message();
+					m.what = 3;						
+					Bundle bundle = new Bundle();
+					bundle.putString("url", trailImageUrl); 
+					m.setData(bundle);					
+					Log.d(TAG, "Sending message; trailimage url is available locally: " + trailImageUrl);
+					updateArticlesHandler.sendMessage(m);
+				}		
+			}
+						
+			return;				
 		}
 
 		public void stop() {
