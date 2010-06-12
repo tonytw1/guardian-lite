@@ -1,12 +1,16 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.List;
+
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.model.Article;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -26,21 +30,10 @@ public class main extends ArticleListActivity {
     	updateArticlesHandler = new UpdateArticlesHandler(this);
 	}
 	
-	
 	@Override
-	// TODO this works but is this the correct way todo it
-	// http://developer.android.com/guide/topics/fundamentals.html#actlife says use a Broadcast listener
-	protected void onStart() {
-		super.onStart();
-		ListView listView = (ListView) findViewById(R.id.ArticlesListView);
-		if (listView.getAdapter() == null) {
-			updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), null, null, this);
-			Thread loader = new Thread(updateArticlesRunner);
-			loader.start();
-			Log.d("UpdateArticlesHandler", "Loader started");			
-		}
+	protected List<Article> loadArticles() {
+		return ArticleDAOFactory.getDao(this.getApplicationContext()).getTopStories();
 	}
-	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    menu.add(0, 1, 0, "Sync");

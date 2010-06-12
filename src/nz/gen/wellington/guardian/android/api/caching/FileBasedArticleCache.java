@@ -52,6 +52,9 @@ public class FileBasedArticleCache {
 			List<Article> loaded = (List<Article>) in.readObject();
 			in.close();
 			Log.i(TAG, "Finished reading from disk: " + filepath);
+			if (loaded != null) {
+				Log.i(TAG, "Loaded " + loaded.size() + " articles");
+			}
 			return loaded;
 			
 		} catch (IOException ex) {

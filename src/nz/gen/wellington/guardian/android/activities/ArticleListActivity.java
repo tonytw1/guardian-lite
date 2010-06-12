@@ -1,16 +1,13 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.activities.ui.ArticleImageDecorator;
-import nz.gen.wellington.guardian.android.activities.ui.ListArticleAdapter;
+import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
-import nz.gen.wellington.guardian.android.model.ImageDecoratedArticle;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import android.app.Activity;
@@ -21,12 +18,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +33,7 @@ public abstract class ArticleListActivity extends Activity {
 	
 	Handler updateArticlesHandler;
 	UpdateArticlesRunner updateArticlesRunner;
-	List<ImageDecoratedArticle> articles;
+	List<Article> articles;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +42,25 @@ public abstract class ArticleListActivity extends Activity {
 		setContentView(R.layout.main);
 	}
 	
+	
+	@Override
+	// TODO this works but is this the correct way todo it
+	// http://developer.android.com/guide/topics/fundamentals.html#actlife says use a Broadcast listener
+	protected void onStart() {
+		super.onStart();
+		
+		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);		
+		//mainPane.removeAllViews();
+		boolean mainPaneNeedsPopulating = mainPane.getChildCount() ==0;
+		if (mainPaneNeedsPopulating) {
+			updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this), this);
+			Thread loader = new Thread(updateArticlesRunner);
+			loader.start();
+			Log.d("UpdateArticlesHandler", "Loader started");			
+		}
+	}
+
+	
 	@Override
 	protected void onStop() {
 		super.onStop();
@@ -52,16 +68,8 @@ public abstract class ArticleListActivity extends Activity {
 		updateArticlesRunner.stop();
 		Log.d(TAG, "Loader stopped");
 	}
-
 	
-	protected void populateNewsitemList(List<Article> articles) {
-		if (articles != null) {
-			ListView listView = (ListView) findViewById(R.id.ArticlesListView);
-			ListAdapter adapter = new ListArticleAdapter(this, ArticleImageDecorator.decorateNewsitemsWithThumbnails(articles, ArticleDAOFactory.getImageDao(this)));		   
-			listView.setAdapter(adapter);
-		}
-	}
-	
+		
 	protected void setHeading(String headingText) {
 		TextView heading = (TextView) findViewById(R.id.Heading);
 		heading.setText(headingText);		
@@ -71,6 +79,9 @@ public abstract class ArticleListActivity extends Activity {
 		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
 		heading.setBackgroundColor(Color.parseColor(colour));
 	}
+	
+	
+	protected abstract List<Article> loadArticles();
 	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,9 +127,44 @@ public abstract class ArticleListActivity extends Activity {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			Log.d("UpdateArticlesHandler", "Populating articles");
-			ListView listView = (ListView) findViewById(R.id.ArticlesListView);			
-			ListAdapter adapter = new ListArticleAdapter(context, articles);		   
-			listView.setAdapter(adapter);
+			
+			LayoutInflater mInflater = LayoutInflater.from(context);
+			if (articles != null) {
+				LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);
+				for (Article article : articles) {
+					View view = mInflater.inflate(R.layout.list, null);					
+					populateArticleListView(article, view);	    	
+					mainpane.addView(view);
+				}				
+				View favourite = mInflater.inflate(R.layout.favourite, null);
+				mainpane.addView(favourite);
+				
+			} else {
+				Log.d(TAG, "No articles to populate");
+			}
+			
+		}
+
+		private void populateArticleListView(Article article, View view) {
+			Log.d(TAG, "Populating view for article: " + article.getTitle());
+			TextView titleText = (TextView) view.findViewById(R.id.TextView01);
+			//ImageDecoratedArticle article = articles.get(position);
+			titleText.setText(article.getTitle());
+			
+			if (article.getSection() != null) {
+				//titleText.setTextColor(Color.parseColor(SectionColourMap.getColourForSection(article.getSection().getId())));
+			}
+			
+			TextView pubDateText = (TextView) view.findViewById(R.id.TextView02);
+			if (article.getPubDate() != null) {
+				pubDateText.setText(article.getPubDateString());
+			}
+			
+			//ImageView imageView = (ImageView) view.findViewById(R.id.TrailImage);
+			//getArticleThumbnail(article, imageView);
+			
+			ArticleClicker urlListener = new ArticleClicker(article);
+			view.setOnClickListener(urlListener);
 		}
 		
 	}
@@ -128,15 +174,11 @@ public abstract class ArticleListActivity extends Activity {
 		boolean running;
 		ArticleDAO articleDAO;
 		ImageDAO imageDAO;
-		Tag tag;
-		Section section;
 		private Context context;
 		
-		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, Tag tag, Section section, Context context) {
+		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, Context context) {
 			this.articleDAO = articleDAO;
 			this.imageDAO = imageDAO;
-			this.tag = tag;
-			this.section = section;
 			this.running = true;
 			this.context = context;
 		}
@@ -144,25 +186,18 @@ public abstract class ArticleListActivity extends Activity {
 		public void run() {
 			Log.d("UpdateArticlesRunner", "Loading articles");
 
-			List<Article> undecoratedArticles = new LinkedList<Article>();			
 			if (running) {
-				if (section != null) {
-					undecoratedArticles = articleDAO.getSectionItems(section);
-				} else if (tag != null) {
-					undecoratedArticles = articleDAO.getKeywordItems(tag);
-				} else {
-					undecoratedArticles = articleDAO.getTopStories();				
-				}
+				articles = loadArticles();				
 			}
 			
-			if (undecoratedArticles == null) {
+			if (articles == null) {
 				Toast.makeText(context, "Articles could not be loaded", Toast.LENGTH_SHORT).show();
 				return;
 			}
 			
 			if (running) {
-				articles = ArticleImageDecorator.decorateNewsitemsWithThumbnails(undecoratedArticles, imageDAO);
-				Log.d("UpdateArticlesRunner", "Articles are available");
+				//articles = ArticleImageDecorator.decorateNewsitemsWithThumbnails(undecoratedArticles, imageDAO);
+				//Log.d("UpdateArticlesRunner", "Articles are available");
 			}
 			
 			if (running) {
