@@ -138,13 +138,21 @@ public abstract class ArticleListActivity extends Activity {
 					LayoutInflater mInflater = LayoutInflater.from(context);
 					if (articles != null) {
 						LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);
+
+						boolean first = true;
 						for (Article article : articles) {
-							View view = mInflater.inflate(R.layout.list, null);					
-							populateArticleListView(article, view);	    	
+							
+							View view;	
+							boolean shouldUseFeatureTrail = first && article.getMainImageUrl() != null && ArticleDAOFactory.getImageDao(context).isAvailableLocally(article.getMainImageUrl());
+							if (shouldUseFeatureTrail) {
+								view = mInflater.inflate(R.layout.featurelist, null);
+							} else {				
+								view = mInflater.inflate(R.layout.list, null);
+							}
+							populateArticleListView(article, view);								    	
 							mainpane.addView(view);
-						}				
-						//View favourite = mInflater.inflate(R.layout.favourite, null);
-						//mainpane.addView(favourite);
+							first = false;
+						}			
 					
 					} else {
 						Log.d(TAG, "No articles to populate");
@@ -160,15 +168,16 @@ public abstract class ArticleListActivity extends Activity {
 			    case 3: 
 
 			    	Bundle data = msg.getData();
-			    	if (data.containsKey("url")) {
+			    	if (data.containsKey("id")) {
+			    		final String id = data.getString("id");
 			    		final String url = data.getString("url");
-			    		Log.d(TAG, "Pushing trail image: " + url);
-			    		if( viewsWaitingForTrailImages.containsKey(url)) {
-			    			View view = viewsWaitingForTrailImages.get(url);
+			    		Log.d(TAG, "Pushing trail image for ariticle: " + id);
+			    		if( viewsWaitingForTrailImages.containsKey(id)) {
+			    			View view = viewsWaitingForTrailImages.get(id);
 			    			ImageView trialImage = (ImageView) view.findViewById(R.id.TrailImage);
 			    			Bitmap image = ArticleDAOFactory.getImageDao(context).getImage(url);
 			    			trialImage.setImageBitmap(image);
-			    			viewsWaitingForTrailImages.remove(url);
+			    			viewsWaitingForTrailImages.remove(id);
 			    		}
 			    	}			    
 			    	return;
@@ -186,21 +195,12 @@ public abstract class ArticleListActivity extends Activity {
 			
 			TextView pubDateText = (TextView) view.findViewById(R.id.TextView02);
 			if (article.getPubDate() != null) {
-				pubDateText.setText(article.getPubDateString() + article.getStandfirst());
-			}
-			
-			if (article.getThumbnailUrl() != null) {
-				Log.d(TAG, "Need trailimage: " + article.getThumbnailUrl());
-				viewsWaitingForTrailImages.put(article.getThumbnailUrl(), view);
-				Log.d(TAG, "Size: " + Integer.toString(viewsWaitingForTrailImages.keySet().size()));
-			
-			} else {
-    			//ImageView trailImage = (ImageView) view.findViewById(R.id.TrailImage);
-    			//trailImage.setImageResource(R.drawable.icon);    			
+				pubDateText.setText(article.getPubDateString() + "\n" + article.getStandfirst());
 			}
 			
 			ArticleClicker urlListener = new ArticleClicker(article);
 			view.setOnClickListener(urlListener);
+			viewsWaitingForTrailImages.put(article.getId(), view);
 		}
 		
 	}
@@ -239,44 +239,50 @@ public abstract class ArticleListActivity extends Activity {
 			}
 			
 			
-			List<String> requiredTrailImages = new LinkedList<String>();
+			List<Article> downloadTrailImages = new LinkedList<Article>();
+			boolean first = true;
 			for (Article article : articles) {
-				if (article.getThumbnailUrl() != null) {
-					Log.d(TAG, "Need trailimage: " + article.getThumbnailUrl());
-					requiredTrailImages.add(article.getThumbnailUrl());
-					Log.d(TAG, "Size: " + Integer.toString(requiredTrailImages.size()));
+				
+				String imageUrl;
+				if (first && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl())) {						
+						imageUrl = article.getMainImageUrl();
+				} else {
+					imageUrl = article.getThumbnailUrl();
 				}
-			}
-			
-			List<String> downloadTrailImages = new LinkedList<String>();
-			if (running) {
-				Log.d(TAG, "Views awaiting trailimages: " + requiredTrailImages);
-				for (String trailImageUrl : requiredTrailImages) {
-					Log.d(TAG, "Loading trail image: " + trailImageUrl);
-					if (imageDAO.isAvailableLocally(trailImageUrl)) {
+					
+				Log.d(TAG, "Need trailimage: " + imageUrl);
+				if (imageUrl != null) {
+					if (imageDAO.isAvailableLocally(imageUrl)) {
 						Message m = new Message();
 						m.what = 3;						
-					    Bundle bundle = new Bundle();
-                        bundle.putString("url", trailImageUrl); 
-						m.setData(bundle);					
-						Log.d(TAG, "Sending message; trailimage url is available locally: " + trailImageUrl);
+						Bundle bundle = new Bundle();
+						bundle.putString("id", article.getId());
+						bundle.putString("url", imageUrl);
+						
+						m.setData(bundle);
+						Log.d(TAG, "Sending message; trailimage for article is available locally: " + article.getId());
 						updateArticlesHandler.sendMessage(m);
+						
 					} else {
-						downloadTrailImages.add(trailImageUrl);
+						Log.d(TAG, "Image is not available locally; will downlood: " + imageUrl);
+						downloadTrailImages.add(article);
 					}
-				}		
+				}
+				first = false;
 			}
-			
+						
 			if (running) {			
-				for (String trailImageUrl : downloadTrailImages) {
+				for (Article article : downloadTrailImages) {
 					Log.d(TAG, "Downloading trail image: " + downloadTrailImages);
-					imageDAO.fetchLiveImage(trailImageUrl);
+					imageDAO.fetchLiveImage(article.getThumbnailUrl());
 					Message m = new Message();
 					m.what = 3;						
 					Bundle bundle = new Bundle();
-					bundle.putString("url", trailImageUrl); 
-					m.setData(bundle);					
-					Log.d(TAG, "Sending message; trailimage url is available locally: " + trailImageUrl);
+					bundle.putString("id", article.getId());
+					bundle.putString("url", article.getThumbnailUrl());
+					
+					m.setData(bundle);
+					Log.d(TAG, "Sending message; trailimage url is available locally: " + article.getId());
 					updateArticlesHandler.sendMessage(m);
 				}		
 			}
