@@ -143,8 +143,8 @@ public abstract class ArticleListActivity extends Activity {
 							populateArticleListView(article, view);	    	
 							mainpane.addView(view);
 						}				
-						View favourite = mInflater.inflate(R.layout.favourite, null);
-						mainpane.addView(favourite);
+						//View favourite = mInflater.inflate(R.layout.favourite, null);
+						//mainpane.addView(favourite);
 					
 					} else {
 						Log.d(TAG, "No articles to populate");
@@ -186,7 +186,7 @@ public abstract class ArticleListActivity extends Activity {
 			
 			TextView pubDateText = (TextView) view.findViewById(R.id.TextView02);
 			if (article.getPubDate() != null) {
-				pubDateText.setText(article.getPubDateString());
+				pubDateText.setText(article.getPubDateString() + article.getStandfirst());
 			}
 			
 			if (article.getThumbnailUrl() != null) {
@@ -195,8 +195,8 @@ public abstract class ArticleListActivity extends Activity {
 				Log.d(TAG, "Size: " + Integer.toString(viewsWaitingForTrailImages.keySet().size()));
 			
 			} else {
-    			ImageView trailImage = (ImageView) view.findViewById(R.id.TrailImage);
-    			trailImage.setImageResource(R.drawable.icon);    			
+    			//ImageView trailImage = (ImageView) view.findViewById(R.id.TrailImage);
+    			//trailImage.setImageResource(R.drawable.icon);    			
 			}
 			
 			ArticleClicker urlListener = new ArticleClicker(article);
