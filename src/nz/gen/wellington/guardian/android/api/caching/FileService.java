@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 public class FileService {
@@ -94,8 +95,14 @@ public class FileService {
 	
 
 	// TODO make a preference - only use external if installed - external is the SD card right?
-	private static File getCacheDir(Context context) {
-		return context.getCacheDir();
+	private static File getCacheDir(Context context) {		
+		File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/guardian/");
+		if ( folder.exists()) {
+			return folder;			
+		} else if (folder.mkdir()) {
+			return folder;
+		}
+		return null;
 	}
 	
 }
