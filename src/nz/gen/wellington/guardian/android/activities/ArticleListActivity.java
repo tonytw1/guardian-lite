@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -177,6 +178,7 @@ public abstract class ArticleListActivity extends Activity {
 			    			ImageView trialImage = (ImageView) view.findViewById(R.id.TrailImage);
 			    			Bitmap image = ArticleDAOFactory.getImageDao(context).getImage(url);
 			    			trialImage.setImageBitmap(image);
+			    			trialImage.setVisibility(View.VISIBLE);
 			    			viewsWaitingForTrailImages.remove(id);
 			    		}
 			    	}			    
@@ -186,16 +188,21 @@ public abstract class ArticleListActivity extends Activity {
 
 		private void populateArticleListView(Article article, View view) {
 			Log.d(TAG, "Populating view for article: " + article.getTitle());
-			TextView titleText = (TextView) view.findViewById(R.id.TextView01);
+			TextView titleText = (TextView) view.findViewById(R.id.Headline);
 			titleText.setText(article.getTitle());
 			
 			if (article.getSection() != null) {
 				//titleText.setTextColor(Color.parseColor(SectionColourMap.getColourForSection(article.getSection().getId())));
 			}
 			
-			TextView pubDateText = (TextView) view.findViewById(R.id.TextView02);
+			TextView pubDateText = (TextView) view.findViewById(R.id.Pubdate);
 			if (article.getPubDate() != null) {
-				pubDateText.setText(article.getPubDateString() + "\n" + article.getStandfirst());
+				pubDateText.setText(article.getPubDateString());
+			}
+			
+			TextView standfirst = (TextView) view.findViewById(R.id.Standfirst);
+			if (article.getStandfirst() != null) {
+				standfirst.setText(article.getStandfirst());
 			}
 			
 			ArticleClicker urlListener = new ArticleClicker(article);
@@ -244,7 +251,8 @@ public abstract class ArticleListActivity extends Activity {
 			for (Article article : articles) {
 				
 				String imageUrl;
-				if (first && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl())) {						
+				boolean mainImageIsAvailableLocally = article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
+				if (first && mainImageIsAvailableLocally) {						
 						imageUrl = article.getMainImageUrl();
 				} else {
 					imageUrl = article.getThumbnailUrl();
@@ -267,16 +275,31 @@ public abstract class ArticleListActivity extends Activity {
 						Log.d(TAG, "Image is not available locally; will downlood: " + imageUrl);
 						downloadTrailImages.add(article);
 					}
+					
+				} else {
+					
+					if (mainImageIsAvailableLocally) {
+						Message m = new Message();
+						m.what = 3;						
+						Bundle bundle = new Bundle();
+						bundle.putString("id", article.getId());
+						bundle.putString("url", article.getMainImageUrl());						
+						m.setData(bundle);
+						Log.d(TAG, "Sending message; main imge for article is available locally: " + article.getId());
+						updateArticlesHandler.sendMessage(m);
+					}
+					
 				}
 				first = false;
 			}
-						
-			if (running) {			
+			
+			
+			if (running) {	
 				for (Article article : downloadTrailImages) {
 					Log.d(TAG, "Downloading trail image: " + downloadTrailImages);
 					imageDAO.fetchLiveImage(article.getThumbnailUrl());
 					Message m = new Message();
-					m.what = 3;						
+					m.what = 3;
 					Bundle bundle = new Bundle();
 					bundle.putString("id", article.getId());
 					bundle.putString("url", article.getThumbnailUrl());

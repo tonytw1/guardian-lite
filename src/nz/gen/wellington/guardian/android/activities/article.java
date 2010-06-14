@@ -10,7 +10,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -42,8 +41,22 @@ public class article extends Activity {
         	Toast.makeText(this, "Could not load article", Toast.LENGTH_SHORT).show();
 		}
 	}
+	
 
-		
+	// TODO duplication
+	protected void setHeading(String headingText) {
+		TextView heading = (TextView) findViewById(R.id.Heading);
+		heading.setText(headingText);		
+	}
+	
+	
+	// TODO duplication
+	protected void setHeadingColour(String colour) {
+		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
+		heading.setBackgroundColor(Color.parseColor(colour));
+	}
+	
+	
 	private void populateArticle(Article article) {		
 		if (article.getSection() != null) {
 			setHeading(article.getSection().getName());
@@ -51,7 +64,6 @@ public class article extends Activity {
 		}
 		
         TextView headline = (TextView) findViewById(R.id.Headline);
-        TextView caption = (TextView) findViewById(R.id.Caption);
         TextView pubDate = (TextView) findViewById(R.id.PubDate);
         TextView byline = (TextView) findViewById(R.id.Byline);
         TextView standfirst = (TextView) findViewById(R.id.Standfirst);
@@ -68,14 +80,9 @@ public class article extends Activity {
         ImageDAO imageDAO = ArticleDAOFactory.getImageDao(this);
     	ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
     	
-    	caption.setText(article.getCaption());
     	final String mainImageUrl = article.getMainImageUrl();
-    	Log.d("article", "main picture url is: " + mainImageUrl);
 		if (mainImageUrl != null && imageDAO.isAvailableLocally(mainImageUrl)) {
-    		Bitmap bitmap = imageDAO.getImage(mainImageUrl);
-    		if (bitmap != null) {
-    			imageView.setImageBitmap(bitmap);		
-    		}
+    		populateMainImage(article, imageDAO, imageView, mainImageUrl);
     	}
         
 		LayoutInflater inflater = LayoutInflater.from(this);		
@@ -99,18 +106,17 @@ public class article extends Activity {
 	    	tagList.addView(vi);
 		}				
 	}
-	
 
-	// TODO duplication
-	protected void setHeading(String headingText) {
-		TextView heading = (TextView) findViewById(R.id.Heading);
-		heading.setText(headingText);		
-	}
-	
-	// TODO duplication
-	protected void setHeadingColour(String colour) {
-		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
-		heading.setBackgroundColor(Color.parseColor(colour));
+
+	private void populateMainImage(Article article, ImageDAO imageDAO, ImageView imageView, final String mainImageUrl) {
+		Bitmap bitmap = imageDAO.getImage(mainImageUrl);
+		if (bitmap != null) {
+			imageView.setImageBitmap(bitmap);
+			TextView caption = (TextView) findViewById(R.id.Caption);
+			caption.setText(article.getCaption());
+			imageView.setVisibility(View.VISIBLE);    			
+			imageView.setVisibility(View.VISIBLE);
+		}
 	}
 	
 }
