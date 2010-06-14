@@ -10,6 +10,7 @@ import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
 import nz.gen.wellington.guardian.android.services.UpdateTopStoriesTask;
+import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -32,10 +33,13 @@ public class sync extends Activity implements OnClickListener {
 	StatusUpdateRunner statusUpdateRunner;
 	Handler statusUpdateHandler;
 	
+	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;	
 	private NotificationManager notificationManager;
 		
 	
 	public sync() {
+		favouriteSectionsAndTagsDAO = new FavouriteSectionsAndTagsDAO(
+				ArticleDAOFactory.getDao(this.getApplicationContext()));
 	}
 	
 	
@@ -67,10 +71,10 @@ public class sync extends Activity implements OnClickListener {
 			startService(new Intent(this, ContentUpdateService.class));
 						
 			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
-			List<Section> sections = articleDAO.getSections();
+			List<Section> sections = favouriteSectionsAndTagsDAO.getFavouriteSections();
 			if (sections != null) {
 				for (Section section : sections) {
-					Log.i(TAG, "Injecting section into update queue: " + section.getName());
+					Log.i(TAG, "Injecting favourite section into update queue: " + section.getName());
 					taskQueue.addArticleTask(new UpdateSectionArticlesTask(section, this.getApplicationContext()));
 				}
 			}
