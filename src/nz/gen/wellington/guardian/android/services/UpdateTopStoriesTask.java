@@ -10,6 +10,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 
 import org.joda.time.DateTime;
 
@@ -27,15 +28,17 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 
 	@Override
 	public void run() {
-		Log.i(TAG, "Updating top stories");
+		Log.i(TAG, "Updating top stories from favourite sections");
 		SortedMap<DateTime, Article> topStories = new TreeMap<DateTime, Article>();
-		List<Section> sections = articleDAO.getSections();
+		
+		List<Section> sections = new FavouriteSectionsAndTagsDAO(articleDAO).getFavouriteSections();
 		if (sections != null) {
 			for (Section section : sections) {
 				List<Article> sectionItems = articleDAO.getSectionItems(section);
 				if (sectionItems != null) {
-					Log.i(TAG, "Adding story: " + sectionItems.get(0));
+					// TODO correct sublisting
 					topStories.put(sectionItems.get(0).getPubDate(), sectionItems.get(0));
+					topStories.put(sectionItems.get(1).getPubDate(), sectionItems.get(1));
 				}
 			}
 		}
@@ -44,9 +47,9 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 				
 		LinkedList<Article> results = new LinkedList<Article>(topStories.values());
 		Collections.reverse(results);
-		if (results.size() > 10) {
-			results = new LinkedList<Article>(results.subList(0, 10));
-		}
+		//if (results.size() > 10) {
+		//	results = new LinkedList<Article>(results.subList(0, 10));
+		//}
 		articleDAO.saveTopStories(results);
 		Log.i(TAG, "Done");
 	}

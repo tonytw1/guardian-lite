@@ -16,7 +16,7 @@ public class FavouriteSectionsAndTagsDAO {
 
 	public List<Section> getFavouriteSections() {		
 		List<Section> favouriteSections = new LinkedList<Section>();
-		favouriteSections.add(articleDAO.getSectionById("business"));
+		favouriteSections.add(articleDAO.getSectionById("business"));	// TODO null safe this lot.
 		favouriteSections.add(articleDAO.getSectionById("commentisfree"));
 		favouriteSections.add(articleDAO.getSectionById("environment"));
 		favouriteSections.add(articleDAO.getSectionById("uk"));

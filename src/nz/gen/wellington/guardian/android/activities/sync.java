@@ -33,14 +33,7 @@ public class sync extends Activity implements OnClickListener {
 	StatusUpdateRunner statusUpdateRunner;
 	Handler statusUpdateHandler;
 	
-	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;	
 	private NotificationManager notificationManager;
-		
-	
-	public sync() {
-		favouriteSectionsAndTagsDAO = new FavouriteSectionsAndTagsDAO(
-				ArticleDAOFactory.getDao(this.getApplicationContext()));
-	}
 	
 	
 	@Override
@@ -69,9 +62,9 @@ public class sync extends Activity implements OnClickListener {
 		case R.id.buttonStart:
 			Log.d(TAG, "Starting content update service service");
 			startService(new Intent(this, ContentUpdateService.class));
-						
-			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
-			List<Section> sections = favouriteSectionsAndTagsDAO.getFavouriteSections();
+			
+			// TODO move favourites dao to singleton.
+			List<Section> sections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext())).getFavouriteSections();
 			if (sections != null) {
 				for (Section section : sections) {
 					Log.i(TAG, "Injecting favourite section into update queue: " + section.getName());
@@ -80,6 +73,7 @@ public class sync extends Activity implements OnClickListener {
 			}
 			
 			Log.i(TAG, "Injecting update top stories task onto queue");
+			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this);
 			taskQueue.addArticleTask(new UpdateTopStoriesTask(articleDAO, this));			
 			break;
 		
