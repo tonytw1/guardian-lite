@@ -114,8 +114,9 @@ public class article extends Activity {
 			imageView.setImageBitmap(bitmap);
 			TextView caption = (TextView) findViewById(R.id.Caption);
 			caption.setText(article.getCaption());
-			imageView.setVisibility(View.VISIBLE);    			
+
 			imageView.setVisibility(View.VISIBLE);
+			caption.setVisibility(View.VISIBLE);    			
 		}
 	}
 	

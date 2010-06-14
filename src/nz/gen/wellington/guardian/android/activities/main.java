@@ -25,6 +25,7 @@ public class main extends ArticleListActivity {
         setHeading("Most recent");
     	setHeadingColour("#0061A6");
     	updateArticlesHandler = new UpdateArticlesHandler(this);
+    	showSeperators = true;
 	}
 	
 	@Override

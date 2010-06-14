@@ -11,12 +11,13 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +40,7 @@ public abstract class ArticleListActivity extends Activity {
 	UpdateArticlesRunner updateArticlesRunner;
 	List<Article> articles;
 	Map<String, View> viewsWaitingForTrailImages;
+	boolean showSeperators = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -141,7 +143,25 @@ public abstract class ArticleListActivity extends Activity {
 						LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);
 
 						boolean first = true;
-						for (Article article : articles) {
+						boolean isFirstOfSection = true;
+						Section currentSection = null;
+						for (Article article : articles) {							
+							
+							if (showSeperators) {
+								if (currentSection == null || !currentSection.getId().equals(article.getSection().getId())) {
+									isFirstOfSection = true;
+								}
+								
+								if (isFirstOfSection) {
+									View seperator = mInflater.inflate(R.layout.seperator, null);
+									seperator.setBackgroundColor(Color.parseColor(SectionColourMap.getColourForSection(article.getSection().getId())));
+									TextView heading = (TextView) seperator.findViewById(R.id.Heading);
+									heading.setText(article.getSection().getName());
+									mainpane.addView(seperator);
+									currentSection = article.getSection();
+									isFirstOfSection = false;
+								}
+							}
 							
 							View view;	
 							boolean shouldUseFeatureTrail = first && article.getMainImageUrl() != null && ArticleDAOFactory.getImageDao(context).isAvailableLocally(article.getMainImageUrl());
@@ -190,10 +210,6 @@ public abstract class ArticleListActivity extends Activity {
 			Log.d(TAG, "Populating view for article: " + article.getTitle());
 			TextView titleText = (TextView) view.findViewById(R.id.Headline);
 			titleText.setText(article.getTitle());
-			
-			if (article.getSection() != null) {
-				//titleText.setTextColor(Color.parseColor(SectionColourMap.getColourForSection(article.getSection().getId())));
-			}
 			
 			TextView pubDateText = (TextView) view.findViewById(R.id.Pubdate);
 			if (article.getPubDate() != null) {

@@ -1,0 +1,2 @@
+<LinearLayout android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content" android:id="@+id/Seperator"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Heading" android:textColor="#fff" android:textSize="6pt" android:textStyle="bold"></TextView>
+</LinearLayout>

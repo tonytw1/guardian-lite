@@ -1,6 +1,6 @@
 package nz.gen.wellington.guardian.android.services;
 
-import java.security.acl.LastOwnerException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,39 +40,37 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 			}
 		}
 		
-		// List now contains 3 items from each section in date order.
 		LinkedList<Article> results = new LinkedList<Article>();
 		while (!topStories.isEmpty()) {
-			Article latest = topStories.get(topStories.firstKey());
-			Log.d(TAG, "Latest article has section: " + latest.getSection().getName());
-			results.add(latest);
-			
-			addArticlesForSection(topStories, results, latest.getSection());
-			
+			Article latest = topStories.get(topStories.lastKey());
+			Log.d(TAG, "Latest article has section: " + latest.getSection().getName());			
+			addArticlesForSection(topStories, results, latest.getSection());			
 		}
 				
 		Log.i(TAG, "Saving " + topStories.size() + " top stories");
-		Collections.reverse(results);		
 		articleDAO.saveTopStories(results);
 		Log.i(TAG, "Done");
 	}
 
 	
 	
-	private void addArticlesForSection(SortedMap<DateTime, Article> topStories,
-			LinkedList<Article> results, Section section) {
-		
+	private void addArticlesForSection(SortedMap<DateTime, Article> topStories, LinkedList<Article> results, Section section) {		
+		List<Article> sectionArticles = new ArrayList<Article>();
 		for (Article article : new LinkedList<Article>(topStories.values())) {
 			if (article.getSection().getId().equals(section.getId())) {
-				results.add(article);
+				Log.i(TAG, "Adding article: " + article.getPubDateString() + ", " + article.getPubDateString());
+				sectionArticles.add(article);
 				topStories.remove(article.getPubDate());
 			}
-		}
-
-		// TODO Auto-generated method stub
-		
+			
+		}		
+		Collections.reverse(sectionArticles);
+		Log.i(TAG, "Added: " + sectionArticles);
+		results.addAll(sectionArticles);
 	}
 
+	
+	
 	private void putLatestThreeStoriesFromSectionOntoList(SortedMap<DateTime, Article> topStories, List<Article> sectionItems) {
 		if (sectionItems == null) {
 			return;
