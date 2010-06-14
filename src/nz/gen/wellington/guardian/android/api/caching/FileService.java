@@ -14,6 +14,10 @@ import android.util.Log;
 public class FileService {
 	
 	private static final String TAG = "FileService";
+
+	public static final int INTERNAL_CACHE = 1;
+	public static final int SDCARD = 3;
+	public static final int EXTERNAL_SDCARD_SAMSUNG_I7500 = 2;
 	
 	
 	public static FileOutputStream getFileOutputStream(Context context, String url) throws FileNotFoundException {
@@ -93,10 +97,25 @@ public class FileService {
 		}
 	}
 	
-
 	// TODO make a preference - only use external if installed - external is the SD card right?
-	private static File getCacheDir(Context context) {		
-		File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/guardian/");
+	private static File getCacheDir(Context context) {
+		
+		final int cacheLocation = INTERNAL_CACHE;
+		switch (cacheLocation) {
+		case INTERNAL_CACHE:
+			return context.getCacheDir();
+		case SDCARD:
+			return getExternalSDCardCacheFolder("/guardian/");
+		case EXTERNAL_SDCARD_SAMSUNG_I7500:
+			return getExternalSDCardCacheFolder("/sd/guardian/");
+
+		default:
+			return context.getCacheDir();
+		}
+	}
+
+	private static File getExternalSDCardCacheFolder(String folderPath) {
+		File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + folderPath);
 		if ( folder.exists()) {
 			return folder;			
 		} else if (folder.mkdir()) {
