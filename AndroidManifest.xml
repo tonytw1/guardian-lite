@@ -25,6 +25,7 @@
 <service android:name=".services.ContentUpdateService" android:enabled="true"></service>
 <activity android:name=".activities.keyword"></activity>
 <activity android:name=".activities.perferences"></activity>
+<activity android:name=".activities.favourites"></activity>
 </application>
     <uses-sdk android:minSdkVersion="3" />
 
