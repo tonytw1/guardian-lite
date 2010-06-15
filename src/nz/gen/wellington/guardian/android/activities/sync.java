@@ -6,9 +6,11 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
+import nz.gen.wellington.guardian.android.services.UpdateTagArticlesTask;
 import nz.gen.wellington.guardian.android.services.UpdateTopStoriesTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.Activity;
@@ -61,16 +63,10 @@ public class sync extends Activity implements OnClickListener {
 		switch (src.getId()) {
 		case R.id.buttonStart:
 			Log.d(TAG, "Starting content update service service");
-			startService(new Intent(this, ContentUpdateService.class));
+			startService(new Intent(this, ContentUpdateService.class));	// TODO should be on app startup
 			
-			// TODO move favourites dao to singleton.
-			List<Section> sections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext())).getFavouriteSections();
-			if (sections != null) {
-				for (Section section : sections) {
-					Log.i(TAG, "Injecting favourite section into update queue: " + section.getName());
-					taskQueue.addArticleTask(new UpdateSectionArticlesTask(section, this.getApplicationContext()));
-				}
-			}
+			//queueFavouriteTags(taskQueue);
+			queueFavouriteSections(taskQueue);
 			
 			Log.i(TAG, "Injecting update top stories task onto queue");
 			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this);
@@ -82,6 +78,28 @@ public class sync extends Activity implements OnClickListener {
 		}
 		
 		updateStatus();
+	}
+	
+	
+	private void queueFavouriteTags(TaskQueue taskQueue) {
+		List<Tag> tags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext())).getFavouriteTags(); // TODO move favourites dao to singleton.
+		if (tags != null) {
+			for (Tag tag : tags) {
+				Log.i(TAG, "Injecting favourite tag into update queue: " + tag.getName());
+				taskQueue.addArticleTask(new UpdateTagArticlesTask(tag, this.getApplicationContext()));
+			}
+		}
+	}
+
+
+	private void queueFavouriteSections(TaskQueue taskQueue) {
+		List<Section> sections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext())).getFavouriteSections(); // TODO move favourites dao to singleton.
+		if (sections != null) {
+			for (Section section : sections) {
+				Log.i(TAG, "Injecting favourite section into update queue: " + section.getName());
+				taskQueue.addArticleTask(new UpdateSectionArticlesTask(section, this.getApplicationContext()));
+			}
+		}
 	}
 	
 	

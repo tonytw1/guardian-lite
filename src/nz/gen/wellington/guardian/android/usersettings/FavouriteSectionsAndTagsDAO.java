@@ -5,6 +5,7 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.Tag;
 
 public class FavouriteSectionsAndTagsDAO {
 	
@@ -13,15 +14,34 @@ public class FavouriteSectionsAndTagsDAO {
 	public FavouriteSectionsAndTagsDAO(ArticleDAO articleDAO) {
 		this.articleDAO = articleDAO;
 	}
-
+	
 	public List<Section> getFavouriteSections() {		
 		List<Section> favouriteSections = new LinkedList<Section>();
-		favouriteSections.add(articleDAO.getSectionById("business"));	// TODO null safe this lot.
-		favouriteSections.add(articleDAO.getSectionById("commentisfree"));
-		favouriteSections.add(articleDAO.getSectionById("environment"));
-		favouriteSections.add(articleDAO.getSectionById("uk"));
-		favouriteSections.add(articleDAO.getSectionById("world"));
+		addFavouriteSection(favouriteSections, "business");
+		addFavouriteSection(favouriteSections, "commentisfree");
+		addFavouriteSection(favouriteSections, "environment");
+		addFavouriteSection(favouriteSections, "uk");
+		addFavouriteSection(favouriteSections, "world");
 		return favouriteSections;
 	}
+
+	public List<Tag> getFavouriteTags() {
+		List<Tag> favouriteTags = new LinkedList<Tag>();
+		addFavouriteTag(favouriteTags, "science/evolution");
+		return favouriteTags;
+	}
+	
+	private void addFavouriteTag(List<Tag> favouriteTags, String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void addFavouriteSection(List<Section> favouriteSections, String sectionId) {
+		Section section = articleDAO.getSectionById(sectionId);
+		if (section != null) {
+			favouriteSections.add(section);
+		}
+	}
+
 
 }
