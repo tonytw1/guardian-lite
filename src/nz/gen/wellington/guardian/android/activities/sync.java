@@ -43,6 +43,9 @@ public class sync extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sync);
         
+    	Log.d(TAG, "Starting content update service service");
+		startService(new Intent(this, ContentUpdateService.class));	// TODO should be on app startup
+		
         start = (Button) findViewById(R.id.buttonStart);        
         start.setOnClickListener(this);
         stop = (Button) findViewById(R.id.StopDownloadButton);        
@@ -61,10 +64,7 @@ public class sync extends Activity implements OnClickListener {
 	public void onClick(View src) {		
 		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();
 		switch (src.getId()) {
-		case R.id.buttonStart:
-			Log.d(TAG, "Starting content update service service");
-			startService(new Intent(this, ContentUpdateService.class));	// TODO should be on app startup
-			
+		case R.id.buttonStart:			
 			queueFavouriteTags(taskQueue);
 			queueFavouriteSections(taskQueue);
 			
