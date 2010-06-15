@@ -39,9 +39,7 @@ public class ContentUpdateService extends Service {
     	taskQueue = ArticleDAOFactory.getTaskQueue();
     	internalRunnable = new InternalRunnable();
 
-    	 inBatch = false;
-    	 report = new ContentUpdateReport();
-    	 
+    	 inBatch = false;    	 
     	 if (!running) {
 			   thread = new Thread(internalRunnable);
 			   thread.setDaemon(true);
@@ -68,9 +66,7 @@ public class ContentUpdateService extends Service {
     
     private ContentUpdateTaskRunnable getNextTask() {
     	Log.i(TAG, "Getting next task");
-    	if (taskQueue.isEmpty() && !inBatch) {
-    		inBatch = true;
-    	}
+    
     	synchronized(taskQueue) {
     		if (taskQueue.isEmpty()) {
 	    	   if (inBatch) {
@@ -81,14 +77,18 @@ public class ContentUpdateService extends Service {
 	    	   try {
 	    		   Log.i(TAG, "Waiting for next task");
 	    		   taskQueue.wait();	           
+
 	    		   inBatch= true;
 	    		   report = new ContentUpdateReport();
 	           
 	    	   } catch (InterruptedException e) {
 	    		   stop();
 	    	   }
-	       }
-	       return taskQueue.getNext();
+	    	   
+    		}
+    		
+    		
+    		return taskQueue.getNext();
     	}
     }
 	 
