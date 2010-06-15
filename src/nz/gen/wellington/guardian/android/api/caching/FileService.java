@@ -15,8 +15,8 @@ public class FileService {
 	private static final String TAG = "FileService";
 
 	public static final int INTERNAL_CACHE = 1;
-	public static final int SDCARD = 3;
-	public static final int EXTERNAL_SDCARD_SAMSUNG_I7500 = 2;
+	public static final int SDCARD = 2;
+	public static final int EXTERNAL_SDCARD_SAMSUNG_I7500 = 3;
 	
 	
 	public static FileOutputStream getFileOutputStream(Context context, String url) throws FileNotFoundException {
@@ -99,7 +99,7 @@ public class FileService {
 	// TODO make a preference - only use external if installed - external is the SD card right?
 	private static File getCacheDir(Context context) {
 		
-		final int cacheLocation = INTERNAL_CACHE;
+		final int cacheLocation = EXTERNAL_SDCARD_SAMSUNG_I7500;
 		switch (cacheLocation) {
 		case INTERNAL_CACHE:
 			return context.getCacheDir();
