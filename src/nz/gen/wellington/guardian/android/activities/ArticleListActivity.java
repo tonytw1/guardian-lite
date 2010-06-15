@@ -7,6 +7,7 @@ import java.util.Map;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
+import nz.gen.wellington.guardian.android.activities.ui.SectionClicker;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
@@ -83,6 +84,11 @@ public abstract class ArticleListActivity extends Activity {
 		heading.setText(headingText);		
 	}
 	
+	protected void hindHeading() {
+		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
+		heading.setVisibility(View.GONE);
+	}
+	
 	protected void setHeadingColour(String colour) {
 		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
 		heading.setBackgroundColor(Color.parseColor(colour));
@@ -155,11 +161,7 @@ public abstract class ArticleListActivity extends Activity {
 								}
 								
 								if (isFirstOfSection) {
-									View seperator = mInflater.inflate(R.layout.seperator, null);
-									seperator.setBackgroundColor(Color.parseColor(SectionColourMap.getColourForSection(article.getSection().getId())));
-									TextView heading = (TextView) seperator.findViewById(R.id.Heading);
-									heading.setText(article.getSection().getName());
-									mainpane.addView(seperator);
+									addSeperator(mInflater, mainpane, article.getSection());
 									currentSection = article.getSection();
 									isFirstOfSection = false;
 								}
@@ -200,6 +202,15 @@ public abstract class ArticleListActivity extends Activity {
 			    	}			    
 			    	return;
 			}
+		}
+
+		private void addSeperator(LayoutInflater mInflater, LinearLayout mainpane, Section section) {
+			View seperator = mInflater.inflate(R.layout.seperator, null);
+			seperator.setBackgroundColor(Color.parseColor(SectionColourMap.getColourForSection(section.getId())));
+			TextView heading = (TextView) seperator.findViewById(R.id.Heading);
+			heading.setText(section.getName());			
+			seperator.setOnClickListener(new SectionClicker(section));
+			mainpane.addView(seperator);
 		}
 
 		private View choiceTrailView(LayoutInflater mInflater, boolean first,
@@ -302,6 +313,7 @@ public abstract class ArticleListActivity extends Activity {
 					
 				} else {
 					
+					/*
 					if (mainImageIsAvailableLocally) {
 						Message m = new Message();
 						m.what = 3;						
@@ -312,6 +324,7 @@ public abstract class ArticleListActivity extends Activity {
 						Log.d(TAG, "Sending message; main imge for article is available locally: " + article.getId());
 						updateArticlesHandler.sendMessage(m);
 					}
+					*/
 					
 				}
 				first = false;

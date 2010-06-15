@@ -22,8 +22,7 @@ public class main extends ArticleListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);        
-        setHeading("Most recent");
-    	setHeadingColour("#0061A6");
+        hindHeading();
     	updateArticlesHandler = new UpdateArticlesHandler(this);
     	showSeperators = true;
     	showMainImage = false;
@@ -35,9 +34,10 @@ public class main extends ArticleListActivity {
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    menu.add(0, 1, 0, "Sync");
+		menu.add(0, 1, 0, "Favourites");
 	    menu.add(0, 2, 0, "Sections");
-	    menu.add(0, 3, 0, "Settings");
+	    menu.add(0, 3, 0, "Sync");
+	    menu.add(0, 4, 0, "Settings");
 	    return true;
 	}
 	
@@ -45,12 +45,15 @@ public class main extends ArticleListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {	   
 	    case 1: 	    	
+	    	switchToFavourites();
+	    	return true;	 
+	    case 2:
+	    	switchToSections();
+	    	return true;	 
+	    case 3: 	    	
 	    	swichToSync();
 	        return true;
-	    case 2: 	    	
-	    	switchToSections();
-	        return true;	 
-	    case 3:
+	    case 4:
 	    	switchToPreferences();
 	    	return true;
 	    }
@@ -65,6 +68,11 @@ public class main extends ArticleListActivity {
 	
 	private void switchToSections() {
 		Intent intent = new Intent(this, sections.class);
+		this.startActivity(intent);		
+	}
+	
+	private void switchToFavourites() {
+		Intent intent = new Intent(this, favourites.class);
 		this.startActivity(intent);		
 	}
 	
