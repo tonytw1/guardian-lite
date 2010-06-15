@@ -1,6 +1,6 @@
 
 <LinearLayout android:id="@+id/LinearLayout01" android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="wrap_content" 
-android:orientation="vertical" android:paddingRight="4px" android:paddingBottom="4px">
+android:orientation="vertical" android:paddingRight="4px" android:paddingBottom="8px">
 <View
     android:layout_width="fill_parent"
     android:layout_height="1dp"
