@@ -40,7 +40,9 @@ public abstract class ArticleListActivity extends Activity {
 	UpdateArticlesRunner updateArticlesRunner;
 	List<Article> articles;
 	Map<String, View> viewsWaitingForTrailImages;
+
 	boolean showSeperators = false;
+	boolean showMainImage = true;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -163,13 +165,7 @@ public abstract class ArticleListActivity extends Activity {
 								}
 							}
 							
-							View view;	
-							boolean shouldUseFeatureTrail = first && article.getMainImageUrl() != null && ArticleDAOFactory.getImageDao(context).isAvailableLocally(article.getMainImageUrl());
-							if (shouldUseFeatureTrail) {
-								view = mInflater.inflate(R.layout.featurelist, null);
-							} else {				
-								view = mInflater.inflate(R.layout.list, null);
-							}
+							View view = choiceTrailView(mInflater, first, article);
 							populateArticleListView(article, view);								    	
 							mainpane.addView(view);
 							first = false;
@@ -204,6 +200,18 @@ public abstract class ArticleListActivity extends Activity {
 			    	}			    
 			    	return;
 			}
+		}
+
+		private View choiceTrailView(LayoutInflater mInflater, boolean first,
+				Article article) {
+			View view;
+			boolean shouldUseFeatureTrail = showMainImage && first && article.getMainImageUrl() != null && ArticleDAOFactory.getImageDao(context).isAvailableLocally(article.getMainImageUrl());
+			if (shouldUseFeatureTrail) {
+				view = mInflater.inflate(R.layout.featurelist, null);
+			} else {				
+				view = mInflater.inflate(R.layout.list, null);
+			}
+			return view;
 		}
 
 		private void populateArticleListView(Article article, View view) {

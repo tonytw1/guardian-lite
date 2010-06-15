@@ -65,7 +65,7 @@ public class sync extends Activity implements OnClickListener {
 			Log.d(TAG, "Starting content update service service");
 			startService(new Intent(this, ContentUpdateService.class));	// TODO should be on app startup
 			
-			//queueFavouriteTags(taskQueue);
+			queueFavouriteTags(taskQueue);
 			queueFavouriteSections(taskQueue);
 			
 			Log.i(TAG, "Injecting update top stories task onto queue");

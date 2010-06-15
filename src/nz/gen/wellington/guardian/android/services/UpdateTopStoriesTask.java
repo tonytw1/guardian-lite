@@ -11,6 +11,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 
 import org.joda.time.DateTime;
@@ -32,28 +33,35 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 		Log.i(TAG, "Updating top stories from favourite sections");
 		SortedMap<DateTime, Article> topStories = new TreeMap<DateTime, Article>();
 		
+		LinkedList<Article> results = new LinkedList<Article>();
+		List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(articleDAO).getFavouriteTags();
+		if (favouriteTags != null) {
+			for (Tag tag: favouriteTags) {
+				List<Article> tagItems = articleDAO.getKeywordItems(tag);
+				putLatestThreeStoriesOntoList(topStories, tagItems);
+			}			
+		}
+	
 		List<Section> sections = new FavouriteSectionsAndTagsDAO(articleDAO).getFavouriteSections();
 		if (sections != null) {
 			for (Section section : sections) {
 				List<Article> sectionItems = articleDAO.getSectionItems(section);
-				putLatestThreeStoriesFromSectionOntoList(topStories, sectionItems);
+				putLatestThreeStoriesOntoList(topStories, sectionItems);
 			}
 		}
 		
-		LinkedList<Article> results = new LinkedList<Article>();
+		
 		while (!topStories.isEmpty()) {
 			Article latest = topStories.get(topStories.lastKey());
 			Log.d(TAG, "Latest article has section: " + latest.getSection().getName());			
 			addArticlesForSection(topStories, results, latest.getSection());			
 		}
-				
+		
 		Log.i(TAG, "Saving " + topStories.size() + " top stories");
 		articleDAO.saveTopStories(results);
 		Log.i(TAG, "Done");
 	}
 
-	
-	
 	private void addArticlesForSection(SortedMap<DateTime, Article> topStories, LinkedList<Article> results, Section section) {		
 		List<Article> sectionArticles = new ArrayList<Article>();
 		for (Article article : new LinkedList<Article>(topStories.values())) {
@@ -62,22 +70,20 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 				sectionArticles.add(article);
 				topStories.remove(article.getPubDate());
 			}
-			
-		}		
+		}
 		Collections.reverse(sectionArticles);
 		Log.i(TAG, "Added: " + sectionArticles);
 		results.addAll(sectionArticles);
 	}
 
 	
-	
-	private void putLatestThreeStoriesFromSectionOntoList(SortedMap<DateTime, Article> topStories, List<Article> sectionItems) {
-		if (sectionItems == null) {
+	private void putLatestThreeStoriesOntoList(SortedMap<DateTime, Article> topStories, List<Article> articles) {
+		if (articles == null) {
 			return;
 		}
-		final int numberToAdd = (sectionItems.size() < 3) ? sectionItems.size() : 3; 
+		final int numberToAdd = (articles.size() < 3) ? articles.size() : 3; 
 		for (int i = 0; i < numberToAdd; i++) {
-			Article article = sectionItems.get(i);
+			Article article = articles.get(i);
 			if (article.getSection() != null) {
 				topStories.put(article.getPubDate(), article);
 			}

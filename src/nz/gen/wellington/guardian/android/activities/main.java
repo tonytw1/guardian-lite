@@ -26,6 +26,7 @@ public class main extends ArticleListActivity {
     	setHeadingColour("#0061A6");
     	updateArticlesHandler = new UpdateArticlesHandler(this);
     	showSeperators = true;
+    	showMainImage = false;
 	}
 	
 	@Override

@@ -27,13 +27,26 @@ public class FavouriteSectionsAndTagsDAO {
 
 	public List<Tag> getFavouriteTags() {
 		List<Tag> favouriteTags = new LinkedList<Tag>();
-		addFavouriteTag(favouriteTags, "science/evolution");
+		addFavouriteTag(favouriteTags, "");
 		return favouriteTags;
 	}
 	
-	private void addFavouriteTag(List<Tag> favouriteTags, String string) {
-		// TODO Auto-generated method stub
+	private void addFavouriteTag(List<Tag> favouriteTags, String tagId) {
+		Tag tag = new Tag("Environment", "environment/oil-spills", new Section("Environment", "BP oil spill", "#FFFF00"));
+		Tag tag3 = new Tag("lifeandstyle", "lifeandstyle/cycling", new Section("lifeandstyle", "Cycling3", "#FFFF00"));
+		Tag tag2 = new Tag("Politics", "politics/vincentcable", new Section("politics", "Politics", "#FFFF00"));
+
+		Tag tag4 = new Tag("Sport", "football/vuvuzelas", new Section("sport", "Sport", "#FFFF00"));
+
 		
+		
+		if (tag != null) {
+			favouriteTags.add(tag);
+			favouriteTags.add(tag2);
+			favouriteTags.add(tag3);
+			favouriteTags.add(tag4);
+
+		}
 	}
 
 	private void addFavouriteSection(List<Section> favouriteSections, String sectionId) {
@@ -42,6 +55,5 @@ public class FavouriteSectionsAndTagsDAO {
 			favouriteSections.add(section);
 		}
 	}
-
 
 }
