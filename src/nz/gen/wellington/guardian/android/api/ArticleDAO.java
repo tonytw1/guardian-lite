@@ -2,6 +2,8 @@ package nz.gen.wellington.guardian.android.api;
 
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedSectionCache;
 import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
@@ -131,6 +133,10 @@ public class ArticleDAO {
 		
 	public void saveTopStories(List<Article> topStories) {
 		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), topStories);		
+	}
+
+	public DateTime getModificationTime(ArticleSet articleSet) {
+		return fileBasedArticleCache.getModificationTime(articleSet);
 	}
 		
 }

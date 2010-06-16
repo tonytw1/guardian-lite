@@ -4,16 +4,24 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.api.CacheFactory;
+import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
+
+import org.joda.time.DateTime;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListAdapter;
+import android.widget.LinearLayout;
 
 public class main extends ArticleListActivity {
+		
+	private static final String TAG = "main";
 	
-	ListAdapter adapter;
+	private DateTime loaded;
 	
 	public main() {
 	}
@@ -28,9 +36,20 @@ public class main extends ArticleListActivity {
     	showMainImage = false;
 	}
 	
+	
+	@Override
+	protected boolean shouldRefreshView(LinearLayout mainPane) {
+		DateTime modtime = ArticleDAOFactory.getDao(this.getApplicationContext()).getModificationTime(new TopStoriesArticleSet());
+		boolean topStoriesFileHasChanged = modtime != null && modtime.isAfter(loaded);
+		return super.shouldRefreshView(mainPane) || topStoriesFileHasChanged;
+	}
+
+	
 	@Override
 	protected List<Article> loadArticles() {
-		return ArticleDAOFactory.getDao(this.getApplicationContext()).getTopStories();
+		List<Article> topStories = ArticleDAOFactory.getDao(this.getApplicationContext()).getTopStories();
+		this.loaded = new DateTime();
+		return topStories;
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {

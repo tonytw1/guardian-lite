@@ -38,7 +38,14 @@ public class UpdateSectionArticlesTask implements ContentUpdateTaskRunnable {
 		}
 		report.setSectionCount(report.getSectionCount()+1);
 	}
+	
+	
+	@Override
+	public String getTaskName() {
+		return "Fetching articles for section: " + section.getName();
+	}
 
+	
 	@Override
 	public void setReport(ContentUpdateReport report) {
 		this.report = report;
@@ -48,7 +55,7 @@ public class UpdateSectionArticlesTask implements ContentUpdateTaskRunnable {
 		if (imageUrl != null) {
 			if (!ArticleDAOFactory.getImageDao(context).isAvailableLocally(imageUrl)) {
 				Log.d(TAG, "Queuing file for fetching: " + imageUrl);
-				ArticleDAOFactory.getTaskQueue().addImageTask(new ImageFetchTask(imageUrl, context));
+				ArticleDAOFactory.getTaskQueue(context).addImageTask(new ImageFetchTask(imageUrl, context));
 			}
 		}
 	}

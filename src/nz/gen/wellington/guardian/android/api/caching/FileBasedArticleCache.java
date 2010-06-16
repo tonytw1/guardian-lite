@@ -7,6 +7,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import android.content.Context;
@@ -78,6 +80,11 @@ public class FileBasedArticleCache {
 		} else {
 			Log.i(TAG, "No local copy to clear:" + articleSet.getApiUrl());
 		}
+	}
+
+
+	public DateTime getModificationTime(ArticleSet articleSet) {
+		return new FileService().getModificationTime(context, articleSet.getApiUrl());
 	}
 		
 }
