@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import org.joda.time.DateTime;
+
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
@@ -38,6 +40,18 @@ public class FileService {
 		Log.i(TAG, "Checking for local cache file at: " + localFile.getAbsolutePath());
 		return localFile.exists() && localFile.canRead();
 	}
+	
+	public DateTime getModificationTime(Context context, String apiUrl) {
+		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
+		Log.i(TAG, "Checking mod time for file at: " + localFile.getAbsolutePath());
+		if (localFile.exists()) {
+			DateTime modTime = new DateTime(localFile.lastModified());
+			Log.i(TAG, "Mod time is: " + modTime.toString());
+			return modTime;
+		}
+		return null;
+	}
+	
 	
 	public static String getLocalFilename(String url) {
 		return url.replaceAll("/", "").replaceAll(":", "");
@@ -99,7 +113,7 @@ public class FileService {
 	// TODO make a preference - only use external if installed - external is the SD card right?
 	private static File getCacheDir(Context context) {
 		
-		final int cacheLocation = EXTERNAL_SDCARD_SAMSUNG_I7500;
+		final int cacheLocation = INTERNAL_CACHE;
 		switch (cacheLocation) {
 		case INTERNAL_CACHE:
 			return context.getCacheDir();

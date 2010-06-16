@@ -58,14 +58,24 @@ public abstract class ArticleListActivity extends Activity {
 		super.onStart();
 		
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);		
-		//mainPane.removeAllViews();
-		boolean mainPaneNeedsPopulating = mainPane.getChildCount() == 0;
+		boolean mainPaneNeedsPopulating = shouldRefreshView(mainPane);
 		if (mainPaneNeedsPopulating) {
-			updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this));
-			Thread loader = new Thread(updateArticlesRunner);
-			loader.start();
-			Log.d("UpdateArticlesHandler", "Loader started");			
+			mainPane.removeAllViews();
+			populateArticles();
 		}
+	}
+
+
+	protected boolean shouldRefreshView(LinearLayout mainPane) {
+		return mainPane.getChildCount() == 0;
+	}
+	
+	
+	protected void populateArticles() {
+		updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this));
+		Thread loader = new Thread(updateArticlesRunner);
+		loader.start();
+		Log.d("UpdateArticlesHandler", "Loader started");		
 	}
 
 	
