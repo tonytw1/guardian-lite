@@ -1,7 +1,11 @@
 package nz.gen.wellington.guardian.android.network;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.http.Header;
@@ -22,16 +26,27 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 public class HttpFetcher {
 	
+	
+    public static final String DOWNLOAD_STARTED = "nz.gen.wellington.guardian.android.network.DOWNLOAD_STARTED";
+    public static final String DOWNLOAD_PROGRESS = "nz.gen.wellington.guardian.android.network.DOWNLOAD_PROGRESS";
+    public static final String DOWNLOAD_FINISHED = "nz.gen.wellington.guardian.android.network.DOWNLOAD_FINISHED";
+
+	
+	
 	HttpClient client;
+	Context context;
 	
 	private static final String TAG = "HttpFetcher";
 
 	
-	public HttpFetcher() {
+	public HttpFetcher(Context context) {
+		this.context =context;
 		client = new DefaultHttpClient();
 		((AbstractHttpClient) client)
 		.addRequestInterceptor(new HttpRequestInterceptor() {
@@ -73,8 +88,38 @@ public class HttpFetcher {
 		try {
 			Log.i(TAG, "Making http fetch of: " + uri);						
 			HttpGet get = new HttpGet(uri);
-			ResponseHandler<String> responseHandler = new BasicResponseHandler();
-			return responseHandler.handleResponse(client.execute(get)); 
+			
+			HttpResponse execute = client.execute(get);
+			if (execute.getStatusLine().getStatusCode() == 200) {
+				long contentLength = execute.getEntity().getContentLength();
+				Log.d(TAG, "Content length: " + contentLength);
+				BufferedInputStream is = new BufferedInputStream(execute.getEntity().getContent());
+				
+				Reader in = new InputStreamReader(is, "UTF-8");				
+				StringBuilder out = new StringBuilder();
+				
+				int totalRead = 0;
+				int read;
+				final char[] buffer = new char[4096];
+				do {
+				  read = in.read(buffer, 0, buffer.length);
+				  if (read>0) {
+					  totalRead = totalRead + read;
+						Log.d(TAG, "Read: " + totalRead);
+						
+						Intent intent = new Intent(DOWNLOAD_PROGRESS);
+						intent.putExtra("bytes_received", totalRead);
+						intent.putExtra("bytes_expected", contentLength);
+						context.sendBroadcast(intent);
+						
+						
+				    out.append(buffer, 0, read);
+				  }
+				} while (read>=0);
+				return out.toString();
+			
+			}
+			return null;
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -88,12 +133,9 @@ public class HttpFetcher {
 	public byte[] httpFetchStream(String uri) {
 		try {
 			Log.i(TAG, "Making http fetch of image: " + uri);
-			HttpGet get = new HttpGet(uri);
-		
-			byte[] byteArray = EntityUtils.toByteArray(client.execute(get).getEntity());
-			return byteArray;
-			
-						
+			HttpGet get = new HttpGet(uri);		
+			return EntityUtils.toByteArray(client.execute(get).getEntity());
+									
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();

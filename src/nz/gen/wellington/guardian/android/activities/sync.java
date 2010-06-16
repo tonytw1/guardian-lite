@@ -7,6 +7,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
@@ -68,6 +69,9 @@ public class sync extends Activity implements OnClickListener {
 		BroadcastReceiver queueChangeReceiver = new QueueChangeReceiver();
 		registerReceiver(queueChangeReceiver, new IntentFilter(TaskQueue.QUEUE_CHANGED));
 		
+		BroadcastReceiver downloadProgressReceiver = new DownloadProgressReceiver();
+		registerReceiver(downloadProgressReceiver, new IntentFilter(HttpFetcher.DOWNLOAD_PROGRESS));
+				
 		BroadcastReceiver batchCompletionReceiver = new BatchCompletionReceiver();
 		registerReceiver(batchCompletionReceiver, new IntentFilter(ContentUpdateService.BATCH_COMPLETION));
 	}
@@ -121,6 +125,13 @@ public class sync extends Activity implements OnClickListener {
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);
 	}
+	
+	
+	private void updateDownloadProgress(int received, long  expected) {
+		final String statusMessage =  received + " / " +  Long.toString(expected);
+		TextView status = (TextView) findViewById(R.id.DownloadProgress);
+		status.setText(statusMessage);
+	}
 
 
 	private void updateCurrentTask(String taskName) {
@@ -152,6 +163,15 @@ public class sync extends Activity implements OnClickListener {
 		}
 	}
 	
+
+	class DownloadProgressReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final int received = intent.getIntExtra("bytes_received", 0);
+			final long expected = intent.getLongExtra("bytes_expected", 0);
+			updateDownloadProgress(received, expected);
+		}		
+	}
 	
 	class BatchCompletionReceiver extends BroadcastReceiver {
 		@Override
