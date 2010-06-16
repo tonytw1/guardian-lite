@@ -58,9 +58,15 @@ public class sync extends Activity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		IntentFilter updateFilter = new IntentFilter(ContentUpdateService.TASK_COMPLETION);
-		BroadcastReceiver updateReceiver = new UpdateReceiver();
-		registerReceiver(updateReceiver, updateFilter);
+
+		BroadcastReceiver taskStartReceiver = new TaskStartReceiver();
+		registerReceiver(taskStartReceiver, new IntentFilter(ContentUpdateService.TASK_START));
+		
+		BroadcastReceiver taskCompletionReceiver = new TaskCompletionReceiver();
+		registerReceiver(taskCompletionReceiver, new IntentFilter(ContentUpdateService.TASK_COMPLETION));
+		
+		BroadcastReceiver batchCompletionReceiver = new BatchCompletionReceiver();
+		registerReceiver(batchCompletionReceiver, new IntentFilter(ContentUpdateService.BATCH_COMPLETION));
 	}
 
 	
@@ -80,7 +86,6 @@ public class sync extends Activity implements OnClickListener {
 			taskQueue.clear();
 		}
 		
-		updateStatus(0, 0);	// TODO
 	}
 	
 	
@@ -106,29 +111,52 @@ public class sync extends Activity implements OnClickListener {
 	}
 	
 	
-	public void updateStatus(int articles, int images) {	
+	private void updateStatus(int articles, int images) {	
 		final String statusMessage =  articles + " article sets and " + images + " images to load.";
 		TextView status = (TextView) findViewById(R.id.Status);
 		status.setText(statusMessage);
-		
-		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();	// TODO this also wants to be message driven
-		boolean canRun = taskQueue.isEmpty();
-		start.setEnabled(canRun);
-		stop.setEnabled(!canRun);
+		status.setVisibility(View.VISIBLE);
+	}
+
+
+	private void updateCurrentTask(String taskName) {
+		TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
+		currentTask.setText(taskName);
+		currentTask.setVisibility(View.VISIBLE);
 	}
 	
-	
-	public class UpdateReceiver extends BroadcastReceiver {
-
+		
+	class TaskStartReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Log.d(TAG, "Received update: " + intent.toString());
+			final String taskName = intent.getStringExtra("task_name");
 			final int articles = intent.getIntExtra("article_queue_size", 0);
 			final int images = intent.getIntExtra("image_queue_size", 0);
+			updateCurrentTask(taskName);
 			updateStatus(articles, images);
 		}
-		
 	}
+	
 
+	class TaskCompletionReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			//TextView status = (TextView) findViewById(R.id.Status);
+			//status.setVisibility(View.GONE);
+			//TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
+			//currentTask.setVisibility(View.GONE);			
+		}
+	}
+	
+	
+	class BatchCompletionReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			TextView status = (TextView) findViewById(R.id.Status);
+			status.setVisibility(View.GONE);
+			TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
+			currentTask.setVisibility(View.GONE);			
+		}
+	}
 	
 }

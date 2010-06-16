@@ -15,8 +15,10 @@ import android.util.Log;
 
 public class ContentUpdateService extends Service {
 	
+    public static final String TASK_START = "nz.gen.wellington.guardian.android.event.CONTENT_UPDATE_TASK_START";
     public static final String TASK_COMPLETION = "nz.gen.wellington.guardian.android.event.CONTENT_UPDATE_TASK_COMPLETION";
-
+    public static final String BATCH_COMPLETION = "nz.gen.wellington.guardian.android.event.CONTENT_UPDATE_BATCH_COMPLETION";
+    
 	private static final String TAG = "ContentLoader";
     
     public static final int UPDATE_COMPLETE_NOTIFICATION_ID = 1;
@@ -54,12 +56,15 @@ public class ContentUpdateService extends Service {
     	public void run() {
     		internalRun();
     	}
-    }    
+    }
+    
     
     private void internalRun() {
     	while(running) {
     		ContentUpdateTaskRunnable task = getNextTask();
-    		task.setReport(report);
+    		
+    		announceTaskBeginning(task);
+    		task.setReport(report);    		
     		task.run();
     		taskQueue.remove(task);
     		
@@ -68,16 +73,14 @@ public class ContentUpdateService extends Service {
     }
  
     
-
-
 	private ContentUpdateTaskRunnable getNextTask() {
-    	Log.i(TAG, "Getting next task");
-    
+    	Log.i(TAG, "Getting next task");    
     	synchronized(taskQueue) {
     		if (taskQueue.isEmpty()) {
 	    	   if (inBatch) {
 	    		   sendNotification(report);
 	    		   inBatch = false;
+	    		   announceBatchFinished();
 	    	   }
 	        
 	    	   try {
@@ -89,16 +92,15 @@ public class ContentUpdateService extends Service {
 	           
 	    	   } catch (InterruptedException e) {
 	    		   stop();
-	    	   }
-	    	   
-    		}
-    		
-    		
+	    	   }	    	   
+    		}    		    		
     		return taskQueue.getNext();
     	}
     }
 	 
 	   
+
+
 	private void stop() {
 		//running = false;
 	}
@@ -117,14 +119,24 @@ public class ContentUpdateService extends Service {
 		return null;
 	}
 		
-
-	private void announceTaskCompletion(ContentUpdateTaskRunnable task) {
-		Intent intent = new Intent(TASK_COMPLETION);
+	
+	private void announceTaskBeginning(ContentUpdateTaskRunnable task) {
+		Intent intent = new Intent(TASK_START);
+		intent.putExtra("task_name", task.getTaskName());
 		intent.putExtra("article_queue_size", taskQueue.getArticleSize());
 		intent.putExtra("image_queue_size", taskQueue.getImageSize());
 		sendBroadcast(intent);
 	}
 	
+	private void announceTaskCompletion(ContentUpdateTaskRunnable task) {
+		Intent intent = new Intent(TASK_COMPLETION);
+		sendBroadcast(intent);
+	}
+	
+	private void announceBatchFinished() {
+		Intent intent = new Intent(BATCH_COMPLETION);
+		sendBroadcast(intent);
+	}
 	
 	private void sendNotification(ContentUpdateReport report) {		
 		int icon = R.drawable.notification_icon;	// TODO resize icon

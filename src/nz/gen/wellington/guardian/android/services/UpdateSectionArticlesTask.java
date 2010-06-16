@@ -38,7 +38,14 @@ public class UpdateSectionArticlesTask implements ContentUpdateTaskRunnable {
 		}
 		report.setSectionCount(report.getSectionCount()+1);
 	}
+	
+	
+	@Override
+	public String getTaskName() {
+		return "Fetching articles for section: " + section.getName();
+	}
 
+	
 	@Override
 	public void setReport(ContentUpdateReport report) {
 		this.report = report;

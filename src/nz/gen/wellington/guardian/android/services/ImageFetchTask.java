@@ -26,6 +26,12 @@ public class ImageFetchTask implements ContentUpdateTaskRunnable {
 		}
 	}
 
+	
+	@Override
+	public String getTaskName() {
+		return "Fetching image: " + url;
+	}
+
 
 	@Override
 	public void setReport(ContentUpdateReport report) {

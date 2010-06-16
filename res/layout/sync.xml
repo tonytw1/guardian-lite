@@ -6,6 +6,9 @@
     android:gravity="center">
 
 <Button android:id="@+id/buttonStart" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Download"></Button>
+
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/CurrentTask"></TextView>
+
 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Status"></TextView>
 
 <Button android:layout_height="wrap_content" android:text="Stop" android:layout_width="fill_parent" android:id="@+id/StopDownloadButton"></Button>

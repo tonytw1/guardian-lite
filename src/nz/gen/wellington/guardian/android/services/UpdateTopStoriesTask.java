@@ -61,7 +61,19 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 		articleDAO.saveTopStories(results);
 		Log.i(TAG, "Done");
 	}
-
+	
+	
+	@Override
+	public String getTaskName() {
+		return "Updating top stories";
+	}
+	
+	
+	@Override
+	public void setReport(ContentUpdateReport report) {			
+	}
+	
+	
 	private void addArticlesForSection(SortedMap<DateTime, Article> topStories, LinkedList<Article> results, Section section) {		
 		List<Article> sectionArticles = new ArrayList<Article>();
 		for (Article article : new LinkedList<Article>(topStories.values())) {
@@ -89,10 +101,5 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 			}
 		}
 	}
-
 	
-	@Override
-	public void setReport(ContentUpdateReport report) {			
-	}
-		
 }
