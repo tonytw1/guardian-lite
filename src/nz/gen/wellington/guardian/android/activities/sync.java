@@ -124,7 +124,11 @@ public class sync extends Activity implements OnClickListener {
 		currentTask.setText(taskName);
 		currentTask.setVisibility(View.VISIBLE);
 	}
-	
+		
+	private void switchToTopStories() {
+		Intent intent = new Intent(this, main.class);
+		this.startActivity(intent);
+	}
 		
 	class TaskStartReceiver extends BroadcastReceiver {
 		@Override
@@ -151,7 +155,8 @@ public class sync extends Activity implements OnClickListener {
 			TextView status = (TextView) findViewById(R.id.Status);
 			status.setVisibility(View.GONE);
 			TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
-			currentTask.setVisibility(View.GONE);			
+			currentTask.setVisibility(View.GONE);
+			switchToTopStories();
 		}
 	}
 	
