@@ -68,12 +68,6 @@ public class ContentUpdateService extends Service {
     }
  
     
-    private void announceTaskCompletion(ContentUpdateTaskRunnable task) {
-    	  Intent intent = new Intent(TASK_COMPLETION);
-    	  intent.putExtra("article_queue_size", taskQueue.getArticleSize());
-    	  intent.putExtra("article_queue_size", taskQueue.getArticleSize());
-          sendBroadcast(intent);
-	}
 
 
 	private ContentUpdateTaskRunnable getNextTask() {
@@ -124,6 +118,14 @@ public class ContentUpdateService extends Service {
 	}
 		
 
+	private void announceTaskCompletion(ContentUpdateTaskRunnable task) {
+		Intent intent = new Intent(TASK_COMPLETION);
+		intent.putExtra("article_queue_size", taskQueue.getArticleSize());
+		intent.putExtra("image_queue_size", taskQueue.getImageSize());
+		sendBroadcast(intent);
+	}
+	
+	
 	private void sendNotification(ContentUpdateReport report) {		
 		int icon = R.drawable.notification_icon;	// TODO resize icon
 		CharSequence tickerText = "Content update complete";
@@ -141,8 +143,5 @@ public class ContentUpdateService extends Service {
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 		notificationManager.notify(UPDATE_COMPLETE_NOTIFICATION_ID, notification);
 	}
-
-
-	
 	
 }
