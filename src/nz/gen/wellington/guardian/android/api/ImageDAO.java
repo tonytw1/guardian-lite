@@ -21,7 +21,7 @@ public class ImageDAO {
 	private Context context;
 		
 	public ImageDAO(Context context) {
-		httpFetcher = new HttpFetcher();
+		httpFetcher = new HttpFetcher(context);
 		this.context = context;
 	}
 

@@ -13,9 +13,8 @@ import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
 
 public class OpenPlatformJSONApi implements ContentSource {
@@ -26,16 +25,16 @@ public class OpenPlatformJSONApi implements ContentSource {
 	private static final int PAGE_SIZE = 10;	// TODO push to a preference
 	
 	private OpenPlatformApiKeyStore apiKeyStore;
-	public HttpFetcher httpFetcher;
+	private HttpFetcher httpFetcher;
+	private NetworkStatusService networkStatusService;
 	protected OpenPlatformJSONParser jsonParser;
-	private Context context;
 	
 	
 	public OpenPlatformJSONApi(Context context, OpenPlatformApiKeyStore apiKeyStore) {
 		this.apiKeyStore = apiKeyStore;
-		this.context = context;
-		httpFetcher = new HttpFetcher();
+		httpFetcher = new HttpFetcher(context);		
 		jsonParser = new  OpenPlatformJSONParser();
+		networkStatusService = new NetworkStatusService(context);
 	}
 
 	
@@ -50,9 +49,9 @@ public class OpenPlatformJSONApi implements ContentSource {
 		final String json = getJSON(buildContentQueryUrl(articleSet));		
 		if (json != null) {	
 			List<Article> articles = jsonParser.parseArticlesJSON(json, sections);			
-			if (articles != null) {				
+			if (articles != null) {	
 				if (jsonParser.getUserTier(json).equals("partner")) {
-					if (isWifiConnection()) {
+					if (networkStatusService.isWifiConnection()) {
 						Log.i(TAG, "Wifi is enabled - downloading full images");
 						return getArticleMainPictureUrls(articles);
 					}
@@ -149,20 +148,5 @@ public class OpenPlatformJSONApi implements ContentSource {
 	private String getJSON(String url) {
 		return httpFetcher.httpFetch(url);		
 	}
-	
-	
-	// TODO push to a helper class - which will let us evict context from this class
-	private boolean isWifiConnection() {
-		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-		if (activeNetworkInfo == null) {
-			return false;
-		}		
-		if (activeNetworkInfo.getTypeName().equals("WIFI")) {
-			return true;
-		}
-		Log.i(TAG, "Active connection is of type: " + activeNetworkInfo.getTypeName());
-		return false;
-	}
-	
+		
 }
