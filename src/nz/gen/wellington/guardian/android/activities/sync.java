@@ -15,10 +15,11 @@ import nz.gen.wellington.guardian.android.services.UpdateTopStoriesTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,9 +33,7 @@ public class sync extends Activity implements OnClickListener {
 	Button start;
 	Button stop;
 	
-	StatusUpdateRunner statusUpdateRunner;
-	Handler statusUpdateHandler;
-	
+
 	private NotificationManager notificationManager;
 	
 	
@@ -51,20 +50,24 @@ public class sync extends Activity implements OnClickListener {
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
     	notificationManager.cancel(ContentUpdateService.UPDATE_COMPLETE_NOTIFICATION_ID);	
     	    	    	
-    	statusUpdateHandler = new StatusUpdateHandler();    	
-    	statusUpdateRunner = new StatusUpdateRunner();
-    	Thread updateThread = new Thread(statusUpdateRunner);
-    	updateThread.start();
+    	Log.d(TAG, "Starting content update service service");
+		startService(new Intent(this, ContentUpdateService.class));	// TODO should be on app startup		
    	}
+	
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		IntentFilter updateFilter = new IntentFilter(ContentUpdateService.TASK_COMPLETION);
+		BroadcastReceiver updateReceiver = new UpdateReceiver();
+		registerReceiver(updateReceiver, updateFilter);
+	}
 
 	
 	public void onClick(View src) {		
 		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();
 		switch (src.getId()) {
-		case R.id.buttonStart:
-			Log.d(TAG, "Starting content update service service");
-			startService(new Intent(this, ContentUpdateService.class));	// TODO should be on app startup
-			
+		case R.id.buttonStart:		
 			queueFavouriteTags(taskQueue);
 			queueFavouriteSections(taskQueue);
 			
@@ -77,7 +80,7 @@ public class sync extends Activity implements OnClickListener {
 			taskQueue.clear();
 		}
 		
-		updateStatus();
+		updateStatus(0, 0);	// TODO
 	}
 	
 	
@@ -103,66 +106,29 @@ public class sync extends Activity implements OnClickListener {
 	}
 	
 	
-	@Override
-	protected void onStop() {
-		super.onStop();
-		Log.d(TAG, "Stopping status update runner");
-		statusUpdateRunner.stop();
-	}
-
-	
-	public void updateStatus() {
-		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();
-
-		String statusMessage = Integer.toString(taskQueue.getArticleSize()) + " article sets and "
-				+ Integer.toString(taskQueue.getImageSize()) + " images to load.";
-
+	public void updateStatus(int articles, int images) {	
+		final String statusMessage =  articles + " article sets and " + images + " images to load.";
 		TextView status = (TextView) findViewById(R.id.Status);
 		status.setText(statusMessage);
-
+		
+		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();	// TODO this also wants to be message driven
 		boolean canRun = taskQueue.isEmpty();
 		start.setEnabled(canRun);
 		stop.setEnabled(!canRun);
 	}
 	
-	class StatusUpdateHandler extends Handler {
-		
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			Log.d(TAG, "Status update handler is updating status");
-			updateStatus();
+	
+	public class UpdateReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.d(TAG, "Received update: " + intent.toString());
+			final int articles = intent.getIntExtra("article_queue_size", 0);
+			final int images = intent.getIntExtra("image_queue_size", 0);
+			updateStatus(articles, images);
 		}
 		
 	}
-	
-	
-	class StatusUpdateRunner implements Runnable {
-		
-		private boolean running;
-				
-		public StatusUpdateRunner() {
-			running = true;
-		}
 
-		public void stop() {
-			this.running = false;			
-		}
-		
-		public void run() {
-			while (running && !Thread.currentThread().isInterrupted()) {
-				Message m = new Message();
-				m.what = 1;
-				sync.this.statusUpdateHandler.sendMessage(m);
-
-				try {
-					Thread.sleep(1000);
-
-				} catch (InterruptedException e) {					
-					Thread.currentThread().interrupt();
-				}
-			}
-		}
-	}
-	
 	
 }

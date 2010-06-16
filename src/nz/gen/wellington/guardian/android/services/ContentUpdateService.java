@@ -15,7 +15,9 @@ import android.util.Log;
 
 public class ContentUpdateService extends Service {
 	
-    private static final String TAG = "ContentLoader";
+    public static final String TASK_COMPLETION = "nz.gen.wellington.guardian.android.event.CONTENT_UPDATE_TASK_COMPLETION";
+
+	private static final String TAG = "ContentLoader";
     
     public static final int UPDATE_COMPLETE_NOTIFICATION_ID = 1;
 
@@ -60,11 +62,21 @@ public class ContentUpdateService extends Service {
     		task.setReport(report);
     		task.run();
     		taskQueue.remove(task);
+    		
+    		announceTaskCompletion(task);    		
     	} 
     }
  
     
-    private ContentUpdateTaskRunnable getNextTask() {
+    private void announceTaskCompletion(ContentUpdateTaskRunnable task) {
+    	  Intent intent = new Intent(TASK_COMPLETION);
+    	  intent.putExtra("article_queue_size", taskQueue.getArticleSize());
+    	  intent.putExtra("article_queue_size", taskQueue.getArticleSize());
+          sendBroadcast(intent);
+	}
+
+
+	private ContentUpdateTaskRunnable getNextTask() {
     	Log.i(TAG, "Getting next task");
     
     	synchronized(taskQueue) {
