@@ -55,7 +55,7 @@ public class UpdateTagArticlesTask implements ContentUpdateTaskRunnable {
 		if (imageUrl != null) {
 			if (!ArticleDAOFactory.getImageDao(context).isAvailableLocally(imageUrl)) {
 				Log.d(TAG, "Queuing file for fetching: " + imageUrl);
-				ArticleDAOFactory.getTaskQueue().addImageTask(new ImageFetchTask(imageUrl, context));
+				ArticleDAOFactory.getTaskQueue(context).addImageTask(new ImageFetchTask(imageUrl, context));
 			}
 		}
 	}

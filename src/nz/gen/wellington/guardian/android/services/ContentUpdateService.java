@@ -40,7 +40,7 @@ public class ContentUpdateService extends Service {
     	notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
     	Log.i(TAG, "Started content update service");
 
-    	taskQueue = ArticleDAOFactory.getTaskQueue();
+    	taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
     	internalRunnable = new InternalRunnable();
 
     	 inBatch = false;    	 

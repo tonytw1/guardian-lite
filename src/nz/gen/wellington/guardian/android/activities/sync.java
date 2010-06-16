@@ -62,8 +62,8 @@ public class sync extends Activity implements OnClickListener {
 		BroadcastReceiver taskStartReceiver = new TaskStartReceiver();
 		registerReceiver(taskStartReceiver, new IntentFilter(ContentUpdateService.TASK_START));
 		
-		BroadcastReceiver taskCompletionReceiver = new TaskCompletionReceiver();
-		registerReceiver(taskCompletionReceiver, new IntentFilter(ContentUpdateService.TASK_COMPLETION));
+		BroadcastReceiver queueChangeReceiver = new QueueChangeReceiver();
+		registerReceiver(queueChangeReceiver, new IntentFilter(TaskQueue.QUEUE_CHANGED));
 		
 		BroadcastReceiver batchCompletionReceiver = new BatchCompletionReceiver();
 		registerReceiver(batchCompletionReceiver, new IntentFilter(ContentUpdateService.BATCH_COMPLETION));
@@ -71,7 +71,7 @@ public class sync extends Activity implements OnClickListener {
 
 	
 	public void onClick(View src) {		
-		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue();
+		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
 		switch (src.getId()) {
 		case R.id.buttonStart:		
 			queueFavouriteTags(taskQueue);
@@ -129,22 +129,18 @@ public class sync extends Activity implements OnClickListener {
 	class TaskStartReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			final String taskName = intent.getStringExtra("task_name");
-			final int articles = intent.getIntExtra("article_queue_size", 0);
-			final int images = intent.getIntExtra("image_queue_size", 0);
+			final String taskName = intent.getStringExtra("task_name");			
 			updateCurrentTask(taskName);
-			updateStatus(articles, images);
 		}
 	}
 	
 
-	class TaskCompletionReceiver extends BroadcastReceiver {
+	class QueueChangeReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			//TextView status = (TextView) findViewById(R.id.Status);
-			//status.setVisibility(View.GONE);
-			//TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
-			//currentTask.setVisibility(View.GONE);			
+			final int articles = intent.getIntExtra("article_queue_size", 0);
+			final int images = intent.getIntExtra("image_queue_size", 0);
+			updateStatus(articles, images);
 		}
 	}
 	

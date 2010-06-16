@@ -34,9 +34,9 @@ public class ArticleDAOFactory {
 		return apiKeyStore;
 	}
 	
-	public static TaskQueue getTaskQueue() {
+	public static TaskQueue getTaskQueue(Context context) {
 		if (taskQueue == null) {
-			taskQueue = new TaskQueue();
+			taskQueue = new TaskQueue(context);
 		}
 		return taskQueue;		
 	}
