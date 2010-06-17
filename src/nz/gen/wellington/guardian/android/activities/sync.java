@@ -33,6 +33,10 @@ public class sync extends Activity implements OnClickListener {
 	Button start;
 	Button stop;
 	
+	BroadcastReceiver taskStartReceiver;
+	BroadcastReceiver queueChangeReceiver;
+	BroadcastReceiver downloadProgressReceiver;
+	BroadcastReceiver batchCompletionReceiver;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,27 +50,33 @@ public class sync extends Activity implements OnClickListener {
         start.setOnClickListener(this);
         stop = (Button) findViewById(R.id.StopDownloadButton);        
         stop.setOnClickListener(this);
+        taskStartReceiver = new TaskStartReceiver();
+        queueChangeReceiver = new QueueChangeReceiver();
+        downloadProgressReceiver = new DownloadProgressReceiver();
+        batchCompletionReceiver = new BatchCompletionReceiver();
 	}
 	
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		BroadcastReceiver taskStartReceiver = new TaskStartReceiver();
-		registerReceiver(taskStartReceiver, new IntentFilter(ContentUpdateService.TASK_START));
-		
-		BroadcastReceiver queueChangeReceiver = new QueueChangeReceiver();
+		registerReceiver(taskStartReceiver, new IntentFilter(ContentUpdateService.TASK_START));		
 		registerReceiver(queueChangeReceiver, new IntentFilter(TaskQueue.QUEUE_CHANGED));
-		
-		BroadcastReceiver downloadProgressReceiver = new DownloadProgressReceiver();
 		registerReceiver(downloadProgressReceiver, new IntentFilter(HttpFetcher.DOWNLOAD_PROGRESS));
-				
-		BroadcastReceiver batchCompletionReceiver = new BatchCompletionReceiver();
 		registerReceiver(batchCompletionReceiver, new IntentFilter(ContentUpdateService.BATCH_COMPLETION));
 	}
 
 	
+	@Override
+	protected void onPause() {
+		super.onResume();
+		unregisterReceiver(taskStartReceiver);
+		unregisterReceiver(queueChangeReceiver);
+		unregisterReceiver(downloadProgressReceiver);
+		unregisterReceiver(batchCompletionReceiver);	
+	}
+
+
 	public void onClick(View src) {		
 		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
 		switch (src.getId()) {
