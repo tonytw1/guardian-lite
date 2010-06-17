@@ -2,6 +2,7 @@ package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ListKeywordClicker;
+import nz.gen.wellington.guardian.android.activities.ui.SectionClicker;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
@@ -101,8 +102,14 @@ public class article extends Activity {
 			View vi = inflater.inflate(R.layout.authorslist, null);			  
 			TextView titleText = (TextView) vi.findViewById(R.id.TagName);
 	    	titleText.setText(tag.getName());
-	    	ListKeywordClicker urlListener = new ListKeywordClicker(tag);
-	    	vi.setOnClickListener(urlListener);
+	    	
+	    	if (tag.isSectionTag()) {
+	    		SectionClicker clicker = new SectionClicker(tag.getSection());
+	    		vi.setOnClickListener(clicker);	    		
+	    	} else {
+	    		ListKeywordClicker clicker = new ListKeywordClicker(tag);
+	    		vi.setOnClickListener(clicker);
+	    	}	
 	    	tagList.addView(vi);
 		}				
 	}
