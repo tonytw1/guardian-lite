@@ -4,13 +4,13 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
-import nz.gen.wellington.guardian.android.api.CacheFactory;
-import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
+import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 
 import org.joda.time.DateTime;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,7 +20,8 @@ import android.widget.LinearLayout;
 public class main extends ArticleListActivity {
 		
 	private static final String TAG = "main";
-	
+
+	private NotificationManager notificationManager;
 	private DateTime loaded;
 	
 	public main() {
@@ -34,6 +35,9 @@ public class main extends ArticleListActivity {
     	updateArticlesHandler = new UpdateArticlesHandler(this);
     	showSeperators = true;
     	showMainImage = false;
+    	
+        //notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+    	//notificationManager.cancel(ContentUpdateService.UPDATE_COMPLETE_NOTIFICATION_ID);	
 	}
 	
 	

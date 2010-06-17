@@ -15,7 +15,6 @@ import nz.gen.wellington.guardian.android.services.UpdateTagArticlesTask;
 import nz.gen.wellington.guardian.android.services.UpdateTopStoriesTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,9 +33,6 @@ public class sync extends Activity implements OnClickListener {
 	Button start;
 	Button stop;
 	
-
-	private NotificationManager notificationManager;
-	
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,12 +46,7 @@ public class sync extends Activity implements OnClickListener {
         start.setOnClickListener(this);
         stop = (Button) findViewById(R.id.StopDownloadButton);        
         stop.setOnClickListener(this);
-        
-        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-    	notificationManager.cancel(ContentUpdateService.UPDATE_COMPLETE_NOTIFICATION_ID);	
-    	    	    	
-    	Log.d(TAG, "Starting content update service service");
-   	}
+	}
 	
 	
 	@Override
