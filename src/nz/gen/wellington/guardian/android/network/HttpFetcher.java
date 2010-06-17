@@ -20,6 +20,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.HttpEntityWrapper;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
@@ -84,8 +85,10 @@ public class HttpFetcher {
 			Log.i(TAG, "Making http fetch of: " + uri);						
 			HttpGet get = new HttpGet(uri);	
 			
-			HttpResponse execute = client.execute(get);
+			get.addHeader(new BasicHeader("User-agent", "gzip"));
+			get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
 			
+			HttpResponse execute = client.execute(get);			
 			if (execute.getStatusLine().getStatusCode() == 200) {
 				long contentLength = execute.getEntity().getContentLength();
 				Log.d(TAG, "Content length: " + contentLength);
@@ -175,8 +178,7 @@ public class HttpFetcher {
 
         @Override
         public long getContentLength() {
-            // length of ungzipped content is not known
-            return -1;
+            return this.wrappedEntity.getContentLength();
         }
     } 
 
