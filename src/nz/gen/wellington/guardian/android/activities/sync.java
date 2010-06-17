@@ -55,7 +55,6 @@ public class sync extends Activity implements OnClickListener {
     	notificationManager.cancel(ContentUpdateService.UPDATE_COMPLETE_NOTIFICATION_ID);	
     	    	    	
     	Log.d(TAG, "Starting content update service service");
-		startService(new Intent(this, ContentUpdateService.class));	// TODO should be on app startup		
    	}
 	
 	
@@ -87,11 +86,17 @@ public class sync extends Activity implements OnClickListener {
 			
 			Log.i(TAG, "Injecting update top stories task onto queue");
 			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this);
-			taskQueue.addArticleTask(new UpdateTopStoriesTask(articleDAO, this));			
+			taskQueue.addArticleTask(new UpdateTopStoriesTask(articleDAO, this));	// TODO content update service should do this.
+			
+			Intent start = new Intent(ContentUpdateService.CONTROL);
+			start.putExtra("command", "start");
+			this.sendBroadcast(start);
 			break;
 		
 		case R.id.StopDownloadButton: 
-			taskQueue.clear();
+			Intent stop = new Intent(ContentUpdateService.CONTROL);
+			stop.putExtra("command", "stop");
+			this.sendBroadcast(stop);
 		}
 		
 	}

@@ -8,12 +8,16 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 
 public class ContentUpdateService extends Service {
+	
+    public static final String CONTROL = "nz.gen.wellington.guardian.android.services.CONTENT_UPDATE";
 	
     public static final String TASK_START = "nz.gen.wellington.guardian.android.event.CONTENT_UPDATE_TASK_START";
     public static final String TASK_COMPLETION = "nz.gen.wellington.guardian.android.event.CONTENT_UPDATE_TASK_COMPLETION";
@@ -28,7 +32,6 @@ public class ContentUpdateService extends Service {
     private Thread thread;
     
     private boolean running;
-    private boolean inBatch;
 
     private TaskQueue taskQueue;
     private Runnable internalRunnable;
@@ -42,16 +45,13 @@ public class ContentUpdateService extends Service {
 
     	taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
     	internalRunnable = new InternalRunnable();
-
-    	 inBatch = false;    	 
-    	 if (!running) {
-			   thread = new Thread(internalRunnable);
-			   thread.setDaemon(true);
-			   running = true;
-			   thread.start();
-    	 }
+    	running = false;
+    	
+    	BroadcastReceiver contentUpdateControlReceiver = new ContentUpdateControlReceiver();
+		registerReceiver(contentUpdateControlReceiver, new IntentFilter(ContentUpdateService.CONTROL));    	
     }
     
+
     private class InternalRunnable implements Runnable {
     	public void run() {
     		internalRun();
@@ -60,49 +60,49 @@ public class ContentUpdateService extends Service {
     
     
     private void internalRun() {
-    	while(running) {
-    		ContentUpdateTaskRunnable task = getNextTask();
-    		
+    	
+    	while(running) {    		
+    		ContentUpdateTaskRunnable task = getNextTask();    		
     		announceTaskBeginning(task);
     		task.setReport(report);    		
     		task.run();
-    		taskQueue.remove(task);
+    		taskQueue.remove(task);    		
+    		announceTaskCompletion(task);
     		
-    		announceTaskCompletion(task);    		
-    	} 
+    		if (taskQueue.isEmpty()) {
+    			sendNotification(report);
+    			running = false;
+    			announceBatchFinished();
+ 			}
+    	}
+    	
     }
  
     
 	private ContentUpdateTaskRunnable getNextTask() {
     	Log.i(TAG, "Getting next task");    
-    	synchronized(taskQueue) {
-    		if (taskQueue.isEmpty()) {
-	    	   if (inBatch) {
-	    		   sendNotification(report);
-	    		   inBatch = false;
-	    		   announceBatchFinished();
-	    	   }
-	        
-	    	   try {
-	    		   Log.i(TAG, "Waiting for next task");
-	    		   taskQueue.wait();	           
-
-	    		   inBatch= true;
-	    		   report = new ContentUpdateReport();
-	           
-	    	   } catch (InterruptedException e) {
-	    		   stop();
-	    	   }	    	   
-    		}    		    		
-    		return taskQueue.getNext();
+    	synchronized(taskQueue) {    	
+    		return taskQueue.getNext();    		   		    		
     	}
     }
 	 
 	   
+	private void start() {
+		Log.i(TAG, "Starting run");
+
+		report = new ContentUpdateReport();
+		running = true;
+
+    	thread = new Thread(internalRunnable);
+    	thread.setDaemon(true);
+    	thread.start();
+	}
 
 
 	private void stop() {
-		//running = false;
+		Log.i(TAG, "Starting stop");
+		running = false;	
+		taskQueue.clear();
 	}
 
 
@@ -127,6 +127,7 @@ public class ContentUpdateService extends Service {
 		intent.putExtra("image_queue_size", taskQueue.getImageSize());
 		sendBroadcast(intent);
 	}
+	
 	
 	private void announceTaskCompletion(ContentUpdateTaskRunnable task) {
 		Intent intent = new Intent(TASK_COMPLETION);
@@ -156,4 +157,19 @@ public class ContentUpdateService extends Service {
 		notificationManager.notify(UPDATE_COMPLETE_NOTIFICATION_ID, notification);
 	}
 	
+	
+	class ContentUpdateControlReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.i(TAG, intent.toString());
+			final String command = intent.getStringExtra("command");
+			if (command != null && command.equals("start")) {
+				start();
+				
+			} else if (command != null && command.equals("stop")) {
+				stop();				
+			}			
+		}
+	}
+		
 }
