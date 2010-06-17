@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringReader;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.http.Header;
@@ -17,11 +16,9 @@ import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.HttpEntityWrapper;
 import org.apache.http.impl.client.AbstractHttpClient;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
@@ -37,8 +34,7 @@ public class HttpFetcher {
     public static final String DOWNLOAD_PROGRESS = "nz.gen.wellington.guardian.android.network.DOWNLOAD_PROGRESS";
     public static final String DOWNLOAD_FINISHED = "nz.gen.wellington.guardian.android.network.DOWNLOAD_FINISHED";
 
-	
-	
+    
 	HttpClient client;
 	Context context;
 	
@@ -83,18 +79,19 @@ public class HttpFetcher {
 	}
 
 
-
 	public String httpFetch(String uri) {				
 		try {
 			Log.i(TAG, "Making http fetch of: " + uri);						
-			HttpGet get = new HttpGet(uri);
+			HttpGet get = new HttpGet(uri);	
 			
 			HttpResponse execute = client.execute(get);
+			
 			if (execute.getStatusLine().getStatusCode() == 200) {
 				long contentLength = execute.getEntity().getContentLength();
 				Log.d(TAG, "Content length: " + contentLength);
-				BufferedInputStream is = new BufferedInputStream(execute.getEntity().getContent());
+				announceDownloadStart(uri);
 				
+				BufferedInputStream is = new BufferedInputStream(execute.getEntity().getContent());				
 				Reader in = new InputStreamReader(is, "UTF-8");				
 				StringBuilder out = new StringBuilder();
 				
@@ -105,31 +102,46 @@ public class HttpFetcher {
 				  read = in.read(buffer, 0, buffer.length);
 				  if (read>0) {
 					  totalRead = totalRead + read;
-						Log.d(TAG, "Read: " + totalRead);
-						
-						Intent intent = new Intent(DOWNLOAD_PROGRESS);
-						intent.putExtra("bytes_received", totalRead);
-						intent.putExtra("bytes_expected", contentLength);
-						context.sendBroadcast(intent);
-						
-						
-				    out.append(buffer, 0, read);
+					  announceProgress(uri, contentLength, totalRead);											
+					  out.append(buffer, 0, read);
 				  }
 				} while (read>=0);
-				return out.toString();
-			
+				
+				announceDownloadCompleted(uri);
+				return out.toString();			
 			}
 			return null;
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			Log.w(TAG, e.getMessage());
 		}
 		return null;
 	}
+
+
+	private void announceDownloadStart(String url) {
+		Intent intent = new Intent(DOWNLOAD_STARTED);
+		intent.putExtra("url", url);
+		context.sendBroadcast(intent);
+	}
 	
 	
+	private void announceDownloadCompleted(String url) {
+		Intent intent = new Intent(DOWNLOAD_FINISHED);
+		intent.putExtra("url", url);
+		context.sendBroadcast(intent);
+	}
+
+
+	private void announceProgress(String url, long contentLength, int totalRead) {
+		Intent intent = new Intent(DOWNLOAD_PROGRESS);
+		intent.putExtra("url", url);
+		intent.putExtra("bytes_received", totalRead);
+		intent.putExtra("bytes_expected", contentLength);
+		context.sendBroadcast(intent);
+	}
 	
+		
 	public byte[] httpFetchStream(String uri) {
 		try {
 			Log.i(TAG, "Making http fetch of image: " + uri);
@@ -143,31 +155,30 @@ public class HttpFetcher {
 		return null;
 	}
 	
+
 	
-	
-	 static class GzipDecompressingEntity extends HttpEntityWrapper {
+	static class GzipDecompressingEntity extends HttpEntityWrapper {
 
-	        public GzipDecompressingEntity(final HttpEntity entity) {
-	            super(entity);
-	        }
-	    
-	        @Override
-	        public InputStream getContent()
-	            throws IOException, IllegalStateException {
+        public GzipDecompressingEntity(final HttpEntity entity) {
+            super(entity);
+        }
+    
+        @Override
+        public InputStream getContent()
+            throws IOException, IllegalStateException {
 
-	            // the wrapped entity's getContent() decides about repeatability
-	            InputStream wrappedin = wrappedEntity.getContent();
+            // the wrapped entity's getContent() decides about repeatability
+            InputStream wrappedin = wrappedEntity.getContent();
 
-	            return new GZIPInputStream(wrappedin);
-	        }
+            return new GZIPInputStream(wrappedin);
+        }
 
-	        @Override
-	        public long getContentLength() {
-	            // length of ungzipped content is not known
-	            return -1;
-	        }
-
-	    } 
+        @Override
+        public long getContentLength() {
+            // length of ungzipped content is not known
+            return -1;
+        }
+    } 
 
 
 }
