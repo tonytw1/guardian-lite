@@ -14,9 +14,11 @@ public class ArticleBodyCleaner {
 			 return null;
 		 }		 
 		 content = p.matcher(content).replaceAll("\n\n");
-		 		 
-		 content = content.replaceAll("&amp;", "&");		 
-		 return StringEscapeUtils.unescapeHtml(tags.matcher(content).replaceAll(""));
+		 content = StringEscapeUtils.unescapeHtml(tags.matcher(content).replaceAll(""));
+		 
+		 content = content.replaceAll("&amp;", "&");
+		 content = content.replaceAll("&nbsp;", " ");			
+		 return content;
 	}
 
 }
