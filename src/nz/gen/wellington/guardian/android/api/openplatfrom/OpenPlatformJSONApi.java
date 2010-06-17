@@ -20,8 +20,9 @@ import android.util.Log;
 public class OpenPlatformJSONApi implements ContentSource {
 		
 	private static final String TAG = "OpenPlatformJSONApi";
-	
-	private static final String SECTIONS_JSON_URL = "http://content.guardianapis.com/sections?format=json";
+
+	private static final String API_HOST = "http://content.guardianapis.com";	
+	private static final String SECTIONS_JSON_URL = API_HOST + "/sections?format=json";
 	private static final int PAGE_SIZE = 10;	// TODO push to a preference
 	
 	private OpenPlatformApiKeyStore apiKeyStore;
@@ -49,38 +50,12 @@ public class OpenPlatformJSONApi implements ContentSource {
 		final String json = getJSON(buildContentQueryUrl(articleSet));		
 		if (json != null) {	
 			List<Article> articles = jsonParser.parseArticlesJSON(json, sections);			
-			if (articles != null) {	
-				if (jsonParser.getUserTier(json).equals("partner")) {
-					if (networkStatusService.isWifiConnection()) {
-						Log.i(TAG, "Wifi is enabled - downloading full images");
-						return getArticleMainPictureUrls(articles);
-					}
-				}
-				Log.i(TAG, "Wifi is not enabled - not downloading full images");
-				return articles;
-			}
+			return articles;			
 		}
 		return null;
 	}
 
 	
-	private List<Article> getArticleMainPictureUrls(List<Article> articles) {
-		for (Article article : articles) {
-			queryForMainPictureUrl(article);
-		}
-		return articles;
-	}
-
-
-	private void queryForMainPictureUrl(Article article) {
-		String itemApiUrl = buildContentItemQueryUrl(article.getId());
-		final String itemJson = getJSON(itemApiUrl);
-		if (itemJson != null) {
-			jsonParser.parseArticleJSONForMainPicture(itemJson, article);
-			Log.i(TAG, "Found article main picture: " + article.getMainImageUrl());
-		}
-	}
-
 	@Override
 	public List<Section> getSections() {
 		if (apiKeyStore.getApiKey() == null) {
@@ -99,6 +74,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	}
 	
 
+	// TODO this wants to move up
 	private List<Section> stripJunkSections(List<Section> sections) {
 		List<Section> goodSections = new LinkedList<Section>();
 		List<String> badSections = Arrays.asList("Community", "Crosswords", "Extra", "Help", "Info", "Local", "From the Guardian", "From the Observer", "Weather");
@@ -110,19 +86,9 @@ public class OpenPlatformJSONApi implements ContentSource {
 		return goodSections;
 	}
 
-
-	private String buildContentItemQueryUrl(String id) {
-		StringBuilder url = new StringBuilder("http://content.guardianapis.com/"); // TODO should use the apiUrl Field
-		url.append(id);
-		url.append("?show-media=all");
-		url.append("&api-key=" + apiKeyStore.getApiKey());
-		url.append("&format=json");
-		return url.toString();
-	}
-	
 	
 	protected String buildContentQueryUrl(ArticleSet articleSet) {		
-		StringBuilder url = new StringBuilder("http://content.guardianapis.com/search");
+		StringBuilder url = new StringBuilder(API_HOST + "/search");
 		url.append("?show-fields=all");
 		
 		if (articleSet instanceof SectionArticleSet) {
@@ -144,6 +110,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		url.append("&format=json");
 		return url.toString();
 	}
+	
 	
 	private String getJSON(String url) {
 		return httpFetcher.httpFetch(url);		

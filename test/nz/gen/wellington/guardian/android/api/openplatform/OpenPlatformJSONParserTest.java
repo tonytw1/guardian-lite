@@ -8,8 +8,6 @@ import java.io.Reader;
 import java.util.List;
 
 import junit.framework.TestCase;
-
-import nz.gen.wellington.guardian.android.activities.article;
 import nz.gen.wellington.guardian.android.api.openplatfrom.OpenPlatformJSONParser;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
@@ -35,15 +33,7 @@ public class OpenPlatformJSONParserTest extends TestCase {
 		assertEquals(1, first.getAuthors().size());
 	}
 		
-	
-	public void testCanParseSingleItemForMediaElement() throws Exception {
-		final String jsonString = loadContent("open-platform/article_with_media_elements.json").toString();
-		
-		parser.parseArticleJSONForMainPicture(jsonString, null);	
-		assertEquals("http://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/6/1/1275408861105/Charles-Dickens-005.jpg", null);
-	}
-	
-	
+
 	@Test
 	public void testCanParseSectionsJSON() throws Exception {
 		final String jsonString = loadContent("open-platform/sections.json").toString();		

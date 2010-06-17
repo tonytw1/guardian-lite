@@ -50,46 +50,6 @@ public class OpenPlatformJSONParser {
 		return null;		
 	}
 
-	public void parseArticleJSONForMainPicture(String jsonString, Article article) {
-		try {
-			JSONObject json = new JSONObject(jsonString);
-			if (!isResponseOk(json)) {
-				return;			
-			}
-			
-			JSONObject response = json.getJSONObject("response");
-			JSONObject content = response.getJSONObject("content");
-			
-			if (content.has("mediaAssets")) {				
-				JSONArray mediaAssets = content.getJSONArray("mediaAssets");
-			
-				// TODO better targeting.
-				if (mediaAssets.length() > 0) {
-					JSONObject first = mediaAssets.getJSONObject(0);
-					if (first.has("file") && first.has("type")) {
-						
-						if (first.getString("type").equals("picture")) {			
-							final String mainImageUrl = (String) first.getString("file");
-							article.setMainImageUrl(mainImageUrl);
-							
-							if (first.has("fields")) {
-								JSONObject fields = first.getJSONObject("fields");
-								if (fields.has("caption")) {
-									article.setCaption(fields.getString("caption"));
-								}
-							}							
-						}
-						
-					}
-				}
-			}
-			return;
-						
-		} catch (JSONException e) {
-			Log.e(TAG, "JSONException while parsing article: " + e.getMessage());
-			return;
-		}
-	}
 	
 	private Article extractArticle(JSONObject result, List<Section> sections) throws JSONException {		
 		Article article = new Article();
@@ -122,13 +82,17 @@ public class OpenPlatformJSONParser {
 				article.setThumbnailUrl(thumbnail);				
 			}
 		}
-		
+			
 		if (result.has("tags")) {
 			processTags(result, article, sections);
 		}
+		
+		if (result.has("mediaAssets")) {
+			JSONArray mediaAssets = result.getJSONArray("mediaAssets");
+			parseArticleJSONForMainPicture(mediaAssets, article);
+		}
 		return article;
 	}
-	
 	
 	
 	private void processTags(JSONObject result, Article article, List<Section> sections) throws JSONException {
@@ -178,6 +142,34 @@ public class OpenPlatformJSONParser {
 	}
 	
 	
+	public void parseArticleJSONForMainPicture(JSONArray mediaAssets, Article article) {
+		try {
+			// TODO better targeting.
+			if (mediaAssets.length() > 0) {
+				JSONObject first = mediaAssets.getJSONObject(0);
+				if (first.has("file") && first.has("type")) {
+					
+					if (first.getString("type").equals("picture")) {
+						final String mainImageUrl = (String) first.getString("file");
+						article.setMainImageUrl(mainImageUrl);
+						Log.i(TAG, "Found main picture: " + mainImageUrl);
+
+						if (first.has("fields")) {
+							JSONObject fields = first.getJSONObject("fields");
+							if (fields.has("caption")) {
+								article.setCaption(fields.getString("caption"));
+							}
+						}
+					}
+				}
+			}
+			return;
+			
+		} catch (JSONException e) {
+			Log.e(TAG, "JSONException while parsing media elements: " + e.getMessage());
+			return;
+		}
+	}
 	
 	public List<Section> parseSectionsJSON(String jsonString) {
 		try {
