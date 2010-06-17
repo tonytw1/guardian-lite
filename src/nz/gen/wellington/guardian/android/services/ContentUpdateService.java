@@ -2,7 +2,6 @@ package nz.gen.wellington.guardian.android.services;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.main;
-import nz.gen.wellington.guardian.android.activities.sync;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import android.app.Notification;

@@ -13,7 +13,6 @@ import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
-import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.content.Context;
 import android.util.Log;
 
@@ -27,7 +26,6 @@ public class OpenPlatformJSONApi implements ContentSource {
 	
 	private OpenPlatformApiKeyStore apiKeyStore;
 	private HttpFetcher httpFetcher;
-	private NetworkStatusService networkStatusService;
 	protected OpenPlatformJSONParser jsonParser;
 	
 	
@@ -35,7 +33,6 @@ public class OpenPlatformJSONApi implements ContentSource {
 		this.apiKeyStore = apiKeyStore;
 		httpFetcher = new HttpFetcher(context);		
 		jsonParser = new  OpenPlatformJSONParser();
-		networkStatusService = new NetworkStatusService(context);
 	}
 
 	
@@ -77,7 +74,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	// TODO this wants to move up
 	private List<Section> stripJunkSections(List<Section> sections) {
 		List<Section> goodSections = new LinkedList<Section>();
-		List<String> badSections = Arrays.asList("Community", "Crosswords", "Extra", "Help", "Info", "Local", "From the Guardian", "From the Observer", "Weather");
+		List<String> badSections = Arrays.asList("Community", "Crosswords", "Extra", "Help", "Info", "Local", "From the Guardian", "From the Observer", "News", "Weather");
 		for (Section section : sections) {
 			if (!badSections.contains(section.getName())) {
 				goodSections.add(section);				

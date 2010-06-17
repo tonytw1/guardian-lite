@@ -5,8 +5,12 @@ import nz.gen.wellington.guardian.android.activities.ui.ListKeywordClicker;
 import nz.gen.wellington.guardian.android.activities.ui.SectionClicker;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.api.caching.FileService;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
+import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -97,21 +101,45 @@ public class article extends Activity {
 	    	authorList.addView(vi);
 		}
 		
+		NetworkStatusService networkStatusService = new NetworkStatusService(this);
+		populateTags(article, inflater, networkStatusService.isConnectionAvailable());
+	}
+
+
+	private void populateTags(Article article, LayoutInflater inflater, boolean connectionIsAvailable) {
+		
 		LinearLayout tagList = (LinearLayout) findViewById(R.id.TagList);
 		for (Tag tag : article.getKeywords()) {
-			View vi = inflater.inflate(R.layout.authorslist, null);			  
-			TextView titleText = (TextView) vi.findViewById(R.id.TagName);
+			boolean isLocallyCached = false;
+			if (tag.isSectionTag()) {
+				isLocallyCached = FileService.isLocallyCached(this.getApplicationContext(), new SectionArticleSet(tag.getSection()).getApiUrl());
+			} else {
+				isLocallyCached = FileService.isLocallyCached(this.getApplicationContext(), new KeywordArticleSet(tag).getApiUrl());
+			}
+			
+			View tagView = inflater.inflate(R.layout.authorslist, null);			  
+			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
 	    	titleText.setText(tag.getName());
 	    	
-	    	if (tag.isSectionTag()) {
-	    		SectionClicker clicker = new SectionClicker(tag.getSection());
-	    		vi.setOnClickListener(clicker);	    		
+	    	boolean contentIsAvailable = isLocallyCached || connectionIsAvailable;
+	    	if (contentIsAvailable) {
+	    		populateTagClicker(tag, tagView);
 	    	} else {
-	    		ListKeywordClicker clicker = new ListKeywordClicker(tag);
-	    		vi.setOnClickListener(clicker);
-	    	}	
-	    	tagList.addView(vi);
-		}				
+	    		titleText.setTextColor(Color.DKGRAY);
+	    	}
+	    	tagList.addView(tagView);
+		}
+	}
+
+
+	private void populateTagClicker(Tag tag, View tagView) {
+		if (tag.isSectionTag()) {
+			SectionClicker clicker = new SectionClicker(tag.getSection());
+			tagView.setOnClickListener(clicker);	    		
+		} else {
+			ListKeywordClicker clicker = new ListKeywordClicker(tag);
+			tagView.setOnClickListener(clicker);
+		}
 	}
 
 
@@ -121,9 +149,9 @@ public class article extends Activity {
 			imageView.setImageBitmap(bitmap);
 			TextView caption = (TextView) findViewById(R.id.Caption);
 			caption.setText(article.getCaption());
-
+			
 			imageView.setVisibility(View.VISIBLE);
-			caption.setVisibility(View.VISIBLE);    			
+			caption.setVisibility(View.VISIBLE);
 		}
 	}
 	
