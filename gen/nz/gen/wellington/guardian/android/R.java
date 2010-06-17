@@ -16,7 +16,7 @@ public final class R {
     }
     public static final class id {
         public static final int ArticleImage=0x7f060007;
-        public static final int ArticleListLayout=0x7f060014;
+        public static final int ArticleListLayout=0x7f060015;
         public static final int AuthorList=0x7f06000d;
         public static final int Byline=0x7f06000a;
         public static final int Caption=0x7f060008;
@@ -29,10 +29,10 @@ public final class R {
         public static final int Headline=0x7f060005;
         public static final int LinearLayout01=0x7f060000;
         public static final int LinearLayout02=0x7f060004;
-        public static final int LinearLayout03=0x7f060013;
-        public static final int MainPane=0x7f060015;
+        public static final int LinearLayout03=0x7f060014;
+        public static final int MainPane=0x7f060011;
         public static final int PubDate=0x7f06000b;
-        public static final int Pubdate=0x7f060012;
+        public static final int Pubdate=0x7f060013;
         public static final int ScrollView01=0x7f060003;
         public static final int SectionImage=0x7f060017;
         public static final int SectionName=0x7f060018;
@@ -44,7 +44,7 @@ public final class R {
         public static final int TagList=0x7f06000e;
         public static final int TagName=0x7f06000f;
         public static final int TextView01=0x7f060009;
-        public static final int TrailImage=0x7f060011;
+        public static final int TrailImage=0x7f060012;
         public static final int buttonStart=0x7f06001a;
     }
     public static final class layout {
@@ -52,13 +52,14 @@ public final class R {
         public static final int author=0x7f030001;
         public static final int authorslist=0x7f030002;
         public static final int favourite=0x7f030003;
-        public static final int featurelist=0x7f030004;
-        public static final int list=0x7f030005;
-        public static final int main=0x7f030006;
-        public static final int sections=0x7f030007;
-        public static final int sectionslist=0x7f030008;
-        public static final int seperator=0x7f030009;
-        public static final int sync=0x7f03000a;
+        public static final int favourites=0x7f030004;
+        public static final int featurelist=0x7f030005;
+        public static final int list=0x7f030006;
+        public static final int main=0x7f030007;
+        public static final int sections=0x7f030008;
+        public static final int sectionslist=0x7f030009;
+        public static final int seperator=0x7f03000a;
+        public static final int sync=0x7f03000b;
     }
     public static final class string {
         public static final int app_name=0x7f050000;

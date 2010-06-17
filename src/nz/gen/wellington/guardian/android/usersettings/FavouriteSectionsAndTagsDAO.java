@@ -32,19 +32,19 @@ public class FavouriteSectionsAndTagsDAO {
 	}
 	
 	private void addFavouriteTag(List<Tag> favouriteTags, String tagId) {
-		Tag tag = new Tag("Environment", "environment/oil-spills", new Section("Environment", "BP oil spill", "#FFFF00"));
-		Tag tag3 = new Tag("lifeandstyle", "lifeandstyle/cycling", new Section("lifeandstyle", "Cycling3", "#FFFF00"));
-		Tag tag2 = new Tag("Politics", "politics/vincentcable", new Section("politics", "Politics", "#FFFF00"));
-
-		Tag tag4 = new Tag("Sport", "football/vuvuzelas", new Section("sport", "Sport", "#FFFF00"));
-
-		
+		Tag tag = new Tag("BP oil spill", "environment/bp-oil-spill", new Section("environment", "Environment", "#FF0000"));
+		Tag tag2 = new Tag("Vince Cable", "politics/vincentcable", new Section("politics", "Politics", "#FF0000"));
+		Tag tag3 = new Tag("Cycling", "lifeandstyle/cycling", new Section("lifeandstyle", "Life and style", "#FF0000"));
+		Tag tag4 = new Tag("Vuvuzelas", "football/vuvuzelas", new Section("sport", "Sport", "#FF0000"));
+		Tag tag5 = new Tag("Helen Pidd", "profile/helenpidd", new Section("global", "Global", "#FF0000"));
 		
 		if (tag != null) {
 			favouriteTags.add(tag);
 			favouriteTags.add(tag2);
 			favouriteTags.add(tag3);
 			favouriteTags.add(tag4);
+			favouriteTags.add(tag5);
+
 
 		}
 	}

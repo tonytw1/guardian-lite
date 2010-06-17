@@ -1,5 +1,7 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.List;
+
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ListKeywordClicker;
 import nz.gen.wellington.guardian.android.activities.ui.SectionClicker;
@@ -17,6 +19,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -91,25 +94,16 @@ public class article extends Activity {
     	}
         
 		LayoutInflater inflater = LayoutInflater.from(this);		
-		LinearLayout authorList = (LinearLayout) findViewById(R.id.AuthorList);
-		for (Tag tag : article.getAuthors()) {
-			View vi = inflater.inflate(R.layout.authorslist, null);			  
-			TextView titleText = (TextView) vi.findViewById(R.id.TagName);
-	    	titleText.setText(tag.getName());
-	    	ListKeywordClicker urlListener = new ListKeywordClicker(tag);
-	    	vi.setOnClickListener(urlListener);
-	    	authorList.addView(vi);
-		}
-		
 		NetworkStatusService networkStatusService = new NetworkStatusService(this);
-		populateTags(article, inflater, networkStatusService.isConnectionAvailable());
+		
+		final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
+		populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), article.getAuthors());
+		populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.TagList), article.getKeywords());
 	}
 
 
-	private void populateTags(Article article, LayoutInflater inflater, boolean connectionIsAvailable) {
-		
-		LinearLayout tagList = (LinearLayout) findViewById(R.id.TagList);
-		for (Tag tag : article.getKeywords()) {
+	private void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<Tag> tags) {		
+		for (Tag tag : tags) {
 			boolean isLocallyCached = false;
 			if (tag.isSectionTag()) {
 				isLocallyCached = FileService.isLocallyCached(this.getApplicationContext(), new SectionArticleSet(tag.getSection()).getApiUrl());
@@ -117,7 +111,7 @@ public class article extends Activity {
 				isLocallyCached = FileService.isLocallyCached(this.getApplicationContext(), new KeywordArticleSet(tag).getApiUrl());
 			}
 			
-			View tagView = inflater.inflate(R.layout.authorslist, null);			  
+			View tagView = inflater.inflate(R.layout.authorslist, null);		  
 			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
 	    	titleText.setText(tag.getName());
 	    	
@@ -131,7 +125,7 @@ public class article extends Activity {
 		}
 	}
 
-
+	
 	private void populateTagClicker(Tag tag, View tagView) {
 		if (tag.isSectionTag()) {
 			SectionClicker clicker = new SectionClicker(tag.getSection());
