@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedSectionCache;
+import nz.gen.wellington.guardian.android.api.caching.FileService;
 import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -115,6 +116,10 @@ public class ArticleDAO {
 	public void evictSections() {
 		sectionCache.clear();
 		fileBasedSectionCache.clear();
+	}
+	
+	public void clearExpiredCacheFiles(Context context) {
+		FileService.clearExpiredCacheFiles(context);
 	}
 	
 	public void evictAll() {

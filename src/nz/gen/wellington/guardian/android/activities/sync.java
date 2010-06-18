@@ -9,6 +9,7 @@ import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
+import nz.gen.wellington.guardian.android.services.PurgeExpiredContentTask;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
 import nz.gen.wellington.guardian.android.services.UpdateTagArticlesTask;
@@ -88,7 +89,8 @@ public class sync extends Activity implements OnClickListener {
 			Log.i(TAG, "Injecting update top stories task onto queue");
 			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this);
 			taskQueue.addArticleTask(new UpdateTopStoriesTask(articleDAO, this));	// TODO content update service should do this.
-			
+			taskQueue.addArticleTask(new PurgeExpiredContentTask(this));	// TODO content update service should do this.
+
 			Intent start = new Intent(ContentUpdateService.CONTROL);
 			start.putExtra("command", "start");
 			this.sendBroadcast(start);

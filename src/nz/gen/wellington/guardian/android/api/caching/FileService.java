@@ -45,13 +45,10 @@ public class FileService {
 		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
 		Log.i(TAG, "Checking mod time for file at: " + localFile.getAbsolutePath());
 		if (localFile.exists()) {
-			DateTime modTime = new DateTime(localFile.lastModified());
-			Log.i(TAG, "Mod time is: " + modTime.toString());
-			return modTime;
+			return calculateFileModTime(localFile);
 		}
 		return null;
 	}
-	
 	
 	public static String getLocalFilename(String url) {
 		return url.replaceAll("/", "").replaceAll(":", "");
@@ -89,6 +86,19 @@ public class FileService {
 	}
 
 	
+	public static void clearExpiredCacheFiles(Context context) {
+		Log.i(TAG, "Clearing all article set cache files more than 24 hours old");
+		FileFilter jsonFilesFilter = new FileFilter() {				
+			@Override
+			public boolean accept(File file) {
+				return calculateFileModTime(file).isBefore(new DateTime().minusDays(1));
+			}
+		};
+		deleteFiles(context, jsonFilesFilter);
+	}
+	
+	
+	
 	private static void deleteFiles(Context context, FileFilter jsonFilesFilter) {		
 		File cacheDir = getCacheDir(context);
 		if (cacheDir == null) {
@@ -111,7 +121,7 @@ public class FileService {
 	}
 	
 	// TODO make a preference - only use external if installed - external is the SD card right?
-	private static File getCacheDir(Context context) {
+	protected static File getCacheDir(Context context) {
 		
 		final int cacheLocation = INTERNAL_CACHE;
 		switch (cacheLocation) {
@@ -126,7 +136,13 @@ public class FileService {
 			return context.getCacheDir();
 		}
 	}
-
+	
+	private static DateTime calculateFileModTime(File localFile) {
+		DateTime modTime = new DateTime(localFile.lastModified());
+		Log.i(TAG, "Mod time is: " + modTime.toString() + " for: " + localFile.getAbsolutePath());
+		return modTime;
+	}
+	
 	private static File getExternalSDCardCacheFolder(String folderPath) {
 		File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + folderPath);
 		if ( folder.exists()) {
