@@ -3,7 +3,7 @@
       android:versionCode="1"
       android:versionName="1.0" package="nz.gen.wellington.guardian.android">
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:permission="android.permission.INTERNET" android:debuggable="true">
-        <activity android:label="@string/app_name" android:name=".activities.main">
+        <activity android:label="@string/app_name" android:name=".activities.main" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -14,18 +14,18 @@
     		</intent-filter>
 		</activity>
 
-		<activity android:label="Sections" android:name=".activities.sections">
+		<activity android:label="Sections" android:name=".activities.sections" android:screenOrientation="portrait">
 			<intent-filter>
 			</intent-filter>
 		</activity>
-<activity android:name=".activities.section"><intent-filter></intent-filter>
+<activity android:name=".activities.section" android:screenOrientation="portrait"><intent-filter></intent-filter>
 </activity>
-<activity android:name=".activities.author"></activity>
-<activity android:name=".activities.sync"></activity>
+<activity android:name=".activities.author" android:screenOrientation="portrait"></activity>
+<activity android:name=".activities.sync" android:screenOrientation="portrait"></activity>
 <service android:name=".services.ContentUpdateService" android:enabled="true"></service>
-<activity android:name=".activities.keyword"></activity>
-<activity android:name=".activities.perferences"></activity>
-<activity android:name=".activities.favourites"></activity>
+<activity android:name=".activities.keyword" android:screenOrientation="portrait"></activity>
+<activity android:name=".activities.perferences" android:screenOrientation="portrait"></activity>
+<activity android:name=".activities.favourites" android:screenOrientation="portrait"></activity>
 </application>
     <uses-sdk android:minSdkVersion="3" />
 

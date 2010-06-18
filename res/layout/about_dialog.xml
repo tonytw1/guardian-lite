@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+<LinearLayout android:id="@+id/LinearLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+<TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Developed by Tony McCrae. Content provided by the Guardian Open Platform." android:paddingLeft="10px" android:paddingRight="10px"></TextView>
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/GuardianLogo" android:paddingLeft="10px" android:paddingRight="10px"></ImageView>
+</LinearLayout>
+</LinearLayout>

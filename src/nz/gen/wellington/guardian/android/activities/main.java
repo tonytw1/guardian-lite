@@ -10,11 +10,13 @@ import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 
 import org.joda.time.DateTime;
 
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class main extends ArticleListActivity {
@@ -61,6 +63,7 @@ public class main extends ArticleListActivity {
 	    menu.add(0, 2, 0, "Sections");
 	    menu.add(0, 3, 0, "Sync");
 	    menu.add(0, 4, 0, "Settings");
+	    menu.add(0, 5, 0, "About");
 	    return true;
 	}
 	
@@ -79,10 +82,21 @@ public class main extends ArticleListActivity {
 	    case 4:
 	    	switchToPreferences();
 	    	return true;
+	    case 5:
+	    	showAbout();
 	    }
 	    return false;
 	}
 
+
+	private void showAbout() {
+		Dialog dialog = new Dialog(this);
+		dialog.setContentView(R.layout.about_dialog);
+		ImageView image = (ImageView) dialog.findViewById(R.id.GuardianLogo);
+		image.setImageResource(R.drawable.poweredbyguardian);		
+		dialog.setTitle("Open Guardian");
+		dialog.show();
+	}
 
 	private void swichToSync() {
 		Intent intent = new Intent(this, sync.class);
