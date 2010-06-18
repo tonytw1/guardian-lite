@@ -9,14 +9,10 @@ public class NetworkStatusService {
 	
 	private static final String TAG = "NetworkStatusService";
 	
-	Context context;
-		
-	public NetworkStatusService(Context context) {
-		this.context = context;
-	}
+
 
 	
-	public boolean isConnectionAvailable() {
+	public static boolean isConnectionAvailable(Context context) {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		if (activeNetworkInfo != null) {
@@ -29,7 +25,7 @@ public class NetworkStatusService {
 	}
 	
 	
-	public boolean isWifiConnection() {
+	public static boolean isWifiConnection(Context context) {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		if (activeNetworkInfo == null) {
