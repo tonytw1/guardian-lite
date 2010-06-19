@@ -26,7 +26,7 @@ public class author extends ArticleListActivity {
 
 	@Override
 	protected List<Article> loadArticles() {
-		return ArticleDAOFactory.getDao(this.getApplicationContext()).getAuthorItems(author);
+		return articleDAO.getAuthorItems(author);
 	}
 	
 		

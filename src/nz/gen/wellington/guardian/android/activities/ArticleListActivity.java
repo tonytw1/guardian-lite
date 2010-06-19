@@ -41,6 +41,8 @@ public abstract class ArticleListActivity extends Activity {
 	UpdateArticlesRunner updateArticlesRunner;
 	List<Article> articles;
 	Map<String, View> viewsWaitingForTrailImages;
+	protected ArticleDAO articleDAO;
+	protected ImageDAO imageDAO;
 
 	boolean showSeperators = false;
 	boolean showMainImage = true;
@@ -51,6 +53,8 @@ public abstract class ArticleListActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 		viewsWaitingForTrailImages = new HashMap<String, View>();
+		articleDAO = ArticleDAOFactory.getDao(this);
+		imageDAO = ArticleDAOFactory.getImageDao(this);
 	}
 	
 	
@@ -73,7 +77,7 @@ public abstract class ArticleListActivity extends Activity {
 	
 	
 	protected void populateArticles() {
-		updateArticlesRunner = new UpdateArticlesRunner(ArticleDAOFactory.getDao(this), ArticleDAOFactory.getImageDao(this));
+		updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO);
 		Thread loader = new Thread(updateArticlesRunner);
 		loader.start();
 		Log.d("UpdateArticlesHandler", "Loader started");		
@@ -81,8 +85,8 @@ public abstract class ArticleListActivity extends Activity {
 
 	
 	@Override
-	protected void onStop() {
-		super.onStop();
+	protected void onPause() {
+		super.onPause();
 		Log.d(TAG, "On stop - want to halt any running threads");
 		updateArticlesRunner.stop();
 		Log.d(TAG, "Loader stopped");
@@ -204,7 +208,7 @@ public abstract class ArticleListActivity extends Activity {
 			    		if( viewsWaitingForTrailImages.containsKey(id)) {
 			    			View view = viewsWaitingForTrailImages.get(id);
 			    			ImageView trialImage = (ImageView) view.findViewById(R.id.TrailImage);
-			    			Bitmap image = ArticleDAOFactory.getImageDao(context).getImage(url);
+			    			Bitmap image = imageDAO.getImage(url);
 			    			trialImage.setImageBitmap(image);
 			    			trialImage.setVisibility(View.VISIBLE);
 			    			viewsWaitingForTrailImages.remove(id);
@@ -226,7 +230,7 @@ public abstract class ArticleListActivity extends Activity {
 		private View choiceTrailView(LayoutInflater mInflater, boolean first,
 				Article article) {
 			View view;
-			boolean shouldUseFeatureTrail = showMainImage && first && article.getMainImageUrl() != null && ArticleDAOFactory.getImageDao(context).isAvailableLocally(article.getMainImageUrl());
+			boolean shouldUseFeatureTrail = showMainImage && first && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
 			if (shouldUseFeatureTrail) {
 				view = mInflater.inflate(R.layout.featurelist, null);
 			} else {				
@@ -362,6 +366,7 @@ public abstract class ArticleListActivity extends Activity {
 
 		public void stop() {
 			this.running = false;
+			articleDAO.stopLoading();
 		}
 	}
 	

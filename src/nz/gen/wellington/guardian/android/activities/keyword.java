@@ -28,6 +28,6 @@ public class keyword extends ArticleListActivity {
 	
 	@Override
 	protected List<Article> loadArticles() {
-		return ArticleDAOFactory.getDao(this.getApplicationContext()).getKeywordItems(keyword);
+		return articleDAO.getKeywordItems(keyword);
 	}
 }

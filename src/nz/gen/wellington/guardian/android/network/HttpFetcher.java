@@ -20,7 +20,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.HttpEntityWrapper;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
@@ -38,12 +37,15 @@ public class HttpFetcher {
     
 	HttpClient client;
 	Context context;
+	private boolean running;
 	
 	private static final String TAG = "HttpFetcher";
 
 	
 	public HttpFetcher(Context context) {
 		this.context =context;
+		running = true;
+
 		client = new DefaultHttpClient();
 		((AbstractHttpClient) client)
 		.addRequestInterceptor(new HttpRequestInterceptor() {
@@ -80,13 +82,13 @@ public class HttpFetcher {
 	}
 
 
-	public String httpFetch(String uri) {				
+	public String httpFetch(String uri) {
 		try {
 			Log.i(TAG, "Making http fetch of: " + uri);						
 			HttpGet get = new HttpGet(uri);	
 			
-			get.addHeader(new BasicHeader("User-agent", "gzip"));
-			get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
+			//get.addHeader(new BasicHeader("User-agent", "gzip"));
+			//get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
 			
 			HttpResponse execute = client.execute(get);			
 			if (execute.getStatusLine().getStatusCode() == 200) {
@@ -100,18 +102,23 @@ public class HttpFetcher {
 				
 				int totalRead = 0;
 				int read;
-				final char[] buffer = new char[4096];
+				final char[] buffer = new char[512];
 				do {
 				  read = in.read(buffer, 0, buffer.length);
-				  if (read>0) {
+				  if (read>0 && running) {
 					  totalRead = totalRead + read;
+					  Log.d(TAG, "Read: " + totalRead + running + this);
 					  announceProgress(uri, contentLength, totalRead);											
 					  out.append(buffer, 0, read);
 				  }
-				} while (read>=0);
+				} while (read >= 0 && running);
+				in.close();
+				is.close();
 				
-				announceDownloadCompleted(uri);
-				return out.toString();			
+				if (running) {
+					announceDownloadCompleted(uri);
+					return out.toString();			
+				}
 			}
 			return null;
 			
@@ -172,7 +179,6 @@ public class HttpFetcher {
 
             // the wrapped entity's getContent() decides about repeatability
             InputStream wrappedin = wrappedEntity.getContent();
-
             return new GZIPInputStream(wrappedin);
         }
 
@@ -180,7 +186,16 @@ public class HttpFetcher {
         public long getContentLength() {
             return this.wrappedEntity.getContentLength();
         }
-    } 
+    }
+
+
+
+	public void stopLoading() {
+		Log.i(TAG, "Stopping loading");
+		// TODO Auto-generated method stub
+		running = false;
+		Log.i(TAG, "Stopping loading: " + running + this);
+	} 
 
 
 }

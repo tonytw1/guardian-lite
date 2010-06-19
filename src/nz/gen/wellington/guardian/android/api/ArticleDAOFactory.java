@@ -8,16 +8,12 @@ import android.preference.PreferenceManager;
 
 public class ArticleDAOFactory {
 
-	private static ArticleDAO dao;
 	private static TaskQueue taskQueue;
 	private static ImageDAO imageDAO;
 	private static OpenPlatformApiKeyStore apiKeyStore;
 	
 	public static ArticleDAO getDao(Context context) {
-		if (dao == null) {
-			dao = new ArticleDAO(context);
-		}
-		return dao;		
+		return new ArticleDAO(context);	
 	}
 	
 	public static ContentSource getOpenPlatformApi(Context context) {

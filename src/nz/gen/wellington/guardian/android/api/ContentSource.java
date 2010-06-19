@@ -15,5 +15,6 @@ public interface ContentSource {
 
 	public List<Section> getSections();
 	List<Article> getArticles(ArticleSet articleSet, List<Section> sections);
+	public void stopLoading();
 
 }

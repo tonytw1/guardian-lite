@@ -23,7 +23,7 @@ public class section extends ArticleListActivity {
 
 	@Override
 	protected List<Article> loadArticles() {
-		return ArticleDAOFactory.getDao(this.getApplicationContext()).getSectionItems(section);
+		return articleDAO.getSectionItems(section);
 	}
 	
 }

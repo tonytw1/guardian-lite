@@ -36,6 +36,16 @@ public class OpenPlatformJSONApi implements ContentSource {
 	}
 
 	
+	
+	
+	@Override
+	public void stopLoading() {
+		httpFetcher.stopLoading();
+	}
+
+
+
+
 	@Override
 	public List<Article> getArticles(ArticleSet articleSet, List<Section> sections) {
 		if (apiKeyStore.getApiKey() == null) {

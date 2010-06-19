@@ -143,5 +143,11 @@ public class ArticleDAO {
 	public DateTime getModificationTime(ArticleSet articleSet) {
 		return fileBasedArticleCache.getModificationTime(articleSet);
 	}
+
+
+	public void stopLoading() {
+		Log.i(TAG, "Stopping loading");
+		openPlatformApi.stopLoading();
+	}
 		
 }
