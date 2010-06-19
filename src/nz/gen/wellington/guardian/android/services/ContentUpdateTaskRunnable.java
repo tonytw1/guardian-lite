@@ -6,5 +6,6 @@ public interface ContentUpdateTaskRunnable extends Runnable {
 
 	public void setReport(ContentUpdateReport report);
 	public String getTaskName();
+	public void stop();
 	
 }

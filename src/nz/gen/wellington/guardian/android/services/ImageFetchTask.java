@@ -25,7 +25,11 @@ public class ImageFetchTask implements ContentUpdateTaskRunnable {
 			report.setImageCount(report.getImageCount()+1);
 		}
 	}
-
+	
+	@Override
+	public void stop() {
+		// TODO
+	}
 	
 	@Override
 	public String getTaskName() {

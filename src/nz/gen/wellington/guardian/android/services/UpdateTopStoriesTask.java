@@ -62,6 +62,10 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 		Log.i(TAG, "Done");
 	}
 	
+	@Override
+	public void stop() {
+		// TODO
+	}
 	
 	@Override
 	public String getTaskName() {

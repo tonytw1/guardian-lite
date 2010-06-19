@@ -17,15 +17,16 @@ public class UpdateSectionArticlesTask implements ContentUpdateTaskRunnable {
 	private Section section;
 	private Context context;
 	private ContentUpdateReport report;
+	private ArticleDAO articleDAO;
 	
 	public UpdateSectionArticlesTask(Section section, Context context) {
 		this.section = section;
 		this.context = context;
+		this.articleDAO = ArticleDAOFactory.getDao(context);
 	}
 
 	@Override
 	public void run() {
-		ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
 		articleDAO.evictArticleSet(new SectionArticleSet(section));
 		Log.i(TAG, "Fetching section articles: " + section.getName());
 		List<Article> sectionItems = articleDAO.getSectionItems(section);
@@ -39,7 +40,12 @@ public class UpdateSectionArticlesTask implements ContentUpdateTaskRunnable {
 		report.setSectionCount(report.getSectionCount()+1);
 	}
 	
-	
+	@Override
+	public void stop() {
+		Log.i(TAG, "Stopping");
+		articleDAO.stopLoading();
+	}
+
 	@Override
 	public String getTaskName() {
 		return "Fetching articles for section: " + section.getName();

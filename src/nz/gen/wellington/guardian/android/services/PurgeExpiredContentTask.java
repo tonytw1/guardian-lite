@@ -19,7 +19,11 @@ public class PurgeExpiredContentTask implements ContentUpdateTaskRunnable {
 		ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
 		articleDAO.clearExpiredCacheFiles(context);
 	}
-
+	
+	@Override
+	public void stop() {
+		// TODO
+	}
 	
 	@Override
 	public String getTaskName() {

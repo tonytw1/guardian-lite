@@ -4,6 +4,7 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.main;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -36,6 +37,7 @@ public class ContentUpdateService extends Service {
     private TaskQueue taskQueue;
     private Runnable internalRunnable;
     private ContentUpdateReport report;
+	private ContentUpdateTaskRunnable currentTask;
    
     
     @Override
@@ -62,17 +64,23 @@ public class ContentUpdateService extends Service {
     private void internalRun() {
     	
     	while(running) {    		
-    		ContentUpdateTaskRunnable task = getNextTask();    		
-    		announceTaskBeginning(task);
-    		task.setReport(report);    		
-    		task.run();
-    		taskQueue.remove(task);    		
-    		announceTaskCompletion(task);
+    		ContentUpdateTaskRunnable task = getNextTask();
+    		if (NetworkStatusService.isConnectionAvailable(this)) {
+    			announceTaskBeginning(task);
+    			task.setReport(report);
+    			currentTask = task;
+    			task.run();
+    			taskQueue.remove(task);    		
+    			announceTaskCompletion(task);
+    			
+    		} else {
+    			Log.i(TAG, "Not running update task as network is not available");
+    		}
     		
     		if (taskQueue.isEmpty()) {
-    			sendNotification(report);
-    			running = false;
-    			announceBatchFinished();
+    		sendNotification(report);
+    		running = false;
+    		announceBatchFinished();
  			}
     	}
     	
@@ -101,16 +109,11 @@ public class ContentUpdateService extends Service {
 
 	private void stop() {
 		Log.i(TAG, "Starting stop");
-		running = false;	
+		running = false;
+		if (currentTask != null) {
+			currentTask.stop();
+		}
 		taskQueue.clear();
-	}
-
-
-	@Override
-	public void onDestroy() {
-		Log.i(TAG, "Stopping content update service");
-		// TODO wait for thread to stop correctly
-		super.onDestroy();
 	}
 
 	
