@@ -8,6 +8,10 @@
 package nz.gen.wellington.guardian.android;
 
 public final class R {
+    public static final class array {
+        public static final int cacheLocationOptionLabels=0x7f050000;
+        public static final int cacheLocationOptionValues=0x7f050001;
+    }
     public static final class attr {
     }
     public static final class drawable {
@@ -17,40 +21,40 @@ public final class R {
         public static final int poweredbyguardian=0x7f020003;
     }
     public static final class id {
-        public static final int ArticleImage=0x7f06000a;
-        public static final int ArticleListLayout=0x7f060018;
-        public static final int AuthorList=0x7f060010;
-        public static final int Byline=0x7f06000d;
-        public static final int Caption=0x7f06000b;
-        public static final int CurrentTask=0x7f06001f;
-        public static final int Description=0x7f06000f;
-        public static final int DownloadProgress=0x7f060020;
-        public static final int Favourite=0x7f060013;
-        public static final int GuardianLogo=0x7f060002;
-        public static final int Heading=0x7f060005;
-        public static final int HeadingLayout=0x7f060004;
-        public static final int Headline=0x7f060008;
-        public static final int KingsPlace=0x7f060000;
-        public static final int LinearLayout01=0x7f060003;
-        public static final int LinearLayout02=0x7f060007;
-        public static final int LinearLayout03=0x7f060017;
-        public static final int MainPane=0x7f060014;
-        public static final int PubDate=0x7f06000e;
-        public static final int Pubdate=0x7f060016;
-        public static final int ScrollView01=0x7f060006;
-        public static final int SectionImage=0x7f06001a;
-        public static final int SectionName=0x7f06001b;
-        public static final int SectionsListView=0x7f060019;
-        public static final int Seperator=0x7f06001c;
-        public static final int Standfirst=0x7f060009;
-        public static final int Status=0x7f06001e;
-        public static final int StopDownloadButton=0x7f060021;
-        public static final int TagList=0x7f060011;
-        public static final int TagName=0x7f060012;
-        public static final int TextView01=0x7f06000c;
-        public static final int TextView02=0x7f060001;
-        public static final int TrailImage=0x7f060015;
-        public static final int buttonStart=0x7f06001d;
+        public static final int ArticleImage=0x7f07000a;
+        public static final int ArticleListLayout=0x7f070018;
+        public static final int AuthorList=0x7f070010;
+        public static final int Byline=0x7f07000d;
+        public static final int Caption=0x7f07000b;
+        public static final int CurrentTask=0x7f07001f;
+        public static final int Description=0x7f07000f;
+        public static final int DownloadProgress=0x7f070020;
+        public static final int Favourite=0x7f070013;
+        public static final int GuardianLogo=0x7f070002;
+        public static final int Heading=0x7f070005;
+        public static final int HeadingLayout=0x7f070004;
+        public static final int Headline=0x7f070008;
+        public static final int KingsPlace=0x7f070000;
+        public static final int LinearLayout01=0x7f070003;
+        public static final int LinearLayout02=0x7f070007;
+        public static final int LinearLayout03=0x7f070017;
+        public static final int MainPane=0x7f070014;
+        public static final int PubDate=0x7f07000e;
+        public static final int Pubdate=0x7f070016;
+        public static final int ScrollView01=0x7f070006;
+        public static final int SectionImage=0x7f07001a;
+        public static final int SectionName=0x7f07001b;
+        public static final int SectionsListView=0x7f070019;
+        public static final int Seperator=0x7f07001c;
+        public static final int Standfirst=0x7f070009;
+        public static final int Status=0x7f07001e;
+        public static final int StopDownloadButton=0x7f070021;
+        public static final int TagList=0x7f070011;
+        public static final int TagName=0x7f070012;
+        public static final int TextView01=0x7f07000c;
+        public static final int TextView02=0x7f070001;
+        public static final int TrailImage=0x7f070015;
+        public static final int buttonStart=0x7f07001d;
     }
     public static final class layout {
         public static final int about_dialog=0x7f030000;
@@ -68,7 +72,7 @@ public final class R {
         public static final int sync=0x7f03000c;
     }
     public static final class string {
-        public static final int app_name=0x7f050000;
+        public static final int app_name=0x7f060000;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;

@@ -42,7 +42,7 @@ public class perferences extends PreferenceActivity {
 			Log.i("PreferenceActivity", "Preference has been updated: " + preference.getKey());
 			if (preference.getKey().equals("apikey")) {
 				final String newApiKey = (String) newValue;
-				ArticleDAOFactory.getOpenPlatformApiKeyStore(preference.getContext().getApplicationContext()).setApiKey(newApiKey);								
+				ArticleDAOFactory.getOpenPlatformApiKeyStore(preference.getContext().getApplicationContext()).setApiKey(newApiKey);		// TODO is this still required?						
 			}
 			return true;
 		}

@@ -9,7 +9,9 @@ import java.io.FileOutputStream;
 import org.joda.time.DateTime;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class FileService {
@@ -120,10 +122,10 @@ public class FileService {
 		}
 	}
 	
-	// TODO make a preference - only use external if installed - external is the SD card right?
-	protected static File getCacheDir(Context context) {
-		
-		final int cacheLocation = INTERNAL_CACHE;
+	
+	protected static File getCacheDir(Context context) {				
+		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
+		final int cacheLocation = Integer.parseInt(prefs.getString("cacheLocation", Integer.toString(INTERNAL_CACHE)));		
 		switch (cacheLocation) {
 		case INTERNAL_CACHE:
 			return context.getCacheDir();
@@ -136,6 +138,7 @@ public class FileService {
 			return context.getCacheDir();
 		}
 	}
+	
 	
 	private static DateTime calculateFileModTime(File localFile) {
 		DateTime modTime = new DateTime(localFile.lastModified());

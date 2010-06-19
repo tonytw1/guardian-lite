@@ -1,0 +1,12 @@
+<resources>
+<string-array name="cacheLocationOptionLabels"><item>Internal memory</item>
+<item>SD card (/sdcard)</item>
+<item>i7500 external SD Card (/sdcard/sd)</item>
+</string-array>
+
+<string-array name="cacheLocationOptionValues">
+<item>1</item>
+<item>2</item>
+<item>3</item>
+</string-array>
+</resources>
