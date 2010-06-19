@@ -53,7 +53,7 @@ public class main extends ArticleListActivity {
 	
 	@Override
 	protected List<Article> loadArticles() {
-		List<Article> topStories = ArticleDAOFactory.getDao(this.getApplicationContext()).getTopStories();
+		List<Article> topStories = articleDAO.getTopStories();
 		this.loaded = new DateTime();
 		return topStories;
 	}
@@ -92,6 +92,9 @@ public class main extends ArticleListActivity {
 	private void showAbout() {
 		Dialog dialog = new Dialog(this);
 		dialog.setContentView(R.layout.about_dialog);
+		ImageView heading = (ImageView) dialog.findViewById(R.id.KingsPlace);
+		heading.setImageResource(R.drawable.kingsplace);
+		
 		ImageView image = (ImageView) dialog.findViewById(R.id.GuardianLogo);
 		image.setImageResource(R.drawable.poweredbyguardian);		
 		dialog.setTitle("Open Guardian");
