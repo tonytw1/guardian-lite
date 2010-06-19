@@ -2,6 +2,7 @@ package nz.gen.wellington.guardian.android.services;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.main;
+import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
@@ -78,9 +79,21 @@ public class ContentUpdateService extends Service {
     		}
     		
     		if (taskQueue.isEmpty()) {
-    		sendNotification(report);
-    		running = false;
-    		announceBatchFinished();
+    			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this);
+    			ContentUpdateTaskRunnable updateTopStories = new UpdateTopStoriesTask(articleDAO, this);    			
+    			ContentUpdateTaskRunnable purgeExpired = new PurgeExpiredContentTask(this);
+    			
+    			announceTaskBeginning(updateTopStories);
+    			updateTopStories.run();
+    			announceTaskCompletion(updateTopStories);
+    			
+    			announceTaskBeginning(purgeExpired);
+    			purgeExpired.run();
+    			announceTaskCompletion(purgeExpired);
+    			
+    			announceBatchFinished();
+    			sendNotification(report);
+    			running = false;
  			}
     	}
     	

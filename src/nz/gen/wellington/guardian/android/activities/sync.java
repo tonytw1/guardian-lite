@@ -3,17 +3,14 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
-import nz.gen.wellington.guardian.android.services.PurgeExpiredContentTask;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
 import nz.gen.wellington.guardian.android.services.UpdateTagArticlesTask;
-import nz.gen.wellington.guardian.android.services.UpdateTopStoriesTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -85,12 +82,7 @@ public class sync extends Activity implements OnClickListener {
 		case R.id.buttonStart:			
 			queueFavouriteTags(taskQueue);
 			queueFavouriteSections(taskQueue);
-			
-			Log.i(TAG, "Injecting update top stories task onto queue");
-			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this);
-			taskQueue.addArticleTask(new UpdateTopStoriesTask(articleDAO, this));	// TODO content update service should do this.
-			taskQueue.addArticleTask(new PurgeExpiredContentTask(this));	// TODO content update service should do this.
-
+						
 			Intent start = new Intent(ContentUpdateService.CONTROL);
 			start.putExtra("command", "start");
 			this.sendBroadcast(start);
@@ -127,9 +119,13 @@ public class sync extends Activity implements OnClickListener {
 	}
 	
 	
-	private void updateStatus(int articles, int images) {	
-		final String statusMessage =  articles + " article sets and " + images + " images to load.";
+	private void updateQueueStatus(int articles, int images) {	
 		TextView status = (TextView) findViewById(R.id.Status);
+		if (articles + images == 0) {
+			status.setVisibility(View.GONE);
+			return;
+		}
+		final String statusMessage =  articles + " article sets and " + images + " images to load.";
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);
 	}
@@ -143,8 +139,8 @@ public class sync extends Activity implements OnClickListener {
 		status.setVisibility(View.VISIBLE);
 	}
 	
-	private void showDownloadProgress(long expected) {
-		final String statusMessage =  "0 / " +  Long.toString(expected);
+	private void showDownloadStart(String url) {
+		final String statusMessage =  "Downloading: " + url;
 		TextView status = (TextView) findViewById(R.id.DownloadProgress);
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);
@@ -181,7 +177,7 @@ public class sync extends Activity implements OnClickListener {
 		public void onReceive(Context context, Intent intent) {
 			final int articles = intent.getIntExtra("article_queue_size", 0);
 			final int images = intent.getIntExtra("image_queue_size", 0);
-			updateStatus(articles, images);
+			updateQueueStatus(articles, images);
 		}
 	}
 	
@@ -192,7 +188,7 @@ public class sync extends Activity implements OnClickListener {
 			final int type = intent.getIntExtra("type", 0);
 			switch (type) {
 			case HttpFetcher.DOWNLOAD_STARTED:
-				showDownloadProgress(intent.getLongExtra("bytes_expected", 0));
+				showDownloadStart(intent.getStringExtra("url"));
 				return;
 				
 			case HttpFetcher.DOWNLOAD_UPDATE:

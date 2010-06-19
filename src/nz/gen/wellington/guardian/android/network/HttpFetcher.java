@@ -91,11 +91,11 @@ public class HttpFetcher {
 			get.addHeader(new BasicHeader("User-agent", "gzip"));
 			get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
 			
+			announceDownloadStart(uri);
 			HttpResponse execute = client.execute(get);			
 			if (execute.getStatusLine().getStatusCode() == 200) {
 				long contentLength = execute.getEntity().getContentLength();
 				Log.d(TAG, "Content length: " + contentLength);
-				announceDownloadStart(uri, contentLength);
 				
 				BufferedInputStream is = new BufferedInputStream(execute.getEntity().getContent());				
 				Reader in = new InputStreamReader(is, "UTF-8");				
@@ -106,9 +106,8 @@ public class HttpFetcher {
 				final char[] buffer = new char[512];
 				do {
 				  read = in.read(buffer, 0, buffer.length);
-				  if (read>0 && running) {
+				  if (read > 0 && running) {
 					  totalRead = totalRead + read;
-					  Log.d(TAG, "Read: " + totalRead + running + this);
 					  announceProgress(uri, contentLength, totalRead);											
 					  out.append(buffer, 0, read);
 				  }
@@ -116,11 +115,14 @@ public class HttpFetcher {
 				in.close();
 				is.close();
 				
+				announceDownloadCompleted(uri);
 				if (running) {
-					announceDownloadCompleted(uri);
 					return out.toString();			
 				}
+				
 			}
+			
+			announceDownloadCompleted(uri);
 			return null;
 			
 		} catch (Exception e) {
@@ -150,11 +152,10 @@ public class HttpFetcher {
 	} 
 
 	
-	private void announceDownloadStart(String url, long contentLength) {
+	private void announceDownloadStart(String url) {
 		Intent intent = new Intent(DOWNLOAD_PROGRESS);
 		intent.putExtra("type", DOWNLOAD_STARTED);
 		intent.putExtra("url", url);
-		intent.putExtra("bytes_expected", contentLength);
 		context.sendBroadcast(intent);
 	}
 	
