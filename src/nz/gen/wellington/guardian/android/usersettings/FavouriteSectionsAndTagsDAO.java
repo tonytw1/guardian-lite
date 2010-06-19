@@ -17,11 +17,12 @@ public class FavouriteSectionsAndTagsDAO {
 	
 	public List<Section> getFavouriteSections() {		
 		List<Section> favouriteSections = new LinkedList<Section>();
-		addFavouriteSection(favouriteSections, "business");
-		addFavouriteSection(favouriteSections, "commentisfree");
-		addFavouriteSection(favouriteSections, "environment");
-		addFavouriteSection(favouriteSections, "uk");
-		addFavouriteSection(favouriteSections, "world");
+		List<Section> sections = articleDAO.getSections();
+		addFavouriteSection(favouriteSections, "business", sections);
+		addFavouriteSection(favouriteSections, "commentisfree", sections);
+		addFavouriteSection(favouriteSections, "environment", sections);
+		addFavouriteSection(favouriteSections, "uk, sections", sections);
+		addFavouriteSection(favouriteSections, "world", sections);
 		return favouriteSections;
 	}
 
@@ -49,11 +50,22 @@ public class FavouriteSectionsAndTagsDAO {
 		}
 	}
 
-	private void addFavouriteSection(List<Section> favouriteSections, String sectionId) {
-		Section section = articleDAO.getSectionById(sectionId);
+	private void addFavouriteSection(List<Section> favouriteSections, String sectionId, List<Section> sections) {
+		Section section = getSectionById(sectionId, sections);
 		if (section != null) {
 			favouriteSections.add(section);
 		}
 	}
 
+	
+	public Section getSectionById(String id, List<Section> sections) {
+		if (sections != null) {
+			for (Section section : sections) {	// TODO suggests that sections should be a map?
+				if (section.getId().equals(id)) {
+					return section;
+				}
+			}
+		}
+		return null;
+	}
 }

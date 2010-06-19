@@ -75,19 +75,6 @@ public class ArticleDAO {
 	}
 	
 	
-	public Section getSectionById(String id) {
-		List<Section> sections = this.getSections();
-		if (sections != null) {
-			for (Section section : sections) {	// TODO suggests that sections should be a map?
-				if (section.getId().equals(id)) {
-					return section;
-				}
-			}
-		}
-		return null;
-	}
-	
-	
 	private List<Article> getArticleSetArticles(ArticleSet articleSet) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
 		
