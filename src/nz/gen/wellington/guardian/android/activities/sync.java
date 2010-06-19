@@ -135,18 +135,32 @@ public class sync extends Activity implements OnClickListener {
 	}
 	
 	
+
 	private void updateDownloadProgress(int received, long  expected) {
 		final String statusMessage =  received + " / " +  Long.toString(expected);
 		TextView status = (TextView) findViewById(R.id.DownloadProgress);
 		status.setText(statusMessage);
+		status.setVisibility(View.VISIBLE);
 	}
-
+	
+	private void showDownloadProgress(long expected) {
+		final String statusMessage =  "0 / " +  Long.toString(expected);
+		TextView status = (TextView) findViewById(R.id.DownloadProgress);
+		status.setText(statusMessage);
+		status.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideDownloadProgress() {
+		TextView status = (TextView) findViewById(R.id.DownloadProgress);
+		status.setVisibility(View.GONE);
+	}
 
 	private void updateCurrentTask(String taskName) {
 		TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
 		currentTask.setText(taskName);
 		currentTask.setVisibility(View.VISIBLE);
 	}
+	
 		
 	private void switchToTopStories() {
 		Intent intent = new Intent(this, main.class);
@@ -175,10 +189,23 @@ public class sync extends Activity implements OnClickListener {
 	class DownloadProgressReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			final int received = intent.getIntExtra("bytes_received", 0);
-			final long expected = intent.getLongExtra("bytes_expected", 0);
-			updateDownloadProgress(received, expected);
-		}		
+			final int type = intent.getIntExtra("type", 0);
+			switch (type) {
+			case HttpFetcher.DOWNLOAD_STARTED:
+				showDownloadProgress(intent.getLongExtra("bytes_expected", 0));
+				return;
+				
+			case HttpFetcher.DOWNLOAD_UPDATE:
+				updateDownloadProgress(
+						intent.getIntExtra("bytes_received", 0),
+						intent.getLongExtra("bytes_expected", 0));
+				return;
+				
+			case HttpFetcher.DOWNLOAD_COMPLETED:
+				hideDownloadProgress();
+				return;
+			}
+		}
 	}
 	
 	class BatchCompletionReceiver extends BroadcastReceiver {

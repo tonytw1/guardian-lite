@@ -20,6 +20,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.HttpEntityWrapper;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
@@ -29,17 +30,17 @@ import android.util.Log;
 
 public class HttpFetcher {
 	
+	private static final String TAG = "HttpFetcher";
 	
-    public static final String DOWNLOAD_STARTED = "nz.gen.wellington.guardian.android.network.DOWNLOAD_STARTED";
     public static final String DOWNLOAD_PROGRESS = "nz.gen.wellington.guardian.android.network.DOWNLOAD_PROGRESS";
-    public static final String DOWNLOAD_FINISHED = "nz.gen.wellington.guardian.android.network.DOWNLOAD_FINISHED";
-
     
 	HttpClient client;
 	Context context;
 	private boolean running;
-	
-	private static final String TAG = "HttpFetcher";
+		
+	public static final int DOWNLOAD_STARTED = 1;
+	public static final int DOWNLOAD_UPDATE = 2;
+	public static final int DOWNLOAD_COMPLETED = 3;
 
 	
 	public HttpFetcher(Context context) {
@@ -87,14 +88,14 @@ public class HttpFetcher {
 			Log.i(TAG, "Making http fetch of: " + uri);						
 			HttpGet get = new HttpGet(uri);	
 			
-			//get.addHeader(new BasicHeader("User-agent", "gzip"));
-			//get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
+			get.addHeader(new BasicHeader("User-agent", "gzip"));
+			get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
 			
 			HttpResponse execute = client.execute(get);			
 			if (execute.getStatusLine().getStatusCode() == 200) {
 				long contentLength = execute.getEntity().getContentLength();
 				Log.d(TAG, "Content length: " + contentLength);
-				announceDownloadStart(uri);
+				announceDownloadStart(uri, contentLength);
 				
 				BufferedInputStream is = new BufferedInputStream(execute.getEntity().getContent());				
 				Reader in = new InputStreamReader(is, "UTF-8");				
@@ -128,30 +129,7 @@ public class HttpFetcher {
 		return null;
 	}
 
-
-	private void announceDownloadStart(String url) {
-		Intent intent = new Intent(DOWNLOAD_STARTED);
-		intent.putExtra("url", url);
-		context.sendBroadcast(intent);
-	}
 	
-	
-	private void announceDownloadCompleted(String url) {
-		Intent intent = new Intent(DOWNLOAD_FINISHED);
-		intent.putExtra("url", url);
-		context.sendBroadcast(intent);
-	}
-
-
-	private void announceProgress(String url, long contentLength, int totalRead) {
-		Intent intent = new Intent(DOWNLOAD_PROGRESS);
-		intent.putExtra("url", url);
-		intent.putExtra("bytes_received", totalRead);
-		intent.putExtra("bytes_expected", contentLength);
-		context.sendBroadcast(intent);
-	}
-	
-		
 	public byte[] httpFetchStream(String uri) {
 		try {
 			Log.i(TAG, "Making http fetch of image: " + uri);
@@ -164,7 +142,37 @@ public class HttpFetcher {
 		}
 		return null;
 	}
+
 	
+	public void stopLoading() {
+		Log.d(TAG, "Stopping loading");
+		running = false;
+	} 
+
+	
+	private void announceDownloadStart(String url, long contentLength) {
+		Intent intent = new Intent(DOWNLOAD_PROGRESS);
+		intent.putExtra("type", DOWNLOAD_STARTED);
+		intent.putExtra("url", url);
+		intent.putExtra("bytes_expected", contentLength);
+		context.sendBroadcast(intent);
+	}
+	
+	private void announceProgress(String url, long contentLength, int totalRead) {
+		Intent intent = new Intent(DOWNLOAD_PROGRESS);
+		intent.putExtra("type", DOWNLOAD_UPDATE);
+		intent.putExtra("url", url);
+		intent.putExtra("bytes_received", totalRead);
+		intent.putExtra("bytes_expected", contentLength);
+		context.sendBroadcast(intent);
+	}
+	
+	private void announceDownloadCompleted(String url) {
+		Intent intent = new Intent(DOWNLOAD_PROGRESS);
+		intent.putExtra("type", DOWNLOAD_COMPLETED);
+		intent.putExtra("url", url);
+		context.sendBroadcast(intent);
+	}
 
 	
 	static class GzipDecompressingEntity extends HttpEntityWrapper {
@@ -187,15 +195,5 @@ public class HttpFetcher {
             return this.wrappedEntity.getContentLength();
         }
     }
-
-
-
-	public void stopLoading() {
-		Log.i(TAG, "Stopping loading");
-		// TODO Auto-generated method stub
-		running = false;
-		Log.i(TAG, "Stopping loading: " + running + this);
-	} 
-
 
 }
