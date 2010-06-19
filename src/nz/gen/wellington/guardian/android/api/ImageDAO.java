@@ -52,9 +52,13 @@ public class ImageDAO {
 	public Bitmap fetchLiveImage(String url) {
 		Log.i(TAG, "Fetching image: " + url);
 		byte[] image = httpFetcher.httpFetchStream(url);
-		Log.d(TAG, "Image file bytes: " + Integer.toString(image.length));
-
 		
+		if (image == null) {
+			Log.i(TAG, "Could not fetch image: " + url);
+			return null;
+		}
+		
+		Log.d(TAG, "Image file bytes: " + Integer.toString(image.length));
 		Log.i(TAG, "Writing image to disk: " + url);
 		ObjectOutputStream out = null;
 		try {		

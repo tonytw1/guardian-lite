@@ -6,6 +6,12 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -164,13 +170,32 @@ public class ContentUpdateService extends Service {
 		
 		Context context = getApplicationContext();
 		CharSequence contentTitle = "Content update complete";
-		CharSequence contentText = "Fetched " + report.getArticleCount() + " articles and " + report.getImageCount() + " images.";
+		
+		CharSequence contentText = "Fetched " + report.getArticleCount() + " articles" + 
+			//" and " +  report.getImageCount() + " images" 
+			" in " + calculateTimeTaken(report);
 		
 		Intent notificationIntent = new Intent(this, main.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 		notificationManager.notify(UPDATE_COMPLETE_NOTIFICATION_ID, notification);
+	}
+
+
+	private String calculateTimeTaken(ContentUpdateReport report) {
+		Interval timeTaken = new Interval(report.getStartTime().getMillis(), new DateTime().getMillis());
+	    PeriodFormatter pf = new PeriodFormatterBuilder().printZeroRarelyFirst()
+        .appendYears().appendSuffix("y ", "y ")
+        .appendMonths().appendSuffix("m" , "m ")
+        .appendDays().appendSuffix("d ", "d ")
+        .appendHours().appendSuffix("h ", "h ")
+        .appendMinutes().appendSuffix("m ", "m ")
+        .appendSeconds().appendSuffix("s ", "s ")
+        .toFormatter();
+
+		String duration = pf.print(timeTaken.toPeriod()).trim();
+		return duration;
 	}
 	
 	
