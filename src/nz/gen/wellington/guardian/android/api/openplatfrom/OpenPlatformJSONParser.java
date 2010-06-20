@@ -21,6 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 public class OpenPlatformJSONParser {
@@ -30,13 +32,17 @@ public class OpenPlatformJSONParser {
 	
 	private static final String CONTRIBUTOR = "contributor";
 	private static final String KEYWORD = "keyword";
+	public static final String ARTICLE_AVAILABLE = "nz.gen.wellington.guardian.android.api.ARTICLE_AVAILABLE";
 
-	boolean running = true;
-	StringBuilder consumedContent;
+	private Context context;
+	private StringBuilder consumedContent;
+	private boolean running;	
 	
-		
-	public OpenPlatformJSONParser() {
+	
+	public OpenPlatformJSONParser(Context context) {
+		this.context = context;
 		consumedContent = new StringBuilder();
+		running = true;
 	}
 
 
@@ -59,10 +65,15 @@ public class OpenPlatformJSONParser {
 			List<Article> articles = new LinkedList<Article>();
 			for (int i=0; i < results.length(); i++) {				
 				JSONObject result = results.getJSONObject(i);						
-				articles.add(extractArticle(result, sections));
+				Article article = extractArticle(result, sections);				
+				articles.add(article);
 			}
 			
 			consumedContent.append(content);
+			
+			for (Article article : articles) {
+				announceArticleExtracted(article);
+			}
 			return articles;
 			
 		} catch (JSONException e) {
@@ -72,6 +83,13 @@ public class OpenPlatformJSONParser {
 	}
 
 
+	private void announceArticleExtracted(Article article) {
+		Intent intent = new Intent(ARTICLE_AVAILABLE);
+		intent.putExtra("article", article);
+		context.sendBroadcast(intent);
+	}
+	
+	
 	private String readInputStreamToString(InputStream inputStream) {
 		StringBuilder content = new StringBuilder();
 		try {

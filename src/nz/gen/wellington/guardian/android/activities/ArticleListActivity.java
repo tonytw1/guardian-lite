@@ -11,6 +11,7 @@ import nz.gen.wellington.guardian.android.activities.ui.SectionClicker;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.api.openplatfrom.OpenPlatformJSONParser;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
@@ -50,8 +51,10 @@ public abstract class ArticleListActivity extends Activity {
 	boolean showSeperators = false;
 	boolean showMainImage = true;
 	
+	
+	protected BroadcastReceiver articlesAvailableReceiver;
 	protected BroadcastReceiver downloadProgressReceiver;
-
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,8 @@ public abstract class ArticleListActivity extends Activity {
 		viewsWaitingForTrailImages = new HashMap<String, View>();
 		articleDAO = ArticleDAOFactory.getDao(this);
 		imageDAO = ArticleDAOFactory.getImageDao(this);
+
+		articlesAvailableReceiver = new ArticlesAvailableReceiver();
 		downloadProgressReceiver = new DownloadProgressReceiver();
 	}
 	
@@ -81,6 +86,7 @@ public abstract class ArticleListActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		registerReceiver(articlesAvailableReceiver, new IntentFilter(OpenPlatformJSONParser.ARTICLE_AVAILABLE));
 		registerReceiver(downloadProgressReceiver, new IntentFilter(HttpFetcher.DOWNLOAD_PROGRESS));
 	}
 
@@ -104,6 +110,7 @@ public abstract class ArticleListActivity extends Activity {
 		Log.d(TAG, "On stop - want to halt any running threads");
 		updateArticlesRunner.stop();
 		Log.d(TAG, "Loader stopped");
+		unregisterReceiver(articlesAvailableReceiver);
 		unregisterReceiver(downloadProgressReceiver);
 	}
 	
@@ -158,10 +165,20 @@ public abstract class ArticleListActivity extends Activity {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+	
 	class UpdateArticlesHandler extends Handler {		
 
 		private Context context;
-
+		boolean first = true;
+		boolean isFirstOfSection = true;
+		Section currentSection = null;
+		
 		public UpdateArticlesHandler(Context context) {
 			super();
 			this.context = context;
@@ -172,42 +189,31 @@ public abstract class ArticleListActivity extends Activity {
 			
 			Log.d(TAG, "Message: " + msg.toString());
 			switch (msg.what) {	   
-			    case 1:  		
-					Log.d("UpdateArticlesHandler", "Populating articles");
+			    case 1: 		
+			    	Article article = (Article) msg.getData().getSerializable("article");
+			    	Log.d("UpdateArticlesHandler", "Populating article");
 				
 					LayoutInflater mInflater = LayoutInflater.from(context);
-					if (articles != null) {
-						LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);
+					LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);
 
-						boolean first = true;
-						boolean isFirstOfSection = true;
-						Section currentSection = null;
-						for (Article article : articles) {							
-							
-							if (showSeperators) {
-								if (currentSection == null || !currentSection.getId().equals(article.getSection().getId())) {
-									isFirstOfSection = true;
-								}
-								
-								if (isFirstOfSection) {
-									addSeperator(mInflater, mainpane, article.getSection());
-									currentSection = article.getSection();
-									isFirstOfSection = false;
-								}
-							}
-							
-							View view = choiceTrailView(mInflater, first, article);
-							populateArticleListView(article, view);								    	
-							mainpane.addView(view);
-							first = false;
-						}			
-					
-					} else {
-						Log.d(TAG, "No articles to populate");
+					if (showSeperators) {
+						if (currentSection == null || !currentSection.getId().equals(article.getSection().getId())) {
+							isFirstOfSection = true;
+						}
+
+						if (isFirstOfSection) {
+							addSeperator(mInflater, mainpane, article.getSection());
+							currentSection = article.getSection();
+							isFirstOfSection = false;
+						}
 					}
+
+					View articleTrailView = choiceTrailView(mInflater, first, article);
+					populateArticleListView(article, articleTrailView);
+					mainpane.addView(articleTrailView);
+					first = false;
 					return;
-			    
-			    
+			    			    
 			    case 2: 
 			    	Toast.makeText(context, "Articles could not be loaded", Toast.LENGTH_SHORT).show();
 			    	return;
@@ -277,6 +283,24 @@ public abstract class ArticleListActivity extends Activity {
 	}
 	
 	
+	class ArticlesAvailableReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Message m = new Message();			
+			m.what = 1;
+			
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("article", intent.getSerializableExtra("article"));			
+			m.setData(bundle);
+			
+			Log.d(TAG, "Sending message; article available");
+			updateArticlesHandler.sendMessage(m);			
+		}
+		
+	}
+	
+
 	class UpdateArticlesRunner implements Runnable {		
 		boolean running;
 		ArticleDAO articleDAO;
@@ -301,12 +325,6 @@ public abstract class ArticleListActivity extends Activity {
 				Log.d(TAG, "Sending message; articles failed to load");
 				updateArticlesHandler.sendMessage(m);
 				return;
-
-			} else {
-				Message m = new Message();
-				m.what = 1;
-				Log.d(TAG, "Sending message; articles are loaded");
-				updateArticlesHandler.sendMessage(m);								
 			}
 			
 			

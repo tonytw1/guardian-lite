@@ -19,7 +19,7 @@ import org.junit.Test;
 
 public class OpenPlatformJSONParserTest extends TestCase {
 
-	OpenPlatformJSONParser parser = new OpenPlatformJSONParser();
+	OpenPlatformJSONParser parser = new OpenPlatformJSONParser(null);
 	
 	@Test
 	public void testCanParseSectionContentResults() throws Exception {			

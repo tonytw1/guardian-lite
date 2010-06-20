@@ -2,8 +2,6 @@ package nz.gen.wellington.guardian.android.api;
 
 import java.util.List;
 
-import org.joda.time.DateTime;
-
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedSectionCache;
 import nz.gen.wellington.guardian.android.api.caching.FileService;
@@ -15,7 +13,9 @@ import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
-import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
+
+import org.joda.time.DateTime;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -56,15 +56,11 @@ public class ArticleDAO {
 	
 	
 	public List<Section> getSections() {
-		//if (sectionCache != null && !sectionCache.isEmpty()) {
-		//	return sectionCache.getAll();
-		//}
-		
 		List <Section> sections = openPlatformApi.getSections();
 		if (sections != null) {
 			Log.i(TAG, "Found " + sections.size() + " sections");
 			sectionCache.addAll(sections);
-		}		
+		}
 		return sections;
 	}
 	
@@ -72,19 +68,11 @@ public class ArticleDAO {
 	private List<Article> getArticleSetArticles(ArticleSet articleSet) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
 		
-		//List<Article> articles = fileBasedArticleCache.getArticleSetArticles(articleSet);
-		//if (articles != null) {
-		//	Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());
-		//	return articles;
-		//}
-				
 		List<Section> sections = this.getSections();
 		if (sections != null) {
 			List<Article> articles = openPlatformApi.getArticles(articleSet, sections);		
 			if (articles != null) {
 				Log.i(TAG, "Got " + articles.size() + " articles from api call");
-				//articleCache.putArticleSetArticles(articleSet, articles);
-				//fileBasedArticleCache.putArticleSetArticles(articleSet, articles);
 				return articles;
 			} else {
 				Log.w(TAG, "Article api call failed");

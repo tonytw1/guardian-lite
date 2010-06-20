@@ -69,7 +69,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}		
 		
 		if (input != null) {
-			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser();
+			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context);
 			List<Article> articles = jsonParser.parseArticlesJSON(input, sections);
 			
 			if (articles != null && !articles.isEmpty()) {
@@ -107,7 +107,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		
 		if (input != null) {
-			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser();
+			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context);
 			List<Section> sections = jsonParser.parseSectionsJSON(input);
 			if (sections != null) {
 				
