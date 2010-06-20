@@ -97,13 +97,13 @@ public class HttpFetcher {
 				long contentLength = execute.getEntity().getContentLength();
 				Log.d(TAG, "Content length: " + contentLength);
 				
-				BufferedInputStream is = new BufferedInputStream(execute.getEntity().getContent());				
-				Reader in = new InputStreamReader(is, "UTF-8");				
+				BufferedInputStream is = new BufferedInputStream(execute.getEntity().getContent(), 1024);				
+				Reader in = new InputStreamReader(is, "UTF-8");
 				StringBuilder out = new StringBuilder();
 				
 				int totalRead = 0;
 				int read;
-				final char[] buffer = new char[512];
+				final char[] buffer = new char[1024];
 				do {
 				  read = in.read(buffer, 0, buffer.length);
 				  if (read > 0 && running) {
