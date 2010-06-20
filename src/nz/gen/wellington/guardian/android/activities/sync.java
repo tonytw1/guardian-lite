@@ -198,11 +198,7 @@ public class sync extends Activity implements OnClickListener {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final int type = intent.getIntExtra("type", 0);
-			switch (type) {
-			case HttpFetcher.DOWNLOAD_STARTED:
-				showDownloadStart(intent.getStringExtra("url"));
-				return;
-				
+			switch (type) {		
 			case HttpFetcher.DOWNLOAD_UPDATE:
 				updateDownloadProgress(
 						intent.getIntExtra("bytes_received", 0),

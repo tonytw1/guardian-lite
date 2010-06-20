@@ -8,11 +8,16 @@ import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import nz.gen.wellington.guardian.android.api.ArticleBodyCleaner;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.joda.time.format.DateTimeFormat;
@@ -20,6 +25,9 @@ import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xml.sax.AttributeList;
+import org.xml.sax.HandlerBase;
+import org.xml.sax.SAXException;
 
 import android.content.Context;
 import android.content.Intent;
@@ -46,41 +54,130 @@ public class OpenPlatformJSONParser {
 	}
 
 
-	public List<Article> parseArticlesJSON(InputStream inputStream, List<Section> sections) {
+	public List<Article> parseArticlesXml(InputStream inputStream, List<Section> sections) {
+		
 		try {
 			
-			final String content = readInputStreamToString(inputStream);
-			if (content == null || content.length() == 0) {
-				return null;
-			}
-						
-			JSONObject json = new JSONObject(content);
-			if (!isResponseOk(json)) {
-				return null;
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser =  factory.newSAXParser();
+            ResultsHandler hb = new ResultsHandler();
+				saxParser.parse(inputStream, hb);
+				inputStream.close();
 				
-			}
-			JSONObject response = json.getJSONObject("response");
-			JSONArray results = response.getJSONArray("results");
+				consumedContent= null;		
+				return hb.getArticles();
 				
-			List<Article> articles = new LinkedList<Article>();
-			for (int i=0; i < results.length(); i++) {				
-				JSONObject result = results.getJSONObject(i);						
-				Article article = extractArticle(result, sections);				
-				articles.add(article);
+				
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-			consumedContent.append(content);
-			
-			for (Article article : articles) {
-				announceArticleExtracted(article);
-			}
-			return articles;
-			
-		} catch (JSONException e) {
-			Log.e(TAG, "JSONException while parsing articles: " + e.getMessage());
-		}
+
+		
 		return null;		
 	}
+	
+	
+	
+
+	 class ResultsHandler extends HandlerBase {
+         
+		 List<Article> articles;
+         Article article;
+         
+         StringBuilder sb = new StringBuilder();
+         String currentField;
+         
+         public List<Article> getArticles() {
+        	 return articles;
+         }
+
+         @Override
+         public void startDocument() throws SAXException {
+                 super.startDocument();
+                 articles = new LinkedList<Article>();
+         }
+
+         @Override
+         public void startElement(String name, AttributeList attributes) throws SAXException {
+        	 super.startElement(name, attributes);
+        	 if (name.equals("content")) {
+        		 article = new Article();
+        		 article.setTitle("TEST");
+        		 sb = new StringBuilder();
+        	 }
+                 
+        	 if (name.equals("field")) {                             
+        		 String fieldname = attributes.getValue("name");
+        		 //System.out.println("Starting field: " + fieldname);
+        		 if (!fieldname.equals(currentField)) {
+        			 currentField = fieldname;
+        		 }
+        	 }
+         }
+
+		
+		@Override
+		public void endElement(String name) throws SAXException {
+			super.endElement(name);
+
+			if (currentField != null) {
+				
+				if (currentField.equals("headline")) {
+					article.setTitle(sb.toString());
+				}
+				
+				if (currentField.equals("byline")) {
+					Log.d(TAG, sb.toString());
+					article.setByline(sb.toString());
+				}
+				
+				//if (currentField.equals("standfirst")) {
+				//	article.setStandfirst(sb.toString());
+				//}
+				
+				if (currentField.equals("body")) {
+					article.setDescription(sb.toString());
+				}
+				currentField = null;
+			}
+
+			if (name.equals("content")) {
+				articles.add(article);
+				announceArticleExtracted(article);
+			}
+		}
+
+         
+         @Override
+         public void characters(char[] ch, int start, int length) throws SAXException {
+                 super.characters(ch, start, length);
+                 if (currentField != null) {
+                         for (int i = start; i < start + length; i++) {
+                                 sb.append(ch[i]);
+                         }
+                 }
+                 
+         }
+
+		public StringBuilder getConsumedContent() {
+			Log.d(TAG, consumedContent.toString());
+			return consumedContent;
+		}
+         
+	 }
+
+
+	
+	
+	
+	
 
 
 	private void announceArticleExtracted(Article article) {
@@ -306,6 +403,7 @@ public class OpenPlatformJSONParser {
 	
 	
 	public String getConsumedContent() {
+		Log.d(TAG, consumedContent.toString());
 		return consumedContent.toString();
 	}
 	

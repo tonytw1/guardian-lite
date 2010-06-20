@@ -5,8 +5,9 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.InputStream;
+
+import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 
 import org.joda.time.DateTime;
 
@@ -24,13 +25,6 @@ public class FileService {
 	public static final int SDCARD = 2;
 	public static final int EXTERNAL_SDCARD_SAMSUNG_I7500 = 3;
 	
-	
-	public static FileWriter getFileWriter(Context context, String url) throws IOException {
-		final String filepath = FileService.getLocalFilename(url);
-		File file = new File(getCacheDir(context) + "/" + filepath);
-		Log.i(TAG, "Opening file writer to: " + file.getAbsolutePath());
-		return new FileWriter(file);
-	}
 	
 	public static FileOutputStream getFileOutputStream(Context context, String url) throws FileNotFoundException {
 		final String filepath = FileService.getLocalFilename(url);

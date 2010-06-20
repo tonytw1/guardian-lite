@@ -283,20 +283,27 @@ public abstract class ArticleListActivity extends Activity {
 	}
 	
 	
+	private void sendArticleReadyMessage(Article article) {
+		Message m = new Message();			
+		m.what = 1;
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("article", article);			
+		m.setData(bundle);
+		
+		Log.d(TAG, "Sending message; article available");
+		updateArticlesHandler.sendMessage(m);
+	}
+	
+	
 	class ArticlesAvailableReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Message m = new Message();			
-			m.what = 1;
-			
-			Bundle bundle = new Bundle();
-			bundle.putSerializable("article", intent.getSerializableExtra("article"));			
-			m.setData(bundle);
-			
-			Log.d(TAG, "Sending message; article available");
-			updateArticlesHandler.sendMessage(m);			
+			Article article = (Article) intent.getSerializableExtra("article");
+			sendArticleReadyMessage(article);			
 		}
+
+	
 		
 	}
 	
@@ -393,7 +400,6 @@ public abstract class ArticleListActivity extends Activity {
 					updateArticlesHandler.sendMessage(m);
 				}		
 			}
-						
 			return;				
 		}
 
@@ -405,19 +411,12 @@ public abstract class ArticleListActivity extends Activity {
 	
 	
 	
-	
-	
-	
 	// TODO all of the below is duplicated from sync	
 	class DownloadProgressReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final int type = intent.getIntExtra("type", 0);
-			switch (type) {
-			case HttpFetcher.DOWNLOAD_STARTED:
-				showDownloadStart(intent.getStringExtra("url"));
-				return;
-				
+			switch (type) {				
 			case HttpFetcher.DOWNLOAD_UPDATE:
 				updateDownloadProgress(
 						intent.getIntExtra("bytes_received", 0),

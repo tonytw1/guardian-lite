@@ -17,6 +17,7 @@ import nz.gen.wellington.guardian.android.model.Tag;
 import org.joda.time.DateTime;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 public class ArticleDAO {
@@ -39,7 +40,7 @@ public class ArticleDAO {
 	
 	
 	public List<Article> getSectionItems(Section section) {
-		ArticleSet sectionArticleSet = new SectionArticleSet(section);		
+		ArticleSet sectionArticleSet = new SectionArticleSet(section);
 		return getArticleSetArticles(sectionArticleSet);
 	}
 	
@@ -56,10 +57,16 @@ public class ArticleDAO {
 	
 	
 	public List<Section> getSections() {
-		List <Section> sections = openPlatformApi.getSections();
-		if (sections != null) {
+		 List<Section> sections = fileBasedSectionCache.getSections();
+		 if (sections != null) {
+			 return sections;
+		 }		
+		
+		 sections = openPlatformApi.getSections();
+		 if (sections != null) {
 			Log.i(TAG, "Found " + sections.size() + " sections");
 			sectionCache.addAll(sections);
+			fileBasedSectionCache.putSections(sections);
 		}
 		return sections;
 	}
@@ -68,12 +75,21 @@ public class ArticleDAO {
 	private List<Article> getArticleSetArticles(ArticleSet articleSet) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
 		
+		List<Article> articles = fileBasedArticleCache.getArticleSetArticles(articleSet);
+		if (articles != null) {
+			Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());
+			
+			return articles;
+		}
+		
 		List<Section> sections = this.getSections();
 		if (sections != null) {
-			List<Article> articles = openPlatformApi.getArticles(articleSet, sections);		
+			articles = openPlatformApi.getArticles(articleSet, sections);		
 			if (articles != null) {
 				Log.i(TAG, "Got " + articles.size() + " articles from api call");
+				fileBasedArticleCache.putArticleSetArticles(articleSet, articles);
 				return articles;
+				
 			} else {
 				Log.w(TAG, "Article api call failed");
 			}

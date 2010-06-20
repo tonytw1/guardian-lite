@@ -3,11 +3,13 @@ package nz.gen.wellington.guardian.android.api;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import nz.gen.wellington.guardian.android.api.caching.FileService;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
+import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,7 +35,7 @@ public class ImageDAO {
 	public Bitmap getImage(String url) {
 		Log.i(TAG, "Reading from disk: " + url);
 		try {
-			FileInputStream fis = FileService.getFileInputStream(context, url);
+			InputStream fis = FileService.getFileInputStream(context, url);
 			ObjectInputStream in = new ObjectInputStream(fis);
 			byte[] image = (byte[]) in.readObject();
 			in.close();

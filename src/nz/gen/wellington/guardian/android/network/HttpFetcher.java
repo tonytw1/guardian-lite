@@ -1,10 +1,7 @@
 package nz.gen.wellington.guardian.android.network;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.http.Header;
@@ -25,7 +22,6 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 public class HttpFetcher {
@@ -38,7 +34,6 @@ public class HttpFetcher {
 	Context context;
 	private boolean running;
 		
-	public static final int DOWNLOAD_STARTED = 1;
 	public static final int DOWNLOAD_UPDATE = 2;
 	public static final int DOWNLOAD_COMPLETED = 3;
 
@@ -91,13 +86,13 @@ public class HttpFetcher {
 			get.addHeader(new BasicHeader("User-agent", "gzip"));
 			get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
 			
-			HttpResponse execute = client.execute(get);			
+			
+			HttpResponse execute = client.execute(get);	
 			if (execute.getStatusLine().getStatusCode() == 200) {
-				
 				long contentLength = execute.getEntity().getContentLength();
 				Log.d(TAG, "Content length: " + contentLength);
 				
-				BufferedInputStream is = new BufferedInputStream(execute.getEntity().getContent(), 1024);				
+				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context);				
 				return is;				
 			}
 			return null;
@@ -129,29 +124,6 @@ public class HttpFetcher {
 	} 
 
 	
-	private void announceDownloadStart(String url) {
-		Intent intent = new Intent(DOWNLOAD_PROGRESS);
-		intent.putExtra("type", DOWNLOAD_STARTED);
-		intent.putExtra("url", url);
-		context.sendBroadcast(intent);
-	}
-	
-	private void announceProgress(String url, long contentLength, int totalRead) {
-		Intent intent = new Intent(DOWNLOAD_PROGRESS);
-		intent.putExtra("type", DOWNLOAD_UPDATE);
-		intent.putExtra("url", url);
-		intent.putExtra("bytes_received", totalRead);
-		intent.putExtra("bytes_expected", contentLength);
-		context.sendBroadcast(intent);
-	}
-	
-	private void announceDownloadCompleted(String url) {
-		Intent intent = new Intent(DOWNLOAD_PROGRESS);
-		intent.putExtra("type", DOWNLOAD_COMPLETED);
-		intent.putExtra("url", url);
-		context.sendBroadcast(intent);
-	}
-
 	
 	static class GzipDecompressingEntity extends HttpEntityWrapper {
 
