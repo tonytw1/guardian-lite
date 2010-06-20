@@ -1,5 +1,10 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,10 +31,18 @@ public class OpenPlatformJSONParser {
 	private static final String CONTRIBUTOR = "contributor";
 	private static final String KEYWORD = "keyword";
 
+	boolean running = true;
 	
-	public List<Article> parseArticlesJSON(String jsonString, List<Section> sections) {
+	
+	public List<Article> parseArticlesJSON(InputStream inputStream, List<Section> sections) {
 		try {
-			JSONObject json = new JSONObject(jsonString);
+			
+			final String content = readInputStreamToString(inputStream);
+			if (content == null || content.length() == 0) {
+				return null;
+			}
+						
+			JSONObject json = new JSONObject(content);
 			if (!isResponseOk(json)) {
 				return null;
 				
@@ -48,6 +61,33 @@ public class OpenPlatformJSONParser {
 			Log.e(TAG, "JSONException while parsing articles: " + e.getMessage());
 		}
 		return null;		
+	}
+
+
+	private String readInputStreamToString(InputStream inputStream) {
+		StringBuilder content = new StringBuilder();
+		try {
+			Reader reader;
+			reader = new InputStreamReader(inputStream, "UTF-8");
+			int read;
+			final char[] buffer = new char[1024];
+			do {
+				read = reader.read(buffer, 0, buffer.length);
+				if (read > 0 && running) {				 									
+					content.append(buffer, 0, read);
+				}
+			} while (read >= 0 && running);
+			reader.close();
+			return content.toString();
+			
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	
@@ -142,7 +182,7 @@ public class OpenPlatformJSONParser {
 	}
 	
 	
-	public void parseArticleJSONForMainPicture(JSONArray mediaAssets, Article article) {
+	private void parseArticleJSONForMainPicture(JSONArray mediaAssets, Article article) {
 		try {
 			// TODO better targeting.
 			if (mediaAssets.length() > 0) {
@@ -171,9 +211,16 @@ public class OpenPlatformJSONParser {
 		}
 	}
 	
-	public List<Section> parseSectionsJSON(String jsonString) {
+	
+	public List<Section> parseSectionsJSON(InputStream input) {
 		try {
-			JSONObject json = new JSONObject(jsonString);
+			
+			final String content = readInputStreamToString(input);
+			if (content == null || content.length() == 0) {
+				return null;
+			}
+			
+			JSONObject json = new JSONObject(content);
 			if (!isResponseOk(json)) {
 				return null;				
 			}

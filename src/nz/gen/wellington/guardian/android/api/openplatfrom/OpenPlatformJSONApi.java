@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,9 +55,9 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
-		final String json = getJSON(buildContentQueryUrl(articleSet));		
-		if (json != null) {	
-			List<Article> articles = jsonParser.parseArticlesJSON(json, sections);			
+		final InputStream input = getJSON(buildContentQueryUrl(articleSet));		
+		if (input != null) {	
+			List<Article> articles = jsonParser.parseArticlesJSON(input, sections);			
 			return articles;			
 		}
 		return null;
@@ -70,9 +71,9 @@ public class OpenPlatformJSONApi implements ContentSource {
 			return null;
 		}
 		Log.i(TAG, "Fetching section list from Open Platform api");
-		String jsonString = getJSON(SECTIONS_JSON_URL);
-		if (jsonString != null) {
-			List<Section> sections = jsonParser.parseSectionsJSON(jsonString);
+		final InputStream input = getJSON(SECTIONS_JSON_URL);
+		if (input != null) {
+			List<Section> sections = jsonParser.parseSectionsJSON(input);
 			if (sections != null) {
 				return stripJunkSections(sections);
 			}
@@ -119,7 +120,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	}
 	
 	
-	private String getJSON(String url) {
+	private InputStream getJSON(String url) {
 		return httpFetcher.httpFetch(url);		
 	}
 		

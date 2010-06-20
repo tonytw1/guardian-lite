@@ -83,7 +83,7 @@ public class HttpFetcher {
 	}
 
 
-	public String httpFetch(String uri) {
+	public InputStream httpFetch(String uri) {
 		try {
 			Log.i(TAG, "Making http fetch of: " + uri);						
 			HttpGet get = new HttpGet(uri);	
@@ -91,38 +91,15 @@ public class HttpFetcher {
 			get.addHeader(new BasicHeader("User-agent", "gzip"));
 			get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
 			
-			announceDownloadStart(uri);
 			HttpResponse execute = client.execute(get);			
 			if (execute.getStatusLine().getStatusCode() == 200) {
+				
 				long contentLength = execute.getEntity().getContentLength();
 				Log.d(TAG, "Content length: " + contentLength);
 				
 				BufferedInputStream is = new BufferedInputStream(execute.getEntity().getContent(), 1024);				
-				Reader in = new InputStreamReader(is, "UTF-8");
-				StringBuilder out = new StringBuilder();
-				
-				int totalRead = 0;
-				int read;
-				final char[] buffer = new char[1024];
-				do {
-				  read = in.read(buffer, 0, buffer.length);
-				  if (read > 0 && running) {
-					  totalRead = totalRead + read;
-					  announceProgress(uri, contentLength, totalRead);											
-					  out.append(buffer, 0, read);
-				  }
-				} while (read >= 0 && running);
-				in.close();
-				is.close();
-				
-				announceDownloadCompleted(uri);
-				if (running) {
-					return out.toString();			
-				}
-				
+				return is;				
 			}
-			
-			announceDownloadCompleted(uri);
 			return null;
 			
 		} catch (Exception e) {

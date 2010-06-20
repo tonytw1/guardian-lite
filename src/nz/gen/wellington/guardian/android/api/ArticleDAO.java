@@ -56,16 +56,16 @@ public class ArticleDAO {
 	
 	
 	public List<Section> getSections() {
-		if (sectionCache != null && !sectionCache.isEmpty()) {
-			return sectionCache.getAll();
-		}
+		//if (sectionCache != null && !sectionCache.isEmpty()) {
+		//	return sectionCache.getAll();
+		//}
 		
-		List<Section> sections = fileBasedSectionCache.getSections();
-		if (sections != null) {
-			return sections;			
-		}
+		//List<Section> sections = fileBasedSectionCache.getSections();
+		//if (sections != null) {
+		//	return sections;
+		//}
 		
-		sections = openPlatformApi.getSections();
+		List <Section> sections = openPlatformApi.getSections();
 		if (sections != null) {
 			Log.i(TAG, "Found " + sections.size() + " sections");
 			sectionCache.addAll(sections);
@@ -78,15 +78,15 @@ public class ArticleDAO {
 	private List<Article> getArticleSetArticles(ArticleSet articleSet) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
 		
-		List<Article> articles = fileBasedArticleCache.getArticleSetArticles(articleSet);
-		if (articles != null) {
-			Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());
-			return articles;
-		}
+		//List<Article> articles = fileBasedArticleCache.getArticleSetArticles(articleSet);
+		//if (articles != null) {
+		//	Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());
+		//	return articles;
+		//}
 				
 		List<Section> sections = this.getSections();
 		if (sections != null) {
-			articles = openPlatformApi.getArticles(articleSet, sections);		
+			List<Article> articles = openPlatformApi.getArticles(articleSet, sections);		
 			if (articles != null) {
 				Log.i(TAG, "Got " + articles.size() + " articles from api call");
 				//articleCache.putArticleSetArticles(articleSet, articles);

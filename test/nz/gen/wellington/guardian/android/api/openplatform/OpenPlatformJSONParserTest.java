@@ -2,9 +2,10 @@ package nz.gen.wellington.guardian.android.api.openplatform;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +22,8 @@ public class OpenPlatformJSONParserTest extends TestCase {
 	OpenPlatformJSONParser parser = new OpenPlatformJSONParser();
 	
 	@Test
-	public void testCanParseSectionContentResults() throws Exception {
-		final String jsonString = loadContent("open-platform/science.json").toString();		
-		List<Article> articles = parser.parseArticlesJSON(jsonString, new ArrayList<Section>());		
+	public void testCanParseSectionContentResults() throws Exception {			
+		List<Article> articles = parser.parseArticlesJSON(loadContent("open-platform/science.json"), new ArrayList<Section>());		
 		assertEquals(10, articles.size());
 		
 		Article first = articles.get(0);
@@ -36,32 +36,30 @@ public class OpenPlatformJSONParserTest extends TestCase {
 		
 
 	@Test
-	public void testCanParseSectionsJSON() throws Exception {
-		final String jsonString = loadContent("open-platform/sections.json").toString();		
-		List<Section> sections = parser.parseSectionsJSON(jsonString);
+	public void testCanParseSectionsJSON() throws Exception {	
+		List<Section> sections = parser.parseSectionsJSON(loadContent("open-platform/sections.json"));
 		assertEquals(38, sections.size());
 	}
 	
 	@Test
 	public void testCanSeeValidStatus() throws Exception {
-		final String jsonString = loadContent("open-platform/sections.json").toString();
-		JSONObject json  = new JSONObject(jsonString);
-		assertTrue(parser.isResponseOk(json));		
-	}
-	
-	private StringBuffer loadContent(String filename) throws IOException {
-		StringBuffer content = new StringBuffer();
-		File contentFile = new File(ClassLoader.getSystemClassLoader().getResource(filename).getFile());
-		Reader freader = new FileReader(contentFile);
-		BufferedReader in = new BufferedReader(freader);
+		StringBuilder content = new StringBuilder();
+		final InputStream input = loadContent("open-platform/sections.json");
+		BufferedReader in = new BufferedReader(new InputStreamReader(input));
 		String str;
 		while ((str = in.readLine()) != null) {
 			content.append(str);
 			content.append("\n");
 		}
 		in.close();
-		freader.close();
-		return content;
+
+		JSONObject json = new JSONObject(content.toString());
+		assertTrue(parser.isResponseOk(json));
+	}
+	
+	private InputStream loadContent(String filename) throws IOException {
+		File contentFile = new File(ClassLoader.getSystemClassLoader().getResource(filename).getFile());
+		return new FileInputStream(contentFile);
 	}
 	
 }
