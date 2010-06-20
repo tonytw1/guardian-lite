@@ -60,16 +60,10 @@ public class ArticleDAO {
 		//	return sectionCache.getAll();
 		//}
 		
-		//List<Section> sections = fileBasedSectionCache.getSections();
-		//if (sections != null) {
-		//	return sections;
-		//}
-		
 		List <Section> sections = openPlatformApi.getSections();
 		if (sections != null) {
 			Log.i(TAG, "Found " + sections.size() + " sections");
 			sectionCache.addAll(sections);
-			fileBasedSectionCache.putSections(sections);
 		}		
 		return sections;
 	}
@@ -90,7 +84,7 @@ public class ArticleDAO {
 			if (articles != null) {
 				Log.i(TAG, "Got " + articles.size() + " articles from api call");
 				//articleCache.putArticleSetArticles(articleSet, articles);
-				fileBasedArticleCache.putArticleSetArticles(articleSet, articles);
+				//fileBasedArticleCache.putArticleSetArticles(articleSet, articles);
 				return articles;
 			} else {
 				Log.w(TAG, "Article api call failed");
@@ -120,11 +114,11 @@ public class ArticleDAO {
 
 
 	public List<Article> getTopStories() {
-		return fileBasedArticleCache.getArticleSetArticles(new TopStoriesArticleSet());
+		return null;	// TODO
 	}
 		
 	public void saveTopStories(List<Article> topStories) {
-		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), topStories);		
+		//fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), topStories);		
 	}
 
 	public DateTime getModificationTime(ArticleSet articleSet) {

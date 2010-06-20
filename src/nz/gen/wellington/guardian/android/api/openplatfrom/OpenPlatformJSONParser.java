@@ -32,8 +32,14 @@ public class OpenPlatformJSONParser {
 	private static final String KEYWORD = "keyword";
 
 	boolean running = true;
+	StringBuilder consumedContent;
 	
-	
+		
+	public OpenPlatformJSONParser() {
+		consumedContent = new StringBuilder();
+	}
+
+
 	public List<Article> parseArticlesJSON(InputStream inputStream, List<Section> sections) {
 		try {
 			
@@ -54,7 +60,9 @@ public class OpenPlatformJSONParser {
 			for (int i=0; i < results.length(); i++) {				
 				JSONObject result = results.getJSONObject(i);						
 				articles.add(extractArticle(result, sections));
-			}				
+			}
+			
+			consumedContent.append(content);
 			return articles;
 			
 		} catch (JSONException e) {
@@ -235,6 +243,7 @@ public class OpenPlatformJSONParser {
 				sections.add(new Section(id, sectionName, SectionColourMap.getColourForSection(id)));
 			}
 			
+			consumedContent.append(content);
 			return sections;			
 			
 		} catch (JSONException e) {
@@ -276,6 +285,10 @@ public class OpenPlatformJSONParser {
 		}
 		return null;
 	}
-
+	
+	
+	public String getConsumedContent() {
+		return consumedContent.toString();
+	}
 	
 }

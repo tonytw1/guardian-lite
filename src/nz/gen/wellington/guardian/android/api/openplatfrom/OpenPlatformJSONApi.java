@@ -1,5 +1,8 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -7,6 +10,7 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.api.OpenPlatformApiKeyStore;
+import nz.gen.wellington.guardian.android.api.caching.FileService;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.AuthorArticleSet;
@@ -22,31 +26,22 @@ public class OpenPlatformJSONApi implements ContentSource {
 	private static final String TAG = "OpenPlatformJSONApi";
 
 	private static final String API_HOST = "http://content.guardianapis.com";	
-	private static final String SECTIONS_JSON_URL = API_HOST + "/sections?format=json";
+	public static final String SECTIONS_API_URL = "sections";
 	private static final int PAGE_SIZE = 10;	// TODO push to a preference
 	
 	private OpenPlatformApiKeyStore apiKeyStore;
 	private HttpFetcher httpFetcher;
-	protected OpenPlatformJSONParser jsonParser;
+
+	private Context context;
 	
 	
 	public OpenPlatformJSONApi(Context context, OpenPlatformApiKeyStore apiKeyStore) {
+		this.context = context;
 		this.apiKeyStore = apiKeyStore;
 		httpFetcher = new HttpFetcher(context);		
-		jsonParser = new  OpenPlatformJSONParser();
 	}
 
 	
-	
-	
-	@Override
-	public void stopLoading() {
-		httpFetcher.stopLoading();
-	}
-
-
-
-
 	@Override
 	public List<Article> getArticles(ArticleSet articleSet, List<Section> sections) {
 		if (apiKeyStore.getApiKey() == null) {
@@ -55,10 +50,34 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
-		final InputStream input = getJSON(buildContentQueryUrl(articleSet));		
-		if (input != null) {	
-			List<Article> articles = jsonParser.parseArticlesJSON(input, sections);			
-			return articles;			
+		final String apiUrl = articleSet.getApiUrl();
+		
+		boolean shouldCache = false;
+		InputStream input = null;
+		if (FileService.isLocallyCached(context, apiUrl)) {		
+			try {
+				Log.i(TAG, "Using locally cached copy of: " + apiUrl);
+				input = FileService.getFileInputStream(context, apiUrl);
+			} catch (FileNotFoundException e) {				
+			}
+		}
+		
+		if (input == null) {
+			Log.i(TAG, "Fetching article set from live api: " + apiUrl);
+			input = getHttpInputStream(buildContentQueryUrl(articleSet));	
+			shouldCache = true;
+		}		
+		
+		if (input != null) {
+			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser();
+			List<Article> articles = jsonParser.parseArticlesJSON(input, sections);
+			
+			if (articles != null && !articles.isEmpty()) {
+				if (shouldCache) {
+					cacheApiUrlContent(jsonParser.getConsumedContent(), apiUrl);
+				}
+				return articles;
+			}
 		}
 		return null;
 	}
@@ -70,19 +89,57 @@ public class OpenPlatformJSONApi implements ContentSource {
 			Log.w(TAG, "API key not set");
 			return null;
 		}
-		Log.i(TAG, "Fetching section list from Open Platform api");
-		final InputStream input = getJSON(SECTIONS_JSON_URL);
+		
+		boolean shouldCache = false;
+		InputStream input = null;
+		if (FileService.isLocallyCached(context, SECTIONS_API_URL)) {		
+			try {
+				Log.i(TAG, "Using locally cached copy of: " + SECTIONS_API_URL);
+				input = FileService.getFileInputStream(context, SECTIONS_API_URL);
+			} catch (FileNotFoundException e) {				
+			}
+		}
+		
+		if (input == null) {
+			Log.i(TAG, "Fetching section list from live api");
+			input = getHttpInputStream(buildSectionsQueryUrl());
+			shouldCache = true;
+		}
+		
 		if (input != null) {
+			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser();
 			List<Section> sections = jsonParser.parseSectionsJSON(input);
 			if (sections != null) {
+				
+				if (shouldCache) {
+					cacheApiUrlContent(jsonParser.getConsumedContent(), SECTIONS_API_URL);
+				}
+				
 				return stripJunkSections(sections);
 			}
 		}
 		return null;
 	}
 	
+	
+	@Override
+	public void stopLoading() {
+		httpFetcher.stopLoading();
+	}
+	
+	
+	private void cacheApiUrlContent(String content, String apiUrl) {		
+		Log.i(TAG, "Writing to disk: " + apiUrl);
+		try {
+			FileWriter writer = FileService.getFileWriter(context, apiUrl);	
+			writer.write(content);
+			writer.close();
+		} catch (IOException ex) {
+			Log.e(TAG, "IO Exception while writing cache file for api url: " + apiUrl + ", " + ex.getMessage());
+		}
+	}
+	
 
-	// TODO this wants to move up
 	private List<Section> stripJunkSections(List<Section> sections) {
 		List<Section> goodSections = new LinkedList<Section>();
 		List<String> badSections = Arrays.asList("Community", "Crosswords", "Extra", "Help", "Info", "Local", "From the Guardian", "From the Observer", "News", "Weather");
@@ -92,6 +149,14 @@ public class OpenPlatformJSONApi implements ContentSource {
 			}
 		}
 		return goodSections;
+	}
+
+	
+	
+	private String buildSectionsQueryUrl() {
+		StringBuilder url = new StringBuilder(API_HOST + "/" + SECTIONS_API_URL);
+		url.append("?format=json");
+		return url.toString();
 	}
 
 	
@@ -120,7 +185,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	}
 	
 	
-	private InputStream getJSON(String url) {
+	private InputStream getHttpInputStream(String url) {
 		return httpFetcher.httpFetch(url);		
 	}
 		
