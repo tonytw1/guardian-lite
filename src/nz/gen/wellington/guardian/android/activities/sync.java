@@ -81,8 +81,9 @@ public class sync extends Activity implements OnClickListener {
 
 		case R.id.buttonStart:			
 			queueFavouriteTags(taskQueue);
-			queueFavouriteSections(taskQueue);
-						
+			queueFavoriteSections(taskQueue);
+			//queueAllSections(taskQueue);
+			
 			Intent start = new Intent(ContentUpdateService.CONTROL);
 			start.putExtra("command", "start");
 			this.sendBroadcast(start);
@@ -94,6 +95,18 @@ public class sync extends Activity implements OnClickListener {
 			this.sendBroadcast(stop);
 		}
 		
+	}
+
+
+	private void queueFavoriteSections(TaskQueue taskQueue) {
+		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext())).getFavouriteSections();		
+		queueSections(taskQueue, favouriteSections);
+	}
+	
+	
+	private void queueAllSections(TaskQueue taskQueue) {
+		// TODO Auto-generated method stub
+		queueSections(taskQueue, ArticleDAOFactory.getDao(this).getSections());
 	}
 	
 	
@@ -108,8 +121,7 @@ public class sync extends Activity implements OnClickListener {
 	}
 
 
-	private void queueFavouriteSections(TaskQueue taskQueue) {
-		List<Section> sections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext())).getFavouriteSections(); // TODO move favourites dao to singleton.
+	private void queueSections(TaskQueue taskQueue, List<Section> sections) {
 		if (sections != null) {
 			for (Section section : sections) {
 				Log.i(TAG, "Injecting favourite section into update queue: " + section.getName());

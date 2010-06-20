@@ -6,7 +6,9 @@
 
 
 
-<ScrollView android:id="@+id/ScrollView01" android:layout_height="wrap_content" android:layout_width="fill_parent"><LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/MainPane">
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/DownloadProgress"></TextView><ScrollView android:id="@+id/ScrollView01" android:layout_height="wrap_content" android:layout_width="fill_parent"><LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/MainPane">
+
+
 
 </LinearLayout></ScrollView>
 </LinearLayout>

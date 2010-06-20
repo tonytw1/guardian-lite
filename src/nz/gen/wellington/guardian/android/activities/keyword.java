@@ -11,7 +11,7 @@ public class keyword extends ArticleListActivity {
 
 	ListAdapter adapter;
 	Tag keyword;
-	
+		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
@@ -22,6 +22,7 @@ public class keyword extends ArticleListActivity {
 		} else {
 			setHeading(keyword.getName());
 		}	
+		
 		updateArticlesHandler = new UpdateArticlesHandler(this);
 	}
 	
@@ -29,4 +30,5 @@ public class keyword extends ArticleListActivity {
 	protected List<Article> loadArticles() {
 		return articleDAO.getKeywordItems(keyword);
 	}
+	
 }
