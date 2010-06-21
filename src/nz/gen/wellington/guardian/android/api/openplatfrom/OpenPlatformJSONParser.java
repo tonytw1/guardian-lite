@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,49 +36,37 @@ public class OpenPlatformJSONParser {
 	private static final String TAG = "OpenPlatformJSONParser";
 	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 	
-	private static final String CONTRIBUTOR = "contributor";
-	private static final String KEYWORD = "keyword";
 	public static final String ARTICLE_AVAILABLE = "nz.gen.wellington.guardian.android.api.ARTICLE_AVAILABLE";
 
-	private Context context;
 	private StringBuilder consumedContent;
 	private boolean running;
 	ArticleCallback articleCallback;
 	
 	
 	public OpenPlatformJSONParser(Context context, ArticleCallback articleCallback) {
-		this.context = context;
-		consumedContent = new StringBuilder();
 		this.articleCallback = articleCallback;
 		running = true;
 	}
 
 
-	public List<Article> parseArticlesXml(InputStream inputStream, List<Section> sections) {		
+	public List<Article> parseArticlesXml(InputStream inputStream, List<Section> sections) {
 		try {
-			
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser saxParser =  factory.newSAXParser();
-            ResultsHandler hb = new ResultsHandler(articleCallback, sections);
-				saxParser.parse(inputStream, hb);
-				inputStream.close();				
-				consumedContent= null;		
-				return hb.getArticles();
-				
-				
-			} catch (SAXException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 
-		
-		return null;		
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser saxParser = factory.newSAXParser();
+			ResultsHandler hb = new ResultsHandler(articleCallback, sections);
+			saxParser.parse(inputStream, hb);
+			inputStream.close();
+			return hb.getArticles();
+
+		} catch (SAXException e) {
+			Log.e(TAG, e.getMessage());
+		} catch (IOException e) {
+			Log.e(TAG, e.getMessage());
+		} catch (ParserConfigurationException e) {
+			Log.e(TAG, e.getMessage());
+		}
+		return null;
 	}
 	
 	
@@ -114,6 +100,9 @@ public class OpenPlatformJSONParser {
 		public List<Article> getArticles() {
         	 return articles;
 		}
+		
+		
+		
 
 		@Override
 		public void startDocument() throws SAXException {
@@ -122,8 +111,9 @@ public class OpenPlatformJSONParser {
 		}
 
          @Override
-         public void startElement(String name, AttributeList attributes) throws SAXException {
+         public void startElement(String name, AttributeList attributes) throws SAXException {        	 
         	 super.startElement(name, attributes);
+        	 
         	 if (name.equals("content")) {
         		 article = new Article();
         		 sb = new StringBuilder();
@@ -152,15 +142,25 @@ public class OpenPlatformJSONParser {
         	 }
         	 
         	 if (name.equals("tag")) {
-        		 Tag tag = new Tag(attributes.getValue("web-title"),
-        				 attributes.getValue("id"),        				 
-        				 null);
-        		 article.addKeyword(tag);        		 
+        		 
+        		 if (attributes.getValue("type").equals("keyword")) {
+        			 Section tagSection = getSectionById(attributes.getValue("section-id"));        		 
+        			 Tag tag = new Tag(attributes.getValue("web-title"),
+        				 attributes.getValue("id"), tagSection);        		 
+        			 article.addKeyword(tag);
+        		 }
+        		 
+        		 if (attributes.getValue("type").equals("contributor")) {
+        			 Tag tag = new Tag(attributes.getValue("web-title"),
+            				 attributes.getValue("id"), null);        
+        			 article.addAuthor(tag);
+        		 }
         	 }
         	 
-        	 if (name.equals("assert")) {
-        		 if (article.getMainImageUrl() == null && attributes.getType("type").equals("picture")) {
+        	 if (name.equals("asset")) {
+        		 if (article.getMainImageUrl() == null && attributes.getValue("type").equals("picture")) {
         			 article.setMainImageUrl(attributes.getValue("file"));        			 
+        			 Log.i(TAG, "Setting main image to: " + article.getMainImageUrl());
         		 }
         	 }
          }
@@ -177,7 +177,6 @@ public class OpenPlatformJSONParser {
 				}
 				
 				if (currentField.equals("byline")) {
-					Log.d(TAG, sb.toString());
 					article.setByline(ArticleBodyCleaner.stripHtml(sb.toString()));
 				}
 				
@@ -206,154 +205,21 @@ public class OpenPlatformJSONParser {
 			}
 		}
 
-         
-         @Override
-         public void characters(char[] ch, int start, int length) throws SAXException {
-                 super.characters(ch, start, length);
-                 if (currentField != null) {
-                         for (int i = start; i < start + length; i++) {
-                                 sb.append(ch[i]);
-                         }
-                 }
-                 
-         }
-
-		public StringBuilder getConsumedContent() {
-			Log.d(TAG, consumedContent.toString());
-			return consumedContent;
+		@Override
+		public void characters(char[] ch, int start, int length) throws SAXException {
+			super.characters(ch, start, length);
+			if (currentField != null) {
+				for (int i = start; i < start + length; i++) {
+					sb.append(ch[i]);
+				}
+			}
 		}
-         
+		
 	 }
 
 
-		
-	
-
-	
-	private Article extractArticle(JSONObject result, List<Section> sections) throws JSONException {		
-		Article article = new Article();
-		
-		final String guid = result.getString("id");
-		article.setId(guid);
-		
-		if (result.has("webPublicationDate")) {
-			final String dateString = getJsonFields(result, "webPublicationDate");
-			try {
-				DateTimeFormatter fmt = DateTimeFormat.forPattern(DATE_TIME_FORMAT);			
-				article.setPubDate(fmt.parseDateTime(dateString));
-			} catch (Exception e) {
-				Log.e(TAG, "Failed to parse date '" + dateString +  "': " + e.getMessage());
-			}
-		}
-		
-		if (result.has("fields")) {
-			JSONObject fields = result.getJSONObject("fields");
-			if (fields != null) {
-				article.setTitle(getJsonFields(fields, "headline"));
-				article.setByline(
-						ArticleBodyCleaner.stripHtml(getJsonFields(fields, "byline")));
-				article.setStandfirst(
-						ArticleBodyCleaner.stripHtml(getJsonFields(fields, "standfirst")));
-				article.setDescription(
-						ArticleBodyCleaner.stripHtml(getJsonFields(fields, "body")));
-				
-				String thumbnail = getJsonFields(fields, "thumbnail");
-				article.setThumbnailUrl(thumbnail);				
-			}
-		}
-			
-		if (result.has("tags")) {
-			processTags(result, article, sections);
-		}
-		
-		if (result.has("mediaAssets")) {
-			JSONArray mediaAssets = result.getJSONArray("mediaAssets");
-			parseArticleJSONForMainPicture(mediaAssets, article);
-		}
-		return article;
-	}
-	
-	
-	private void processTags(JSONObject result, Article article, List<Section> sections) throws JSONException {
-		JSONArray tags = result.getJSONArray("tags");
-		if (tags != null) {
-			for (int j=0; j < tags.length(); j++) {														
-				JSONObject tag = tags.getJSONObject(j);				
-				final String type = tag.getString("type");
-								
-				if (type.equals(CONTRIBUTOR)) {
-					Tag author = new Tag(
-						getJsonFields(tag, "webTitle"), 
-						getJsonFields(tag, "id"), null);
-					article.addAuthor(author);
-					
-				} else if (type.equals(KEYWORD)) {
-					
-					Section tagSection = null;
-					final String sectionId = getJsonFields(tag, "sectionId");
-					for (Section section : sections) {
-						if (section.getId().equals(sectionId)) {
-							tagSection = section;
-						}
-					}
-					
-					
-					Tag keyword = new Tag(
-							getJsonFields(tag, "webTitle"), 
-							getJsonFields(tag, "id"),
-							tagSection);
-					article.addKeyword(keyword);
-				}
-			}
-						
-			if (tags.length() > 0) {
-				JSONObject tag = tags.getJSONObject(0);
-				final String sectionId = getJsonFields(tag, "sectionId");
-				for (Section section : sections) {
-					if (section.getId().equals(sectionId)) {
-						article.setSection(section);
-					}
-				}
-			}
-		}
-		
-		return;
-	}
-	
-	
-	private void parseArticleJSONForMainPicture(JSONArray mediaAssets, Article article) {
-		try {
-			// TODO better targeting.
-			if (mediaAssets.length() > 0) {
-				JSONObject first = mediaAssets.getJSONObject(0);
-				if (first.has("file") && first.has("type")) {
-					
-					if (first.getString("type").equals("picture")) {
-						final String mainImageUrl = (String) first.getString("file");
-						article.setMainImageUrl(mainImageUrl);
-						Log.i(TAG, "Found main picture: " + mainImageUrl);
-
-						if (first.has("fields")) {
-							JSONObject fields = first.getJSONObject("fields");
-							if (fields.has("caption")) {
-								article.setCaption(fields.getString("caption"));
-							}
-						}
-					}
-				}
-			}
-			return;
-			
-		} catch (JSONException e) {
-			Log.e(TAG, "JSONException while parsing media elements: " + e.getMessage());
-			return;
-		}
-	}
-	
-	
 	public List<Section> parseSectionsJSON(InputStream input) {
-		try {
-			
+		try {			
 			StringBuilder content = new StringBuilder();
 			BufferedReader in = new BufferedReader(new InputStreamReader(input));
 			String str;
@@ -383,8 +249,7 @@ public class OpenPlatformJSONParser {
 		} catch (JSONException e) {
 			Log.e(TAG, "JSONException while parsing articles: " + e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(TAG, "IOException while parsing articles: " + e.getMessage());
 		}
 		return null;
 	}
@@ -414,19 +279,6 @@ public class OpenPlatformJSONParser {
 		} catch (JSONException e) {
 			return null;
 		}		
-	}
-	
-	private String getJsonFields(JSONObject jsonObject, String field) throws JSONException {
-		if (jsonObject.has(field)) {
-			return jsonObject.getString(field);
-		}
-		return null;
-	}
-	
-	
-	public String getConsumedContent() {
-		Log.d(TAG, consumedContent.toString());
-		return consumedContent.toString();
 	}
 	
 }

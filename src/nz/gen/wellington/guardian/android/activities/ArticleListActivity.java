@@ -187,7 +187,6 @@ public abstract class ArticleListActivity extends Activity {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			
-			Log.d(TAG, "Message: " + msg.toString());
 			switch (msg.what) {	   
 			    case 1: 		
 			    	Article article = (Article) msg.getData().getSerializable("article");
