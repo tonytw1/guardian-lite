@@ -27,6 +27,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	private static final int PAGE_SIZE = 10;	// TODO push to a preference
 	
 	private OpenPlatformApiKeyStore apiKeyStore;
+	private OpenPlatformJSONParser contentParser;
 	private HttpFetcher httpFetcher;
 
 	private Context context;
@@ -35,7 +36,8 @@ public class OpenPlatformJSONApi implements ContentSource {
 	public OpenPlatformJSONApi(Context context, OpenPlatformApiKeyStore apiKeyStore) {
 		this.context = context;
 		this.apiKeyStore = apiKeyStore;
-		httpFetcher = new HttpFetcher(context);		
+		httpFetcher = new HttpFetcher(context);
+		contentParser = new OpenPlatformJSONParser(context);
 	}
 
 	
@@ -56,8 +58,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}		
 		
 		if (input != null) {
-			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context, articleCallback);
-			List<Article> articles = jsonParser.parseArticlesXml(input, sections);
+			List<Article> articles = contentParser.parseArticlesXml(input, sections, articleCallback);
 			
 			if (articles != null && !articles.isEmpty()) {
 				return articles;
@@ -81,7 +82,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		
 		if (input != null) {
-			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context, null);
+			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context);
 			List<Section> sections = jsonParser.parseSectionsJSON(input);
 			if (sections != null) {				
 				return stripJunkSections(sections);
@@ -93,6 +94,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	
 	@Override
 	public void stopLoading() {
+		contentParser.stop();
 		httpFetcher.stopLoading();
 	}
 	

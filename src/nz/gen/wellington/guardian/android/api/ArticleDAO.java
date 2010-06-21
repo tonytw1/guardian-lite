@@ -25,20 +25,17 @@ public class ArticleDAO {
 		
 	private static final String TAG = "ArticleDAO";
 	
-	ContentSource openPlatformApi;
-
 	InMemorySectionCache sectionCache;
 	FileBasedArticleCache fileBasedArticleCache;
 	FileBasedSectionCache fileBasedSectionCache;
-
-	private ArticleCallback articleCallback;
+	ArticleCallback articleCallback;
+	ContentSource openPlatformApi;
 	
 	public ArticleDAO(Context context) {
-		this.openPlatformApi = ArticleDAOFactory.getOpenPlatformApi(context);
-
 		this.sectionCache = CacheFactory.getSectionCache();
 		this.fileBasedArticleCache = new FileBasedArticleCache(context);
 		this.fileBasedSectionCache = new FileBasedSectionCache(context);
+		openPlatformApi = ArticleDAOFactory.getOpenPlatformApi(context);
 	}
 	
 	
@@ -63,8 +60,8 @@ public class ArticleDAO {
 		 List<Section> sections = fileBasedSectionCache.getSections();
 		 if (sections != null) {
 			 return sections;
-		 }		
-		
+		 }
+		 
 		 sections = openPlatformApi.getSections();
 		 if (sections != null) {
 			Log.i(TAG, "Found " + sections.size() + " sections");

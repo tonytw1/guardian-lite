@@ -38,18 +38,15 @@ public class OpenPlatformJSONParser {
 	
 	public static final String ARTICLE_AVAILABLE = "nz.gen.wellington.guardian.android.api.ARTICLE_AVAILABLE";
 
-	private StringBuilder consumedContent;
 	private boolean running;
-	ArticleCallback articleCallback;
 	
 	
-	public OpenPlatformJSONParser(Context context, ArticleCallback articleCallback) {
-		this.articleCallback = articleCallback;
+	public OpenPlatformJSONParser(Context context) {
 		running = true;
 	}
 
 
-	public List<Article> parseArticlesXml(InputStream inputStream, List<Section> sections) {
+	public List<Article> parseArticlesXml(InputStream inputStream, List<Section> sections, ArticleCallback articleCallback) {
 		try {
 
 			SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -113,6 +110,10 @@ public class OpenPlatformJSONParser {
          @Override
          public void startElement(String name, AttributeList attributes) throws SAXException {        	 
         	 super.startElement(name, attributes);
+        	 if (!running) {
+        		 Log.i(TAG, "Parser stopping");
+        		 throw new SAXException("Parse has been stopped");        		 
+        	 }
         	 
         	 if (name.equals("content")) {
         		 article = new Article();
@@ -279,6 +280,11 @@ public class OpenPlatformJSONParser {
 		} catch (JSONException e) {
 			return null;
 		}		
+	}
+
+
+	public void stop() {
+		running = false;		
 	}
 	
 }
