@@ -6,12 +6,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
 import nz.gen.wellington.guardian.android.api.openplatfrom.OpenPlatformJSONParser;
-import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 
 import org.json.JSONObject;
@@ -19,7 +17,7 @@ import org.junit.Test;
 
 public class OpenPlatformJSONParserTest extends TestCase {
 
-	OpenPlatformJSONParser parser = new OpenPlatformJSONParser(null);
+	OpenPlatformJSONParser parser = new OpenPlatformJSONParser(null, null);
 	
 	@Test
 	public void testCanParseSectionContentResults() throws Exception {			

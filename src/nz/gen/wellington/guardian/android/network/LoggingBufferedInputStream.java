@@ -11,6 +11,7 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 	
 	Context context;
 	int totalRead;
+	long contentLength;
 	
 	public LoggingBufferedInputStream(InputStream in, Context context) {
 		super(in);
@@ -18,17 +19,18 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 		totalRead = 0;
 	}
 
-	public LoggingBufferedInputStream(InputStream in, int size, Context context) {
+	public LoggingBufferedInputStream(InputStream in, int size, Context context, long contentLength) {
 		super(in, size);
 		this.context = context;
 		totalRead = 0;
+		this.contentLength = contentLength;
 	}
 
 	@Override
 	public synchronized int read(byte[] buffer, int offset, int length) throws IOException {
 		int read = super.read(buffer, offset, length);
 		totalRead = totalRead + read;
-		announceProgress("dsjd", 0, totalRead);
+		announceProgress("dsjd", totalRead);
 		return read;	
 	}
 	
@@ -36,7 +38,7 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 	public int read(byte[] buffer) throws IOException {
 		int read =  super.read(buffer);
 		totalRead = totalRead + read;
-		announceProgress("dsjd", 0, totalRead);
+		announceProgress("dsjd", totalRead);
 		return read;
 	}
 	
@@ -48,7 +50,7 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 	}
 	
 
-	private void announceProgress(String url, long contentLength, int totalRead) {
+	private void announceProgress(String url, int totalRead) {
 		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
 		intent.putExtra("type", HttpFetcher.DOWNLOAD_UPDATE);
 		intent.putExtra("url", url);
@@ -57,6 +59,7 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 		context.sendBroadcast(intent);
 	}
 
+	
 	
 	private void announceDownloadCompleted(String url) {
 		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);

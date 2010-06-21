@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.api.OpenPlatformApiKeyStore;
 import nz.gen.wellington.guardian.android.model.Article;
@@ -14,7 +15,6 @@ import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
-import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 import android.content.Context;
 import android.util.Log;
 
@@ -40,7 +40,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 
 	
 	@Override
-	public List<Article> getArticles(ArticleSet articleSet, List<Section> sections) {
+	public List<Article> getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {
 		if (apiKeyStore.getApiKey() == null) {
 			Log.w(TAG, "API key not set");
 			return null;
@@ -56,7 +56,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}		
 		
 		if (input != null) {
-			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context);
+			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context, articleCallback);
 			List<Article> articles = jsonParser.parseArticlesXml(input, sections);
 			
 			if (articles != null && !articles.isEmpty()) {
@@ -81,7 +81,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		
 		if (input != null) {
-			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context);
+			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context, null);
 			List<Section> sections = jsonParser.parseSectionsJSON(input);
 			if (sections != null) {				
 				return stripJunkSections(sections);

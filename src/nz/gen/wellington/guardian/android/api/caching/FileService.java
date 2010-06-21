@@ -5,9 +5,6 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-
-import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 
 import org.joda.time.DateTime;
 

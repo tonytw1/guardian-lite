@@ -2,6 +2,7 @@ package nz.gen.wellington.guardian.android.api;
 
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
@@ -14,7 +15,7 @@ import nz.gen.wellington.guardian.android.model.Section;
 public interface ContentSource {
 
 	public List<Section> getSections();
-	List<Article> getArticles(ArticleSet articleSet, List<Section> sections);
+	List<Article> getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback);
 	public void stopLoading();
 
 }

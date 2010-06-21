@@ -308,7 +308,7 @@ public abstract class ArticleListActivity extends Activity {
 	}
 	
 
-	class UpdateArticlesRunner implements Runnable {		
+	class UpdateArticlesRunner implements Runnable, ArticleCallback {		
 		boolean running;
 		ArticleDAO articleDAO;
 		ImageDAO imageDAO;
@@ -317,6 +317,7 @@ public abstract class ArticleListActivity extends Activity {
 			this.articleDAO = articleDAO;
 			this.imageDAO = imageDAO;
 			this.running = true;
+			articleDAO.setArticleReadyCallback(this);
 		}
 		
 		public void run() {
@@ -406,6 +407,12 @@ public abstract class ArticleListActivity extends Activity {
 		public void stop() {
 			this.running = false;
 			articleDAO.stopLoading();
+		}
+
+		@Override
+		public void articleReady(Article article) {
+			Log.d(TAG, "Article ready: " + article.getTitle());
+			sendArticleReadyMessage(article);
 		}
 	}
 	

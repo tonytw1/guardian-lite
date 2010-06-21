@@ -7,17 +7,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.activities.ArticleListActivity;
-import nz.gen.wellington.guardian.android.api.openplatfrom.OpenPlatformJSONApi;
-import nz.gen.wellington.guardian.android.api.openplatfrom.OpenPlatformJSONParser;
+import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.Section;
 
 import org.joda.time.DateTime;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 public class FileBasedArticleCache {
@@ -45,7 +41,7 @@ public class FileBasedArticleCache {
 
 
 	@SuppressWarnings("unchecked")
-	public List<Article> getArticleSetArticles(ArticleSet articleSet) {
+	public List<Article> getArticleSetArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
 		if (!FileService.isLocallyCached(context, articleSet.getApiUrl())) {
 			return null;
 		}
@@ -62,9 +58,12 @@ public class FileBasedArticleCache {
 			Log.i(TAG, "Finished reading from disk: " + filepath);
 			if (loaded != null) {
 				
-				for (Article article : loaded) {
-					announceArticleExtracted(article);
+				if (articleCallback != null) {
+					for (Article article : loaded) {
+						articleCallback.articleReady(article);
+					}
 				}
+					
 				Log.i(TAG, "Loaded " + loaded.size() + " articles");
 			}
 			return loaded;
@@ -75,13 +74,6 @@ public class FileBasedArticleCache {
 			Log.e(TAG, "Exception while writing article set: " + articleSet.getName() + ex.getMessage());
 		}
 		return null;
-	}
-	
-	
-	private void announceArticleExtracted(Article article) {
-		Intent intent = new Intent(OpenPlatformJSONParser.ARTICLE_AVAILABLE);
-		intent.putExtra("article", article);
-		context.sendBroadcast(intent);
 	}
 	
 	

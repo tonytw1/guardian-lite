@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,12 +13,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ArticleBodyCleaner;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
-import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.joda.time.format.DateTimeFormat;
@@ -30,7 +31,6 @@ import org.xml.sax.HandlerBase;
 import org.xml.sax.SAXException;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 public class OpenPlatformJSONParser {
@@ -44,26 +44,26 @@ public class OpenPlatformJSONParser {
 
 	private Context context;
 	private StringBuilder consumedContent;
-	private boolean running;	
+	private boolean running;
+	ArticleCallback articleCallback;
 	
 	
-	public OpenPlatformJSONParser(Context context) {
+	public OpenPlatformJSONParser(Context context, ArticleCallback articleCallback) {
 		this.context = context;
 		consumedContent = new StringBuilder();
+		this.articleCallback = articleCallback;
 		running = true;
 	}
 
 
-	public List<Article> parseArticlesXml(InputStream inputStream, List<Section> sections) {
-		
+	public List<Article> parseArticlesXml(InputStream inputStream, List<Section> sections) {		
 		try {
 			
 			SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser =  factory.newSAXParser();
-            ResultsHandler hb = new ResultsHandler();
+            ResultsHandler hb = new ResultsHandler(articleCallback, sections);
 				saxParser.parse(inputStream, hb);
-				inputStream.close();
-				
+				inputStream.close();				
 				consumedContent= null;		
 				return hb.getArticles();
 				
@@ -93,36 +93,79 @@ public class OpenPlatformJSONParser {
          
          StringBuilder sb = new StringBuilder();
          String currentField;
+         ArticleCallback articleCallback;
+         private List<Section> sections;
          
-         public List<Article> getArticles() {
-        	 return articles;
+         public ResultsHandler(ArticleCallback articleCallback, List<Section> sections) {
+        	 this.articleCallback =articleCallback;
+        	 this.sections = sections;
          }
+         
+         
+         private Section getSectionById(String sectionId) {
+ 			for (Section section : sections) {
+ 				if (section.getId().equals(sectionId)) {
+ 					return section;
+ 				}
+ 			}
+ 			return null;			
+ 		}
 
-         @Override
-         public void startDocument() throws SAXException {
-                 super.startDocument();
-                 articles = new LinkedList<Article>();
-         }
+		public List<Article> getArticles() {
+        	 return articles;
+		}
+
+		@Override
+		public void startDocument() throws SAXException {
+			super.startDocument();
+			articles = new LinkedList<Article>();
+		}
 
          @Override
          public void startElement(String name, AttributeList attributes) throws SAXException {
         	 super.startElement(name, attributes);
         	 if (name.equals("content")) {
         		 article = new Article();
-        		 article.setTitle("TEST");
         		 sb = new StringBuilder();
+        		 	 
+        		 article.setId(attributes.getValue("id"));
+        		 
+        		 final String sectionId =  attributes.getValue("section-id");
+        		 Section section = getSectionById(sectionId);
+        		 article.setSection(section);
+        		 
+        		 
+        		 final String dateString = attributes.getValue("web-publication-date");
+        		 try {
+        			 DateTimeFormatter fmt = DateTimeFormat.forPattern(DATE_TIME_FORMAT);
+        			 article.setPubDate(fmt.parseDateTime(dateString));
+        		 } catch (Exception e) {
+        				Log.e(TAG, "Failed to parse date '" + dateString +  "': " + e.getMessage());
+        		 }
         	 }
                  
         	 if (name.equals("field")) {                             
         		 String fieldname = attributes.getValue("name");
-        		 //System.out.println("Starting field: " + fieldname);
         		 if (!fieldname.equals(currentField)) {
         			 currentField = fieldname;
         		 }
         	 }
+        	 
+        	 if (name.equals("tag")) {
+        		 Tag tag = new Tag(attributes.getValue("web-title"),
+        				 attributes.getValue("id"),        				 
+        				 null);
+        		 article.addKeyword(tag);        		 
+        	 }
+        	 
+        	 if (name.equals("assert")) {
+        		 if (article.getMainImageUrl() == null && attributes.getType("type").equals("picture")) {
+        			 article.setMainImageUrl(attributes.getValue("file"));        			 
+        		 }
+        	 }
          }
 
-		
+	
 		@Override
 		public void endElement(String name) throws SAXException {
 			super.endElement(name);
@@ -135,22 +178,31 @@ public class OpenPlatformJSONParser {
 				
 				if (currentField.equals("byline")) {
 					Log.d(TAG, sb.toString());
-					article.setByline(sb.toString());
+					article.setByline(ArticleBodyCleaner.stripHtml(sb.toString()));
 				}
 				
-				//if (currentField.equals("standfirst")) {
-				//	article.setStandfirst(sb.toString());
-				//}
+				if (currentField.equals("standfirst")) {
+					article.setStandfirst(ArticleBodyCleaner.stripHtml(sb.toString()));
+				}
+				
+				if (currentField.equals("thumbnail")) {
+					article.setThumbnailUrl(ArticleBodyCleaner.stripHtml(sb.toString()));
+				}
 				
 				if (currentField.equals("body")) {
-					article.setDescription(sb.toString());
+					article.setDescription(ArticleBodyCleaner.stripHtml(sb.toString()));
 				}
+				
 				currentField = null;
+				sb = new StringBuilder();
+
 			}
 
 			if (name.equals("content")) {
 				articles.add(article);
-				announceArticleExtracted(article);
+				if (articleCallback !=  null) {
+					articleCallback.articleReady(article);
+				}
 			}
 		}
 
@@ -174,44 +226,8 @@ public class OpenPlatformJSONParser {
 	 }
 
 
+		
 	
-	
-	
-	
-
-
-	private void announceArticleExtracted(Article article) {
-		Intent intent = new Intent(ARTICLE_AVAILABLE);
-		intent.putExtra("article", article);
-		context.sendBroadcast(intent);
-	}
-	
-	
-	private String readInputStreamToString(InputStream inputStream) {
-		StringBuilder content = new StringBuilder();
-		try {
-			Reader reader;
-			reader = new InputStreamReader(inputStream, "UTF-8");
-			int read;
-			final char[] buffer = new char[1024];
-			do {
-				read = reader.read(buffer, 0, buffer.length);
-				if (read > 0 && running) {				 									
-					content.append(buffer, 0, read);
-				}
-			} while (read >= 0 && running);
-			reader.close();
-			return content.toString();
-			
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 	
 	private Article extractArticle(JSONObject result, List<Section> sections) throws JSONException {		
@@ -338,12 +354,16 @@ public class OpenPlatformJSONParser {
 	public List<Section> parseSectionsJSON(InputStream input) {
 		try {
 			
-			final String content = readInputStreamToString(input);
-			if (content == null || content.length() == 0) {
-				return null;
+			StringBuilder content = new StringBuilder();
+			BufferedReader in = new BufferedReader(new InputStreamReader(input));
+			String str;
+			while ((str = in.readLine()) != null) {
+				content.append(str);
+				content.append("\n");
 			}
+			in.close();
 			
-			JSONObject json = new JSONObject(content);
+			JSONObject json = new JSONObject(content.toString());
 			if (!isResponseOk(json)) {
 				return null;				
 			}
@@ -353,16 +373,18 @@ public class OpenPlatformJSONParser {
 			List<Section> sections = new LinkedList<Section>();
 			for (int i=0; i < results.length(); i++) {		
 				JSONObject section = results.getJSONObject(i);				
-				final String sectionName = StringEscapeUtils.unescapeHtml(section.getString("webTitle"));
-				final String id =  section.getString("id");
-				sections.add(new Section(id, sectionName, SectionColourMap.getColourForSection(id)));
+				 final String sectionName = StringEscapeUtils.unescapeHtml(section.getString("webTitle"));
+				 final String id = section.getString("id");
+				 sections.add(new Section(id, sectionName, SectionColourMap.getColourForSection(id)));
 			}
 			
-			consumedContent.append(content);
 			return sections;			
 			
 		} catch (JSONException e) {
 			Log.e(TAG, "JSONException while parsing articles: " + e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return null;
 	}

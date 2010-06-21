@@ -92,7 +92,7 @@ public class HttpFetcher {
 				long contentLength = execute.getEntity().getContentLength();
 				Log.d(TAG, "Content length: " + contentLength);
 				
-				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context);				
+				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context, contentLength);				
 				return is;				
 			}
 			return null;

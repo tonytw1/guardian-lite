@@ -1,6 +1,5 @@
 package nz.gen.wellington.guardian.android.api;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +8,6 @@ import java.io.ObjectOutputStream;
 
 import nz.gen.wellington.guardian.android.api.caching.FileService;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
-import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

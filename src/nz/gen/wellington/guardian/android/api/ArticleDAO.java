@@ -2,6 +2,7 @@ package nz.gen.wellington.guardian.android.api;
 
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedSectionCache;
 import nz.gen.wellington.guardian.android.api.caching.FileService;
@@ -13,11 +14,11 @@ import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 
 import org.joda.time.DateTime;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 public class ArticleDAO {
@@ -29,6 +30,8 @@ public class ArticleDAO {
 	InMemorySectionCache sectionCache;
 	FileBasedArticleCache fileBasedArticleCache;
 	FileBasedSectionCache fileBasedSectionCache;
+
+	private ArticleCallback articleCallback;
 	
 	public ArticleDAO(Context context) {
 		this.openPlatformApi = ArticleDAOFactory.getOpenPlatformApi(context);
@@ -75,16 +78,15 @@ public class ArticleDAO {
 	private List<Article> getArticleSetArticles(ArticleSet articleSet) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
 		
-		List<Article> articles = fileBasedArticleCache.getArticleSetArticles(articleSet);
+		List<Article> articles = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
 		if (articles != null) {
-			Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());
-			
+			Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());			
 			return articles;
 		}
 		
 		List<Section> sections = this.getSections();
 		if (sections != null) {
-			articles = openPlatformApi.getArticles(articleSet, sections);		
+			articles = openPlatformApi.getArticles(articleSet, sections, articleCallback);		
 			if (articles != null) {
 				Log.i(TAG, "Got " + articles.size() + " articles from api call");
 				fileBasedArticleCache.putArticleSetArticles(articleSet, articles);
@@ -118,11 +120,11 @@ public class ArticleDAO {
 
 
 	public List<Article> getTopStories() {
-		return null;	// TODO
+		return fileBasedArticleCache.getArticleSetArticles(new TopStoriesArticleSet(), articleCallback);
 	}
 		
 	public void saveTopStories(List<Article> topStories) {
-		//fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), topStories);		
+		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), topStories);		
 	}
 
 	public DateTime getModificationTime(ArticleSet articleSet) {
@@ -133,6 +135,11 @@ public class ArticleDAO {
 	public void stopLoading() {
 		Log.i(TAG, "Stopping loading");
 		openPlatformApi.stopLoading();
+	}
+
+
+	public void setArticleReadyCallback(ArticleCallback articleCallback) {
+		this.articleCallback = articleCallback;		
 	}
 		
 }
