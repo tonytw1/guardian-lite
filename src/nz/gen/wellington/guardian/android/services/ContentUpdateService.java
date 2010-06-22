@@ -16,10 +16,9 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -31,7 +30,7 @@ public class ContentUpdateService extends Service {
     public static final String TASK_COMPLETION = "nz.gen.wellington.guardian.android.event.CONTENT_UPDATE_TASK_COMPLETION";
     public static final String BATCH_COMPLETION = "nz.gen.wellington.guardian.android.event.CONTENT_UPDATE_BATCH_COMPLETION";
     
-	private static final String TAG = "ContentLoader";
+	private static final String TAG = "ContentUpdateService";
     
     public static final int UPDATE_COMPLETE_NOTIFICATION_ID = 1;
 
@@ -46,6 +45,8 @@ public class ContentUpdateService extends Service {
     private ContentUpdateReport report;
 	private ContentUpdateTaskRunnable currentTask;
    
+	private final IBinder mBinder = new ContentUpdateServiceBinder();
+
     
     @Override
     public void onCreate() {
@@ -54,17 +55,35 @@ public class ContentUpdateService extends Service {
 
     	taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
     	internalRunnable = new InternalRunnable();
-    	running = false;
-    	
-    	BroadcastReceiver contentUpdateControlReceiver = new ContentUpdateControlReceiver();
-		registerReceiver(contentUpdateControlReceiver, new IntentFilter(ContentUpdateService.CONTROL));    	
+    	running = false;    	
     }
     
+    
+    public void start() {
+		Log.i(TAG, "Starting run");
 
-    private class InternalRunnable implements Runnable {
-    	public void run() {
-    		internalRun();
-    	}
+		report = new ContentUpdateReport();
+		running = true;
+
+    	thread = new Thread(internalRunnable);
+    	thread.setDaemon(true);
+    	thread.start();
+	}
+
+
+	public void stop() {
+		Log.i(TAG, "Starting stop");
+		running = false;
+		if (currentTask != null) {
+			currentTask.stop();
+		}
+		taskQueue.clear();
+	}
+	
+	
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
     }
     
     
@@ -113,34 +132,7 @@ public class ContentUpdateService extends Service {
     	}
     }
 	 
-	   
-	private void start() {
-		Log.i(TAG, "Starting run");
-
-		report = new ContentUpdateReport();
-		running = true;
-
-    	thread = new Thread(internalRunnable);
-    	thread.setDaemon(true);
-    	thread.start();
-	}
-
-
-	private void stop() {
-		Log.i(TAG, "Starting stop");
-		running = false;
-		if (currentTask != null) {
-			currentTask.stop();
-		}
-		taskQueue.clear();
-	}
-
-	
-	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
-	}
-		
+			
 	
 	private void announceTaskBeginning(ContentUpdateTaskRunnable task) {
 		Intent intent = new Intent(TASK_START);
@@ -203,19 +195,18 @@ public class ContentUpdateService extends Service {
 		return duration;
 	}
 	
+
+    private class InternalRunnable implements Runnable {
+    	public void run() {
+    		internalRun();
+    	}
+    }
+    
 	
-	class ContentUpdateControlReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Log.i(TAG, intent.toString());
-			final String command = intent.getStringExtra("command");
-			if (command != null && command.equals("start")) {
-				start();
-				
-			} else if (command != null && command.equals("stop")) {
-				stop();				
-			}			
+	public class ContentUpdateServiceBinder extends Binder {
+		public ContentUpdateService getService() {
+			return ContentUpdateService.this;
 		}
 	}
-		
+	
 }

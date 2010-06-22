@@ -14,10 +14,13 @@ import nz.gen.wellington.guardian.android.services.UpdateTagArticlesTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +34,8 @@ public class sync extends Activity implements OnClickListener {
 	Button start;
 	Button stop;
 	
+	private ContentUpdateService contentUpdateService;
+	
 	BroadcastReceiver taskStartReceiver;
 	BroadcastReceiver queueChangeReceiver;
 	BroadcastReceiver downloadProgressReceiver;
@@ -40,10 +45,7 @@ public class sync extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sync);
-        
-    	Log.d(TAG, "Starting content update service service");
-		startService(new Intent(this, ContentUpdateService.class));	// TODO should be on app startup
-		
+        		
         start = (Button) findViewById(R.id.buttonStart);        
         start.setOnClickListener(this);
         stop = (Button) findViewById(R.id.StopDownloadButton);        
@@ -52,6 +54,8 @@ public class sync extends Activity implements OnClickListener {
         queueChangeReceiver = new QueueChangeReceiver();
         downloadProgressReceiver = new DownloadProgressReceiver();
         batchCompletionReceiver = new BatchCompletionReceiver();
+        
+        doBindService();
 	}
 	
 
@@ -84,15 +88,16 @@ public class sync extends Activity implements OnClickListener {
 			queueFavoriteSections(taskQueue);
 			//queueAllSections(taskQueue);
 			
-			Intent start = new Intent(ContentUpdateService.CONTROL);
-			start.putExtra("command", "start");
-			this.sendBroadcast(start);
+			contentUpdateService.start();
+			stop.setEnabled(true);
+			start.setEnabled(false);
 			break;
 		
 		case R.id.StopDownloadButton: 
-			Intent stop = new Intent(ContentUpdateService.CONTROL);
-			stop.putExtra("command", "stop");
-			this.sendBroadcast(stop);
+			contentUpdateService.stop();
+			stop.setEnabled(false);
+			start.setEnabled(true);
+			break;
 		}
 		
 	}
@@ -150,14 +155,7 @@ public class sync extends Activity implements OnClickListener {
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);
 	}
-	
-	private void showDownloadStart(String url) {
-		final String statusMessage =  "Downloading: " + url;
-		TextView status = (TextView) findViewById(R.id.DownloadProgress);
-		status.setText(statusMessage);
-		status.setVisibility(View.VISIBLE);
-	}
-	
+		
 	private void hideDownloadProgress() {
 		TextView status = (TextView) findViewById(R.id.DownloadProgress);
 		status.setVisibility(View.GONE);
@@ -222,5 +220,62 @@ public class sync extends Activity implements OnClickListener {
 			switchToTopStories();
 		}
 	}
+	
+	
+	
+	
+	
+	private ServiceConnection mConnection = new ServiceConnection() {
+	    public void onServiceConnected(ComponentName className, IBinder service) {
+	        // This is called when the connection with the service has been
+	        // established, giving us the service object we can use to
+	        // interact with the service.  Because we have bound to a explicit
+	        // service that we know is running in our own process, we can
+	        // cast its IBinder to a concrete class and directly access it.
+	        contentUpdateService = ((ContentUpdateService.ContentUpdateServiceBinder)service).getService();
+
+	        // Tell the user about this for our demo.
+	        Log.d(TAG, "Content update service is bound");
+	    }
+
+	    public void onServiceDisconnected(ComponentName className) {
+	        // This is called when the connection with the service has been
+	        // unexpectedly disconnected -- that is, its process crashed.
+	        // Because it is running in our same process, we should never
+	        // see this happen.
+	        contentUpdateService = null;
+	        Log.d(TAG, "Content update service is unbound");
+
+	    }
+	};
+
+	boolean mIsBound = false;
+	void doBindService() {
+	    // Establish a connection with the service.  We use an explicit
+	    // class name because we want a specific service implementation that
+	    // we know will be running in our own process (and thus won't be
+	    // supporting component replacement by other applications).
+		
+		Intent intent = new Intent(this, ContentUpdateService.class);
+	    bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+	    mIsBound = true;
+	}
+
+	void doUnbindService() {
+	    if (mIsBound) {
+	        // Detach our existing connection.
+	        unbindService(mConnection);
+	        mIsBound = false;
+	    }
+	}
+
+	@Override
+	protected void onDestroy() {
+	    super.onDestroy();
+	    doUnbindService();
+	}
+	
+	
+	
 	
 }
