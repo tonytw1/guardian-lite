@@ -33,6 +33,7 @@ public class sync extends Activity implements OnClickListener {
 
 	Button start;
 	Button stop;
+	TextView statusMessage;
 	
 	private ContentUpdateService contentUpdateService;
 	
@@ -50,6 +51,9 @@ public class sync extends Activity implements OnClickListener {
         start.setOnClickListener(this);
         stop = (Button) findViewById(R.id.StopDownloadButton);        
         stop.setOnClickListener(this);
+        
+        statusMessage = (TextView) findViewById(R.id.StatusMessage);        
+        
         taskStartReceiver = new TaskStartReceiver();
         queueChangeReceiver = new QueueChangeReceiver();
         downloadProgressReceiver = new DownloadProgressReceiver();
@@ -87,16 +91,23 @@ public class sync extends Activity implements OnClickListener {
 			queueFavouriteTags(taskQueue);
 			queueFavoriteSections(taskQueue);
 			//queueAllSections(taskQueue);
-			
+						
 			contentUpdateService.start();
 			stop.setEnabled(true);
 			start.setEnabled(false);
+			statusMessage.setText("The most recent articles for your favourite tags and sections are been downloaded in the background.\n\n" +
+					"You will receive a notification when this download has completed.");
+			statusMessage.setVisibility(View.VISIBLE);
+
 			break;
 		
 		case R.id.StopDownloadButton: 
 			contentUpdateService.stop();
 			stop.setEnabled(false);
 			start.setEnabled(true);
+			statusMessage.setText("Your content download has been halted. Preforming post download cleanup tasks.");
+			statusMessage.setVisibility(View.VISIBLE);
+
 			break;
 		}
 		
@@ -217,6 +228,8 @@ public class sync extends Activity implements OnClickListener {
 			status.setVisibility(View.GONE);
 			TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
 			currentTask.setVisibility(View.GONE);
+			statusMessage.setText("");
+			statusMessage.setVisibility(View.GONE);
 			switchToTopStories();
 		}
 	}

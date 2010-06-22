@@ -26,7 +26,7 @@ public final class R {
         public static final int AuthorList=0x7f070010;
         public static final int Byline=0x7f07000d;
         public static final int Caption=0x7f07000b;
-        public static final int CurrentTask=0x7f070022;
+        public static final int CurrentTask=0x7f070023;
         public static final int Description=0x7f07000f;
         public static final int DownloadProgress=0x7f070019;
         public static final int Favourite=0x7f070013;
@@ -49,14 +49,15 @@ public final class R {
         public static final int SectionsListView=0x7f07001c;
         public static final int Seperator=0x7f07001f;
         public static final int Standfirst=0x7f070009;
-        public static final int Status=0x7f070021;
-        public static final int StopDownloadButton=0x7f070023;
+        public static final int Status=0x7f070022;
+        public static final int StatusMessage=0x7f070020;
+        public static final int StopDownloadButton=0x7f070024;
         public static final int TagList=0x7f070011;
         public static final int TagName=0x7f070012;
         public static final int TextView01=0x7f07000c;
         public static final int TextView02=0x7f070001;
         public static final int TrailImage=0x7f070015;
-        public static final int buttonStart=0x7f070020;
+        public static final int buttonStart=0x7f070021;
     }
     public static final class layout {
         public static final int about_dialog=0x7f030000;
