@@ -26,6 +26,7 @@
 <activity android:name=".activities.keyword" android:screenOrientation="portrait"></activity>
 <activity android:name=".activities.perferences" android:screenOrientation="portrait"></activity>
 <activity android:name=".activities.favourites" android:screenOrientation="portrait"></activity>
+<activity android:name=".activities.notification"></activity>
 </application>
     <uses-sdk android:minSdkVersion="3" />
 

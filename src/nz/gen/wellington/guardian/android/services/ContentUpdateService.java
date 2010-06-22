@@ -1,7 +1,7 @@
 package nz.gen.wellington.guardian.android.services;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.activities.main;
+import nz.gen.wellington.guardian.android.activities.notification;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
@@ -175,8 +175,13 @@ public class ContentUpdateService extends Service {
 			//" and " +  report.getImageCount() + " images" 
 			" in " + calculateTimeTaken(report);
 		
-		Intent notificationIntent = new Intent(this, main.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		final String fullReport = "Fetched " + report.getArticleCount() + " articles" + 
+			" and " +  report.getImageCount() + " images" +
+			" in " + calculateTimeTaken(report);
+		
+		Intent notificationIntent = new Intent(this, notification.class);
+		notificationIntent.putExtra("report", fullReport);		
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 		notificationManager.notify(UPDATE_COMPLETE_NOTIFICATION_ID, notification);

@@ -10,7 +10,6 @@ import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import org.joda.time.DateTime;
 
 import android.app.Dialog;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,10 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class main extends ArticleListActivity {
-		
-	private static final String TAG = "main";
-
-	private NotificationManager notificationManager;
+	
 	private DateTime loaded;
 	
 	public main() {
@@ -36,9 +32,6 @@ public class main extends ArticleListActivity {
     	updateArticlesHandler = new UpdateArticlesHandler(this);
     	showSeperators = true;
     	showMainImage = false;
-    	
-        //notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-    	//notificationManager.cancel(ContentUpdateService.UPDATE_COMPLETE_NOTIFICATION_ID);	
 	}
 	
 	
