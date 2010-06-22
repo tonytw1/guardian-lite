@@ -10,7 +10,6 @@ import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import nz.gen.wellington.guardian.android.sqllite.DataHelper;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.Activity;
 import android.content.Context;
@@ -23,19 +22,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class favourites extends Activity {
-
-	private DataHelper dh;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.favourites);
-          
-		this.dh = new DataHelper(this);
-		this.dh.deleteAll();
-		this.dh.insert("keyword", "environment/bp-oil-spill", "BP oil spill", "environment");
-		
-		
 	}
 
 	
@@ -50,8 +41,8 @@ public class favourites extends Activity {
 
 
 	private void populateFavourites() {
-		List<Tag> favouriteTags = this.dh.selectAll();
-		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext())).getFavouriteSections();
+		List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags();
+		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();
 		
 		LayoutInflater inflater = LayoutInflater.from(this);		
 		LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);

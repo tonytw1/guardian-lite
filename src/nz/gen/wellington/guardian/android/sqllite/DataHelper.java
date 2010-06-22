@@ -15,6 +15,8 @@ import android.util.Log;
 
 public class DataHelper {
 
+	private static final String TAG = "DataHelper";
+	
 	private Context context;
 	private SQLiteDatabase db;
 
@@ -54,9 +56,12 @@ public class DataHelper {
 		List<Tag> favouriteTags = new ArrayList<Tag>();
 		if (cursor.moveToFirst()) {
 			do {
-				String type = cursor.getString(0);
+				final String type = cursor.getString(0);
+				final String name = cursor.getString(2);
+				final String id = cursor.getString(1);
+				Log.i(TAG, type + ", " + name + ", " + id);
 				if (type.equals("keyword")) {
-					favouriteTags.add(new Tag(cursor.getString(2), cursor.getString(1), null));
+					favouriteTags.add(new Tag(name, id, null));
 				}
 				
 			} while (cursor.moveToNext());

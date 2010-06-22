@@ -23,10 +23,13 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 
 	private static final String TAG = "UpdateTopStoriesTask";
 	private ArticleDAO articleDAO;
+	private FavouriteSectionsAndTagsDAO favouritesDAO;
 
 	public UpdateTopStoriesTask(ArticleDAO articleDAO, Context context) {
 		this.articleDAO = articleDAO;
+		this.favouritesDAO = new FavouriteSectionsAndTagsDAO(articleDAO, context);
 	}
+
 
 	@Override
 	public void run() {
@@ -34,15 +37,15 @@ public class UpdateTopStoriesTask implements ContentUpdateTaskRunnable {
 		SortedMap<DateTime, Article> topStories = new TreeMap<DateTime, Article>();
 		
 		LinkedList<Article> results = new LinkedList<Article>();
-		List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(articleDAO).getFavouriteTags();
+		List<Tag> favouriteTags = favouritesDAO.getFavouriteTags();
 		if (favouriteTags != null) {
 			for (Tag tag: favouriteTags) {
 				List<Article> tagItems = articleDAO.getKeywordItems(tag);
 				putLatestThreeStoriesOntoList(topStories, tagItems);
 			}			
 		}
-	
-		List<Section> sections = new FavouriteSectionsAndTagsDAO(articleDAO).getFavouriteSections();
+		
+		List<Section> sections = favouritesDAO.getFavouriteSections();
 		if (sections != null) {
 			for (Section section : sections) {
 				List<Article> sectionItems = articleDAO.getSectionItems(section);
