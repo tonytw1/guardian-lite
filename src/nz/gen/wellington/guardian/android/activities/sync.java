@@ -45,6 +45,10 @@ public class sync extends Activity implements OnClickListener {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "Starting content update service service");
+        startService(new Intent(this, ContentUpdateService.class)); 
+        
         setContentView(R.layout.sync);
         		
         start = (Button) findViewById(R.id.buttonStart);        
@@ -65,17 +69,18 @@ public class sync extends Activity implements OnClickListener {
 
 	@Override
 	protected void onResume() {
-		super.onResume();
+		super.onResume();		
 		registerReceiver(taskStartReceiver, new IntentFilter(ContentUpdateService.TASK_START));		
 		registerReceiver(queueChangeReceiver, new IntentFilter(TaskQueue.QUEUE_CHANGED));
 		registerReceiver(downloadProgressReceiver, new IntentFilter(HttpFetcher.DOWNLOAD_PROGRESS));
 		registerReceiver(batchCompletionReceiver, new IntentFilter(ContentUpdateService.BATCH_COMPLETION));
+		updateStatus();
 	}
 
 	
 	@Override
 	protected void onPause() {
-		super.onResume();
+		super.onPause();
 		unregisterReceiver(taskStartReceiver);
 		unregisterReceiver(queueChangeReceiver);
 		unregisterReceiver(downloadProgressReceiver);
@@ -93,24 +98,55 @@ public class sync extends Activity implements OnClickListener {
 			//queueAllSections(taskQueue);
 						
 			contentUpdateService.start();
+			updateStatus();
+			break;
+		
+		case R.id.StopDownloadButton: 
+			contentUpdateService.stop();
+			updateStatus();
+			break;
+		}
+		
+	}
+
+
+	private void updateStatus() {
+		Log.i(TAG, "Updating status");
+		if (contentUpdateService == null) {
+			Log.i(TAG, "Updating status - null");
+			start.setEnabled(false);
+			stop.setEnabled(false);
+			return;
+		}
+		
+		Log.i(TAG, "Updating status" + contentUpdateService.getStatus());
+		switch (contentUpdateService.getStatus()) {
+		case ContentUpdateService.STOPPED:
+			start.setEnabled(true);
+			stop.setEnabled(false);
+			statusMessage.setText("");
+			statusMessage.setVisibility(View.GONE);			
+			TextView status = (TextView) findViewById(R.id.Status);
+			status.setVisibility(View.GONE);
+			TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
+			currentTask.setVisibility(View.GONE);			
+			break;
+
+		case ContentUpdateService.RUNNING:
 			stop.setEnabled(true);
 			start.setEnabled(false);
 			statusMessage.setText("The most recent articles for your favourite tags and sections are been downloaded in the background.\n\n" +
 					"You will receive a notification when this download has completed.");
 			statusMessage.setVisibility(View.VISIBLE);
-
 			break;
 		
-		case R.id.StopDownloadButton: 
-			contentUpdateService.stop();
+		case ContentUpdateService.CLEANUP:
 			stop.setEnabled(false);
-			start.setEnabled(true);
-			statusMessage.setText("Your content download has been halted. Preforming post download cleanup tasks.");
+			start.setEnabled(false);
+			statusMessage.setText("Preforming post download cleanup tasks.");
 			statusMessage.setVisibility(View.VISIBLE);
-
 			break;
 		}
-		
 	}
 
 
@@ -159,7 +195,6 @@ public class sync extends Activity implements OnClickListener {
 	}
 	
 	
-
 	private void updateDownloadProgress(int received, long  expected) {
 		final String statusMessage =  received + " / " +  Long.toString(expected);
 		TextView status = (TextView) findViewById(R.id.DownloadProgress);
@@ -176,9 +211,9 @@ public class sync extends Activity implements OnClickListener {
 		TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
 		currentTask.setText(taskName);
 		currentTask.setVisibility(View.VISIBLE);
+		updateStatus();
 	}
-	
-		
+			
 	private void switchToTopStories() {
 		Intent intent = new Intent(this, main.class);
 		this.startActivity(intent);
@@ -224,71 +259,46 @@ public class sync extends Activity implements OnClickListener {
 	class BatchCompletionReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			TextView status = (TextView) findViewById(R.id.Status);
-			status.setVisibility(View.GONE);
-			TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
-			currentTask.setVisibility(View.GONE);
-			statusMessage.setText("");
-			statusMessage.setVisibility(View.GONE);
+			updateStatus();			
 			switchToTopStories();
 		}
 	}
 	
 	
 	
-	
-	
 	private ServiceConnection mConnection = new ServiceConnection() {
 	    public void onServiceConnected(ComponentName className, IBinder service) {
-	        // This is called when the connection with the service has been
-	        // established, giving us the service object we can use to
-	        // interact with the service.  Because we have bound to a explicit
-	        // service that we know is running in our own process, we can
-	        // cast its IBinder to a concrete class and directly access it.
 	        contentUpdateService = ((ContentUpdateService.ContentUpdateServiceBinder)service).getService();
-
-	        // Tell the user about this for our demo.
 	        Log.d(TAG, "Content update service is bound");
+	        updateStatus();
 	    }
 
 	    public void onServiceDisconnected(ComponentName className) {
-	        // This is called when the connection with the service has been
-	        // unexpectedly disconnected -- that is, its process crashed.
-	        // Because it is running in our same process, we should never
-	        // see this happen.
 	        contentUpdateService = null;
 	        Log.d(TAG, "Content update service is unbound");
-
 	    }
 	};
 
+	
 	boolean mIsBound = false;
 	void doBindService() {
-	    // Establish a connection with the service.  We use an explicit
-	    // class name because we want a specific service implementation that
-	    // we know will be running in our own process (and thus won't be
-	    // supporting component replacement by other applications).
-		
 		Intent intent = new Intent(this, ContentUpdateService.class);
 	    bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 	    mIsBound = true;
 	}
 
 	void doUnbindService() {
-	    if (mIsBound) {
-	        // Detach our existing connection.
+	    if (mIsBound) {	       
 	        unbindService(mConnection);
 	        mIsBound = false;
 	    }
 	}
 
+	
 	@Override
 	protected void onDestroy() {
 	    super.onDestroy();
 	    doUnbindService();
 	}
-	
-	
-	
 	
 }
