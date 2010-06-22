@@ -152,7 +152,7 @@ public class sync extends Activity implements OnClickListener {
 
 
 	private void queueFavoriteSections(TaskQueue taskQueue) {
-		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext())).getFavouriteSections();		
+		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();		
 		queueSections(taskQueue, favouriteSections);
 	}
 	
@@ -164,7 +164,7 @@ public class sync extends Activity implements OnClickListener {
 	
 	
 	private void queueFavouriteTags(TaskQueue taskQueue) {
-		List<Tag> tags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext())).getFavouriteTags(); // TODO move favourites dao to singleton.
+		List<Tag> tags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags(); // TODO move favourites dao to singleton.
 		if (tags != null) {
 			for (Tag tag : tags) {
 				Log.i(TAG, "Injecting favourite tag into update queue: " + tag.getName());

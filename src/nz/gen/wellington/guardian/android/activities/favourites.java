@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class favourites extends Activity {
-
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +41,8 @@ public class favourites extends Activity {
 
 
 	private void populateFavourites() {
-		List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext())).getFavouriteTags();
-		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext())).getFavouriteSections();
+		List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags();
+		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();
 		
 		LayoutInflater inflater = LayoutInflater.from(this);		
 		LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);
