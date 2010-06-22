@@ -11,6 +11,7 @@ import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
 import nz.gen.wellington.guardian.android.services.UpdateTagArticlesTask;
+import nz.gen.wellington.guardian.android.services.UpdateTopStoriesTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -92,7 +93,8 @@ public class sync extends Activity implements OnClickListener {
 		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
 		switch (src.getId()) {
 
-		case R.id.buttonStart:			
+		case R.id.buttonStart:
+			taskQueue.addArticleTask(new UpdateTopStoriesTask(this.getApplicationContext()));
 			queueFavouriteTags(taskQueue);
 			queueFavoriteSections(taskQueue);
 			//queueAllSections(taskQueue);
@@ -124,8 +126,8 @@ public class sync extends Activity implements OnClickListener {
 		case ContentUpdateService.STOPPED:
 			start.setEnabled(true);
 			stop.setEnabled(false);
-			statusMessage.setText("");
-			statusMessage.setVisibility(View.GONE);			
+			statusMessage.setText("Download the latest articles from your favourite tags and sections for offline viewing.");
+			statusMessage.setVisibility(View.VISIBLE);	
 			TextView status = (TextView) findViewById(R.id.Status);
 			status.setVisibility(View.GONE);
 			TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
@@ -135,8 +137,7 @@ public class sync extends Activity implements OnClickListener {
 		case ContentUpdateService.RUNNING:
 			stop.setEnabled(true);
 			start.setEnabled(false);
-			statusMessage.setText("The most recent articles for your favourite tags and sections are been downloaded in the background.\n\n" +
-					"You will receive a notification when this download has completed.");
+			statusMessage.setText("Your latest articles are been downloaded in the background.");
 			statusMessage.setVisibility(View.VISIBLE);
 			break;
 		

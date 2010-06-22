@@ -25,14 +25,12 @@ public class ContentUpdateService extends Service {
 
     
     private Thread thread;
-    
     private InternalRunnable internalRunnable;
  
    
 	private final IBinder mBinder = new ContentUpdateServiceBinder();
 
-
-    
+	
     @Override
     public void onCreate() {
     }
@@ -63,23 +61,10 @@ public class ContentUpdateService extends Service {
 	}
 	
 	
-	
-	
-	
-
-
-
 	@Override
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
-    
-    
-   
-	
-	
-
-   
     
 	
 	public class ContentUpdateServiceBinder extends Binder {

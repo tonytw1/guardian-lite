@@ -1,16 +1,16 @@
 package nz.gen.wellington.guardian.android.services;
 
+import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.activities.notification;
+import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
-import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.activities.notification;
-import nz.gen.wellington.guardian.android.api.ArticleDAO;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
-import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
-import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -32,12 +32,14 @@ public class InternalRunnable implements Runnable {
     private TaskQueue taskQueue;
     
     private NotificationManager notificationManager;
+	private NetworkStatusService networkStatusService;
 
     
 	
 	public InternalRunnable(Context context, NotificationManager notificationManager) {
 		this.context = context;
 		this.notificationManager = notificationManager;
+		this.networkStatusService = new NetworkStatusService(context.getApplicationContext());
 		this.status = ContentUpdateService.STOPPED;
 		
 		report = new ContentUpdateReport();
@@ -59,17 +61,14 @@ public class InternalRunnable implements Runnable {
 		running = true;
 	}
 	
-	
-
-		public void stop() {
-			Log.i(TAG, "Starting stop");
-			taskQueue.clear();
-			if (currentTask != null) {
-				currentTask.stop();
-			}
-			//running = false;
+	public void stop() {
+		Log.i(TAG, "Starting stop");
+		taskQueue.clear();
+		if (currentTask != null) {
+			currentTask.stop();
 		}
-	
+		// running = false;
+	}
 	
 	 private void internalRun() {
 	    	
@@ -79,7 +78,7 @@ public class InternalRunnable implements Runnable {
 	    		this.status = ContentUpdateService.RUNNING;
 
 	    		ContentUpdateTaskRunnable task = getNextTask();
-	    		if (NetworkStatusService.isConnectionAvailable(context)) {
+	    		if (networkStatusService.isConnectionAvailable()) {
 
 	    			announceTaskBeginning(task);
 	    			task.setReport(report);
@@ -94,17 +93,9 @@ public class InternalRunnable implements Runnable {
 	    		}
 	    		
 	    		if (taskQueue.isEmpty()) {
-	    			ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
-	    			ContentUpdateTaskRunnable updateTopStories = new UpdateTopStoriesTask(articleDAO, context);    			
+	    			status = ContentUpdateService.CLEANUP;	    			
+	    			
 	    			ContentUpdateTaskRunnable purgeExpired = new PurgeExpiredContentTask(context);
-	    			
-	    			status = ContentUpdateService.CLEANUP;
-	    			currentTask = updateTopStories;
-	    			announceTaskBeginning(updateTopStories);
-	    			updateTopStories.run();
-	    			announceTaskCompletion(updateTopStories);
-	    			currentTask = null;
-	    			
 	    			currentTask = purgeExpired;
 	    			announceTaskBeginning(purgeExpired);
 	    			purgeExpired.run();

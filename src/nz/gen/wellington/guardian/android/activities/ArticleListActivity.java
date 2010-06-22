@@ -35,7 +35,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public abstract class ArticleListActivity extends Activity {
 	
@@ -62,8 +61,8 @@ public abstract class ArticleListActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 		viewsWaitingForTrailImages = new HashMap<String, View>();
-		articleDAO = ArticleDAOFactory.getDao(this);
-		imageDAO = ArticleDAOFactory.getImageDao(this);
+		articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
+		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());
 
 		articlesAvailableReceiver = new ArticlesAvailableReceiver();
 		downloadProgressReceiver = new DownloadProgressReceiver();
@@ -187,8 +186,7 @@ public abstract class ArticleListActivity extends Activity {
 			    	Log.d("UpdateArticlesHandler", "Populating article");
 				
 					LayoutInflater mInflater = LayoutInflater.from(context);
-					LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);
-
+					LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);					
 					if (showSeperators) {
 						if (currentSection == null || !currentSection.getId().equals(article.getSection().getId())) {
 							isFirstOfSection = true;

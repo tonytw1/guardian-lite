@@ -22,15 +22,13 @@ import android.widget.Toast;
 public class article extends Activity {
 	
 	ListAdapter adapter;
-	
-	public article() {
-	}
-	
+	private NetworkStatusService networkStatusService;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		this.networkStatusService = new NetworkStatusService(this.getApplicationContext());
 		requestWindowFeature(Window.FEATURE_NO_TITLE);	
 		setContentView(R.layout.article);
 		
@@ -85,7 +83,7 @@ public class article extends Activity {
     		populateMainImage(article, imageDAO, imageView, mainImageUrl);
     	}
         		
-		final boolean connectionAvailable = NetworkStatusService.isConnectionAvailable(this.getApplicationContext());
+		final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
 		
 		LayoutInflater inflater = LayoutInflater.from(this);
 		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), article.getAuthors(), this.getApplicationContext());

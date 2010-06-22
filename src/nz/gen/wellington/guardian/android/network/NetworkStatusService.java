@@ -8,11 +8,14 @@ import android.util.Log;
 public class NetworkStatusService {
 	
 	private static final String TAG = "NetworkStatusService";
+	private Context context;
 	
+	public NetworkStatusService(Context context) {
+		this.context = context;
+	}
 
 
-	
-	public static boolean isConnectionAvailable(Context context) {
+	public boolean isConnectionAvailable() {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		if (activeNetworkInfo != null) {
@@ -25,7 +28,7 @@ public class NetworkStatusService {
 	}
 	
 	
-	public static boolean isWifiConnection(Context context) {
+	public boolean isWifiConnection() {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		if (activeNetworkInfo == null) {

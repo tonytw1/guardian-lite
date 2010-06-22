@@ -83,8 +83,7 @@ public class OpenPlatformJSONParser {
         	 this.articleCallback =articleCallback;
         	 this.sections = sections;
          }
-         
-         
+                  
          private Section getSectionById(String sectionId) {
  			for (Section section : sections) {
  				if (section.getId().equals(sectionId)) {
@@ -99,8 +98,6 @@ public class OpenPlatformJSONParser {
 		}
 		
 		
-		
-
 		@Override
 		public void startDocument() throws SAXException {
 			super.startDocument();
@@ -161,7 +158,6 @@ public class OpenPlatformJSONParser {
         	 if (name.equals("asset")) {
         		 if (article.getMainImageUrl() == null && attributes.getValue("type").equals("picture")) {
         			 article.setMainImageUrl(attributes.getValue("file"));        			 
-        			 Log.i(TAG, "Setting main image to: " + article.getMainImageUrl());
         		 }
         	 }
          }
@@ -199,9 +195,14 @@ public class OpenPlatformJSONParser {
 			}
 
 			if (name.equals("content")) {
-				articles.add(article);
-				if (articleCallback !=  null) {
-					articleCallback.articleReady(article);
+				boolean isArticleValid = article.getSection() != null;
+				if (isArticleValid) {
+					articles.add(article);
+					if (articleCallback !=  null) {
+						articleCallback.articleReady(article);
+					}
+				} else {
+					Log.w(TAG, "Invalid article: " + article.getId());
 				}
 			}
 		}

@@ -31,13 +31,14 @@ public class ArticleDAO {
 	FileBasedSectionCache fileBasedSectionCache;
 	ArticleCallback articleCallback;
 	ContentSource openPlatformApi;
-	Context context;
+	NetworkStatusService networkStatusService;
 	
 	public ArticleDAO(Context context) {
 		this.sectionCache = CacheFactory.getSectionCache();
 		this.fileBasedArticleCache = new FileBasedArticleCache(context);
 		this.fileBasedSectionCache = new FileBasedSectionCache(context);
 		openPlatformApi = ArticleDAOFactory.getOpenPlatformApi(context);
+		this.networkStatusService = new NetworkStatusService(context);
 	}
 	
 	
@@ -80,11 +81,8 @@ public class ArticleDAO {
 		List<Article> articles = null;
 		DateTime modificationTime = fileBasedArticleCache.getModificationTime(articleSet);
 		if (modificationTime != null) {
-			if (NetworkStatusService.isConnectionAvailable(context)) {
-				if (modificationTime.isBefore(new DateTime().minusMinutes(20))) {
-					Log.i(TAG, "Not serving cache article set is local copy is older than 20 minutes and network is available");
-					return null;
-				}				
+			if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(20))) {
+				Log.i(TAG, "Not serving cache article set is local copy is older than 20 minutes and network is available");			
 			} else {
 				articles = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
 			}
@@ -131,7 +129,7 @@ public class ArticleDAO {
 
 
 	public List<Article> getTopStories() {
-		return fileBasedArticleCache.getArticleSetArticles(new TopStoriesArticleSet(), articleCallback);
+		return getArticleSetArticles(new TopStoriesArticleSet());
 	}
 		
 	public void saveTopStories(List<Article> topStories) {

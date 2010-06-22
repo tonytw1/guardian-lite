@@ -4,7 +4,6 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import android.app.Activity;
 import android.app.NotificationManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;

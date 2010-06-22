@@ -46,8 +46,8 @@ public class favourites extends Activity {
 		
 		LayoutInflater inflater = LayoutInflater.from(this);		
 		LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);
-		
-		boolean connectionIsAvailable = NetworkStatusService.isConnectionAvailable(this.getApplicationContext());
+				
+		boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();
 		TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, favouriteTags, this.getApplicationContext());
 		populateSections(inflater, connectionIsAvailable, authorList, favouriteSections, this.getApplicationContext());
 	}
