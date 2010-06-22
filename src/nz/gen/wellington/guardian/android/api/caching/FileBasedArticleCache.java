@@ -10,6 +10,7 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 
 import org.joda.time.DateTime;
 
@@ -45,7 +46,7 @@ public class FileBasedArticleCache {
 		if (!FileService.isLocallyCached(context, articleSet.getApiUrl())) {
 			return null;
 		}
-
+		
 		final String filepath = FileService.getLocalFilename(articleSet.getApiUrl());
 		Log.i(TAG, "Reading from disk: " + filepath);
 		try {

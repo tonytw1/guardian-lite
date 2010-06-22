@@ -174,7 +174,7 @@ public class OpenPlatformJSONParser {
 			if (currentField != null) {
 				
 				if (currentField.equals("headline")) {
-					article.setTitle(sb.toString());
+					article.setTitle(ArticleBodyCleaner.stripHtml(sb.toString()));
 				}
 				
 				if (currentField.equals("byline")) {

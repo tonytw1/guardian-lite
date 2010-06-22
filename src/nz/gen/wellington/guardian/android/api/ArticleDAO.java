@@ -15,6 +15,7 @@ import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 
 import org.joda.time.DateTime;
 
@@ -30,6 +31,7 @@ public class ArticleDAO {
 	FileBasedSectionCache fileBasedSectionCache;
 	ArticleCallback articleCallback;
 	ContentSource openPlatformApi;
+	Context context;
 	
 	public ArticleDAO(Context context) {
 		this.sectionCache = CacheFactory.getSectionCache();
@@ -75,9 +77,21 @@ public class ArticleDAO {
 	private List<Article> getArticleSetArticles(ArticleSet articleSet) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
 		
-		List<Article> articles = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
+		List<Article> articles = null;
+		DateTime modificationTime = fileBasedArticleCache.getModificationTime(articleSet);
+		if (modificationTime != null) {
+			if (NetworkStatusService.isConnectionAvailable(context)) {
+				if (modificationTime.isBefore(new DateTime().minusMinutes(20))) {
+					Log.i(TAG, "Not serving cache article set is local copy is older than 20 minutes and network is available");
+					return null;
+				}				
+			} else {
+				articles = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
+			}
+		}
+		
 		if (articles != null) {
-			Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());			
+			Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());
 			return articles;
 		}
 		

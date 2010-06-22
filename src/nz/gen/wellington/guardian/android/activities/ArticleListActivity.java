@@ -165,13 +165,7 @@ public abstract class ArticleListActivity extends Activity {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
+
 	class UpdateArticlesHandler extends Handler {		
 
 		private Context context;
@@ -214,10 +208,9 @@ public abstract class ArticleListActivity extends Activity {
 					return;
 			    			    
 			    case 2: 
-			    	Toast.makeText(context, "Articles could not be loaded", Toast.LENGTH_SHORT).show();
+			    	//Toast.makeText(context, "Articles could not be loaded", Toast.LENGTH_SHORT).show();
 			    	return;
-			    
-			    
+			    			    
 			    case 3: 
 
 			    	Bundle data = msg.getData();
