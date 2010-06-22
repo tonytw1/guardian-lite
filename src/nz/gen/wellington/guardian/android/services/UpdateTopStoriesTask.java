@@ -37,9 +37,8 @@ public class UpdateTopStoriesTask extends ArticleUpdateTask implements ContentUp
 	
 	@Override
 	public void run() {
-		TopStoriesArticleSet articleSet = new TopStoriesArticleSet();
-		articleDAO.evictArticleSet(articleSet);
 		Log.i(TAG, "Fetching latest articles");
+		TopStoriesArticleSet articleSet = new TopStoriesArticleSet();
 				
 		ContentSource api = ArticleDAOFactory.getOpenPlatformApi(context);
 		List<Section> sections = ArticleDAOFactory.getDao(context).getSections();

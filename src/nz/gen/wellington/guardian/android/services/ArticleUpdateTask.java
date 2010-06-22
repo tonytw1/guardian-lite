@@ -17,6 +17,7 @@ public abstract class ArticleUpdateTask {
 	protected Context context;
 	protected ContentUpdateReport report;
 	protected ArticleDAO articleDAO;
+	protected boolean running = true;
 
 	final public void setReport(ContentUpdateReport report) {
 		this.report = report;
@@ -26,6 +27,7 @@ public abstract class ArticleUpdateTask {
 	final public void stop() {
 		Log.i(TAG, "Stopping");
 		articleDAO.stopLoading();
+		running = false;
 	}
 	
 	
@@ -41,7 +43,7 @@ public abstract class ArticleUpdateTask {
 	
 	
 	final protected void queueImageDownloadIsNotAvailableLocally(String imageUrl) {
-		if (imageUrl != null) {
+		if (imageUrl != null && running) {
 			if (!ArticleDAOFactory.getImageDao(context).isAvailableLocally(imageUrl)) {
 				Log.d(TAG, "Queuing file for fetching: " + imageUrl);
 				ArticleDAOFactory.getTaskQueue(context).addImageTask(new ImageFetchTask(imageUrl, context));

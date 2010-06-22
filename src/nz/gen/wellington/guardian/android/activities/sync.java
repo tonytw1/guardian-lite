@@ -137,7 +137,7 @@ public class sync extends Activity implements OnClickListener {
 		case ContentUpdateService.RUNNING:
 			stop.setEnabled(true);
 			start.setEnabled(false);
-			statusMessage.setText("Your latest articles are been downloaded in the background.");
+			statusMessage.setText("Latest articles are been downloaded in the background.");
 			statusMessage.setVisibility(View.VISIBLE);
 			break;
 		

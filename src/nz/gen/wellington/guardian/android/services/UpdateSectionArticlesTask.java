@@ -3,7 +3,10 @@ package nz.gen.wellington.guardian.android.services;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.api.ContentSource;
+import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import android.content.Context;
@@ -20,14 +23,23 @@ public class UpdateSectionArticlesTask extends ArticleUpdateTask implements Cont
 		this.articleDAO = ArticleDAOFactory.getDao(context);
 	}
 
+	
 	@Override
 	public void run() {
-		articleDAO.evictArticleSet(new SectionArticleSet(section));
-		Log.i(TAG, "Fetching section articles: " + section.getName());
-		List<Article> sectionItems = articleDAO.getSectionItems(section);
-		processArticles(sectionItems);
-		report.setSectionCount(report.getSectionCount()+1);
+		Log.i(TAG, "Fetching section articles");
+		ArticleSet articleSet = new SectionArticleSet(section);
+				
+		ContentSource api = ArticleDAOFactory.getOpenPlatformApi(context);
+		List<Section> sections = ArticleDAOFactory.getDao(context).getSections();
+		
+		List<Article> articles = api.getArticles(articleSet, sections, null);
+		if (articles != null) {
+			FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
+			fileBasedArticleCache.putArticleSetArticles(articleSet, articles);
+			processArticles(articles);
+		}
 	}
+	
 	
 	@Override
 	public String getTaskName() {
