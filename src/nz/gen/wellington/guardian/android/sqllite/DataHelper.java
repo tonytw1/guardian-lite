@@ -51,8 +51,20 @@ public class DataHelper {
 	public void deleteAll() {
 		this.db.delete(TAG_TABLE, null, null);
 	}
-		
-		
+	
+	
+	public boolean isFavourite(Tag tag) {
+		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "apiid" }, " apiid = ? ", new String[] { tag.getId() }, null, null, "name desc");
+		return cursor.getCount() > 0;		
+	}
+	
+	
+	
+	public void removeTag(Tag keyword) {
+		this.db.delete(TAG_TABLE, " apiid = ? ", new String[] { keyword.getId() });		
+	}
+	
+	
 	public List<Tag> selectAll(Map<String, Section> map) {
 		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name desc");
 		
@@ -96,7 +108,5 @@ public class DataHelper {
 			onCreate(db);
 		}
 	}
-
-
-
+	
 }

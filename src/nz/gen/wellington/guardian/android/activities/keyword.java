@@ -5,7 +5,6 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.sqllite.DataHelper;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +17,8 @@ public class keyword extends ArticleListActivity {
 
 	ListAdapter adapter;
 	Tag keyword;
+	DataHelper dh;
+	MenuItem favouriteMenuItem;
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,8 @@ public class keyword extends ArticleListActivity {
 		} else {
 			setHeading(keyword.getName());
 		}	
-		
+
+		dh = new DataHelper(this);
 		updateArticlesHandler = new UpdateArticlesHandler(this);
 	}
 	
@@ -39,11 +41,17 @@ public class keyword extends ArticleListActivity {
 	}
 	
 	
-	
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 1, 0, "Add to Favourites");
+		
+		if (dh.isFavourite(keyword)) {
+			favouriteMenuItem = menu.add(0, 1, 0, "Remove from Favourites");
+		} else {
+			favouriteMenuItem = menu.add(0, 1, 0, "Add to Favourites");
+		}
+		
 	    return true;
 	}
+	
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {	   
@@ -54,10 +62,19 @@ public class keyword extends ArticleListActivity {
 	    return false;
 	}	
 
-	private void addToFavourites() {	
-		Log.i(TAG, "Adding current tag to favourites: " + keyword.getName());
-		DataHelper dh = new DataHelper(this);
-		dh.insert("keyword", keyword.getId(), keyword.getName(), keyword.getSection().getId());		
+	
+	private void addToFavourites() {
+		if (!dh.isFavourite(keyword)) {
+			Log.i(TAG, "Adding current tag to favourites: " + keyword.getName());
+			dh.insert("keyword", keyword.getId(), keyword.getName(), (keyword.getSection() != null) ? keyword.getSection().getId(): "global");
+			favouriteMenuItem.setTitle("Remove from Favourites");			
+	
+		} else {
+			Log.i(TAG, "Removing current tag from favourites: " + keyword.getName());			
+			dh.removeTag(keyword);
+			favouriteMenuItem.setTitle("Add to Favourites");
+		}
+			
 	}
 	
 }
