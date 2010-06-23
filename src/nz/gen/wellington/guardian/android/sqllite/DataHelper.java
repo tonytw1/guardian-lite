@@ -2,8 +2,11 @@ package nz.gen.wellington.guardian.android.sqllite;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.keyword;
+import nz.gen.wellington.guardian.android.activities.sections;
+import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 
 import android.content.Context;
@@ -50,18 +53,19 @@ public class DataHelper {
 	}
 		
 		
-	public List<Tag> selectAll() {
+	public List<Tag> selectAll(Map<String, Section> map) {
 		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name desc");
 		
 		List<Tag> favouriteTags = new ArrayList<Tag>();
 		if (cursor.moveToFirst()) {
 			do {
 				final String type = cursor.getString(0);
-				final String name = cursor.getString(2);
 				final String id = cursor.getString(1);
+				final String name = cursor.getString(2);
+				final String sectionId = cursor.getString(3);
 				Log.i(TAG, type + ", " + name + ", " + id);
 				if (type.equals("keyword")) {
-					favouriteTags.add(new Tag(name, id, null));
+					favouriteTags.add(new Tag(name, id, map.get(sectionId)));
 				}
 				
 			} while (cursor.moveToNext());

@@ -1,6 +1,8 @@
 package nz.gen.wellington.guardian.android.api;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
@@ -149,6 +151,15 @@ public class ArticleDAO {
 
 	public void setArticleReadyCallback(ArticleCallback articleCallback) {
 		this.articleCallback = articleCallback;		
+	}
+
+
+	public Map<String, Section> getSectionsMap() {
+		Map<String, Section> sections = new HashMap<String, Section>();
+		for (Section section : this.getSections()) {
+			sections.put(section.getId(), section);
+		}
+		return sections;
 	}
 		
 }
