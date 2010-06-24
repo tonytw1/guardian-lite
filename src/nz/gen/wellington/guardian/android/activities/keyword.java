@@ -17,7 +17,6 @@ public class keyword extends ArticleListActivity {
 
 	ListAdapter adapter;
 	Tag keyword;
-	DataHelper dh;
 	MenuItem favouriteMenuItem;
 		
 	@Override
@@ -31,10 +30,10 @@ public class keyword extends ArticleListActivity {
 			setHeading(keyword.getName());
 		}	
 
-		dh = new DataHelper(this);
 		updateArticlesHandler = new UpdateArticlesHandler(this);
 	}
 	
+
 	@Override
 	protected List<Article> loadArticles() {
 		return articleDAO.getKeywordItems(keyword);
@@ -42,13 +41,13 @@ public class keyword extends ArticleListActivity {
 	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
-		
+		DataHelper dh = new DataHelper(this);
 		if (dh.isFavourite(keyword)) {
 			favouriteMenuItem = menu.add(0, 1, 0, "Remove from Favourites");
 		} else {
 			favouriteMenuItem = menu.add(0, 1, 0, "Add to Favourites");
 		}
-		
+		dh.close();
 	    return true;
 	}
 	
@@ -64,6 +63,7 @@ public class keyword extends ArticleListActivity {
 
 	
 	private void addToFavourites() {
+		DataHelper dh = new DataHelper(this);
 		if (!dh.isFavourite(keyword)) {
 			Log.i(TAG, "Adding current tag to favourites: " + keyword.getName());
 			dh.insert("keyword", keyword.getId(), keyword.getName(), (keyword.getSection() != null) ? keyword.getSection().getId(): "global");
@@ -74,7 +74,7 @@ public class keyword extends ArticleListActivity {
 			dh.removeTag(keyword);
 			favouriteMenuItem.setTitle("Add to Favourites");
 		}
-			
+		dh.close();	
 	}
 	
 }

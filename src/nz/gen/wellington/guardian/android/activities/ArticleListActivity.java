@@ -337,8 +337,7 @@ public abstract class ArticleListActivity extends Activity {
 				} else {
 					imageUrl = article.getThumbnailUrl();
 				}
-					
-				Log.d(TAG, "Need trailimage: " + imageUrl);
+				
 				if (imageUrl != null) {
 					if (imageDAO.isAvailableLocally(imageUrl)) {
 						Message m = new Message();

@@ -108,5 +108,11 @@ public class DataHelper {
 			onCreate(db);
 		}
 	}
+
+
+
+	public void close() {
+		db.close();		
+	}
 	
 }

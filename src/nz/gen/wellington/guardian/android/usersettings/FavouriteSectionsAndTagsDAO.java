@@ -13,21 +13,28 @@ import nz.gen.wellington.guardian.android.sqllite.DataHelper;
 public class FavouriteSectionsAndTagsDAO {
 	
 	ArticleDAO articleDAO;
-	private DataHelper dh;
+	private Context context;
 
 	
 	public FavouriteSectionsAndTagsDAO(ArticleDAO articleDAO, Context context) {
 		this.articleDAO = articleDAO;
-		this.dh = new DataHelper(context);
+		this.context = context;
 	}
 	
-	public List<Section> getFavouriteSections() {		
+	public List<Section> getFavouriteSections() {
+		DataHelper dh = new DataHelper(context);
 		List<Section> favouriteSections = new LinkedList<Section>();
+		dh.close();
 		return favouriteSections;
 	}
+	
+	
 
 	public List<Tag> getFavouriteTags() {
-		return this.dh.selectAll(articleDAO.getSectionsMap());
+		DataHelper dh = new DataHelper(context);
+		List<Tag> tags = dh.selectAll(articleDAO.getSectionsMap());
+		dh.close();
+		return tags;
 	}
 	
 }
