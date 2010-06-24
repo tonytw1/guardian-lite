@@ -189,9 +189,12 @@ public class OpenPlatformJSONParser {
 					article.setDescription(ArticleBodyCleaner.stripHtml(sb.toString()));
 				}
 				
+				if (currentField.equals("caption")) {
+					article.setCaption(ArticleBodyCleaner.stripHtml(sb.toString()));
+				}
+				
 				currentField = null;
 				sb = new StringBuilder();
-
 			}
 
 			if (name.equals("content")) {

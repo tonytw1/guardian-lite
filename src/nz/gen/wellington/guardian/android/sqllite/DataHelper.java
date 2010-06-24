@@ -114,5 +114,11 @@ public class DataHelper {
 	public void close() {
 		db.close();		
 	}
+
+
+	public boolean isFavourite(Section section) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }

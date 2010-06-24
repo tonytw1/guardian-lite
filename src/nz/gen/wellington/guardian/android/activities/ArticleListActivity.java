@@ -199,7 +199,7 @@ public abstract class ArticleListActivity extends Activity {
 						}
 					}
 
-					View articleTrailView = choiceTrailView(mInflater, first, article);
+					View articleTrailView = chooseTrailView(mInflater, first, article);
 					populateArticleListView(article, articleTrailView);
 					mainpane.addView(articleTrailView);
 					first = false;
@@ -238,7 +238,7 @@ public abstract class ArticleListActivity extends Activity {
 			mainpane.addView(seperator);
 		}
 
-		private View choiceTrailView(LayoutInflater mInflater, boolean first,
+		private View chooseTrailView(LayoutInflater mInflater, boolean first,
 				Article article) {
 			View view;
 			boolean shouldUseFeatureTrail = showMainImage && first && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
@@ -263,6 +263,13 @@ public abstract class ArticleListActivity extends Activity {
 			TextView standfirst = (TextView) view.findViewById(R.id.Standfirst);
 			if (article.getStandfirst() != null) {
 				standfirst.setText(article.getStandfirst());
+			}
+			
+			
+			TextView caption = (TextView) view.findViewById(R.id.Caption);
+			if (caption != null && article.getCaption() != null) {
+				caption.setText(article.getCaption());
+				caption.setVisibility(View.VISIBLE);
 			}
 			
 			ArticleClicker urlListener = new ArticleClicker(article);
