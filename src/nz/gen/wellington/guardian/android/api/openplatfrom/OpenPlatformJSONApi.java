@@ -22,7 +22,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		
 	private static final String TAG = "OpenPlatformJSONApi";
 
-	private static final String API_HOST = "http://content.guardianapis.com";	
+	private static final String API_HOST = "http://content-api-proxy.appspot.com";	
 	public static final String SECTIONS_API_URL = "sections";
 	private static final int PAGE_SIZE = 10;	// TODO push to a preference
 	
@@ -138,7 +138,6 @@ public class OpenPlatformJSONApi implements ContentSource {
 		url.append("&show-tags=all");
 		url.append("&api-key=" + apiKeyStore.getApiKey());
 		url.append("&page-size=" + PAGE_SIZE);
-		url.append("&tag=type%2Farticle");
 		url.append("&format=xml");
 		return url.toString();
 	}

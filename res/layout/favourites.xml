@@ -1,1 +1,4 @@
-<LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:id="@+id/MainPane"></LinearLayout>
+<LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:id="@+id/Outer"><TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="The following tags and sections are marked as favourites."></TextView><ScrollView android:id="@+id/ScrollView01" android:layout_height="wrap_content" android:layout_width="fill_parent"><LinearLayout android:layout_height="wrap_content" android:id="@+id/MainPane" android:orientation="vertical" android:layout_width="fill_parent"></LinearLayout>
+
+</ScrollView>
+</LinearLayout>

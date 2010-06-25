@@ -89,7 +89,7 @@ public class main extends ArticleListActivity {
 		
 		ImageView image = (ImageView) dialog.findViewById(R.id.GuardianLogo);
 		image.setImageResource(R.drawable.poweredbyguardian);		
-		dialog.setTitle("Open Guardian");
+		dialog.setTitle(R.string.app_name);
 		dialog.show();
 	}
 

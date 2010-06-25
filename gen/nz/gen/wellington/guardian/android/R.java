@@ -29,7 +29,6 @@ public final class R {
         public static final int CurrentTask=0x7f070023;
         public static final int Description=0x7f07000f;
         public static final int DownloadProgress=0x7f070019;
-        public static final int Favourite=0x7f070013;
         public static final int GuardianLogo=0x7f070002;
         public static final int Heading=0x7f070005;
         public static final int HeadingLayout=0x7f070004;
@@ -40,6 +39,7 @@ public final class R {
         public static final int LinearLayout03=0x7f070017;
         public static final int MainPane=0x7f070014;
         public static final int Ok=0x7f07001b;
+        public static final int Outer=0x7f070013;
         public static final int PubDate=0x7f07000e;
         public static final int Pubdate=0x7f070016;
         public static final int Report=0x7f07001a;
@@ -64,16 +64,15 @@ public final class R {
         public static final int article=0x7f030001;
         public static final int author=0x7f030002;
         public static final int authorslist=0x7f030003;
-        public static final int favourite=0x7f030004;
-        public static final int favourites=0x7f030005;
-        public static final int featurelist=0x7f030006;
-        public static final int list=0x7f030007;
-        public static final int main=0x7f030008;
-        public static final int notification=0x7f030009;
-        public static final int sections=0x7f03000a;
-        public static final int sectionslist=0x7f03000b;
-        public static final int seperator=0x7f03000c;
-        public static final int sync=0x7f03000d;
+        public static final int favourites=0x7f030004;
+        public static final int featurelist=0x7f030005;
+        public static final int list=0x7f030006;
+        public static final int main=0x7f030007;
+        public static final int notification=0x7f030008;
+        public static final int sections=0x7f030009;
+        public static final int sectionslist=0x7f03000a;
+        public static final int seperator=0x7f03000b;
+        public static final int sync=0x7f03000c;
     }
     public static final class string {
         public static final int app_name=0x7f060000;
