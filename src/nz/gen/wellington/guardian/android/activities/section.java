@@ -5,6 +5,7 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.sqllite.DataHelper;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -34,11 +35,14 @@ public class section extends ArticleListActivity {
 	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, 1, 0, "Home");
+		menu.add(0, 2, 0, "Favourites");
+		menu.add(0, 3, 0, "Sections");
 		DataHelper dh = new DataHelper(this);
 		if (dh.isFavourite(section)) {
-			favouriteMenuItem = menu.add(0, 1, 0, "Remove from Favourites");
+			favouriteMenuItem = menu.add(0, 4, 0, "Remove from Favourites");
 		} else {
-			favouriteMenuItem = menu.add(0, 1, 0, "Add to Favourites");
+			favouriteMenuItem = menu.add(0, 4, 0, "Add to Favourites");
 		}
 		dh.close();
 	    return true;
@@ -46,12 +50,21 @@ public class section extends ArticleListActivity {
 	
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {	   
-	    case 1: 	    	
-	    	addToFavourites();
-	    	return true;	 
-	    }
-	    return false;
+		switch (item.getItemId()) {
+		case 1:
+			switchToMain();
+			return true;
+		case 2:
+			switchToFavourites();
+			return true;
+		case 3:
+			switchToSections();
+			return true;
+		case 4:
+			addToFavourites();
+			return true;
+		}
+		return false;
 	}
 	
 	
@@ -69,5 +82,23 @@ public class section extends ArticleListActivity {
 		}
 		dh.close();	
 	}
+	
+	
+	private void switchToMain() {
+		Intent intent = new Intent(this, main.class);
+		this.startActivity(intent);	
+	}
+	
+	private void switchToFavourites() {
+		Intent intent = new Intent(this, favourites.class);
+		this.startActivity(intent);		
+	}
+	
+	private void switchToSections() {
+		Intent intent = new Intent(this, sections.class);
+		this.startActivity(intent);		
+	}
+	
+	
 		
 }

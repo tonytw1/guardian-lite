@@ -7,10 +7,13 @@ import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -103,4 +106,47 @@ public class article extends Activity {
 		}
 	}
 	
+	
+	
+	
+	
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, 1, 0, "Home");
+		menu.add(0, 2, 0, "Favourites");
+	    menu.add(0, 3, 0, "Sections");
+	    return true;
+	}
+	
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case 1:
+	    	switchToMain();
+	    	return true;
+	    case 2: 	    	
+	    	switchToFavourites();
+	    	return true;	 
+	    case 3:
+	    	switchToSections();
+	    	return true;
+	    }
+	    return false;
+	}
+	
+	
+	private void switchToMain() {
+		Intent intent = new Intent(this, main.class);
+		this.startActivity(intent);	
+	}
+	
+	private void switchToFavourites() {
+		Intent intent = new Intent(this, favourites.class);
+		this.startActivity(intent);		
+	}
+	
+	private void switchToSections() {
+		Intent intent = new Intent(this, sections.class);
+		this.startActivity(intent);		
+	}
+		
 }
