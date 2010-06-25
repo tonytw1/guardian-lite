@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import nz.gen.wellington.guardian.android.activities.keyword;
-import nz.gen.wellington.guardian.android.activities.sections;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -54,18 +51,26 @@ public class DataHelper {
 	
 	
 	public boolean isFavourite(Tag tag) {
-		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "apiid" }, " apiid = ? ", new String[] { tag.getId() }, null, null, "name desc");
+		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'tag' and apiid = ? ", new String[] { tag.getId() }, null, null, "name desc");
 		return cursor.getCount() > 0;		
 	}
 	
+
+	public boolean isFavourite(Section section) {
+		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'section' and apiid = ? ", new String[] { section.getId() }, null, null, "name desc");
+		return cursor.getCount() > 0;	
+	}
 	
+	public void removeSection(Section section) {
+		this.db.delete(TAG_TABLE, " apiid = ? ", new String[] { section.getId() });
+	}
 	
-	public void removeTag(Tag keyword) {
-		this.db.delete(TAG_TABLE, " apiid = ? ", new String[] { keyword.getId() });		
+	public void removeTag(Tag tag) {
+		this.db.delete(TAG_TABLE, " apiid = ? ", new String[] { tag.getId() });		
 	}
 	
 	
-	public List<Tag> selectAll(Map<String, Section> map) {
+	public List<Tag> getFavouriteTags(Map<String, Section> sectionsMap) {
 		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name desc");
 		
 		List<Tag> favouriteTags = new ArrayList<Tag>();
@@ -76,8 +81,8 @@ public class DataHelper {
 				final String name = cursor.getString(2);
 				final String sectionId = cursor.getString(3);
 				Log.i(TAG, type + ", " + name + ", " + id);
-				if (type.equals("keyword")) {
-					favouriteTags.add(new Tag(name, id, map.get(sectionId)));
+				if (type.equals("tag")) {
+					favouriteTags.add(new Tag(name, id, sectionsMap.get(sectionId)));
 				}
 				
 			} while (cursor.moveToNext());
@@ -88,7 +93,48 @@ public class DataHelper {
 		return favouriteTags;
 	}
 	
+	
+	public List<Section> getFavouriteSections(Map<String, Section> sectionsMap) {
+		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name desc");
+		
+		List<Section> favouriteSections = new ArrayList<Section>();
+		if (cursor.moveToFirst()) {
+			do {
+				final String type = cursor.getString(0);
+				final String id = cursor.getString(1);
+				final String name = cursor.getString(2);
+				final String sectionId = cursor.getString(3);
+				Log.i(TAG, type + ", " + name + ", " + id);
+				if (type.equals("section")) {
+					Section section = sectionsMap.get(sectionId);
+					if (section != null) {
+						favouriteSections.add(section);
+					}
+				}
+				
+			} while (cursor.moveToNext());
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		return favouriteSections;
+	}
 
+
+	public void close() {
+		db.close();		
+	}
+	
+	
+	public void addTag(Tag keyword) {
+		this.insert("tag", keyword.getId(), keyword.getName(), (keyword.getSection() != null) ? keyword.getSection().getId(): "global");
+	}
+	
+	
+	public void addSection(Section section) {
+		this.insert("section", section.getId(), section.getName(), section.getId());		
+	}
+	
 	
 	private static class OpenHelper extends SQLiteOpenHelper {
 
@@ -107,18 +153,6 @@ public class DataHelper {
 			db.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE);
 			onCreate(db);
 		}
-	}
-
-
-
-	public void close() {
-		db.close();		
-	}
-
-
-	public boolean isFavourite(Section section) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 	
 }

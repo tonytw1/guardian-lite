@@ -59,12 +59,12 @@ public class section extends ArticleListActivity {
 		DataHelper dh = new DataHelper(this);
 		if (!dh.isFavourite(section)) {
 			Log.i(TAG, "Adding current tag to favourites: " + section.getName());
-			//dh.insert("keyword", section.getId(), section.getName(), (keyword.getSection() != null) ? keyword.getSection().getId(): "global");
+			dh.addSection(section);
 			favouriteMenuItem.setTitle("Remove from Favourites");			
 	
 		} else {
 			Log.i(TAG, "Removing current section from favourites: " + section.getName());			
-			//dh.removeTag(section);
+			dh.removeSection(section);
 			favouriteMenuItem.setTitle("Add to Favourites");
 		}
 		dh.close();	

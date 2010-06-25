@@ -21,18 +21,18 @@ public class FavouriteSectionsAndTagsDAO {
 		this.context = context;
 	}
 	
+	
 	public List<Section> getFavouriteSections() {
 		DataHelper dh = new DataHelper(context);
-		List<Section> favouriteSections = new LinkedList<Section>();
+		List<Section> sections = dh.getFavouriteSections(articleDAO.getSectionsMap());
 		dh.close();
-		return favouriteSections;
+		return sections;
 	}
 	
 	
-
 	public List<Tag> getFavouriteTags() {
 		DataHelper dh = new DataHelper(context);
-		List<Tag> tags = dh.selectAll(articleDAO.getSectionsMap());
+		List<Tag> tags = dh.getFavouriteTags(articleDAO.getSectionsMap());
 		dh.close();
 		return tags;
 	}

@@ -66,7 +66,7 @@ public class keyword extends ArticleListActivity {
 		DataHelper dh = new DataHelper(this);
 		if (!dh.isFavourite(keyword)) {
 			Log.i(TAG, "Adding current tag to favourites: " + keyword.getName());
-			dh.insert("keyword", keyword.getId(), keyword.getName(), (keyword.getSection() != null) ? keyword.getSection().getId(): "global");
+			dh.addTag(keyword);
 			favouriteMenuItem.setTitle("Remove from Favourites");			
 	
 		} else {
