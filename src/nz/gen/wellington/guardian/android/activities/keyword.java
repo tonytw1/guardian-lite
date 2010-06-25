@@ -46,7 +46,7 @@ public class keyword extends ArticleListActivity {
 		menu.add(0, 3, 0, "Sections");
 		DataHelper dh = new DataHelper(this);
 		if (dh.isFavourite(keyword)) {
-			favouriteMenuItem = menu.add(0, 4, 0, "Remove from Favourites");
+			favouriteMenuItem = menu.add(0, 4, 0, "Remove Favourite");
 		} else {
 			favouriteMenuItem = menu.add(0, 4, 0, "Add to Favourites");
 		}
@@ -80,7 +80,7 @@ public class keyword extends ArticleListActivity {
 		if (!dh.isFavourite(keyword)) {
 			Log.i(TAG, "Adding current tag to favourites: " + keyword.getName());
 			dh.addTag(keyword);
-			favouriteMenuItem.setTitle("Remove from Favourites");			
+			favouriteMenuItem.setTitle("Remove Favourite");			
 	
 		} else {
 			Log.i(TAG, "Removing current tag from favourites: " + keyword.getName());			

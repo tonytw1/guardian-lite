@@ -40,7 +40,7 @@ public class section extends ArticleListActivity {
 		menu.add(0, 3, 0, "Sections");
 		DataHelper dh = new DataHelper(this);
 		if (dh.isFavourite(section)) {
-			favouriteMenuItem = menu.add(0, 4, 0, "Remove from Favourites");
+			favouriteMenuItem = menu.add(0, 4, 0, "Remove Favourite");
 		} else {
 			favouriteMenuItem = menu.add(0, 4, 0, "Add to Favourites");
 		}
@@ -73,7 +73,7 @@ public class section extends ArticleListActivity {
 		if (!dh.isFavourite(section)) {
 			Log.i(TAG, "Adding current tag to favourites: " + section.getName());
 			dh.addSection(section);
-			favouriteMenuItem.setTitle("Remove from Favourites");			
+			favouriteMenuItem.setTitle("Remove Favourite");
 	
 		} else {
 			Log.i(TAG, "Removing current section from favourites: " + section.getName());			
