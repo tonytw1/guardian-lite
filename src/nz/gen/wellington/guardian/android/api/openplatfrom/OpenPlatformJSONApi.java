@@ -11,6 +11,7 @@ import nz.gen.wellington.guardian.android.api.OpenPlatformApiKeyStore;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.AuthorArticleSet;
+import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
@@ -121,6 +122,10 @@ public class OpenPlatformJSONApi implements ContentSource {
 	
 	protected String buildContentQueryUrl(ArticleSet articleSet) {		
 		StringBuilder url = new StringBuilder(API_HOST + "/search");
+		if (articleSet instanceof FavouriteStoriesArticleSet) {
+			 url = new StringBuilder(API_HOST + "/favourites");
+		}
+		
 		url.append("?show-fields=all");
 		
 		if (articleSet instanceof SectionArticleSet) {
@@ -133,6 +138,10 @@ public class OpenPlatformJSONApi implements ContentSource {
 		
 		if (articleSet instanceof AuthorArticleSet) {
 			url.append("&tag=" + articleSet.getApiUrl());			
+		}
+		
+		if (articleSet instanceof FavouriteStoriesArticleSet) {
+			 url.append(articleSet.getApiUrl());
 		}
 		
 		url.append("&show-tags=all");

@@ -5,7 +5,10 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
+import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 
 import org.joda.time.DateTime;
 
@@ -45,9 +48,22 @@ public class main extends ArticleListActivity {
 	
 	@Override
 	protected List<Article> loadArticles() {
-		List<Article> topStories = articleDAO.getTopStories();
-		this.loaded = new DateTime();
-		return topStories;
+		
+		FavouriteSectionsAndTagsDAO dao = new FavouriteSectionsAndTagsDAO(articleDAO, this);
+	
+		List<Section> favouriteSections = dao.getFavouriteSections();
+		List<Tag> favouriteTags = dao.getFavouriteTags();
+		if (favouriteSections.isEmpty() && favouriteTags.isEmpty()) {
+			List<Article> topStories = articleDAO.getTopStories();
+			this.loaded = new DateTime();
+			return topStories;			
+
+		} else {
+			List<Article> favouriteStories = articleDAO.getFavouriteArticles(favouriteSections, favouriteTags);
+			this.loaded = new DateTime();
+			return favouriteStories;			
+		}
+		
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {

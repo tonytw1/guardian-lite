@@ -12,6 +12,7 @@ import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.AuthorArticleSet;
+import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
@@ -133,6 +134,10 @@ public class ArticleDAO {
 	public List<Article> getTopStories() {
 		return getArticleSetArticles(new TopStoriesArticleSet());
 	}
+	
+	public List<Article> getFavouriteArticles(List<Section> favouriteSections, List<Tag> favouriteTags) {
+		return getArticleSetArticles(new FavouriteStoriesArticleSet(favouriteSections, favouriteTags));
+	}
 		
 	public void saveTopStories(List<Article> topStories) {
 		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), topStories);		
@@ -155,11 +160,14 @@ public class ArticleDAO {
 
 
 	public Map<String, Section> getSectionsMap() {
-		Map<String, Section> sections = new HashMap<String, Section>();
-		for (Section section : this.getSections()) {
-			sections.put(section.getId(), section);
+		Map<String, Section> sectionsMap = new HashMap<String, Section>();
+		List<Section> sections = this.getSections();
+		if (sections != null) {
+			for (Section section : sections) {
+				sectionsMap.put(section.getId(), section);
+			}
 		}
-		return sections;
+		return sectionsMap;
 	}
 		
 }

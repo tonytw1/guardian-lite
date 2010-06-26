@@ -1,14 +1,12 @@
 package nz.gen.wellington.guardian.android.usersettings;
 
-import java.util.LinkedList;
 import java.util.List;
-
-import android.content.Context;
 
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.sqllite.DataHelper;
+import android.content.Context;
 
 public class FavouriteSectionsAndTagsDAO {
 	
