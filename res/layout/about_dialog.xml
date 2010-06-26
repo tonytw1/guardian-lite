@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content" android:orientation="vertical">
-<ImageView android:layout_height="wrap_content" android:id="@+id/KingsPlace" android:layout_width="fill_parent"></ImageView><TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Developed by Tony McCrae. Content provided by the Guardian Open Platform." android:paddingLeft="10px" android:paddingRight="10px"></TextView><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/GuardianLogo" android:paddingLeft="10px" android:paddingRight="10px"></ImageView>
+  android:orientation="vertical" android:gravity="left" android:layout_width="fill_parent" android:layout_height="fill_parent">
+<ScrollView android:id="@+id/ScrollView01" android:layout_width="fill_parent" android:layout_height="fill_parent"><LinearLayout android:id="@+id/LinearLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="vertical"><ImageView android:layout_height="wrap_content" android:id="@+id/KingsPlace" android:layout_width="fill_parent" android:paddingBottom="0px" android:paddingTop="0px"></ImageView><TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingLeft="10px" android:paddingRight="10px" android:text="This unoffical application was developed by Tony McCrae of Eel Pie Consulting Ltd. \r\n \r\nArticles are retreived from the Guardian's RSS feeds. Tag information is supplied by the Guardian Content API. \r\n \r\n For more information see:\r\n http://eelpieconsulting.co.uk/guardian-lite\r\n\r\nApplication (c) 2010 Eel Pie Consulting Limited\r\n\r\nContent (c) 2010 Guardian News and Media Limited"></TextView><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/GuardianLogo" android:layout_gravity="left" android:paddingTop="6px" android:paddingLeft="6px"></ImageView></LinearLayout>
+</ScrollView>
+
 
 </LinearLayout>

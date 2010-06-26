@@ -199,8 +199,9 @@ public abstract class ArticleListActivity extends Activity {
 						}
 					}
 
-					View articleTrailView = chooseTrailView(mInflater, first, article);
-					populateArticleListView(article, articleTrailView);
+					boolean shouldUseFeatureTrail = showMainImage && first && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
+					View articleTrailView = chooseTrailView(mInflater, shouldUseFeatureTrail);
+					populateArticleListView(article, articleTrailView, shouldUseFeatureTrail);
 					mainpane.addView(articleTrailView);
 					first = false;
 					return;
@@ -218,16 +219,21 @@ public abstract class ArticleListActivity extends Activity {
 			    		Log.d(TAG, "Pushing trail image for ariticle: " + id);
 			    		if( viewsWaitingForTrailImages.containsKey(id)) {
 			    			View view = viewsWaitingForTrailImages.get(id);
-			    			ImageView trialImage = (ImageView) view.findViewById(R.id.TrailImage);
-			    			Bitmap image = imageDAO.getImage(url);
-			    			trialImage.setImageBitmap(image);
-			    			trialImage.setVisibility(View.VISIBLE);
+			    			populateTrailImage(url, view);
 			    			viewsWaitingForTrailImages.remove(id);
 			    		}
 			    	}			    
 			    	return;
 			}
 		}
+
+		private void populateTrailImage(final String url, View view) {
+			ImageView trialImage = (ImageView) view.findViewById(R.id.TrailImage);
+			Bitmap image = imageDAO.getImage(url);
+			trialImage.setImageBitmap(image);
+			trialImage.setVisibility(View.VISIBLE);
+		}
+		
 
 		private void addSeperator(LayoutInflater mInflater, LinearLayout mainpane, Section section) {
 			View seperator = mInflater.inflate(R.layout.seperator, null);
@@ -238,10 +244,8 @@ public abstract class ArticleListActivity extends Activity {
 			mainpane.addView(seperator);
 		}
 
-		private View chooseTrailView(LayoutInflater mInflater, boolean first,
-				Article article) {
+		private View chooseTrailView(LayoutInflater mInflater, boolean shouldUseFeatureTrail) {
 			View view;
-			boolean shouldUseFeatureTrail = showMainImage && first && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
 			if (shouldUseFeatureTrail) {
 				view = mInflater.inflate(R.layout.featurelist, null);
 			} else {				
@@ -250,7 +254,7 @@ public abstract class ArticleListActivity extends Activity {
 			return view;
 		}
 
-		private void populateArticleListView(Article article, View view) {
+		private void populateArticleListView(Article article, View view, boolean shouldUseFeatureTrail) {
 			Log.d(TAG, "Populating view for article: " + article.getTitle());
 			TextView titleText = (TextView) view.findViewById(R.id.Headline);
 			titleText.setText(article.getTitle());
@@ -264,17 +268,28 @@ public abstract class ArticleListActivity extends Activity {
 			if (article.getStandfirst() != null) {
 				standfirst.setText(article.getStandfirst());
 			}
-			
-			
+						
 			TextView caption = (TextView) view.findViewById(R.id.Caption);
 			if (caption != null && article.getCaption() != null) {
 				caption.setText(article.getCaption());
 				caption.setVisibility(View.VISIBLE);
 			}
 			
+			String trailImageUrl = article.getThumbnailUrl();
+			if (shouldUseFeatureTrail) {
+				trailImageUrl = article.getMainImageUrl();
+			}
+			
+			if (trailImageUrl != null) {
+				if (imageDAO.isAvailableLocally(trailImageUrl)) {
+					populateTrailImage(trailImageUrl, view);
+				} else {
+					viewsWaitingForTrailImages.put(article.getId(), view);
+				}
+			}
+			
 			ArticleClicker urlListener = new ArticleClicker(article);
 			view.setOnClickListener(urlListener);
-			viewsWaitingForTrailImages.put(article.getId(), view);
 		}
 		
 	}
@@ -293,15 +308,11 @@ public abstract class ArticleListActivity extends Activity {
 	
 	
 	class ArticlesAvailableReceiver extends BroadcastReceiver {
-
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Article article = (Article) intent.getSerializableExtra("article");
 			sendArticleReadyMessage(article);			
-		}
-
-	
-		
+		}		
 	}
 	
 
@@ -434,7 +445,6 @@ public abstract class ArticleListActivity extends Activity {
 	}
 	
 	
-
 	private void updateDownloadProgress(int received, long  expected) {
 		final String statusMessage =  received + " / " +  Long.toString(expected);
 		TextView status = (TextView) findViewById(R.id.DownloadProgress);

@@ -12,6 +12,7 @@ import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsD
 
 import org.joda.time.DateTime;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -98,15 +99,15 @@ public class main extends ArticleListActivity {
 
 
 	private void showAbout() {
-		Dialog dialog = new Dialog(this);
+		Dialog dialog = new AlertDialog.Builder(this).create();
+		dialog.show();
 		dialog.setContentView(R.layout.about_dialog);
 		ImageView heading = (ImageView) dialog.findViewById(R.id.KingsPlace);
 		heading.setImageResource(R.drawable.kingsplace);
 		
 		ImageView image = (ImageView) dialog.findViewById(R.id.GuardianLogo);
 		image.setImageResource(R.drawable.poweredbyguardian);		
-		dialog.setTitle(R.string.app_name);
-		dialog.show();
+		dialog.setTitle(null);
 	}
 
 	private void swichToSync() {

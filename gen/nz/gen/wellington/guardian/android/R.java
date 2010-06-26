@@ -29,12 +29,12 @@ public final class R {
         public static final int CurrentTask=0x7f070023;
         public static final int Description=0x7f07000f;
         public static final int DownloadProgress=0x7f070019;
-        public static final int GuardianLogo=0x7f070002;
-        public static final int Heading=0x7f070005;
-        public static final int HeadingLayout=0x7f070004;
+        public static final int GuardianLogo=0x7f070004;
+        public static final int Heading=0x7f070006;
+        public static final int HeadingLayout=0x7f070005;
         public static final int Headline=0x7f070008;
-        public static final int KingsPlace=0x7f070000;
-        public static final int LinearLayout01=0x7f070003;
+        public static final int KingsPlace=0x7f070002;
+        public static final int LinearLayout01=0x7f070001;
         public static final int LinearLayout02=0x7f070007;
         public static final int LinearLayout03=0x7f070017;
         public static final int MainPane=0x7f070014;
@@ -43,7 +43,7 @@ public final class R {
         public static final int PubDate=0x7f07000e;
         public static final int Pubdate=0x7f070016;
         public static final int Report=0x7f07001a;
-        public static final int ScrollView01=0x7f070006;
+        public static final int ScrollView01=0x7f070000;
         public static final int SectionImage=0x7f07001d;
         public static final int SectionName=0x7f07001e;
         public static final int SectionsListView=0x7f07001c;
@@ -55,7 +55,7 @@ public final class R {
         public static final int TagList=0x7f070011;
         public static final int TagName=0x7f070012;
         public static final int TextView01=0x7f07000c;
-        public static final int TextView02=0x7f070001;
+        public static final int TextView02=0x7f070003;
         public static final int TrailImage=0x7f070015;
         public static final int buttonStart=0x7f070021;
     }
