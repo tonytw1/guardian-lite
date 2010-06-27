@@ -51,14 +51,18 @@ public class DataHelper {
 	
 	
 	public boolean isFavourite(Tag tag) {
-		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'tag' and apiid = ? ", new String[] { tag.getId() }, null, null, "name desc");
-		return cursor.getCount() > 0;		
+		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'tag' and apiid = ? ", new String[] { tag.getId() }, null, null, "name asc");
+		final boolean isFavourite = cursor.getCount() > 0;
+		closeCursor(cursor);
+		return isFavourite;	
 	}
 	
 
 	public boolean isFavourite(Section section) {
-		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'section' and apiid = ? ", new String[] { section.getId() }, null, null, "name desc");
-		return cursor.getCount() > 0;	
+		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'section' and apiid = ? ", new String[] { section.getId() }, null, null, "name asc");
+		final boolean isFavourite = cursor.getCount() > 0;
+		closeCursor(cursor);
+		return isFavourite;	
 	}
 	
 	public void removeSection(Section section) {
@@ -71,7 +75,7 @@ public class DataHelper {
 	
 	
 	public List<Tag> getFavouriteTags(Map<String, Section> sectionsMap) {
-		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name desc");
+		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");
 		
 		List<Tag> favouriteTags = new ArrayList<Tag>();
 		if (cursor.moveToFirst()) {
@@ -87,15 +91,13 @@ public class DataHelper {
 				
 			} while (cursor.moveToNext());
 		}
-		if (cursor != null && !cursor.isClosed()) {
-			cursor.close();
-		}
+		closeCursor(cursor);
 		return favouriteTags;
 	}
-	
-	
+
+
 	public List<Section> getFavouriteSections(Map<String, Section> sectionsMap) {
-		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name desc");
+		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");
 		
 		List<Section> favouriteSections = new ArrayList<Section>();
 		if (cursor.moveToFirst()) {
@@ -114,15 +116,8 @@ public class DataHelper {
 				
 			} while (cursor.moveToNext());
 		}
-		if (cursor != null && !cursor.isClosed()) {
-			cursor.close();
-		}
+		closeCursor(cursor);
 		return favouriteSections;
-	}
-
-
-	public void close() {
-		db.close();		
 	}
 	
 	
@@ -133,6 +128,18 @@ public class DataHelper {
 	
 	public void addSection(Section section) {
 		this.insert("section", section.getId(), section.getName(), section.getId());		
+	}
+	
+	
+	public void close() {
+		db.close();		
+	}
+	
+	
+	private void closeCursor(Cursor cursor) {
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
 	}
 	
 	

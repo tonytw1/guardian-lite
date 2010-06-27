@@ -40,6 +40,26 @@ public class TagListPopulatingService {
 	    	tagList.addView(tagView);
 		}
 	}
+	
+	
+	public static void populateSections(LayoutInflater inflater, boolean connectionIsAvailable,  ViewGroup tagList, List<Section> sections, Context context) {
+		for (Section section: sections) {
+			View tagView = inflater.inflate(R.layout.authorslist, null);
+			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
+	    	titleText.setText(section.getName());
+	    	
+	    	boolean isLocallyCached = FileService.isLocallyCached(context, new SectionArticleSet(section).getApiUrl());	    	
+	    	boolean contentIsAvailable = isLocallyCached || connectionIsAvailable;
+	    	if (contentIsAvailable) {
+	    		TagListPopulatingService.populateSectionClicker(section, tagView);
+
+	    	} else {
+	    		titleText.setTextColor(Color.DKGRAY);
+	    	}	    	
+	    	tagList.addView(tagView);
+		}
+		
+	}
 
 	
 	public static void populateClicker(Tag tag, View tagView) {
