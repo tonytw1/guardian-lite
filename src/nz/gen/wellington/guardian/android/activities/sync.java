@@ -7,6 +7,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
@@ -124,10 +125,20 @@ public class sync extends Activity implements OnClickListener {
 		Log.i(TAG, "Updating status" + contentUpdateService.getStatus());
 		switch (contentUpdateService.getStatus()) {
 		case ContentUpdateService.STOPPED:
-			start.setEnabled(true);
+			
+			NetworkStatusService networkStatusService = new NetworkStatusService(this.getApplicationContext());
+			if (networkStatusService.isConnectionAvailable()) {
+				start.setEnabled(true);
+				statusMessage.setText("Download the latest articles from your favourite tags and sections for offline viewing.");
+				statusMessage.setVisibility(View.VISIBLE);	
+
+			} else {
+				start.setEnabled(false);
+				statusMessage.setText("An active connection is required before articles can be downloaded.");
+				statusMessage.setVisibility(View.VISIBLE);	
+			}
+			
 			stop.setEnabled(false);
-			statusMessage.setText("Download the latest articles from your favourite tags and sections for offline viewing.");
-			statusMessage.setVisibility(View.VISIBLE);	
 			TextView status = (TextView) findViewById(R.id.Status);
 			status.setVisibility(View.GONE);
 			TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
@@ -137,7 +148,8 @@ public class sync extends Activity implements OnClickListener {
 		case ContentUpdateService.RUNNING:
 			stop.setEnabled(true);
 			start.setEnabled(false);
-			statusMessage.setText("Latest articles are been downloaded in the background.");
+			statusMessage.setText("Articles are been downloaded in the background.\n\n" +
+				"You may exit this screen and continue browing in the meantime.");
 			statusMessage.setVisibility(View.VISIBLE);
 			break;
 		
