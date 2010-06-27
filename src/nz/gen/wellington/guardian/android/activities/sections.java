@@ -9,9 +9,12 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -21,15 +24,13 @@ public class sections extends Activity {
 	
 	ListAdapter adapter;
 	private ArticleDAO articleDAO;
-
-	public sections() {
-		articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
-	}
 	
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
-		super.onStart();		
+		super.onStart();
+		articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.sections);
 		
@@ -50,6 +51,37 @@ public class sections extends Activity {
 		
 		boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();
 		TagListPopulatingService.populateSections(inflater, connectionIsAvailable, authorList, favouriteSections, this.getApplicationContext());
+	}
+	
+	
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, 1, 0, "Home");
+		menu.add(0, 2, 0, "Favourites");
+	    return true;
+	}
+	
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 1:
+			switchToMain();
+			return true;
+		case 2:
+			switchToFavourites();
+			return true;
+		}
+		return false;
+	}
+	
+	
+	private void switchToMain() {
+		Intent intent = new Intent(this, main.class);
+		this.startActivity(intent);	
+	}
+	
+	private void switchToFavourites() {
+		Intent intent = new Intent(this, favourites.class);
+		this.startActivity(intent);		
 	}
 	
 	

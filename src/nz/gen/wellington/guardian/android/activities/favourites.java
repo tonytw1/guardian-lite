@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class favourites extends Activity {
 	
@@ -36,12 +37,20 @@ public class favourites extends Activity {
 		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();
 		List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags();
 		
-		LayoutInflater inflater = LayoutInflater.from(this);		
-		LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);
+		boolean hasFavourites= !favouriteSections.isEmpty() || !favouriteTags.isEmpty();
+		if (hasFavourites) {
+			LayoutInflater inflater = LayoutInflater.from(this);
+			LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);
 		
-		boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();
-		TagListPopulatingService.populateSections(inflater, connectionIsAvailable, authorList, favouriteSections, this.getApplicationContext());
-		TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, favouriteTags, this.getApplicationContext());
+			boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();
+			TagListPopulatingService.populateSections(inflater, connectionIsAvailable, authorList, favouriteSections, this.getApplicationContext());
+			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, favouriteTags, this.getApplicationContext());
+		
+		} else {
+			TextView description = (TextView) findViewById(R.id.Description);
+			description.setText("No favourite sections of tags have been set.\n\nAdd favourites to influence the contents of the " +
+					"latest articles screen and to control which articles are downloaded for offline viewing.");			
+		}
 	}
 	
 }
