@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-<EditTextPreference android:key="apikey" android:summary="Your Guardian Content API Key" android:title="API Key"></EditTextPreference>
+
 <ListPreference android:title="Cache location" android:key="cacheLocation" android:summary="Where should cached articles and images be stored" android:entryValues="@array/cacheLocationOptionValues" android:entries="@array/cacheLocationOptionLabels" android:defaultValue="1"></ListPreference>
 </PreferenceScreen>

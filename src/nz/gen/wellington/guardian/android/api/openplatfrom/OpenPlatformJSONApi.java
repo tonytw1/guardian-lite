@@ -7,7 +7,6 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ContentSource;
-import nz.gen.wellington.guardian.android.api.OpenPlatformApiKeyStore;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.AuthorArticleSet;
@@ -28,28 +27,21 @@ public class OpenPlatformJSONApi implements ContentSource {
 	public static final String SECTIONS_API_URL = "sections";
 	private static final int PAGE_SIZE = 10;	// TODO push to a preference
 	
-	private OpenPlatformApiKeyStore apiKeyStore;
 	private OpenPlatformJSONParser contentParser;
 	private HttpFetcher httpFetcher;
 
 	private Context context;
 	
 	
-	public OpenPlatformJSONApi(Context context, OpenPlatformApiKeyStore apiKeyStore) {
+	public OpenPlatformJSONApi(Context context) {
 		this.context = context;
-		this.apiKeyStore = apiKeyStore;
 		httpFetcher = new HttpFetcher(context);
 		contentParser = new OpenPlatformJSONParser(context);
 	}
 
 	
 	@Override
-	public List<Article> getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {
-		if (apiKeyStore.getApiKey() == null) {
-			Log.w(TAG, "API key not set");
-			return null;
-		}
-		
+	public List<Article> getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {		
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
 		final String apiUrl = articleSet.getApiUrl();
 		
@@ -71,12 +63,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 
 	
 	@Override
-	public List<Section> getSections() {
-		if (apiKeyStore.getApiKey() == null) {
-			Log.w(TAG, "API key not set");
-			return null;
-		}
-		
+	public List<Section> getSections() {		
 		InputStream input = null;		
 		if (input == null) {
 			Log.i(TAG, "Fetching section list from live api");
@@ -151,7 +138,6 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		
 		url.append("&show-tags=all");
-		url.append("&api-key=" + apiKeyStore.getApiKey());
 		url.append("&page-size=" + PAGE_SIZE);
 		url.append("&format=xml");
 		return url.toString();
