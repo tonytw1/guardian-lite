@@ -95,10 +95,9 @@ public class sync extends Activity implements OnClickListener {
 		switch (src.getId()) {
 
 		case R.id.buttonStart:
-			taskQueue.addArticleTask(new UpdateTopStoriesTask(this.getApplicationContext()));
-			queueFavouriteTags(taskQueue);
 			queueFavoriteSections(taskQueue);
-			//queueAllSections(taskQueue);
+			queueFavouriteTags(taskQueue);
+			taskQueue.addArticleTask(new UpdateTopStoriesTask(this.getApplicationContext()));
 						
 			contentUpdateService.start();
 			updateStatus();
@@ -142,14 +141,14 @@ public class sync extends Activity implements OnClickListener {
 			TextView status = (TextView) findViewById(R.id.Status);
 			status.setVisibility(View.GONE);
 			TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
-			currentTask.setVisibility(View.GONE);			
+			currentTask.setVisibility(View.GONE);
 			break;
 
 		case ContentUpdateService.RUNNING:
 			stop.setEnabled(true);
 			start.setEnabled(false);
 			statusMessage.setText("Articles are been downloaded in the background.\n\n" +
-				"You may exit this screen and continue browing in the meantime.");
+				"You may exit this screen and continue browsing in the meantime.");
 			statusMessage.setVisibility(View.VISIBLE);
 			break;
 		
@@ -166,12 +165,6 @@ public class sync extends Activity implements OnClickListener {
 	private void queueFavoriteSections(TaskQueue taskQueue) {
 		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();		
 		queueSections(taskQueue, favouriteSections);
-	}
-	
-	
-	private void queueAllSections(TaskQueue taskQueue) {
-		// TODO Auto-generated method stub
-		queueSections(taskQueue, ArticleDAOFactory.getDao(this).getSections());
 	}
 	
 	
