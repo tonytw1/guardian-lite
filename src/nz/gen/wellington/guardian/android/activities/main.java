@@ -12,7 +12,6 @@ import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsD
 
 import org.joda.time.DateTime;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -99,7 +98,7 @@ public class main extends ArticleListActivity {
 
 
 	private void showAbout() {
-		Dialog dialog = new AlertDialog.Builder(this).create();
+		Dialog dialog = new Dialog(this);
 		dialog.show();
 		dialog.setContentView(R.layout.about_dialog);
 		ImageView heading = (ImageView) dialog.findViewById(R.id.KingsPlace);
