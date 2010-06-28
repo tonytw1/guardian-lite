@@ -28,11 +28,12 @@ public class HttpFetcher {
 	
 	private static final String TAG = "HttpFetcher";
 	
+	private static final int HTTP_TIMEOUT = 20000;
+
     public static final String DOWNLOAD_PROGRESS = "nz.gen.wellington.guardian.android.network.DOWNLOAD_PROGRESS";
     
 	HttpClient client;
 	Context context;
-	private boolean running;
 		
 	public static final int DOWNLOAD_UPDATE = 2;
 	public static final int DOWNLOAD_COMPLETED = 3;
@@ -40,8 +41,7 @@ public class HttpFetcher {
 	
 	public HttpFetcher(Context context) {
 		this.context =context;
-		running = true;
-
+		
 		client = new DefaultHttpClient();
 		((AbstractHttpClient) client)
 		.addRequestInterceptor(new HttpRequestInterceptor() {
@@ -75,6 +75,9 @@ public class HttpFetcher {
 				}
 			}
 		});
+		
+		client.getParams().setParameter("http.socket.timeout", new Integer(HTTP_TIMEOUT));
+		client.getParams().setParameter("http.connection.timeout", new Integer(HTTP_TIMEOUT));
 	}
 
 
@@ -120,7 +123,7 @@ public class HttpFetcher {
 	
 	public void stopLoading() {
 		Log.d(TAG, "Stopping loading");
-		running = false;
+		client.getConnectionManager().shutdown();
 	} 
 
 	
