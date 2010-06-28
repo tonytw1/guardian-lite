@@ -10,6 +10,7 @@ import nz.gen.wellington.guardian.android.api.caching.FileBasedSectionCache;
 import nz.gen.wellington.guardian.android.api.caching.FileService;
 import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.AuthorArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
@@ -35,6 +36,8 @@ public class ArticleDAO {
 	ArticleCallback articleCallback;
 	ContentSource openPlatformApi;
 	NetworkStatusService networkStatusService;
+
+	private List<Tag> refinements;
 	
 	public ArticleDAO(Context context) {
 		this.sectionCache = CacheFactory.getSectionCache();
@@ -87,7 +90,11 @@ public class ArticleDAO {
 			if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(20))) {
 				Log.i(TAG, "Not serving cache article set is local copy is older than 20 minutes and network is available");			
 			} else {
-				articles = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
+				ArticleBundle bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
+				if (bundle != null) {
+					articles = bundle.getArticles();
+					refinements = bundle.getRefinements();
+				}
 			}
 		}
 		
@@ -101,7 +108,7 @@ public class ArticleDAO {
 			articles = openPlatformApi.getArticles(articleSet, sections, articleCallback);		
 			if (articles != null) {
 				Log.i(TAG, "Got " + articles.size() + " articles from api call");
-				fileBasedArticleCache.putArticleSetArticles(articleSet, articles);
+				fileBasedArticleCache.putArticleSetArticles(articleSet, articles, openPlatformApi.getRefinements());
 				return articles;
 				
 			} else {
@@ -140,7 +147,7 @@ public class ArticleDAO {
 	}
 		
 	public void saveTopStories(List<Article> topStories) {
-		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), topStories);		
+		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), topStories, null);		
 	}
 
 	public DateTime getModificationTime(ArticleSet articleSet) {
@@ -172,6 +179,9 @@ public class ArticleDAO {
 
 
 	public List<Tag> getRefinements() {
+		if (refinements != null) {
+			return refinements;
+		}
 		return openPlatformApi.getRefinements();		
 	}
 		

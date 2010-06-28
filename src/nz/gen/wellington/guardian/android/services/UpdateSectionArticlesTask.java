@@ -35,7 +35,7 @@ public class UpdateSectionArticlesTask extends ArticleUpdateTask implements Cont
 		List<Article> articles = api.getArticles(articleSet, sections, null);
 		if (articles != null) {
 			FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
-			fileBasedArticleCache.putArticleSetArticles(articleSet, articles);
+			fileBasedArticleCache.putArticleSetArticles(articleSet, articles, api.getRefinements());
 			processArticles(articles);
 		}
 	}

@@ -36,7 +36,7 @@ public class UpdateTagArticlesTask extends ArticleUpdateTask implements ContentU
 		List<Article> articles = api.getArticles(articleSet, sections, null);
 		if (articles != null) {
 			FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
-			fileBasedArticleCache.putArticleSetArticles(articleSet, articles);
+			fileBasedArticleCache.putArticleSetArticles(articleSet, articles, api.getRefinements());
 			processArticles(articles);
 		}
 	}

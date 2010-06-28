@@ -9,7 +9,9 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.Tag;
 
 import org.joda.time.DateTime;
 
@@ -27,12 +29,13 @@ public class FileBasedArticleCache {
 	}
 	
 	
-	 public void putArticleSetArticles(ArticleSet articleSet, List<Article> articles) {
+	 public void putArticleSetArticles(ArticleSet articleSet, List<Article> articles, List<Tag> refinements) {
+		 ArticleBundle articleBundle = new ArticleBundle(articles, refinements);
 		 Log.i(TAG, "Writing to disk: " + articleSet.getName());
 		 try {
 		 FileOutputStream fos = FileService.getFileOutputStream(context, articleSet.getApiUrl());
 		 ObjectOutputStream out = new ObjectOutputStream(fos);
-		 out.writeObject(articles);
+		 out.writeObject(articleBundle);
 		 out.close();
 		 } catch (IOException ex) {
 		 Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName() + ex.getMessage());
@@ -40,8 +43,7 @@ public class FileBasedArticleCache {
 		 }
 
 
-	@SuppressWarnings("unchecked")
-	public List<Article> getArticleSetArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
+	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
 		if (!FileService.isLocallyCached(context, articleSet.getApiUrl())) {
 			return null;
 		}
@@ -53,20 +55,21 @@ public class FileBasedArticleCache {
 
 			Log.i(TAG, "Reading from disk: " + filepath);
 			ObjectInputStream in = new ObjectInputStream(fis);
-			List<Article> loaded = (List<Article>) in.readObject();
+			ArticleBundle loaded = (ArticleBundle) in.readObject();
 			in.close();
 			Log.i(TAG, "Finished reading from disk: " + filepath);
 			if (loaded != null) {
 				
 				if (articleCallback != null) {
-					for (Article article : loaded) {
+					for (Article article : loaded.getArticles()) {
 						articleCallback.articleReady(article);
 					}
 				}
 					
-				Log.i(TAG, "Loaded " + loaded.size() + " articles");
+				Log.i(TAG, "Loaded " + loaded.getArticles().size() + " articles");
+				return loaded;
 			}
-			return loaded;
+			return null;
 
 		} catch (IOException ex) {
 			Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName() + ex.getMessage());

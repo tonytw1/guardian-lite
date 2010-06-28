@@ -46,7 +46,7 @@ public class UpdateTopStoriesTask extends ArticleUpdateTask implements ContentUp
 		List<Article> articles = api.getArticles(articleSet, sections, null);
 		if (articles != null) {
 			FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
-			fileBasedArticleCache.putArticleSetArticles(articleSet, sortByLatestSection(articles));
+			fileBasedArticleCache.putArticleSetArticles(articleSet, sortByLatestSection(articles), api.getRefinements());
 			processArticles(articles);
 		}
 	}
