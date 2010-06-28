@@ -9,7 +9,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    	<activity android:label="View Article" android:name=".activities.article">
+    	<activity android:label="View Article" android:name=".activities.article" android:noHistory="true">
     		<intent-filter>
     		</intent-filter>
 		</activity>
@@ -26,7 +26,7 @@
 <activity android:name=".activities.keyword" android:screenOrientation="portrait" ></activity>
 <activity android:name=".activities.perferences" android:screenOrientation="portrait"></activity>
 <activity android:name=".activities.favourites" android:screenOrientation="portrait"></activity>
-<activity android:name=".activities.notification"></activity>
+<activity android:name=".activities.notification" android:noHistory="true"></activity>
 </application>
     <uses-sdk android:minSdkVersion="3" />
 
