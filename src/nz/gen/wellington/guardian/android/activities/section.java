@@ -30,9 +30,13 @@ public class section extends ArticleListActivity {
 
 	@Override
 	protected List<Article> loadArticles() {
-		return articleDAO.getSectionItems(section);
+		List<Article> sectionArticles = articleDAO.getSectionItems(section);
+		
+		articleDAO.getRefinements();
+		
+		return sectionArticles;
 	}
-	
+		
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Home");

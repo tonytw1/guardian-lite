@@ -10,6 +10,7 @@ import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,12 @@ import android.widget.TextView;
 public class TagListPopulatingService {
 
 	
+	private static final String TAG = "TagListPopulatingService";
+
+
 	public static void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<Tag> tags, Context context) {		
 		for (Tag tag : tags) {
+			Log.d(TAG, "Populating tag: " + tag.getId() + " (" + tag.getName() + ")");
 			boolean isLocallyCached = false;
 			if (tag.isSectionTag()) {
 				isLocallyCached = FileService.isLocallyCached(context, new SectionArticleSet(tag.getSection()).getApiUrl());

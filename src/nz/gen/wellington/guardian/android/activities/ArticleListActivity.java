@@ -8,6 +8,7 @@ import java.util.Map;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
 import nz.gen.wellington.guardian.android.activities.ui.SectionClicker;
+import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
@@ -15,6 +16,7 @@ import nz.gen.wellington.guardian.android.api.openplatfrom.OpenPlatformJSONParse
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
+import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -31,6 +33,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -224,6 +227,14 @@ public abstract class ArticleListActivity extends Activity {
 			    		}
 			    	}			    
 			    	return;
+			    	
+			    case 4:
+			    	
+			    	List<Tag> refinements = articleDAO.getRefinements();
+					LayoutInflater inflater = LayoutInflater.from(context);
+					mainpane = (LinearLayout) findViewById(R.id.MainPane);
+					TagListPopulatingService.populateTags(inflater, true, mainpane, refinements, context);			    	
+			    	return;
 			}
 		}
 
@@ -344,6 +355,11 @@ public abstract class ArticleListActivity extends Activity {
 			}
 			
 			
+			Message m = new Message();
+			m.what = 4;
+			updateArticlesHandler.sendMessage(m);
+			
+			
 			List<Article> downloadTrailImages = new LinkedList<Article>();
 			boolean first = true;
 			for (Article article : articles) {
@@ -358,7 +374,7 @@ public abstract class ArticleListActivity extends Activity {
 				
 				if (imageUrl != null) {
 					if (imageDAO.isAvailableLocally(imageUrl)) {
-						Message m = new Message();
+						m = new Message();
 						m.what = 3;						
 						Bundle bundle = new Bundle();
 						bundle.putString("id", article.getId());
@@ -393,11 +409,11 @@ public abstract class ArticleListActivity extends Activity {
 			}
 			
 			
-			if (running) {	
+			if (running) {
 				for (Article article : downloadTrailImages) {
 					Log.d(TAG, "Downloading trail image: " + downloadTrailImages);
 					imageDAO.fetchLiveImage(article.getThumbnailUrl());
-					Message m = new Message();
+					m = new Message();
 					m.what = 3;
 					Bundle bundle = new Bundle();
 					bundle.putString("id", article.getId());

@@ -169,5 +169,10 @@ public class ArticleDAO {
 		}
 		return sectionsMap;
 	}
+
+
+	public List<Tag> getRefinements() {
+		return openPlatformApi.getRefinements();		
+	}
 		
 }

@@ -14,6 +14,7 @@ import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
+import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import android.content.Context;
@@ -62,6 +63,11 @@ public class OpenPlatformJSONApi implements ContentSource {
 	}
 
 	
+	public List<Tag> getRefinements() {
+		return contentParser.getRefinements();
+	}
+
+
 	@Override
 	public List<Section> getSections() {		
 		InputStream input = null;		

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class OpenPlatformJSONParser {
 	public static final String ARTICLE_AVAILABLE = "nz.gen.wellington.guardian.android.api.ARTICLE_AVAILABLE";
 
 	private boolean running;
-	
+	ResultsHandler hb;
 	
 	public OpenPlatformJSONParser(Context context) {
 		running = true;
@@ -51,7 +52,7 @@ public class OpenPlatformJSONParser {
 
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
-			ResultsHandler hb = new ResultsHandler(articleCallback, sections);
+			hb = new ResultsHandler(articleCallback, sections);
 			saxParser.parse(inputStream, hb);
 			inputStream.close();
 			return hb.getArticles();
@@ -66,16 +67,24 @@ public class OpenPlatformJSONParser {
 		return null;
 	}
 	
-	
+	public List<Tag> getRefinements() {
+		if (hb != null) {
+			return hb.getRefinements();
+		}
+		return new ArrayList<Tag>();
+	}
+
 	
 
 	 class ResultsHandler extends HandlerBase {
          
 		 List<Article> articles;
+		 List<Tag> refinements;
          Article article;
          
          StringBuilder sb = new StringBuilder();
          String currentField;
+         String currentRefinementGroupType;
          ArticleCallback articleCallback;
          private List<Section> sections;
          
@@ -84,7 +93,11 @@ public class OpenPlatformJSONParser {
         	 this.sections = sections;
          }
                   
-         private Section getSectionById(String sectionId) {
+         public List<Tag> getRefinements() {
+			return refinements;
+		}
+
+		private Section getSectionById(String sectionId) {
  			for (Section section : sections) {
  				if (section.getId().equals(sectionId)) {
  					return section;
@@ -102,6 +115,7 @@ public class OpenPlatformJSONParser {
 		public void startDocument() throws SAXException {
 			super.startDocument();
 			articles = new LinkedList<Article>();
+			refinements = new LinkedList<Tag>();
 		}
 
          @Override
@@ -155,6 +169,21 @@ public class OpenPlatformJSONParser {
         		 }
         	 }
         	 
+        	 if (name.equals("refinement-group")) {
+        		 currentRefinementGroupType = attributes.getValue("type");
+        	 }
+        	 
+        	 if (name.equals("refinement")) {
+        		 if (currentRefinementGroupType != null && currentRefinementGroupType.equals("keyword")) {
+        			 final String tagId = attributes.getValue("id");
+        			 final String sectionId = tagId.split("/")[0];
+
+        			 Section section = getSectionById(sectionId);
+        			 Log.i(TAG, "Found refinement keyword: " + tagId);
+        			 refinements.add(new Tag(attributes.getValue("display-name"), tagId, section));        			 
+        		 }        		 
+        	 }
+        	         	 
         	 if (name.equals("asset")) {
         		 if (article.getMainImageUrl() == null && attributes.getValue("type").equals("picture")) {
         			 article.setMainImageUrl(attributes.getValue("file"));        			 
