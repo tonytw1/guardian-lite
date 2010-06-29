@@ -61,6 +61,24 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		return null;
 	}
+	
+	
+
+	@Override
+	public String getRemoteChecksum(ArticleSet articleSet) {
+		InputStream input = null;		
+		if (input == null) {
+			Log.i(TAG, "Fetching article set checksum from live api: " + articleSet.getApiUrl());
+			input = getHttpInputStream(buildContentQueryUrl(articleSet, false));
+		}		
+		
+		if (input != null) {
+			List<Article> articles = contentParser.parseArticlesXml(input, null, null);
+			return contentParser.getChecksum();			
+		}
+		return null;
+	}
+
 
 	
 	public List<Tag> getRefinements() {

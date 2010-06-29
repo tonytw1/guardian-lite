@@ -87,8 +87,20 @@ public class ArticleDAO {
 		List<Article> articles = null;
 		DateTime modificationTime = fileBasedArticleCache.getModificationTime(articleSet);
 		if (modificationTime != null) {
-			if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(20))) {
-				Log.i(TAG, "Not serving cache article set is local copy is older than 20 minutes and network is available");			
+			if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(1))) {
+				Log.i(TAG, "Not serving cache article set is local copy is older than 20 minutes and network is available");
+				
+				ArticleBundle bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
+				if (bundle != null) {
+					articles = bundle.getArticles();
+					refinements = bundle.getRefinements();
+					String localChecksum = bundle.getChecksum();
+					String remoteChecksum = this.getArticleSetRemoteChecksum(articleSet);	// TODO this should happen after articles loaded.
+					if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {						
+						Log.i(TAG, "Remove content checksum is different: " + localChecksum + ":" + remoteChecksum);
+					}
+				}				
+				
 			} else {
 				ArticleBundle bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
 				if (bundle != null) {
@@ -118,7 +130,12 @@ public class ArticleDAO {
 		return null;
 	}
 
-
+	
+	private String getArticleSetRemoteChecksum(ArticleSet articleSet) {
+		return openPlatformApi.getRemoteChecksum(articleSet);
+	}
+	
+	
 	public void evictSections() {
 		sectionCache.clear();
 		fileBasedSectionCache.clear();

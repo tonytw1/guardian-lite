@@ -20,5 +20,6 @@ public interface ContentSource {
 	public void stopLoading();
 	public List<Tag> getRefinements();
 	public String getChecksum();
+	public String getRemoteChecksum(ArticleSet articleSet);
 
 }
