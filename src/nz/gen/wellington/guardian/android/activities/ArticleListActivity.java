@@ -33,7 +33,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -249,9 +248,10 @@ public abstract class ArticleListActivity extends Activity {
 		private void addSeperator(LayoutInflater mInflater, LinearLayout mainpane, Section section) {
 			View seperator = mInflater.inflate(R.layout.seperator, null);
 			seperator.setBackgroundColor(Color.parseColor(SectionColourMap.getColourForSection(section.getId())));
-			TextView heading = (TextView) seperator.findViewById(R.id.Heading);
-			heading.setText(section.getName());			
-			seperator.setOnClickListener(new SectionClicker(section));
+			TextView heading = (TextView) seperator.findViewById(R.id.TagName);
+			heading.setText(section.getName());
+			
+			TagListPopulatingService.populateSectionClicker(section, seperator, context);			
 			mainpane.addView(seperator);
 		}
 
