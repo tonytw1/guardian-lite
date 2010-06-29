@@ -195,12 +195,21 @@ public class sync extends Activity implements OnClickListener {
 			status.setVisibility(View.GONE);
 			return;
 		}
-		final String statusMessage =  articles + " article sets and " + images + " images to load.";
+		final String statusMessage =  articles + " article " + getPrural("set", articles) + " and " 
+		+ images + " " + getPrural("image", images) + " to load.";
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);
 	}
 	
 	
+	private String getPrural(String word, int count) {
+		if (count != 1) {
+			return word + "s";
+		}
+		return word;
+	}
+
+
 	private void updateDownloadProgress(int received, long  expected) {
 		final String statusMessage =  received + " / " +  Long.toString(expected);
 		TextView status = (TextView) findViewById(R.id.DownloadProgress);
