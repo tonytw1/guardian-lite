@@ -87,8 +87,8 @@ public class ArticleDAO {
 		List<Article> articles = null;
 		DateTime modificationTime = fileBasedArticleCache.getModificationTime(articleSet);
 		if (modificationTime != null) {
-			if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(1))) {
-				Log.i(TAG, "Not serving cache article set is local copy is older than 20 minutes and network is available");
+			if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(10))) {
+				Log.i(TAG, "Checking remote checksum local copy is older than 10 minutes and network is available");
 				
 				ArticleBundle bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
 				if (bundle != null) {
