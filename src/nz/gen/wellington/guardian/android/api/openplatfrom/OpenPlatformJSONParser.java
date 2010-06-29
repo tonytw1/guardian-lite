@@ -76,11 +76,20 @@ public class OpenPlatformJSONParser {
 
 	
 
+	public String getChecksum() {
+		if (hb != null) {
+			return hb.getChecksum();
+		}
+		return null;
+	}
+	
+
 	 class ResultsHandler extends HandlerBase {
          
 		 List<Article> articles;
 		 List<Tag> refinements;
          Article article;
+         String checksum;
          
          StringBuilder sb = new StringBuilder();
          String currentField;
@@ -95,7 +104,12 @@ public class OpenPlatformJSONParser {
                   
          public List<Tag> getRefinements() {
 			return refinements;
-		}
+         }
+         
+         public String getChecksum() {        	 
+        	 return checksum;
+         }
+         
 
 		private Section getSectionById(String sectionId) {
  			for (Section section : sections) {
@@ -151,6 +165,10 @@ public class OpenPlatformJSONParser {
         		 if (!fieldname.equals(currentField)) {
         			 currentField = fieldname;
         		 }
+        	 }
+        	 
+        	 if (name.equals("results")) {
+        		 checksum = attributes.getValue("checksum");
         	 }
         	 
         	 if (name.equals("tag")) {

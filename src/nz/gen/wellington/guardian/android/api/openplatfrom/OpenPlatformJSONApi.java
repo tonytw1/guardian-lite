@@ -49,7 +49,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		InputStream input = null;		
 		if (input == null) {
 			Log.i(TAG, "Fetching article set from live api: " + apiUrl);
-			input = getHttpInputStream(buildContentQueryUrl(articleSet));	
+			input = getHttpInputStream(buildContentQueryUrl(articleSet, true));	
 		}		
 		
 		if (input != null) {
@@ -65,6 +65,10 @@ public class OpenPlatformJSONApi implements ContentSource {
 	
 	public List<Tag> getRefinements() {
 		return contentParser.getRefinements();
+	}
+	
+	public String getChecksum() {
+		return contentParser.getChecksum();
 	}
 
 
@@ -114,7 +118,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	}
 
 	
-	protected String buildContentQueryUrl(ArticleSet articleSet) {
+	protected String buildContentQueryUrl(ArticleSet articleSet, boolean showAll) {
 		
 		if (articleSet instanceof TopStoriesArticleSet) {
 			return API_HOST + "/favourites";
@@ -125,7 +129,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 			 url = new StringBuilder(API_HOST + "/favourites");
 		}
 		
-		url.append("?show-fields=all");
+		url.append("?format=xml");
 		
 		if (articleSet instanceof SectionArticleSet) {
 			url.append("&section=" + articleSet.getApiUrl());			
@@ -142,10 +146,12 @@ public class OpenPlatformJSONApi implements ContentSource {
 		if (articleSet instanceof FavouriteStoriesArticleSet) {
 			 url.append(articleSet.getApiUrl());
 		}
-		
-		url.append("&show-tags=all");
+
+		if (showAll) {
+			url.append("&show-fields=true");	// TODO is all in api
+			url.append("&show-tags=true");
+		}
 		url.append("&page-size=" + PAGE_SIZE);
-		url.append("&format=xml");
 		return url.toString();
 	}
 	

@@ -108,7 +108,7 @@ public class ArticleDAO {
 			articles = openPlatformApi.getArticles(articleSet, sections, articleCallback);		
 			if (articles != null) {
 				Log.i(TAG, "Got " + articles.size() + " articles from api call");
-				fileBasedArticleCache.putArticleSetArticles(articleSet, articles, openPlatformApi.getRefinements());
+				fileBasedArticleCache.putArticleSetArticles(articleSet, new ArticleBundle(articles, openPlatformApi.getRefinements(), openPlatformApi.getChecksum()));
 				return articles;
 				
 			} else {
@@ -147,7 +147,7 @@ public class ArticleDAO {
 	}
 		
 	public void saveTopStories(List<Article> topStories) {
-		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), topStories, null);		
+		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), new ArticleBundle(topStories, null, null));		
 	}
 
 	public DateTime getModificationTime(ArticleSet articleSet) {

@@ -19,5 +19,6 @@ public interface ContentSource {
 	List<Article> getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback);
 	public void stopLoading();
 	public List<Tag> getRefinements();
+	public String getChecksum();
 
 }

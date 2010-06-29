@@ -6,6 +6,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
@@ -36,7 +37,7 @@ public class UpdateTagArticlesTask extends ArticleUpdateTask implements ContentU
 		List<Article> articles = api.getArticles(articleSet, sections, null);
 		if (articles != null) {
 			FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
-			fileBasedArticleCache.putArticleSetArticles(articleSet, articles, api.getRefinements());
+			fileBasedArticleCache.putArticleSetArticles(articleSet, new ArticleBundle(articles, api.getRefinements(),api.getChecksum()));
 			processArticles(articles);
 		}
 	}

@@ -9,11 +9,12 @@ public class ArticleBundle implements Serializable {
 	
 	List<Article> articles;
 	List<Tag> refinements;
+	String checksum;
 	
-	
-	public ArticleBundle(List<Article> articles, List<Tag> refinements) {
+	public ArticleBundle(List<Article> articles, List<Tag> refinements, String checksum) {
 		this.articles = articles;
 		this.refinements = refinements;
+		this.checksum = checksum;		
 	}
 
 
@@ -24,6 +25,11 @@ public class ArticleBundle implements Serializable {
 
 	public List<Tag> getRefinements() {
 		return refinements;
+	}
+
+
+	public String getChecksum() {
+		return checksum;
 	}
 	
 	

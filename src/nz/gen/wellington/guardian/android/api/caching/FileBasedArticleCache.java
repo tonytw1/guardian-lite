@@ -5,13 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.Tag;
 
 import org.joda.time.DateTime;
 
@@ -29,18 +27,17 @@ public class FileBasedArticleCache {
 	}
 	
 	
-	 public void putArticleSetArticles(ArticleSet articleSet, List<Article> articles, List<Tag> refinements) {
-		 ArticleBundle articleBundle = new ArticleBundle(articles, refinements);
+	 public void putArticleSetArticles(ArticleSet articleSet, ArticleBundle bundle) {
 		 Log.i(TAG, "Writing to disk: " + articleSet.getName());
 		 try {
-		 FileOutputStream fos = FileService.getFileOutputStream(context, articleSet.getApiUrl());
-		 ObjectOutputStream out = new ObjectOutputStream(fos);
-		 out.writeObject(articleBundle);
-		 out.close();
+			 FileOutputStream fos = FileService.getFileOutputStream(context, articleSet.getApiUrl());
+			 ObjectOutputStream out = new ObjectOutputStream(fos);
+			 out.writeObject(bundle);
+			 out.close();
 		 } catch (IOException ex) {
-		 Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName() + ex.getMessage());
+			 Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName() + ex.getMessage());
 		 }
-		 }
+	 }
 
 
 	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
@@ -67,6 +64,7 @@ public class FileBasedArticleCache {
 				}
 					
 				Log.i(TAG, "Loaded " + loaded.getArticles().size() + " articles");
+				Log.i(TAG, "Content checksum is: " + loaded.getChecksum());
 				return loaded;
 			}
 			return null;

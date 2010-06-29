@@ -13,6 +13,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import android.content.Context;
@@ -46,7 +47,7 @@ public class UpdateTopStoriesTask extends ArticleUpdateTask implements ContentUp
 		List<Article> articles = api.getArticles(articleSet, sections, null);
 		if (articles != null) {
 			FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
-			fileBasedArticleCache.putArticleSetArticles(articleSet, sortByLatestSection(articles), api.getRefinements());
+			fileBasedArticleCache.putArticleSetArticles(articleSet, new ArticleBundle(sortByLatestSection(articles), api.getRefinements(), api.getChecksum()));
 			processArticles(articles);
 		}
 	}
