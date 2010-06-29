@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -99,8 +100,9 @@ public class main extends ArticleListActivity {
 
 	private void showAbout() {
 		Dialog dialog = new Dialog(this);
-		dialog.show();
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.about_dialog);
+		dialog.show();
 		ImageView heading = (ImageView) dialog.findViewById(R.id.KingsPlace);
 		heading.setImageResource(R.drawable.kingsplace);
 		
