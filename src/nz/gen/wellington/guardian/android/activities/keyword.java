@@ -1,8 +1,6 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.List;
-
-import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.sqllite.DataHelper;
 import android.content.Intent;
@@ -36,7 +34,7 @@ public class keyword extends ArticleListActivity {
 	
 
 	@Override
-	protected List<Article> loadArticles() {
+	protected ArticleBundle loadArticles() {
 		return articleDAO.getKeywordItems(keyword);
 	}
 	

@@ -17,7 +17,7 @@ public class SectionClicker implements OnClickListener {
 	public void onClick(View v) {
 		Intent intent = new Intent(v.getContext(), section.class);
 		intent.putExtra("section", section);
-		v.getContext().startActivity(intent);		
+		v.getContext().startActivity(intent);
 	}
 
 }

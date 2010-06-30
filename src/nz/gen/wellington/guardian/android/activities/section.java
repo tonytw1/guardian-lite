@@ -1,8 +1,6 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.List;
-
-import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.sqllite.DataHelper;
 import android.content.Intent;
@@ -29,9 +27,8 @@ public class section extends ArticleListActivity {
 
 
 	@Override
-	protected List<Article> loadArticles() {
-		List<Article> sectionArticles = articleDAO.getSectionItems(section);		
-		return sectionArticles;
+	protected ArticleBundle loadArticles() {
+		return articleDAO.getSectionItems(section);		
 	}
 		
 	

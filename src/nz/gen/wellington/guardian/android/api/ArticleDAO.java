@@ -45,24 +45,24 @@ public class ArticleDAO {
 		this.networkStatusService = new NetworkStatusService(context);
 	}
 	
-	
-	public List<Article> getSectionItems(Section section) {
+	@Deprecated
+	public ArticleBundle getSectionItems(Section section) {
 		ArticleSet sectionArticleSet = new SectionArticleSet(section);
 		return getArticleSetArticles(sectionArticleSet);
 	}
 	
-	
-	public List<Article> getAuthorItems(Tag author) {
+	@Deprecated
+	public ArticleBundle getAuthorItems(Tag author) {
 		ArticleSet authorArticleSet = new AuthorArticleSet(author);
 		return getArticleSetArticles(authorArticleSet);
 	}
 	
-	public List<Article> getKeywordItems(Tag keyword) {
+	@Deprecated
+	public ArticleBundle getKeywordItems(Tag keyword) {
 		ArticleSet keywordArticleSet = new KeywordArticleSet(keyword);
 		return getArticleSetArticles(keywordArticleSet);
 	}
-	
-	
+		
 	public List<Section> getSections() {
 		 List<Section> sections = fileBasedSectionCache.getSections();
 		 if (sections != null) {
@@ -79,18 +79,17 @@ public class ArticleDAO {
 	}
 	
 	
-	private List<Article> getArticleSetArticles(ArticleSet articleSet) {
+	private ArticleBundle getArticleSetArticles(ArticleSet articleSet) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
 		
-		List<Article> articles = null;
+		ArticleBundle bundle = null;
 		DateTime modificationTime = fileBasedArticleCache.getModificationTime(articleSet);
 		if (modificationTime != null) {
 			if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(10))) {
 				Log.i(TAG, "Checking remote checksum local copy is older than 10 minutes and network is available");
 				
-				ArticleBundle bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
+				bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
 				if (bundle != null) {
-					articles = bundle.getArticles();
 					String localChecksum = bundle.getChecksum();
 					String remoteChecksum = this.getArticleSetRemoteChecksum(articleSet);	// TODO this should happen after articles loaded.
 					if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {						
@@ -99,25 +98,22 @@ public class ArticleDAO {
 				}				
 				
 			} else {
-				ArticleBundle bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
-				if (bundle != null) {
-					articles = bundle.getArticles();
-				}
+				bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);				
 			}
 		}
 		
-		if (articles != null) {
+		if (bundle != null) {
 			Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());
-			return articles;
+			return bundle;
 		}
 		
 		List<Section> sections = this.getSections();
 		if (sections != null) {
-			ArticleBundle bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback);		
-			if (articles != null) {
-				Log.i(TAG, "Got " + articles.size() + " articles from api call");
+			bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback);		
+			if (bundle != null) {
+				Log.i(TAG, "Got article bundle from api call");
 				fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);
-				return bundle.getArticles();
+				return bundle;
 				
 			} else {
 				Log.w(TAG, "Article api call failed");
@@ -151,11 +147,11 @@ public class ArticleDAO {
 	}
 
 
-	public List<Article> getTopStories() {
+	public ArticleBundle getTopStories() {
 		return getArticleSetArticles(new TopStoriesArticleSet());
 	}
 	
-	public List<Article> getFavouriteArticles(List<Section> favouriteSections, List<Tag> favouriteTags) {
+	public ArticleBundle getFavouriteArticles(List<Section> favouriteSections, List<Tag> favouriteTags) {
 		return getArticleSetArticles(new FavouriteStoriesArticleSet(favouriteSections, favouriteTags));
 	}
 		

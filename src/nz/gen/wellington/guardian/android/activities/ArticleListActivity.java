@@ -13,6 +13,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.api.openplatfrom.OpenPlatformJSONParser;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -43,7 +44,7 @@ public abstract class ArticleListActivity extends Activity {
 	
 	Handler updateArticlesHandler;
 	UpdateArticlesRunner updateArticlesRunner;
-	List<Article> articles;
+	ArticleBundle bundle;
 	Map<String, View> viewsWaitingForTrailImages;
 	protected ArticleDAO articleDAO;
 	protected ImageDAO imageDAO;
@@ -131,7 +132,7 @@ public abstract class ArticleListActivity extends Activity {
 	}
 	
 	
-	protected abstract List<Article> loadArticles();
+	protected abstract ArticleBundle loadArticles();
 	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -227,12 +228,12 @@ public abstract class ArticleListActivity extends Activity {
 			    	return;
 			    	
 			    case 4:
-			    	
-			    	List<Tag> refinements = articleDAO.getRefinements();
+			    				    
+			    	List<Tag> refinements = bundle.getRefinements();
 					LayoutInflater inflater = LayoutInflater.from(context);
 					mainpane = (LinearLayout) findViewById(R.id.MainPane);
 					TagListPopulatingService.populateTags(inflater, true, mainpane, refinements, context);			    	
-			    	return;
+					return;
 			}
 		}
 
@@ -342,10 +343,10 @@ public abstract class ArticleListActivity extends Activity {
 			Log.d("UpdateArticlesRunner", "Loading articles");
 
 			if (running) {
-				articles = loadArticles();
+				bundle = loadArticles();
 			}
 			
-			if (articles == null) {
+			if (bundle == null) {
 				Message m = new Message();
 				m.what = 2;
 				Log.d(TAG, "Sending message; articles failed to load");
@@ -361,7 +362,7 @@ public abstract class ArticleListActivity extends Activity {
 			
 			List<Article> downloadTrailImages = new LinkedList<Article>();
 			boolean first = true;
-			for (Article article : articles) {
+			for (Article article : bundle.getArticles()) {
 				
 				String imageUrl;
 				boolean mainImageIsAvailableLocally = article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());

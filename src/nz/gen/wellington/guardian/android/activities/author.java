@@ -3,6 +3,7 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.Tag;
 import android.os.Bundle;
 import android.widget.ListAdapter;
@@ -24,7 +25,7 @@ public class author extends ArticleListActivity {
 	}
 
 	@Override
-	protected List<Article> loadArticles() {
+	protected ArticleBundle loadArticles() {
 		return articleDAO.getAuthorItems(author);
 	}
 	

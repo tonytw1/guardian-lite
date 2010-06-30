@@ -5,6 +5,7 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
@@ -48,19 +49,19 @@ public class main extends ArticleListActivity {
 
 	
 	@Override
-	protected List<Article> loadArticles() {
+	protected ArticleBundle loadArticles() {
 		
 		FavouriteSectionsAndTagsDAO dao = new FavouriteSectionsAndTagsDAO(articleDAO, this);
 	
 		List<Section> favouriteSections = dao.getFavouriteSections();
 		List<Tag> favouriteTags = dao.getFavouriteTags();
 		if (favouriteSections.isEmpty() && favouriteTags.isEmpty()) {
-			List<Article> topStories = articleDAO.getTopStories();
+			ArticleBundle topStories = articleDAO.getTopStories();
 			this.loaded = new DateTime();
 			return topStories;			
 
 		} else {
-			List<Article> favouriteStories = articleDAO.getFavouriteArticles(favouriteSections, favouriteTags);
+			ArticleBundle favouriteStories = articleDAO.getFavouriteArticles(favouriteSections, favouriteTags);
 			this.loaded = new DateTime();
 			return favouriteStories;			
 		}
