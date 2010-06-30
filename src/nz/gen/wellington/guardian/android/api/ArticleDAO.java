@@ -83,29 +83,14 @@ public class ArticleDAO {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
 		
 		ArticleBundle bundle = null;
-		DateTime modificationTime = fileBasedArticleCache.getModificationTime(articleSet);
-		if (modificationTime != null) {
-			if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(10))) {
-				Log.i(TAG, "Checking remote checksum local copy is older than 10 minutes and network is available");
-				
-				bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
-				if (bundle != null) {
-					String localChecksum = bundle.getChecksum();
-					String remoteChecksum = this.getArticleSetRemoteChecksum(articleSet);	// TODO this should happen after articles loaded.
-					if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {						
-						Log.i(TAG, "Remove content checksum is different: " + localChecksum + ":" + remoteChecksum);
-					}
-				}				
-				
-			} else {
-				bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);				
-			}
-		}
+		bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
+		
 		
 		if (bundle != null) {
 			Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());
 			return bundle;
 		}
+		
 		
 		List<Section> sections = this.getSections();
 		if (sections != null) {
@@ -156,7 +141,7 @@ public class ArticleDAO {
 	}
 		
 	public void saveTopStories(List<Article> topStories) {
-		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), new ArticleBundle(topStories, null, null));		
+		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), new ArticleBundle(topStories, null, null, new DateTime()));		
 	}
 
 	public DateTime getModificationTime(ArticleSet articleSet) {

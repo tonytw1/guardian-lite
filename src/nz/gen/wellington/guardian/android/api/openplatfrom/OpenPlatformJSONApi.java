@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.model.Article;
@@ -56,7 +58,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		if (input != null) {
 			List<Article> articles = contentParser.parseArticlesXml(input, sections, articleCallback);			
 			if (articles != null && !articles.isEmpty()) {
-				return new ArticleBundle(articles, contentParser.getRefinements(), contentParser.getChecksum());
+				return new ArticleBundle(articles, contentParser.getRefinements(), contentParser.getChecksum(), new DateTime());
 			}
 		}
 		return null;

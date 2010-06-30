@@ -5,6 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Period;
+import org.joda.time.ReadableDuration;
+
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
@@ -18,6 +23,7 @@ import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -98,7 +104,8 @@ public abstract class ArticleListActivity extends Activity {
 	
 	
 	protected void populateArticles() {
-		updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO);
+		NetworkStatusService networkStatusService = new NetworkStatusService(this);
+		updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService);
 		Thread loader = new Thread(updateArticlesRunner);
 		loader.start();
 		Log.d("UpdateArticlesHandler", "Loader started");		
@@ -331,11 +338,13 @@ public abstract class ArticleListActivity extends Activity {
 		boolean running;
 		ArticleDAO articleDAO;
 		ImageDAO imageDAO;
+		NetworkStatusService networkStatusService;
 		
-		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO) {
+		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, NetworkStatusService networkStatusService) {
 			this.articleDAO = articleDAO;
 			this.imageDAO = imageDAO;
 			this.running = true;
+			this.networkStatusService = networkStatusService;
 			articleDAO.setArticleReadyCallback(this);
 		}
 		
@@ -353,6 +362,7 @@ public abstract class ArticleListActivity extends Activity {
 				updateArticlesHandler.sendMessage(m);
 				return;
 			}
+			
 			
 			
 			Message m = new Message();
@@ -424,6 +434,29 @@ public abstract class ArticleListActivity extends Activity {
 					updateArticlesHandler.sendMessage(m);
 				}		
 			}
+			
+			if (bundle != null) {
+				DateTime modificationTime = bundle.getTimestamp();
+				Log.i(TAG, "Article bundle timestamp is: " + bundle.getTimestamp());			
+				
+				if (modificationTime != null) {
+					if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(10))) {
+						Log.i(TAG, "Checking remote checksum local copy is older than 10 minutes and network is available");
+						
+						//bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
+						//if (bundle != null) {
+							String localChecksum = bundle.getChecksum();
+				//			String remoteChecksum = this.getArticleSetRemoteChecksum(articleSet);	// TODO this should happen after articles loaded.
+				//			if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {						
+				//				Log.i(TAG, "Remove content checksum is different: " + localChecksum + ":" + remoteChecksum);
+				//			}
+				//		}				
+				//		
+				//	} else {
+					}
+				}
+			}
+			
 			return;				
 		}
 

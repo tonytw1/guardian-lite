@@ -43,7 +43,7 @@ public class FileService {
 		return localFile.exists() && localFile.canRead();
 	}
 	
-	public DateTime getModificationTime(Context context, String apiUrl) {
+	public static DateTime getModificationTime(Context context, String apiUrl) {
 		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
 		Log.i(TAG, "Checking mod time for file at: " + localFile.getAbsolutePath());
 		if (localFile.exists()) {

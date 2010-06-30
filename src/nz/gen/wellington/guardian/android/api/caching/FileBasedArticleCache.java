@@ -56,7 +56,7 @@ public class FileBasedArticleCache {
 			in.close();
 			Log.i(TAG, "Finished reading from disk: " + filepath);
 			if (loaded != null) {
-				
+								
 				if (articleCallback != null) {
 					for (Article article : loaded.getArticles()) {
 						articleCallback.articleReady(article);
