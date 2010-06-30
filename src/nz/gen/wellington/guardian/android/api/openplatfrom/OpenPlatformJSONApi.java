@@ -5,9 +5,12 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.xml.sax.Parser;
+
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.AuthorArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
@@ -42,8 +45,9 @@ public class OpenPlatformJSONApi implements ContentSource {
 
 	
 	@Override
-	public List<Article> getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {		
+	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {		
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
+
 		final String apiUrl = articleSet.getApiUrl();
 		
 		InputStream input = null;		
@@ -53,10 +57,9 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}		
 		
 		if (input != null) {
-			List<Article> articles = contentParser.parseArticlesXml(input, sections, articleCallback);
-			
+			List<Article> articles = contentParser.parseArticlesXml(input, sections, articleCallback);			
 			if (articles != null && !articles.isEmpty()) {
-				return articles;
+				return new ArticleBundle(articles, contentParser.getRefinements(), contentParser.getChecksum());
 			}
 		}
 		return null;
@@ -73,20 +76,9 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}		
 		
 		if (input != null) {
-			List<Article> articles = contentParser.parseArticlesXml(input, null, null);
 			return contentParser.getChecksum();			
 		}
 		return null;
-	}
-
-
-	
-	public List<Tag> getRefinements() {
-		return contentParser.getRefinements();
-	}
-	
-	public String getChecksum() {
-		return contentParser.getChecksum();
 	}
 
 

@@ -30,10 +30,7 @@ public class section extends ArticleListActivity {
 
 	@Override
 	protected List<Article> loadArticles() {
-		List<Article> sectionArticles = articleDAO.getSectionItems(section);
-		
-		articleDAO.getRefinements();
-		
+		List<Article> sectionArticles = articleDAO.getSectionItems(section);		
 		return sectionArticles;
 	}
 		

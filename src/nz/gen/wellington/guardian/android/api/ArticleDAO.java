@@ -36,8 +36,6 @@ public class ArticleDAO {
 	ArticleCallback articleCallback;
 	ContentSource openPlatformApi;
 	NetworkStatusService networkStatusService;
-
-	private List<Tag> refinements;
 	
 	public ArticleDAO(Context context) {
 		this.sectionCache = CacheFactory.getSectionCache();
@@ -93,7 +91,6 @@ public class ArticleDAO {
 				ArticleBundle bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
 				if (bundle != null) {
 					articles = bundle.getArticles();
-					refinements = bundle.getRefinements();
 					String localChecksum = bundle.getChecksum();
 					String remoteChecksum = this.getArticleSetRemoteChecksum(articleSet);	// TODO this should happen after articles loaded.
 					if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {						
@@ -105,7 +102,6 @@ public class ArticleDAO {
 				ArticleBundle bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
 				if (bundle != null) {
 					articles = bundle.getArticles();
-					refinements = bundle.getRefinements();
 				}
 			}
 		}
@@ -117,11 +113,11 @@ public class ArticleDAO {
 		
 		List<Section> sections = this.getSections();
 		if (sections != null) {
-			articles = openPlatformApi.getArticles(articleSet, sections, articleCallback);		
+			ArticleBundle bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback);		
 			if (articles != null) {
 				Log.i(TAG, "Got " + articles.size() + " articles from api call");
-				fileBasedArticleCache.putArticleSetArticles(articleSet, new ArticleBundle(articles, openPlatformApi.getRefinements(), openPlatformApi.getChecksum()));
-				return articles;
+				fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);
+				return bundle.getArticles();
 				
 			} else {
 				Log.w(TAG, "Article api call failed");
@@ -192,14 +188,6 @@ public class ArticleDAO {
 			}
 		}
 		return sectionsMap;
-	}
-
-
-	public List<Tag> getRefinements() {
-		if (refinements != null) {
-			return refinements;
-		}
-		return openPlatformApi.getRefinements();		
 	}
 		
 }
