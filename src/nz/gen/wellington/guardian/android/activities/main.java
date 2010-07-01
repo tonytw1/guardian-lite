@@ -6,6 +6,8 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
+import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
@@ -49,23 +51,17 @@ public class main extends ArticleListActivity {
 
 	
 	@Override
-	protected ArticleBundle loadArticles() {
-		
+	protected ArticleSet getArticleSet() {		
 		FavouriteSectionsAndTagsDAO dao = new FavouriteSectionsAndTagsDAO(articleDAO, this);
 	
 		List<Section> favouriteSections = dao.getFavouriteSections();
 		List<Tag> favouriteTags = dao.getFavouriteTags();
-		if (favouriteSections.isEmpty() && favouriteTags.isEmpty()) {
-			ArticleBundle topStories = articleDAO.getTopStories();
-			this.loaded = new DateTime();
-			return topStories;			
-
-		} else {
-			ArticleBundle favouriteStories = articleDAO.getFavouriteArticles(favouriteSections, favouriteTags);
-			this.loaded = new DateTime();
-			return favouriteStories;			
-		}
 		
+		if (favouriteSections.isEmpty() && favouriteTags.isEmpty()) {
+			return new TopStoriesArticleSet();
+		} else {
+			return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);
+		}		
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {

@@ -12,12 +12,7 @@ import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.AuthorArticleSet;
-import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
-import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.SectionArticleSet;
-import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 
@@ -45,24 +40,7 @@ public class ArticleDAO {
 		this.networkStatusService = new NetworkStatusService(context);
 	}
 	
-	@Deprecated
-	public ArticleBundle getSectionItems(Section section) {
-		ArticleSet sectionArticleSet = new SectionArticleSet(section);
-		return getArticleSetArticles(sectionArticleSet);
-	}
 	
-	@Deprecated
-	public ArticleBundle getAuthorItems(Tag author) {
-		ArticleSet authorArticleSet = new AuthorArticleSet(author);
-		return getArticleSetArticles(authorArticleSet);
-	}
-	
-	@Deprecated
-	public ArticleBundle getKeywordItems(Tag keyword) {
-		ArticleSet keywordArticleSet = new KeywordArticleSet(keyword);
-		return getArticleSetArticles(keywordArticleSet);
-	}
-		
 	public List<Section> getSections() {
 		 List<Section> sections = fileBasedSectionCache.getSections();
 		 if (sections != null) {
@@ -79,7 +57,7 @@ public class ArticleDAO {
 	}
 	
 	
-	private ArticleBundle getArticleSetArticles(ArticleSet articleSet) {
+	public ArticleBundle getArticleSetArticles(ArticleSet articleSet) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
 		
 		ArticleBundle bundle = null;
@@ -108,7 +86,7 @@ public class ArticleDAO {
 	}
 
 	
-	private String getArticleSetRemoteChecksum(ArticleSet articleSet) {
+	public String getArticleSetRemoteChecksum(ArticleSet articleSet) {
 		return openPlatformApi.getRemoteChecksum(articleSet);
 	}
 	
@@ -130,16 +108,7 @@ public class ArticleDAO {
 	public void evictArticleSet(ArticleSet articleSet) {
 		fileBasedArticleCache.clear(articleSet);
 	}
-
-
-	public ArticleBundle getTopStories() {
-		return getArticleSetArticles(new TopStoriesArticleSet());
-	}
 	
-	public ArticleBundle getFavouriteArticles(List<Section> favouriteSections, List<Tag> favouriteTags) {
-		return getArticleSetArticles(new FavouriteStoriesArticleSet(favouriteSections, favouriteTags));
-	}
-		
 	public void saveTopStories(List<Article> topStories) {
 		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), new ArticleBundle(topStories, null, null, new DateTime()));		
 	}

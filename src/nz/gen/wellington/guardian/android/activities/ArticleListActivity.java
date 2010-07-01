@@ -19,6 +19,7 @@ import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.api.openplatfrom.OpenPlatformJSONParser;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
+import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -139,9 +140,12 @@ public abstract class ArticleListActivity extends Activity {
 	}
 	
 	
-	protected abstract ArticleBundle loadArticles();
+	private ArticleBundle loadArticles() {
+		return articleDAO.getArticleSetArticles(getArticleSet());
+	}
 	
-	
+	protected abstract ArticleSet getArticleSet();	
+
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    menu.add(0, 1, 0, "Most recent");
 	    menu.add(0, 2, 0, "Sections");
@@ -452,10 +456,10 @@ public abstract class ArticleListActivity extends Activity {
 					if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(10))) {
 						Log.i(TAG, "Checking remote checksum local copy is older than 10 minutes and network is available");
 					
-						//String localChecksum = bundle.getChecksum();
-						//String remoteChecksum = this.getArticleSetRemoteChecksum(articleS);	// TODO this should happen after articles loaded.
-						//if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {						
-						///	Log.i(TAG, "Remove content checksum is different: " + localChecksum + ":" + remoteChecksum);
+						String localChecksum = bundle.getChecksum();
+						String remoteChecksum = articleDAO.getArticleSetRemoteChecksum(getArticleSet());
+						if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {						
+							Log.i(TAG, "Remove content checksum is different: " + localChecksum + ":" + remoteChecksum);
 							m = new Message();
 							m.what = 5;
 							Bundle bundle = new Bundle();
@@ -463,8 +467,10 @@ public abstract class ArticleListActivity extends Activity {
 							m.setData(bundle);
 							updateArticlesHandler.sendMessage(m);
 							
-							
-						//}
+						} else {
+							Log.i(TAG, "No remote content change detected: " + localChecksum + ":" + remoteChecksum);
+							// TODO mark article set modtime
+						}
 					}
 				}
 			}

@@ -1,7 +1,10 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
+import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.sqllite.DataHelper;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,10 +28,9 @@ public class section extends ArticleListActivity {
     	updateArticlesHandler = new UpdateArticlesHandler(this);
 	}
 
-
-	@Override
-	protected ArticleBundle loadArticles() {
-		return articleDAO.getSectionItems(section);		
+	
+	protected ArticleSet getArticleSet() {
+		return new SectionArticleSet(section);
 	}
 		
 	
