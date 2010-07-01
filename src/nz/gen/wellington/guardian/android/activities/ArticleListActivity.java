@@ -235,8 +235,7 @@ public abstract class ArticleListActivity extends MenuedActivity {
 			    	
 					mainpane = (LinearLayout) findViewById(R.id.MainPane);
 					TextView message = new TextView(context);
-					final String modtime = msg.getData().getString("modtime");	
-					message.setText("Artilce set is more than 10 minutes old: " + modtime);
+					message.setText("Updates to this article set are available.");
 					mainpane.addView(message, 0);
 			    	
 			}
@@ -515,11 +514,5 @@ public abstract class ArticleListActivity extends MenuedActivity {
 		TextView status = (TextView) findViewById(R.id.DownloadProgress);
 		status.setVisibility(View.GONE);
 	}
-	
-	
-	
-	
-	
-	
-		
+
 }
