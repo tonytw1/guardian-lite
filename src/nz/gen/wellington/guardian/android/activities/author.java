@@ -1,6 +1,5 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.AuthorArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
