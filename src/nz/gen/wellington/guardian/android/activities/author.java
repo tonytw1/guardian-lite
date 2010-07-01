@@ -6,6 +6,7 @@ import nz.gen.wellington.guardian.android.model.Tag;
 import android.os.Bundle;
 import android.widget.ListAdapter;
 
+@Deprecated
 public class author extends ArticleListActivity {
 
 	ListAdapter adapter;

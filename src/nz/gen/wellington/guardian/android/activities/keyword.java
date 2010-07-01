@@ -47,6 +47,8 @@ public class keyword extends ArticleListActivity {
 			favouriteMenuItem = menu.add(0, 4, 0, "Add to Favourites");
 		}
 		dh.close();
+		
+		menu.add(0, 5, 0, "Refresh");
 	    return true;
 	}
 	
@@ -65,6 +67,9 @@ public class keyword extends ArticleListActivity {
 			return true;
 		case 4:
 			addToFavourites();
+			return true;
+		case 5:
+			refresh(true);
 			return true;
 		}
 		return false;

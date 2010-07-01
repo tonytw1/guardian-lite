@@ -34,8 +34,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -59,6 +57,8 @@ public abstract class ArticleListActivity extends MenuedActivity {
 	
 	protected BroadcastReceiver articlesAvailableReceiver;
 	protected BroadcastReceiver downloadProgressReceiver;
+
+	private Thread loader;
 	
 	
 	@Override
@@ -72,21 +72,42 @@ public abstract class ArticleListActivity extends MenuedActivity {
 
 		articlesAvailableReceiver = new ArticlesAvailableReceiver();
 		downloadProgressReceiver = new DownloadProgressReceiver();
+		
+		NetworkStatusService networkStatusService = new NetworkStatusService(this);		
+		updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService);		
+		loader = new Thread(updateArticlesRunner);
 	}
 	
 	
 	@Override
 	protected void onStart() {
-		super.onStart();
-		
+		super.onStart();	
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);		
 		boolean mainPaneNeedsPopulating = shouldRefreshView(mainPane);
 		if (mainPaneNeedsPopulating) {
-			mainPane.removeAllViews();
-			populateArticles();
+			refresh(false);
 		}
 	}
 
+	
+	protected void refresh(boolean unCached) {
+		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
+		mainPane.removeAllViews();
+		if (!loader.isAlive()) {
+			updateArticlesRunner.setUncached(unCached);
+			loader.start();
+			Log.d("UpdateArticlesHandler", "Loader started");
+		}
+	}
+	
+	
+	protected void populateArticles() {
+		if (!loader.isAlive()) {			
+			loader.start();
+			Log.d("UpdateArticlesHandler", "Loader started");
+		}
+	}
+	
 
 	@Override
 	protected void onResume() {
@@ -100,16 +121,7 @@ public abstract class ArticleListActivity extends MenuedActivity {
 		return mainPane.getChildCount() == 0;
 	}
 	
-	
-	protected void populateArticles() {
-		NetworkStatusService networkStatusService = new NetworkStatusService(this);
-		updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService);
-		Thread loader = new Thread(updateArticlesRunner);
-		loader.start();
-		Log.d("UpdateArticlesHandler", "Loader started");		
-	}
-
-	
+		
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -137,30 +149,11 @@ public abstract class ArticleListActivity extends MenuedActivity {
 	}
 	
 	
-	private ArticleBundle loadArticles() {
-		return articleDAO.getArticleSetArticles(getArticleSet());
+	private ArticleBundle loadArticles(boolean uncached) {
+		return articleDAO.getArticleSetArticles(getArticleSet(), uncached);
 	}
 	
 	protected abstract ArticleSet getArticleSet();	
-
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    menu.add(0, 1, 0, "Most recent");
-	    menu.add(0, 2, 0, "Sections");
-	    return true;
-	}
-	
-	
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {	   
-	    case 1: 	    	
-	    	switchToMain();
-	        return true;
-	    case 2: 	    	
-	    	switchToSections();
-	        return true;	 
-	    }	    	
-	    return false;
-	}
 
 	
 	class UpdateArticlesHandler extends Handler {		
@@ -336,6 +329,7 @@ public abstract class ArticleListActivity extends MenuedActivity {
 		ArticleDAO articleDAO;
 		ImageDAO imageDAO;
 		NetworkStatusService networkStatusService;
+		boolean uncached;
 		
 		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, NetworkStatusService networkStatusService) {
 			this.articleDAO = articleDAO;
@@ -343,13 +337,18 @@ public abstract class ArticleListActivity extends MenuedActivity {
 			this.running = true;
 			this.networkStatusService = networkStatusService;
 			articleDAO.setArticleReadyCallback(this);
+			this.uncached = false;
 		}
 		
+		public void setUncached(boolean uncached) {
+			this.uncached = uncached;		
+		}
+
 		public void run() {
 			Log.d("UpdateArticlesRunner", "Loading articles");
 
 			if (running) {
-				bundle = loadArticles();
+				bundle = loadArticles(uncached);
 			}
 			
 			if (bundle == null) {

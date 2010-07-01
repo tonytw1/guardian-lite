@@ -35,6 +35,7 @@ public class section extends ArticleListActivity {
 		menu.add(0, 1, 0, "Home");
 		menu.add(0, 2, 0, "Favourites");
 		menu.add(0, 3, 0, "Sections");
+
 		DataHelper dh = new DataHelper(this);
 		if (dh.isFavourite(section)) {
 			favouriteMenuItem = menu.add(0, 4, 0, "Remove Favourite");
@@ -42,6 +43,8 @@ public class section extends ArticleListActivity {
 			favouriteMenuItem = menu.add(0, 4, 0, "Add to Favourites");
 		}
 		dh.close();
+		
+		menu.add(0, 5, 0, "Refresh");
 	    return true;
 	}
 	
@@ -59,6 +62,9 @@ public class section extends ArticleListActivity {
 			return true;
 		case 4:
 			addToFavourites();
+			return true;
+		case 5:
+			refresh(true);
 			return true;
 		}
 		return false;

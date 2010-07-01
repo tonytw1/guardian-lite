@@ -28,7 +28,7 @@ public class HttpFetcher {
 	
 	private static final String TAG = "HttpFetcher";
 	
-	private static final int HTTP_TIMEOUT = 20000;
+	private static final int HTTP_TIMEOUT = 60000;
 
     public static final String DOWNLOAD_PROGRESS = "nz.gen.wellington.guardian.android.network.DOWNLOAD_PROGRESS";
     

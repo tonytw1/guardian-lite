@@ -57,18 +57,17 @@ public class ArticleDAO {
 	}
 	
 	
-	public ArticleBundle getArticleSetArticles(ArticleSet articleSet) {
+	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, boolean uncached) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
 		
 		ArticleBundle bundle = null;
-		bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
-		
-		
-		if (bundle != null) {
-			Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());
-			return bundle;
+		if (!uncached) {
+			bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);		
+			if (bundle != null) {
+				Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());
+				return bundle;
+			}		
 		}
-		
 		
 		List<Section> sections = this.getSections();
 		if (sections != null) {

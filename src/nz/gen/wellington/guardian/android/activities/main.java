@@ -66,7 +66,8 @@ public class main extends ArticleListActivity {
 	    menu.add(0, 2, 0, "Sections");
 	    menu.add(0, 3, 0, "Offline");
 	    menu.add(0, 4, 0, "Settings");
-	    menu.add(0, 5, 0, "About");
+		menu.add(0, 5, 0, "Refresh");
+	    menu.add(0, 6, 0, "About");
 	    return true;
 	}
 	
@@ -85,7 +86,7 @@ public class main extends ArticleListActivity {
 	    case 4:
 	    	switchToPreferences();
 	    	return true;
-	    case 5:
+	    case 6:
 	    	showAbout();
 	    }
 	    return false;
