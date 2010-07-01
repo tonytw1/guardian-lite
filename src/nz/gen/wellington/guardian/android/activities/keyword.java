@@ -37,9 +37,9 @@ public class keyword extends ArticleListActivity {
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 1, 0, "Home");
-		menu.add(0, 2, 0, "Favourites");
-		menu.add(0, 3, 0, "Sections");
+		menu.add(0, 1, 0, "Home");	
+		menu.add(0, 5, 0, "Refresh");
+		
 		DataHelper dh = new DataHelper(this);
 		if (dh.isFavourite(keyword)) {
 			favouriteMenuItem = menu.add(0, 4, 0, "Remove Favourite");
@@ -48,7 +48,6 @@ public class keyword extends ArticleListActivity {
 		}
 		dh.close();
 		
-		menu.add(0, 5, 0, "Refresh");
 	    return true;
 	}
 	
@@ -58,13 +57,7 @@ public class keyword extends ArticleListActivity {
 		switch (item.getItemId()) {
 		case 1:
 			switchToMain();
-			return true;
-		case 2:
-			switchToFavourites();
-			return true;
-		case 3:
-			switchToSections();
-			return true;
+			return true;	
 		case 4:
 			addToFavourites();
 			return true;

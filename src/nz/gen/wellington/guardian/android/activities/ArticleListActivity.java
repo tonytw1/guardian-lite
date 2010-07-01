@@ -39,6 +39,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public abstract class ArticleListActivity extends MenuedActivity {
 	
@@ -75,7 +76,6 @@ public abstract class ArticleListActivity extends MenuedActivity {
 		
 		NetworkStatusService networkStatusService = new NetworkStatusService(this);		
 		updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService);		
-		loader = new Thread(updateArticlesRunner);
 	}
 	
 	
@@ -92,9 +92,10 @@ public abstract class ArticleListActivity extends MenuedActivity {
 	
 	protected void refresh(boolean unCached) {
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
-		mainPane.removeAllViews();
-		if (!loader.isAlive()) {
+		if (loader == null || !loader.isAlive()) {
 			updateArticlesRunner.setUncached(unCached);
+			mainPane.removeAllViews();
+			loader = new Thread(updateArticlesRunner);
 			loader.start();
 			Log.d("UpdateArticlesHandler", "Loader started");
 		}
@@ -198,7 +199,7 @@ public abstract class ArticleListActivity extends MenuedActivity {
 					return;
 			    			    
 			    case 2: 
-			    	//Toast.makeText(context, "Articles could not be loaded", Toast.LENGTH_SHORT).show();
+			    	Toast.makeText(context, "Articles could not be loaded", Toast.LENGTH_SHORT).show();
 			    	return;
 			    			    
 			    case 3: 

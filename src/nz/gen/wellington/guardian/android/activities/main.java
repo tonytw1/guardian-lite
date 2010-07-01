@@ -86,6 +86,9 @@ public class main extends ArticleListActivity {
 	    case 4:
 	    	switchToPreferences();
 	    	return true;
+	    case 5:
+			refresh(true);
+			return true;	
 	    case 6:
 	    	showAbout();
 	    }
