@@ -208,7 +208,6 @@ public abstract class ArticleListActivity extends MenuedActivity {
 			    	if (data.containsKey("id")) {
 			    		final String id = data.getString("id");
 			    		final String url = data.getString("url");
-			    		Log.d(TAG, "Pushing trail image for ariticle: " + id);
 			    		if( viewsWaitingForTrailImages.containsKey(id)) {
 			    			View view = viewsWaitingForTrailImages.get(id);
 			    			populateTrailImage(url, view);
@@ -218,10 +217,16 @@ public abstract class ArticleListActivity extends MenuedActivity {
 			    	return;
 			    	
 			    case 4:
-			    				    
+			    	
+			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
+			    	String descripton = bundle.getDescription();
+			    	if (descripton != null) {
+			    		TextView descriptionView = new TextView(context);
+			    		descriptionView.setText(descripton);
+			    		mainpane.addView(descriptionView, 0);
+			    	}
 			    	List<Tag> refinements = bundle.getRefinements();
 					LayoutInflater inflater = LayoutInflater.from(context);
-					mainpane = (LinearLayout) findViewById(R.id.MainPane);
 					TagListPopulatingService.populateTags(inflater, true, mainpane, refinements, context);			    	
 					return;
 					
@@ -229,9 +234,12 @@ public abstract class ArticleListActivity extends MenuedActivity {
 			    	
 					mainpane = (LinearLayout) findViewById(R.id.MainPane);
 					TextView message = new TextView(context);
-					message.setText("Updates to this article set are available.");
-					mainpane.addView(message, 0);
-			    	
+					msg.getData().getString("modtime");
+					message.setText("Updates to this article set are available (" +
+						msg.getData().getString("modtime") + ", " +
+						msg.getData().getString("localChecksum") + ":" +
+						msg.getData().getString("remoteChecksum") + ")");
+					mainpane.addView(message, 0);			    	
 			}
 		}
 
@@ -309,9 +317,7 @@ public abstract class ArticleListActivity extends MenuedActivity {
 		m.what = 1;
 		Bundle bundle = new Bundle();
 		bundle.putSerializable("article", article);			
-		m.setData(bundle);
-		
-		Log.d(TAG, "Sending message; article available");
+		m.setData(bundle);		
 		updateArticlesHandler.sendMessage(m);
 	}
 	
@@ -388,11 +394,9 @@ public abstract class ArticleListActivity extends MenuedActivity {
 						bundle.putString("url", imageUrl);
 						
 						m.setData(bundle);
-						Log.d(TAG, "Sending message; trailimage for article is available locally: " + article.getId());
 						updateArticlesHandler.sendMessage(m);
 						
 					} else {
-						Log.d(TAG, "Image is not available locally; will downlood: " + imageUrl);
 						downloadTrailImages.add(article);
 					}
 					
@@ -427,7 +431,6 @@ public abstract class ArticleListActivity extends MenuedActivity {
 					bundle.putString("url", article.getThumbnailUrl());
 					
 					m.setData(bundle);
-					Log.d(TAG, "Sending message; trailimage url is available locally: " + article.getId());
 					updateArticlesHandler.sendMessage(m);
 				}		
 			}
@@ -437,23 +440,31 @@ public abstract class ArticleListActivity extends MenuedActivity {
 				Log.i(TAG, "Article bundle timestamp is: " + bundle.getTimestamp());			
 				
 				if (modificationTime != null) {
+					
 					if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(10))) {
 						Log.i(TAG, "Checking remote checksum local copy is older than 10 minutes and network is available");
 					
 						String localChecksum = bundle.getChecksum();
 						String remoteChecksum = articleDAO.getArticleSetRemoteChecksum(getArticleSet());
-						if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {						
-							Log.i(TAG, "Remove content checksum is different: " + localChecksum + ":" + remoteChecksum);
-							m = new Message();
-							m.what = 5;
-							Bundle bundle = new Bundle();
-							bundle.putString("modtime", modificationTime.toString());
-							m.setData(bundle);
-							updateArticlesHandler.sendMessage(m);
+						if (remoteChecksum != null) {
+							if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {
+								Log.i(TAG, "Remove content checksum is different: " + localChecksum + ":" + remoteChecksum);
+								m = new Message();
+								m.what = 5;
+								Bundle bundle = new Bundle();
+								bundle.putString("modtime", modificationTime.toString());
+								bundle.putString("localChecksum", localChecksum);
+								bundle.putString("remoteChecksum", remoteChecksum);
+								m.setData(bundle);
+								updateArticlesHandler.sendMessage(m);
+							
+							} else {
+								Log.i(TAG, "No remote content change detected: " + localChecksum + ":" + remoteChecksum);
+								articleDAO.touchFile(getArticleSet());
+							}
 							
 						} else {
-							Log.i(TAG, "No remote content change detected: " + localChecksum + ":" + remoteChecksum);
-							// TODO mark article set modtime
+							Log.e(TAG, "Remote checksum was null");							
 						}
 					}
 				}
@@ -469,7 +480,6 @@ public abstract class ArticleListActivity extends MenuedActivity {
 
 		@Override
 		public void articleReady(Article article) {
-			Log.d(TAG, "Article ready: " + article.getTitle());
 			sendArticleReadyMessage(article);
 		}
 	}

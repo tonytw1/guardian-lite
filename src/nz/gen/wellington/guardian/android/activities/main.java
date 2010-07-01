@@ -64,10 +64,10 @@ public class main extends ArticleListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Favourites");
 	    menu.add(0, 2, 0, "Sections");
-	    menu.add(0, 3, 0, "Offline");
-	    menu.add(0, 4, 0, "Settings");
-		menu.add(0, 5, 0, "Refresh");
 	    menu.add(0, 6, 0, "About");
+	    menu.add(0, 4, 0, "Settings");
+	    menu.add(0, 3, 0, "Offline");
+	    menu.add(0, 5, 0, "Refresh");
 	    return true;
 	}
 	

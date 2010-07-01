@@ -13,12 +13,14 @@ public class ArticleBundle implements Serializable {
 	List<Tag> refinements;
 	String checksum;
 	DateTime timestamp;
+	private String description;
 	
-	public ArticleBundle(List<Article> articles, List<Tag> refinements, String checksum, DateTime timestamp) {
+	public ArticleBundle(List<Article> articles, List<Tag> refinements, String checksum, DateTime timestamp, String description) {
 		this.articles = articles;
 		this.refinements = refinements;
 		this.checksum = checksum;
 		this.timestamp = timestamp;
+		this.description = description;
 	}
 
 	public List<Article> getArticles() {
@@ -32,7 +34,10 @@ public class ArticleBundle implements Serializable {
 	public String getChecksum() {
 		return checksum;
 	}
-
+	
+	public String getDescription() {
+		return description;
+	}
 
 	public DateTime getTimestamp() {
 		return timestamp;

@@ -3,6 +3,8 @@ package nz.gen.wellington.guardian.android.services;
 import java.util.List;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
@@ -32,10 +34,15 @@ public abstract class ArticleUpdateTask {
 	
 	
 	final protected void processArticles(List<Article> articles) {
+		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
+		final boolean largeImages = (Boolean) prefs.getBoolean("largeImages", true);
+		
 		if (articles != null) {
 			for (Article article : articles) {
 				queueImageDownloadIsNotAvailableLocally(article.getThumbnailUrl());
-				queueImageDownloadIsNotAvailableLocally(article.getMainImageUrl());				
+				if (largeImages) {
+					queueImageDownloadIsNotAvailableLocally(article.getMainImageUrl());
+				}
 				report.setArticleCount(report.getArticleCount()+1);
 			}
 		}

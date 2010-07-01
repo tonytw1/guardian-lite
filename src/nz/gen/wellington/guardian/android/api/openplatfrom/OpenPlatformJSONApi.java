@@ -58,7 +58,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		if (input != null) {
 			List<Article> articles = contentParser.parseArticlesXml(input, sections, articleCallback);			
 			if (articles != null && !articles.isEmpty()) {
-				return new ArticleBundle(articles, contentParser.getRefinements(), contentParser.getChecksum(), new DateTime());
+				return new ArticleBundle(articles, contentParser.getRefinements(), contentParser.getChecksum(), new DateTime(), contentParser.getDescription());
 			}
 		}
 		return null;
@@ -75,6 +75,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}		
 		
 		if (input != null) {
+			contentParser.parseArticlesXml(input, null, null);
 			return contentParser.getChecksum();			
 		}
 		return null;

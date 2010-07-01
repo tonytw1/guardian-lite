@@ -31,6 +31,7 @@ public class ArticleDAO {
 	ArticleCallback articleCallback;
 	ContentSource openPlatformApi;
 	NetworkStatusService networkStatusService;
+	private Context context;
 	
 	public ArticleDAO(Context context) {
 		this.sectionCache = CacheFactory.getSectionCache();
@@ -38,6 +39,7 @@ public class ArticleDAO {
 		this.fileBasedSectionCache = new FileBasedSectionCache(context);
 		openPlatformApi = ArticleDAOFactory.getOpenPlatformApi(context);
 		this.networkStatusService = new NetworkStatusService(context);
+		this.context = context;
 	}
 	
 	
@@ -109,7 +111,7 @@ public class ArticleDAO {
 	}
 	
 	public void saveTopStories(List<Article> topStories) {
-		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), new ArticleBundle(topStories, null, null, new DateTime()));		
+		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), new ArticleBundle(topStories, null, null, new DateTime(), null));
 	}
 
 	public DateTime getModificationTime(ArticleSet articleSet) {
@@ -137,6 +139,11 @@ public class ArticleDAO {
 			}
 		}
 		return sectionsMap;
+	}
+
+
+	public void touchFile(ArticleSet articleSet) {
+		FileService.touchFile(context, articleSet.getApiUrl());		
 	}
 		
 }

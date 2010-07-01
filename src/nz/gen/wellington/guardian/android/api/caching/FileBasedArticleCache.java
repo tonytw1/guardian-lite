@@ -94,7 +94,7 @@ public class FileBasedArticleCache {
 
 
 	public DateTime getModificationTime(ArticleSet articleSet) {
-		return new FileService().getModificationTime(context, articleSet.getApiUrl());
+		return FileService.getModificationTime(context, articleSet.getApiUrl());
 	}
 		
 }

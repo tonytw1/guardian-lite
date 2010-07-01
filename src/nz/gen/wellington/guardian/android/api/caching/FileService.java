@@ -52,6 +52,14 @@ public class FileService {
 		return null;
 	}
 	
+	public static void touchFile(Context context, String apiUrl) {
+		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
+		if (localFile.exists()) {
+			Log.i(TAG, "Toching mod time for file at: " + localFile.getAbsolutePath());
+			touchFileModTime(localFile);
+		}
+	}
+	
 	public static String getLocalFilename(String url) {
 		return url.replaceAll("/", "").replaceAll(":", "");
 	}
@@ -144,6 +152,12 @@ public class FileService {
 		DateTime modTime = new DateTime(localFile.lastModified());
 		Log.i(TAG, "Mod time is: " + modTime.toString() + " for: " + localFile.getAbsolutePath());
 		return modTime;
+	}
+	
+	
+	private static void touchFileModTime(File localFile) {
+		DateTime modTime = new DateTime();
+		localFile.setLastModified(modTime.toDate().getTime());
 	}
 	
 	private static File getExternalSDCardCacheFolder(String folderPath) {
