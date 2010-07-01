@@ -14,7 +14,6 @@ import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsD
 import org.joda.time.DateTime;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -104,26 +103,6 @@ public class main extends ArticleListActivity {
 		ImageView image = (ImageView) dialog.findViewById(R.id.GuardianLogo);
 		image.setImageResource(R.drawable.poweredbyguardian);		
 		dialog.setTitle(null);
-	}
-
-	private void swichToSync() {
-		Intent intent = new Intent(this, sync.class);
-		this.startActivity(intent);	
-	}
-	
-	private void switchToSections() {
-		Intent intent = new Intent(this, sections.class);
-		this.startActivity(intent);		
-	}
-	
-	private void switchToFavourites() {
-		Intent intent = new Intent(this, favourites.class);
-		this.startActivity(intent);		
-	}
-	
-	private void switchToPreferences() {
-		Intent intent = new Intent(this, perferences.class);
-		this.startActivity(intent);	
 	}
 	
 }

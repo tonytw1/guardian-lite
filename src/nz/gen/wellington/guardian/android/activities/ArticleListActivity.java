@@ -5,11 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.joda.time.Period;
-import org.joda.time.ReadableDuration;
-
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
@@ -25,7 +20,9 @@ import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import android.app.Activity;
+
+import org.joda.time.DateTime;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -45,7 +42,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public abstract class ArticleListActivity extends Activity {
+public abstract class ArticleListActivity extends MenuedActivity {
 	
 	private static final String TAG = "ArticleListActivity";
 	
@@ -156,7 +153,7 @@ public abstract class ArticleListActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {	   
 	    case 1: 	    	
-	    	switchToMostRecent();
+	    	switchToMain();
 	        return true;
 	    case 2: 	    	
 	    	switchToSections();
@@ -165,19 +162,7 @@ public abstract class ArticleListActivity extends Activity {
 	    return false;
 	}
 
-
-	private void switchToMostRecent() {
-		Intent intent = new Intent(this, main.class);
-		this.startActivity(intent);
-	}
 	
-	private void switchToSections() {
-		Intent intent = new Intent(this, sections.class);
-		this.startActivity(intent);		
-	}
-	
-	
-
 	class UpdateArticlesHandler extends Handler {		
 
 		private Context context;

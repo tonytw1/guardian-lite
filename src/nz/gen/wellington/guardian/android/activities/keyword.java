@@ -4,7 +4,6 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.sqllite.DataHelper;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -85,21 +84,6 @@ public class keyword extends ArticleListActivity {
 			favouriteMenuItem.setTitle("Add to Favourites");
 		}
 		dh.close();	
-	}
-	
-	private void switchToMain() {
-		Intent intent = new Intent(this, main.class);
-		this.startActivity(intent);	
-	}
-	
-	private void switchToFavourites() {
-		Intent intent = new Intent(this, favourites.class);
-		this.startActivity(intent);		
-	}
-	
-	private void switchToSections() {
-		Intent intent = new Intent(this, sections.class);
-		this.startActivity(intent);		
 	}
 	
 }
