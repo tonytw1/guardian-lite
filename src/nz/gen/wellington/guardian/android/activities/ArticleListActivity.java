@@ -241,6 +241,15 @@ public abstract class ArticleListActivity extends Activity {
 					mainpane = (LinearLayout) findViewById(R.id.MainPane);
 					TagListPopulatingService.populateTags(inflater, true, mainpane, refinements, context);			    	
 					return;
+					
+			    case 5: 
+			    	
+					mainpane = (LinearLayout) findViewById(R.id.MainPane);
+					TextView message = new TextView(context);
+					final String modtime = msg.getData().getString("modtime");	
+					message.setText("Artilce set is more than 10 minutes old: " + modtime);
+					mainpane.addView(message, 0);
+			    	
 			}
 		}
 
@@ -442,17 +451,20 @@ public abstract class ArticleListActivity extends Activity {
 				if (modificationTime != null) {
 					if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(10))) {
 						Log.i(TAG, "Checking remote checksum local copy is older than 10 minutes and network is available");
-						
-						//bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
-						//if (bundle != null) {
-							String localChecksum = bundle.getChecksum();
-				//			String remoteChecksum = this.getArticleSetRemoteChecksum(articleSet);	// TODO this should happen after articles loaded.
-				//			if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {						
-				//				Log.i(TAG, "Remove content checksum is different: " + localChecksum + ":" + remoteChecksum);
-				//			}
-				//		}				
-				//		
-				//	} else {
+					
+						//String localChecksum = bundle.getChecksum();
+						//String remoteChecksum = this.getArticleSetRemoteChecksum(articleS);	// TODO this should happen after articles loaded.
+						//if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {						
+						///	Log.i(TAG, "Remove content checksum is different: " + localChecksum + ":" + remoteChecksum);
+							m = new Message();
+							m.what = 5;
+							Bundle bundle = new Bundle();
+							bundle.putString("modtime", modificationTime.toString());
+							m.setData(bundle);
+							updateArticlesHandler.sendMessage(m);
+							
+							
+						//}
 					}
 				}
 			}
