@@ -11,6 +11,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 
 public abstract class ArticleUpdateTask {
 
@@ -35,7 +36,10 @@ public abstract class ArticleUpdateTask {
 	
 	final protected void processArticles(List<Article> articles) {
 		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
-		final boolean largeImages = (Boolean) prefs.getBoolean("largeImages", true);
+
+		final boolean largeImagesPreference = (Boolean) prefs.getBoolean("largeImages", true);
+		NetworkStatusService networkStatusService = new NetworkStatusService(context);
+		final boolean largeImages = largeImagesPreference && networkStatusService.isWifiConnection();
 		
 		if (articles != null) {
 			for (Article article : articles) {
