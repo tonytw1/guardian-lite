@@ -22,21 +22,25 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 public class HttpFetcher {
 	
 	private static final String TAG = "HttpFetcher";
 	
-	private static final int HTTP_TIMEOUT = 60000;
+	private static final int HTTP_TIMEOUT = 10000;
 
     public static final String DOWNLOAD_PROGRESS = "nz.gen.wellington.guardian.android.network.DOWNLOAD_PROGRESS";
     
 	HttpClient client;
 	Context context;
 		
+	public static final int DOWNLOAD_STARTED = 1;
 	public static final int DOWNLOAD_UPDATE = 2;
 	public static final int DOWNLOAD_COMPLETED = 3;
+	public static final int DOWNLOAD_FAILED = 4;
+
 
 	
 	public HttpFetcher(Context context) {
@@ -88,9 +92,9 @@ public class HttpFetcher {
 			
 			get.addHeader(new BasicHeader("User-agent", "gzip"));
 			get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
-			
-			
-			HttpResponse execute = client.execute(get);	
+					
+			announceDownloadStarted(uri);
+			HttpResponse execute = client.execute(get);
 			if (execute.getStatusLine().getStatusCode() == 200) {
 				long contentLength = execute.getEntity().getContentLength();
 				Log.d(TAG, "Content length: " + contentLength);
@@ -98,10 +102,12 @@ public class HttpFetcher {
 				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context, contentLength);				
 				return is;				
 			}
+			announceDownloadFailed(uri);
 			return null;
 			
 		} catch (Exception e) {
-			Log.w(TAG, e.getMessage());
+			Log.e(TAG, "Http exception: " + e.getMessage());
+			announceDownloadFailed(uri);
 		}
 		return null;
 	}
@@ -114,8 +120,8 @@ public class HttpFetcher {
 			return EntityUtils.toByteArray(client.execute(get).getEntity());
 									
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			Log.e(TAG, "Http exception: " + e.getMessage());
+			announceDownloadFailed(uri);
 		}
 		return null;
 	}
@@ -124,10 +130,25 @@ public class HttpFetcher {
 	public void stopLoading() {
 		Log.d(TAG, "Stopping loading");
 		client.getConnectionManager().shutdown();
+		// TODO announce stop
 	} 
+	
+	
+	private void announceDownloadStarted(String url) {
+		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
+		intent.putExtra("type", HttpFetcher.DOWNLOAD_STARTED);
+		intent.putExtra("url", url);
+		context.sendBroadcast(intent);
+	}
 
-	
-	
+	private void announceDownloadFailed(String url) {
+		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
+		intent.putExtra("type", HttpFetcher.DOWNLOAD_FAILED);
+		intent.putExtra("url", url);
+		Log.i(TAG, "Broadcasting http fail: " + intent.toString());
+		context.sendBroadcast(intent);
+	}
+		
 	static class GzipDecompressingEntity extends HttpEntityWrapper {
 
         public GzipDecompressingEntity(final HttpEntity entity) {
@@ -148,5 +169,5 @@ public class HttpFetcher {
             return this.wrappedEntity.getContentLength();
         }
     }
-
+	
 }

@@ -33,19 +33,19 @@ public class FileService {
 	public static FileInputStream getFileInputStream(Context context, String url) throws FileNotFoundException {
 		final String filepath = FileService.getLocalFilename(url);
 		File file = new File(getCacheDir(context) + "/" + filepath);
-		Log.i(TAG, "Opening input stream to: " + file.getAbsolutePath());
+		//Log.i(TAG, "Opening input stream to: " + file.getAbsolutePath());
 		return new FileInputStream(file);
 	}
 
 	public static boolean isLocallyCached(Context context, String apiUrl) {
 		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
-		Log.i(TAG, "Checking for local cache file at: " + localFile.getAbsolutePath());
+		//Log.i(TAG, "Checking for local cache file at: " + localFile.getAbsolutePath());
 		return localFile.exists() && localFile.canRead();
 	}
 	
 	public static DateTime getModificationTime(Context context, String apiUrl) {
 		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
-		Log.i(TAG, "Checking mod time for file at: " + localFile.getAbsolutePath());
+		//Log.i(TAG, "Checking mod time for file at: " + localFile.getAbsolutePath());
 		if (localFile.exists()) {
 			return calculateFileModTime(localFile);
 		}

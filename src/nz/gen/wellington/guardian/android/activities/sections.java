@@ -7,24 +7,36 @@ import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class sections extends Activity {
+	
+	private static final String TAG = "sections";
 	
 	ListAdapter adapter;
 	private ArticleDAO articleDAO;
 	
+	
+	protected BroadcastReceiver downloadProgressReceiver;
+
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,20 +49,41 @@ public class sections extends Activity {
 		setHeading("Sections");
 		setHeadingColour("#0061A6");
 		
+		downloadProgressReceiver = new DownloadProgressReceiver();
+		
+	}
+	
+	
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		registerReceiver(downloadProgressReceiver, new IntentFilter(HttpFetcher.DOWNLOAD_PROGRESS));
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
 		mainPane.removeAllViews();
 		populateSections();        
 	}
+
+		
+	@Override
+	public void onPause() {
+		super.onPause();
+		unregisterReceiver(downloadProgressReceiver);
+	}
 	
 		
 	private void populateSections() {
-		List<Section> favouriteSections = articleDAO.getSections();
-		
-		LayoutInflater inflater = LayoutInflater.from(this);		
-		LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);
-		
-		boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();
-		TagListPopulatingService.populateSections(inflater, connectionIsAvailable, authorList, favouriteSections, this.getApplicationContext());
+		List<Section> sections = articleDAO.getSections();		
+		if (sections != null) {
+			LayoutInflater inflater = LayoutInflater.from(this);		
+			LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);
+			
+			boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();
+			TagListPopulatingService.populateSections(inflater, connectionIsAvailable, authorList, sections, this.getApplicationContext());
+
+		} else {
+        	Toast.makeText(this, "Could not load sections", Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 	
@@ -95,5 +128,63 @@ public class sections extends Activity {
 		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
 		heading.setBackgroundColor(Color.parseColor(colour));
 	}
-
+	
+	
+	// TODO All duplicated with main and sync.
+	class DownloadProgressReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.i(TAG, "Received: " + intent.toString());
+			final int type = intent.getIntExtra("type", 0);
+			switch (type) {
+			
+			case HttpFetcher.DOWNLOAD_STARTED:
+				showDownloadStart(intent.getStringExtra("url"));
+				return;
+						
+			case HttpFetcher.DOWNLOAD_UPDATE:
+				updateDownloadProgress(
+						intent.getIntExtra("bytes_received", 0),
+						intent.getLongExtra("bytes_expected", 0));
+				return;
+				
+			case HttpFetcher.DOWNLOAD_COMPLETED:
+				hideDownloadProgress();
+				return;
+				
+			case HttpFetcher.DOWNLOAD_FAILED:
+				showDownloadFailed(intent.getStringExtra("url"));
+				return;
+			}
+		}				
+	}
+	
+	
+	private void updateDownloadProgress(int received, long  expected) {
+		final String statusMessage =  received + " / " +  Long.toString(expected);
+		TextView status = (TextView) findViewById(R.id.DownloadProgress);
+		status.setText(statusMessage);
+		status.setVisibility(View.VISIBLE);
+	}
+	
+	private void showDownloadStart(String url) {
+		final String statusMessage =  "Downloading: " + url;
+		TextView status = (TextView) findViewById(R.id.DownloadProgress);
+		status.setText(statusMessage);
+		status.setVisibility(View.VISIBLE);
+	}
+	
+	private void showDownloadFailed(String url) {
+		Log.i(TAG, "Got download failed message: " + url);
+		final String statusMessage =  "Download failed: " + url;
+		TextView status = (TextView) findViewById(R.id.DownloadProgress);
+		status.setText(statusMessage);
+		status.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideDownloadProgress() {
+		TextView status = (TextView) findViewById(R.id.DownloadProgress);
+		status.setVisibility(View.GONE);
+	}
+	
 }

@@ -117,11 +117,6 @@ public abstract class ArticleListActivity extends MenuedActivity {
 		registerReceiver(downloadProgressReceiver, new IntentFilter(HttpFetcher.DOWNLOAD_PROGRESS));
 	}
 
-
-	protected boolean shouldRefreshView(LinearLayout mainPane) {
-		return mainPane.getChildCount() == 0;
-	}
-	
 		
 	@Override
 	protected void onPause() {
@@ -134,6 +129,10 @@ public abstract class ArticleListActivity extends MenuedActivity {
 	}
 	
 		
+	protected boolean shouldRefreshView(LinearLayout mainPane) {
+		return mainPane.getChildCount() == 0;
+	}
+	
 	protected void setHeading(String headingText) {
 		TextView heading = (TextView) findViewById(R.id.Heading);
 		heading.setText(headingText);		
@@ -491,7 +490,13 @@ public abstract class ArticleListActivity extends MenuedActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final int type = intent.getIntExtra("type", 0);
-			switch (type) {				
+			switch (type) {
+			
+			case HttpFetcher.DOWNLOAD_STARTED:
+				showDownloadStart(intent.getStringExtra("url"));
+				return;
+			
+			
 			case HttpFetcher.DOWNLOAD_UPDATE:
 				updateDownloadProgress(
 						intent.getIntExtra("bytes_received", 0),
@@ -500,6 +505,10 @@ public abstract class ArticleListActivity extends MenuedActivity {
 				
 			case HttpFetcher.DOWNLOAD_COMPLETED:
 				hideDownloadProgress();
+				return;
+				
+			case HttpFetcher.DOWNLOAD_FAILED:
+				showDownloadFailed(intent.getStringExtra("url"));
 				return;
 			}
 		}				
@@ -515,6 +524,13 @@ public abstract class ArticleListActivity extends MenuedActivity {
 	
 	private void showDownloadStart(String url) {
 		final String statusMessage =  "Downloading: " + url;
+		TextView status = (TextView) findViewById(R.id.DownloadProgress);
+		status.setText(statusMessage);
+		status.setVisibility(View.VISIBLE);
+	}
+	
+	private void showDownloadFailed(String url) {
+		final String statusMessage =  "Download failed: " + url;
 		TextView status = (TextView) findViewById(R.id.DownloadProgress);
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);

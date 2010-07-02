@@ -44,6 +44,5 @@ public class FavouriteStoriesArticleSet implements Serializable, ArticleSet {
 	public String getName() {
 		return "Favourites";
 	}
-
 	
 }
