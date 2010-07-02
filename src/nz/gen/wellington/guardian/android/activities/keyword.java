@@ -29,7 +29,7 @@ public class keyword extends ArticleListActivity {
 			setHeading(keyword.getName());
 		}	
 
-		updateArticlesHandler = new UpdateArticlesHandler(this);
+		updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
 	}
 	
 	protected ArticleSet getArticleSet() {

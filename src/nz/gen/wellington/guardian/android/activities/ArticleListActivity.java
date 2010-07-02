@@ -163,10 +163,12 @@ public abstract class ArticleListActivity extends MenuedActivity {
 		boolean first = true;
 		boolean isFirstOfSection = true;
 		Section currentSection = null;
+		private ArticleSet articleSet;
 		
-		public UpdateArticlesHandler(Context context) {
+		public UpdateArticlesHandler(Context context, ArticleSet articleSet) {
 			super();
 			this.context = context;
+			this.articleSet = articleSet;
 		}
 		
 		public void handleMessage(Message msg) {
@@ -190,8 +192,9 @@ public abstract class ArticleListActivity extends MenuedActivity {
 							isFirstOfSection = false;
 						}
 					}
-
-					boolean shouldUseFeatureTrail = showMainImage && first && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
+					
+				boolean isContributorArticleSet = articleSet.getApiUrl().startsWith("profile");
+				boolean shouldUseFeatureTrail = showMainImage && first && !isContributorArticleSet && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
 					View articleTrailView = chooseTrailView(mInflater, shouldUseFeatureTrail);
 					populateArticleListView(article, articleTrailView, shouldUseFeatureTrail);
 					mainpane.addView(articleTrailView);
@@ -323,7 +326,7 @@ public abstract class ArticleListActivity extends MenuedActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Article article = (Article) intent.getSerializableExtra("article");
-			sendArticleReadyMessage(article);			
+			sendArticleReadyMessage(article);	
 		}		
 	}
 	

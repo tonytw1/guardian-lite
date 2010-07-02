@@ -128,12 +128,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	}
 
 	
-	protected String buildContentQueryUrl(ArticleSet articleSet, boolean showAll) {
-		
-		if (articleSet instanceof TopStoriesArticleSet) {
-			return API_HOST + "/favourites";
-		}
-		
+	protected String buildContentQueryUrl(ArticleSet articleSet, boolean showAll) {		
 		StringBuilder url = new StringBuilder(API_HOST + "/search");
 		if (articleSet instanceof FavouriteStoriesArticleSet) {
 			 url = new StringBuilder(API_HOST + "/favourites");

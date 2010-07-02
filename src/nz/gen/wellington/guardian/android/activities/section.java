@@ -22,7 +22,7 @@ public class section extends ArticleListActivity {
         section = (Section) this.getIntent().getExtras().get("section");
     	setHeading(section.getName());
     	setHeadingColour(section.getColour());
-    	updateArticlesHandler = new UpdateArticlesHandler(this);
+    	updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
 	}
 
 	
