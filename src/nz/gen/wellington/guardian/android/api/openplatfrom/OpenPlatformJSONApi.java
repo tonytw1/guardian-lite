@@ -5,20 +5,20 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.joda.time.DateTime;
-
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.AuthorArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
+
+import org.joda.time.DateTime;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -146,10 +146,6 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		
 		if (articleSet instanceof KeywordArticleSet) {
-			url.append("&tag=" + articleSet.getApiUrl());			
-		}
-		
-		if (articleSet instanceof AuthorArticleSet) {
 			url.append("&tag=" + articleSet.getApiUrl());			
 		}
 		
