@@ -10,6 +10,7 @@ import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 
 import org.joda.time.DateTime;
 
@@ -30,7 +31,7 @@ public class FileBasedArticleCache {
 	 public void putArticleSetArticles(ArticleSet articleSet, ArticleBundle bundle) {
 		 Log.i(TAG, "Writing to disk: " + articleSet.getName());
 		 try {
-			 FileOutputStream fos = FileService.getFileOutputStream(context, articleSet.getApiUrl());
+			 FileOutputStream fos = FileService.getFileOutputStream(context, getLocalFileKeyForArticleSet(articleSet));
 			 ObjectOutputStream out = new ObjectOutputStream(fos);
 			 out.writeObject(bundle);
 			 out.close();
@@ -40,15 +41,25 @@ public class FileBasedArticleCache {
 	 }
 
 
+	private String getLocalFileKeyForArticleSet(ArticleSet articleSet) {
+		String localFileKey = articleSet.getApiUrl();
+		 if (articleSet instanceof FavouriteStoriesArticleSet) {
+			 localFileKey = "favourites";
+		 }
+		return localFileKey;
+	}
+
+
 	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
-		if (!FileService.isLocallyCached(context, articleSet.getApiUrl())) {
+		String localFileKey = getLocalFileKeyForArticleSet(articleSet);
+		if (!FileService.isLocallyCached(context, localFileKey)) {
 			return null;
 		}
 		
-		final String filepath = FileService.getLocalFilename(articleSet.getApiUrl());
+		final String filepath = FileService.getLocalFilename(localFileKey);
 		Log.i(TAG, "Reading from disk: " + filepath);
 		try {
-			FileInputStream fis = FileService.getFileInputStream(context, articleSet.getApiUrl());
+			FileInputStream fis = FileService.getFileInputStream(context, localFileKey);
 
 			Log.i(TAG, "Reading from disk: " + filepath);
 			ObjectInputStream in = new ObjectInputStream(fis);
