@@ -36,10 +36,10 @@ public abstract class ArticleUpdateTask {
 	
 	final protected void processArticles(List<Article> articles) {
 		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
-
 		final boolean largeImagesPreference = (Boolean) prefs.getBoolean("largeImages", true);
+		Log.d(TAG, "Large images is: " + largeImagesPreference);
 		NetworkStatusService networkStatusService = new NetworkStatusService(context);
-		final boolean largeImages = largeImagesPreference && networkStatusService.isWifiConnection();
+		final boolean largeImages = largeImagesPreference || networkStatusService.isWifiConnection();
 		
 		if (articles != null) {
 			for (Article article : articles) {
