@@ -15,6 +15,7 @@ import org.joda.time.DateTime;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -23,6 +24,7 @@ import android.widget.LinearLayout;
 
 public class main extends ArticleListActivity {
 	
+	private static final String TAG = "main";
 	private DateTime loaded;
 	
 	public main() {
@@ -33,7 +35,7 @@ public class main extends ArticleListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);        
         hindHeading();
-    	updateArticlesHandler = new UpdateArticlesHandler(this);
+    	updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
     	showSeperators = true;
     	showMainImage = false;
 	}
@@ -55,6 +57,7 @@ public class main extends ArticleListActivity {
 		List<Tag> favouriteTags = dao.getFavouriteTags();
 		
 		if (favouriteSections.isEmpty() && favouriteTags.isEmpty()) {
+			Log.i(TAG, "Using top stories article set as favourites are empty");
 			return new TopStoriesArticleSet();
 		} else {
 			return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);
