@@ -14,7 +14,6 @@ import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
 import nz.gen.wellington.guardian.android.services.UpdateTagArticlesTask;
 import nz.gen.wellington.guardian.android.services.UpdateTopStoriesTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -29,7 +28,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class sync extends Activity implements OnClickListener {
+public class sync extends DownloadProgressAwareActivity implements OnClickListener {
 	
 	private static final String TAG = "sync";
 
@@ -210,18 +209,6 @@ public class sync extends Activity implements OnClickListener {
 	}
 
 
-	private void updateDownloadProgress(int received, long  expected) {
-		final String statusMessage =  received + " / " +  Long.toString(expected);
-		TextView status = (TextView) findViewById(R.id.DownloadProgress);
-		status.setText(statusMessage);
-		status.setVisibility(View.VISIBLE);
-	}
-		
-	private void hideDownloadProgress() {
-		TextView status = (TextView) findViewById(R.id.DownloadProgress);
-		status.setVisibility(View.GONE);
-	}
-
 	private void updateCurrentTask(String taskName) {
 		TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
 		currentTask.setText(taskName);
@@ -252,24 +239,6 @@ public class sync extends Activity implements OnClickListener {
 		}
 	}
 	
-
-	class DownloadProgressReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			final int type = intent.getIntExtra("type", 0);
-			switch (type) {		
-			case HttpFetcher.DOWNLOAD_UPDATE:
-				updateDownloadProgress(
-						intent.getIntExtra("bytes_received", 0),
-						intent.getLongExtra("bytes_expected", 0));
-				return;
-				
-			case HttpFetcher.DOWNLOAD_COMPLETED:
-				hideDownloadProgress();
-				return;
-			}
-		}
-	}
 	
 	class BatchCompletionReceiver extends BroadcastReceiver {
 		@Override
