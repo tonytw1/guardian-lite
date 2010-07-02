@@ -235,10 +235,7 @@ public abstract class ArticleListActivity extends MenuedActivity {
 					mainpane = (LinearLayout) findViewById(R.id.MainPane);
 					TextView message = new TextView(context);
 					msg.getData().getString("modtime");
-					message.setText("Updates to this article set are available (" +
-						msg.getData().getString("modtime") + ", " +
-						msg.getData().getString("localChecksum") + ":" +
-						msg.getData().getString("remoteChecksum") + ")");
+					message.setText("Updates to this article set are available (Refresh to view)");
 					mainpane.addView(message, 0);			    	
 			}
 		}
