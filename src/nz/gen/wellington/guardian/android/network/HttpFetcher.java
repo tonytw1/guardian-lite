@@ -29,7 +29,7 @@ public class HttpFetcher {
 	
 	private static final String TAG = "HttpFetcher";
 	
-	private static final int HTTP_TIMEOUT = 10000;
+	private static final int HTTP_TIMEOUT = 15000;
 
     public static final String DOWNLOAD_PROGRESS = "nz.gen.wellington.guardian.android.network.DOWNLOAD_PROGRESS";
     
@@ -92,7 +92,7 @@ public class HttpFetcher {
 			
 			get.addHeader(new BasicHeader("User-agent", "gzip"));
 			get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
-					
+			
 			announceDownloadStarted(uri);
 			HttpResponse execute = client.execute(get);
 			if (execute.getStatusLine().getStatusCode() == 200) {
@@ -129,8 +129,6 @@ public class HttpFetcher {
 	
 	public void stopLoading() {
 		Log.d(TAG, "Stopping loading");
-		client.getConnectionManager().shutdown();
-		// TODO announce stop
 	} 
 	
 	

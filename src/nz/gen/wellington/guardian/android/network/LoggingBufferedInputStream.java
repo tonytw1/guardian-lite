@@ -6,9 +6,12 @@ import java.io.InputStream;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class LoggingBufferedInputStream extends BufferedInputStream {
 	
+	private static final String TAG = "LoggingBufferedInputStream";
+
 	Context context;
 	int totalRead;
 	long contentLength;
@@ -51,6 +54,7 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 	
 
 	private void announceProgress(String url, int totalRead) {
+		Log.i(TAG, Integer.toString(totalRead));
 		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
 		intent.putExtra("type", HttpFetcher.DOWNLOAD_UPDATE);
 		intent.putExtra("url", url);
