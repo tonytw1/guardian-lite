@@ -127,6 +127,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		Log.d(TAG, "Loader stopped");
 		unregisterReceiver(articlesAvailableReceiver);
 		unregisterReceiver(downloadProgressReceiver);
+		hideDownloadProgress();
 	}
 	
 		
