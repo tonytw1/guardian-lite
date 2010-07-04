@@ -17,9 +17,12 @@ public class ArticleDAOFactory {
 	
 	public static ContentSource getOpenPlatformApi(Context context) {
 		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
+
 		final String pageSizeString = prefs.getString("pageSize", "10");
 		int pageSize = Integer.parseInt(pageSizeString);
-		return new OpenPlatformJSONApi(context, pageSize);
+		
+		final String trailKey = prefs.getString("trialKey", "");		
+		return new OpenPlatformJSONApi(context, pageSize, trailKey);
 	}
 	
 	public static TaskQueue getTaskQueue(Context context) {

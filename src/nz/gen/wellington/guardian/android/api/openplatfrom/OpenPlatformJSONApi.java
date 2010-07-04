@@ -33,20 +33,24 @@ public class OpenPlatformJSONApi implements ContentSource {
 
 	private Context context;
 	private int pageSize;
+	private String trialKey;
 	
 	
-	public OpenPlatformJSONApi(Context context, int pageSize) {
+	public OpenPlatformJSONApi(Context context, int pageSize, String trialKey) {
 		this.context = context;
 		httpFetcher = new HttpFetcher(context);
 		contentParser = new OpenPlatformJSONParser(context);
 		this.pageSize = pageSize;
+		this.trialKey = trialKey;
 	}
 
 	
 	@Override
 	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {		
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
-
+		if (!"sausages".equals(trialKey)) {
+			return null;
+		}
 		final String apiUrl = articleSet.getApiUrl();
 		
 		InputStream input = null;		
