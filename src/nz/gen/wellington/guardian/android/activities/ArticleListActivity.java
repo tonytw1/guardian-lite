@@ -45,7 +45,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	private static final String TAG = "ArticleListActivity";
 	
-	Handler updateArticlesHandler;
+	UpdateArticlesHandler updateArticlesHandler;
 	UpdateArticlesRunner updateArticlesRunner;
 	ArticleBundle bundle;
 	Map<String, View> viewsWaitingForTrailImages;
@@ -54,7 +54,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 	boolean showSeperators = false;
 	boolean showMainImage = true;
-	
+	NetworkStatusService networkStatusService;
 	
 	protected BroadcastReceiver articlesAvailableReceiver;
 	protected BroadcastReceiver downloadProgressReceiver;
@@ -74,7 +74,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		articlesAvailableReceiver = new ArticlesAvailableReceiver();
 		downloadProgressReceiver = new DownloadProgressReceiver();
 		
-		NetworkStatusService networkStatusService = new NetworkStatusService(this);		
+		networkStatusService = new NetworkStatusService(this);		
 		updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService);		
 	}
 	
@@ -91,25 +91,26 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 	
 	protected void refresh(boolean unCached) {
+		Log.i(TAG, "Refresh requested");
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
 		if (loader == null || !loader.isAlive()) {
-			updateArticlesRunner.setUncached(unCached);
+			Log.i(TAG, "Requested run");
 			mainPane.removeAllViews();
+			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService);
+			updateArticlesRunner.setUncached(unCached);
+
+			updateArticlesHandler.init();
+			
 			loader = new Thread(updateArticlesRunner);
 			loader.start();
-			Log.d("UpdateArticlesHandler", "Loader started");
-		}
-	}
-	
-	
-	protected void populateArticles() {
-		if (!loader.isAlive()) {			
-			loader.start();
-			Log.d("UpdateArticlesHandler", "Loader started");
-		}
-	}
-	
+			Log.d(TAG, "Loader started");
 
+		} else {
+			Log.i(TAG, "Loader already alive - not running");
+		}
+	}
+	
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -153,21 +154,29 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		return articleDAO.getArticleSetArticles(getArticleSet(), uncached);
 	}
 	
-	protected abstract ArticleSet getArticleSet();	
-
+	protected abstract ArticleSet getArticleSet();
+	protected abstract String getRefinementDescription();	
 	
 	class UpdateArticlesHandler extends Handler {		
 
 		private Context context;
 		boolean first = true;
-		boolean isFirstOfSection = true;
-		Section currentSection = null;
+		boolean isFirstOfSection;
+		Section currentSection;
 		private ArticleSet articleSet;
 		
 		public UpdateArticlesHandler(Context context, ArticleSet articleSet) {
 			super();
 			this.context = context;
 			this.articleSet = articleSet;
+			init();
+		}
+		
+		
+		public void init() {
+			first = true;
+			isFirstOfSection = true;
+			currentSection = null;
 		}
 		
 		public void handleMessage(Message msg) {
@@ -228,17 +237,28 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    		mainpane.addView(descriptionView, 0);
 			    	}
 			    	List<Tag> refinements = bundle.getRefinements();
-					LayoutInflater inflater = LayoutInflater.from(context);
-					TagListPopulatingService.populateTags(inflater, true, mainpane, refinements, context);			    	
-					return;
-					
-			    case 5: 
+
 			    	
+			    	if (refinements != null && !refinements.isEmpty()) {
+			    		TextView description = new TextView(context);			    	
+			    		String refinementDescription = getRefinementDescription();			    		
+			    		
+			    		description.setText(refinementDescription);
+			    		mainpane.addView(description);
+			    	
+			    		LayoutInflater inflater = LayoutInflater.from(context);					
+			    		TagListPopulatingService.populateTags(inflater, true, mainpane, refinements, context);			    	
+			    	}
+			    	return;
+			    				    	
+			    case 5: 
+			    	Log.i(TAG, "Got updates available message");
 					mainpane = (LinearLayout) findViewById(R.id.MainPane);
 					TextView message = new TextView(context);
 					msg.getData().getString("modtime");
 					message.setText("Updates to this article set are available (Refresh to view)");
-					mainpane.addView(message, 0);			    	
+					mainpane.addView(message, 0);
+					return;
 			}
 		}
 
@@ -447,7 +467,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 						String remoteChecksum = articleDAO.getArticleSetRemoteChecksum(getArticleSet());
 						if (remoteChecksum != null) {
 							if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {
-								Log.i(TAG, "Remove content checksum is different: " + localChecksum + ":" + remoteChecksum);
+								Log.i(TAG, "Remote content checksum is different: " + localChecksum + ":" + remoteChecksum);
 								m = new Message();
 								m.what = 5;
 								Bundle bundle = new Bundle();
@@ -466,6 +486,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 							Log.e(TAG, "Remote checksum was null");							
 						}
 					}
+					
 				}
 			}
 			
