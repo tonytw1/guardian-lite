@@ -30,6 +30,10 @@ public class section extends ArticleListActivity {
 		return new SectionArticleSet(section);
 	}
 		
+	@Override
+	protected String getRefinementDescription() {
+		return "These tags have been used within the " + getArticleSet().getName() + " section recently:";
+	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Home");

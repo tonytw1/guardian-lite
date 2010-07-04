@@ -64,6 +64,14 @@ public class main extends ArticleListActivity {
 		}		
 	}
 	
+	
+	
+	@Override
+	protected String getRefinementDescription() {
+		return null;
+	}
+	
+
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Favourites");
 	    menu.add(0, 2, 0, "Sections");
