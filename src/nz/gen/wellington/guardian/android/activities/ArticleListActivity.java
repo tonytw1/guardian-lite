@@ -418,24 +418,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 						
 					} else {
 						downloadTrailImages.add(article);
-					}
-					
-				} else {
-					
-					/*
-					if (mainImageIsAvailableLocally) {
-						Message m = new Message();
-						m.what = 3;						
-						Bundle bundle = new Bundle();
-						bundle.putString("id", article.getId());
-						bundle.putString("url", article.getMainImageUrl());						
-						m.setData(bundle);
-						Log.d(TAG, "Sending message; main imge for article is available locally: " + article.getId());
-						updateArticlesHandler.sendMessage(m);
-					}
-					*/
-					
+					}					
 				}
+				
 				first = false;
 			}
 			
