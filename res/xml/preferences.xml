@@ -2,7 +2,8 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+<ListPreference android:entryValues="@array/pageSizeOptionValues" android:entries="@array/pageSizeOptionLabels" android:summary="Number of articles to include in each article set" android:title="Page size" android:key="pageSize" android:defaultValue="10"></ListPreference><CheckBoxPreference android:summary="Disable large images when not connected via Wifi" android:summaryOff="Large images will only be downloaded when connected via Wifi" android:summaryOn="Large images will always be downloaded
+" android:enabled="true" android:key="largeImages" android:defaultValue="false" android:title="Large images mobile"></CheckBoxPreference>
 <ListPreference android:title="Cache location" android:key="cacheLocation" android:summary="Where should cached articles and images be stored" android:entryValues="@array/cacheLocationOptionValues" android:entries="@array/cacheLocationOptionLabels" android:defaultValue="1"></ListPreference>
-<CheckBoxPreference android:summary="Disable large images when not connected via Wifi" android:summaryOff="Large images will only be downloaded when connected via Wifi" android:summaryOn="Large images will always be downloaded
-" android:enabled="true" android:key="largeImages" android:title="Large images"></CheckBoxPreference>
 </PreferenceScreen>

@@ -27,18 +27,19 @@ public class OpenPlatformJSONApi implements ContentSource {
 
 	private static final String API_HOST = "http://content-api-proxy.appspot.com";	
 	public static final String SECTIONS_API_URL = "sections";
-	private static final int PAGE_SIZE = 10;	// TODO push to a preference
 	
 	private OpenPlatformJSONParser contentParser;
 	private HttpFetcher httpFetcher;
 
 	private Context context;
+	private int pageSize;
 	
 	
-	public OpenPlatformJSONApi(Context context) {
+	public OpenPlatformJSONApi(Context context, int pageSize) {
 		this.context = context;
 		httpFetcher = new HttpFetcher(context);
 		contentParser = new OpenPlatformJSONParser(context);
+		this.pageSize = pageSize;
 	}
 
 	
@@ -51,7 +52,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		InputStream input = null;		
 		if (input == null) {
 			Log.i(TAG, "Fetching article set from live api: " + apiUrl);
-			input = getHttpInputStream(buildContentQueryUrl(articleSet, true));	
+			input = getHttpInputStream(buildContentQueryUrl(articleSet, true, pageSize));	
 		}		
 		
 		if (input != null) {
@@ -70,7 +71,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		InputStream input = null;		
 		if (input == null) {
 			Log.i(TAG, "Fetching article set checksum from live api: " + articleSet.getApiUrl());
-			input = getHttpInputStream(buildContentQueryUrl(articleSet, false));
+			input = getHttpInputStream(buildContentQueryUrl(articleSet, false, pageSize));
 		}		
 		
 		if (input != null) {
@@ -127,7 +128,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	}
 
 	
-	protected String buildContentQueryUrl(ArticleSet articleSet, boolean showAll) {		
+	protected String buildContentQueryUrl(ArticleSet articleSet, boolean showAll, int pageSize) {		
 		StringBuilder url = new StringBuilder(API_HOST + "/search");
 		if (articleSet instanceof FavouriteStoriesArticleSet) {
 			 url = new StringBuilder(API_HOST + "/favourites");
@@ -151,7 +152,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 			url.append("&show-fields=true");	// TODO is all in api
 			url.append("&show-tags=true");
 		}
-		url.append("&page-size=" + PAGE_SIZE);
+		url.append("&page-size=" + pageSize);
 		return url.toString();
 	}
 	
