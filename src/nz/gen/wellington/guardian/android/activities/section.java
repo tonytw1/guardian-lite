@@ -32,7 +32,7 @@ public class section extends ArticleListActivity {
 		
 	@Override
 	protected String getRefinementDescription() {
-		return "These " + getArticleSet().getName() + " section tags have been used recently:";
+		return "These tags have been used recently within the " + getArticleSet().getName() + " section:";
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
