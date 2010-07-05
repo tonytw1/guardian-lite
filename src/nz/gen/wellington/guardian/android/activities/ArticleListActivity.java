@@ -250,13 +250,14 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	List<Tag> refinements = bundle.getRefinements();
 			    	
 			    	if (refinements != null && !refinements.isEmpty()) {
-			    		TextView description = new TextView(context);			    	
-			    		String refinementDescription = getRefinementDescription();			    		
+			    		LayoutInflater inflater = LayoutInflater.from(context);
+						View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);
+
+						TextView description = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);			    		
+			    		description.setText(getRefinementDescription());
 			    		
-			    		description.setText(refinementDescription);
-			    		mainpane.addView(description);
-			    	
-			    		LayoutInflater inflater = LayoutInflater.from(context);					
+			    		mainpane.addView(refinementsHeadingView);
+			    		
 			    		TagListPopulatingService.populateTags(inflater, true, mainpane, refinements, context);			    	
 			    	}
 			    	return;
@@ -361,7 +362,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		updateArticlesHandler.sendMessage(m);
 	}
 	
-	
+	@Deprecated
 	class ArticlesAvailableReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
