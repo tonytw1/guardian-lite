@@ -7,5 +7,5 @@
     android:layout_height="1dp"
     android:background="?android:attr/listDivider"
     />
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/RefinementsDescription" android:paddingTop="10px"></TextView>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/RefinementsDescription" android:paddingTop="10px" android:paddingBottom="8px"></TextView>
 </LinearLayout>
