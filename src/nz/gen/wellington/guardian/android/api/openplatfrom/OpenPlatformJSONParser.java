@@ -181,7 +181,7 @@ public class OpenPlatformJSONParser {
         	 if (name.equals("results")) {
         		 checksum = attributes.getValue("checksum");
         		 description = attributes.getValue("description");
-        		 Log.i(TAG, "Description is: " + description);
+        		 articleCallback.descriptionReady(description);
         	 }
         	 
         	 if (name.equals("tag")) {

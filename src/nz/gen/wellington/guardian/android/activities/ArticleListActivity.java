@@ -39,7 +39,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public abstract class ArticleListActivity extends DownloadProgressAwareActivity {
 	
@@ -211,7 +210,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					return;
 			    			    
 			    case 2: 
-			    	Toast.makeText(context, "Articles could not be loaded", Toast.LENGTH_SHORT).show();
+			    	// TODO on screen test
 			    	return;
 			    			    
 			    case 3: 
@@ -228,17 +227,21 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	}			    
 			    	return;
 			    	
-			    case 4:
 			    	
+			    case 6:
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
-			    	String descripton = bundle.getDescription();
+			    	Bundle descriptionData = msg.getData();
+			    	String descripton = descriptionData.getString("description");
 			    	if (descripton != null) {
 			    		TextView descriptionView = new TextView(context);
 			    		descriptionView.setText(descripton);
 			    		mainpane.addView(descriptionView, 0);
 			    	}
+			    	return;
+			    	
+			    case 4:			    	
+			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
 			    	List<Tag> refinements = bundle.getRefinements();
-
 			    	
 			    	if (refinements != null && !refinements.isEmpty()) {
 			    		TextView description = new TextView(context);			    	
@@ -342,6 +345,17 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	}
 	
 	
+	
+	private void sendDescriptionReadyMessage(String description) {
+		Message m = new Message();			
+		m.what = 6;
+		Bundle bundle = new Bundle();
+		bundle.putString("description", description);			
+		m.setData(bundle);		
+		updateArticlesHandler.sendMessage(m);
+	}
+	
+	
 	class ArticlesAvailableReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -385,7 +399,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				updateArticlesHandler.sendMessage(m);
 				return;
 			}
-			
 			
 			
 			Message m = new Message();
@@ -488,6 +501,13 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		public void articleReady(Article article) {
 			sendArticleReadyMessage(article);
 		}
+
+		@Override
+		public void descriptionReady(String description) {
+			sendDescriptionReadyMessage(description);
+			
+		}
+			
 	}
 	
 }
