@@ -48,6 +48,7 @@ public class OpenPlatformJSONParser {
 
 
 	public List<Article> parseArticlesXml(InputStream inputStream, List<Section> sections, ArticleCallback articleCallback) {
+		running = true;
 		try {
 
 			SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -181,7 +182,9 @@ public class OpenPlatformJSONParser {
         	 if (name.equals("results")) {
         		 checksum = attributes.getValue("checksum");
         		 description = attributes.getValue("description");
-        		 articleCallback.descriptionReady(description);
+        		 if (articleCallback != null) {
+        			 articleCallback.descriptionReady(description);
+        		 }
         	 }
         	 
         	 if (name.equals("tag")) {
