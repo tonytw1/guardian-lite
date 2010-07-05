@@ -91,6 +91,12 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	protected void refresh(boolean unCached) {
 		Log.i(TAG, "Refresh requested");
+	
+		if (!networkStatusService.isConnectionAvailable() && unCached) {
+			Log.i(TAG, "Not refreshing uncached as no connection is available");
+			return;
+		}
+				
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
 		if (loader == null || !loader.isAlive()) {
 			Log.i(TAG, "Requested run");
@@ -504,8 +510,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 		@Override
 		public void descriptionReady(String description) {
-			sendDescriptionReadyMessage(description);
-			
+			sendDescriptionReadyMessage(description);			
 		}
 			
 	}
