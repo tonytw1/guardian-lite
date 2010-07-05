@@ -4,15 +4,18 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
+import nz.gen.wellington.guardian.android.services.UpdateArticleSetTask;
 import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
 import nz.gen.wellington.guardian.android.services.UpdateTagArticlesTask;
-import nz.gen.wellington.guardian.android.services.UpdateTopStoriesTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -94,10 +97,19 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 		switch (src.getId()) {
 
 		case R.id.buttonStart:
-			queueFavoriteSections(taskQueue);
-			queueFavouriteTags(taskQueue);
-			taskQueue.addArticleTask(new UpdateTopStoriesTask(this.getApplicationContext()));
-						
+			
+			List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();		
+			List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags(); // TODO move favourites dao to singleton.
+
+			ArticleSet homePageArticleSet = new TopStoriesArticleSet();
+			if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
+				queueFavoriteSections(taskQueue, favouriteSections);
+				queueFavouriteTags(taskQueue, favouriteTags);
+				homePageArticleSet = new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);
+			}
+			
+			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), homePageArticleSet));
+									
 			contentUpdateService.start();
 			updateStatus();
 			break;
@@ -161,14 +173,12 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	}
 
 
-	private void queueFavoriteSections(TaskQueue taskQueue) {
-		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();		
+	private void queueFavoriteSections(TaskQueue taskQueue, List<Section> favouriteSections) {
 		queueSections(taskQueue, favouriteSections);
 	}
 	
 	
-	private void queueFavouriteTags(TaskQueue taskQueue) {
-		List<Tag> tags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags(); // TODO move favourites dao to singleton.
+	private void queueFavouriteTags(TaskQueue taskQueue, List<Tag> tags) {
 		if (tags != null) {
 			for (Tag tag : tags) {
 				Log.i(TAG, "Injecting favourite tag into update queue: " + tag.getName());

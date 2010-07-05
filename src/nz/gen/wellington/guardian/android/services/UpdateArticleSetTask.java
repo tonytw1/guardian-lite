@@ -6,32 +6,33 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
+import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import android.content.Context;
 import android.util.Log;
 
-public class UpdateTopStoriesTask extends ArticleUpdateTask implements ContentUpdateTaskRunnable {
+public class UpdateArticleSetTask extends ArticleUpdateTask implements ContentUpdateTaskRunnable {
 
 	private static final String TAG = "UpdateTopStoriesTask";
+	private ArticleSet articleSet;
 	
 	
-	public UpdateTopStoriesTask(Context context) {
+	public UpdateArticleSetTask(Context context, ArticleSet articleSet) {
 		this.context = context;
 		this.articleDAO = ArticleDAOFactory.getDao(context);
+		this.articleSet = articleSet;
 	}
 
 	
 	@Override
 	public String getTaskName() {
-		return "Fetching top stories";
+		return "Fetching " + articleSet.getName();
 	}
 	
 	
 	@Override
 	public void run() {
-		Log.i(TAG, "Fetching latest articles");
-		TopStoriesArticleSet articleSet = new TopStoriesArticleSet();
+		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
 				
 		ContentSource api = ArticleDAOFactory.getOpenPlatformApi(context);
 		List<Section> sections = ArticleDAOFactory.getDao(context).getSections();
@@ -43,5 +44,5 @@ public class UpdateTopStoriesTask extends ArticleUpdateTask implements ContentUp
 			processArticles(bundle.getArticles());
 		}
 	}
-			
+	
 }

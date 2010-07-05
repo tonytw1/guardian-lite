@@ -12,6 +12,8 @@ import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import android.content.Context;
 import android.util.Log;
 
+// TODO move to be an UpdateArticleSetTask
+@Deprecated
 public class UpdateSectionArticlesTask extends ArticleUpdateTask implements ContentUpdateTaskRunnable {
 
 	private static final String TAG = "UpdateSectionArticlesTask";
