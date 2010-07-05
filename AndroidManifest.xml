@@ -2,13 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       android:versionCode="1"
       android:versionName="1.0" package="nz.gen.wellington.guardian.android">
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:permission="android.permission.INTERNET" android:debuggable="true">
+      
+      
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
+     	     
         <activity android:label="@string/app_name" android:name=".activities.main" android:screenOrientation="portrait" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+      	
     	<activity android:label="View Article" android:name=".activities.article" >
     		<intent-filter>
     		</intent-filter>
@@ -18,22 +22,23 @@
 			<intent-filter>
 			</intent-filter>
 		</activity>
-<activity android:name=".activities.section" android:screenOrientation="portrait" ><intent-filter></intent-filter>
-</activity>
-<activity android:name=".activities.sync" android:screenOrientation="portrait"></activity>
-<service android:name=".services.ContentUpdateService" android:enabled="true"></service>
-<activity android:name=".activities.keyword" android:screenOrientation="portrait" ></activity>
-<activity android:name=".activities.perferences" android:screenOrientation="portrait"></activity>
-<activity android:name=".activities.favourites" android:screenOrientation="portrait"></activity>
-<activity android:name=".activities.notification" android:noHistory="true"></activity>
-</application>
-    <uses-sdk android:minSdkVersion="3" />
 
+		<activity android:name=".activities.section" android:screenOrientation="portrait" ><intent-filter></intent-filter>
+		</activity>
+
+		<activity android:name=".activities.sync" android:screenOrientation="portrait"></activity>
+
+		<service android:name=".services.ContentUpdateService" android:enabled="true"></service>
+		
+		<activity android:name=".activities.keyword" android:screenOrientation="portrait" ></activity>
+		<activity android:name=".activities.perferences" android:screenOrientation="portrait"></activity>
+		<activity android:name=".activities.favourites" android:screenOrientation="portrait"></activity>
+		<activity android:name=".activities.notification" android:noHistory="true"></activity>
+
+	</application>
+
+<uses-sdk android:minSdkVersion="3" />
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-
-
-
-
-
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+
 </manifest> 
