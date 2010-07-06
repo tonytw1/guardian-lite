@@ -1,8 +1,12 @@
 package nz.gen.wellington.guardian.android.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 public class SectionArticleSet implements ArticleSet, Serializable {
+	
+	protected String[] permittedRefinements = {"blog", "keyword", "contributor"};
 	
 	private static final long serialVersionUID = 1L;
 	private Section section;
@@ -19,5 +23,10 @@ public class SectionArticleSet implements ArticleSet, Serializable {
 	@Override
 	public String getApiUrl() {
 		return section.getId();
+	}
+	
+	@Override
+	public List<String> getPermittedRefinements() {
+		return Arrays.asList(permittedRefinements);
 	}
 }

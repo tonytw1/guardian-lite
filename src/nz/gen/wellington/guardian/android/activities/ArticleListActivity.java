@@ -60,6 +60,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 	private Thread loader;
 	
+	protected String[] permittedRefinements = {"keyword"};
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -252,14 +254,11 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	if (refinements != null && !refinements.isEmpty()) {
 			    		LayoutInflater inflater = LayoutInflater.from(context);
 			    		
-			    		for (String refinementType : refinements.keySet()) {
-			    			View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);
-			    			
-			    			TextView description = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);			    		
-			    			//description.setText(getRefinementDescription());
-			    			description.setText(refinementType);
-			    			mainpane.addView(refinementsHeadingView);			    			
-			    			TagListPopulatingService.populateTags(inflater, true, mainpane, refinements.get(refinementType), context);
+			    		for (String refinementType : articleSet.getPermittedRefinements()) {
+			    			if (articleSet.getPermittedRefinements().contains(refinementType)) {
+			    				String description = refinementType + getRefinementDescription();	// TODO
+			    				populateRefinementType(mainpane, inflater, description, refinements.get(refinementType));
+			    			}
 						}
 			    		
 			    	}
@@ -274,6 +273,15 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					mainpane.addView(message, 0);
 					return;
 			}
+		}
+
+		
+		private void populateRefinementType(LinearLayout mainpane, LayoutInflater inflater, String description, List<Tag> typedRefinements) {
+			View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);
+			TextView descriptionView = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);			    		
+			descriptionView.setText(description);
+			mainpane.addView(refinementsHeadingView);
+			TagListPopulatingService.populateTags(inflater, true, mainpane, typedRefinements, context);
 		}
 
 		private void populateTrailImage(final String url, View view) {
@@ -465,8 +473,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			
 			if (bundle != null) {
 				DateTime modificationTime = bundle.getTimestamp();
-				Log.i(TAG, "Article bundle timestamp is: " + bundle.getTimestamp());			
+				Log.i(TAG, "Article bundle timestamp is: " + bundle.getTimestamp() + " / " + modificationTime);			
 				
+				/*
 				if (modificationTime != null) {
 					
 					if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(10))) {
@@ -497,6 +506,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					}
 					
 				}
+				*/
+				
 			}
 			
 			return;				

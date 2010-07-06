@@ -1,5 +1,8 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.Arrays;
+import java.util.List;
+
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
@@ -14,8 +17,8 @@ public class section extends ArticleListActivity {
 	private static final String TAG = "section";	
 	private Section section;
 	private MenuItem favouriteMenuItem;
-
-
+	
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);        
@@ -28,6 +31,10 @@ public class section extends ArticleListActivity {
 	
 	protected ArticleSet getArticleSet() {
 		return new SectionArticleSet(section);
+	}
+	
+	protected List<String> getPermittedRefinements() {
+		return Arrays.asList(permittedRefinements);
 	}
 		
 	@Override

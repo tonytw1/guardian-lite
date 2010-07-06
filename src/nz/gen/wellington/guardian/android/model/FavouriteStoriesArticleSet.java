@@ -1,6 +1,7 @@
 package nz.gen.wellington.guardian.android.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 public class FavouriteStoriesArticleSet implements Serializable, ArticleSet {
@@ -9,6 +10,9 @@ public class FavouriteStoriesArticleSet implements Serializable, ArticleSet {
 	
 	private List<Section> sections;
 	private List<Tag> tags;
+	
+	protected String[] permittedRefinements = {};
+
 	
 	public FavouriteStoriesArticleSet(List<Section> sections, List<Tag> tags) {
 		this.sections = sections;
@@ -51,4 +55,8 @@ public class FavouriteStoriesArticleSet implements Serializable, ArticleSet {
 		return "Favourites";
 	}
 	
+	@Override
+	public List<String> getPermittedRefinements() {
+		return Arrays.asList(permittedRefinements);
+	}
 }

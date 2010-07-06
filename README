@@ -50,7 +50,9 @@ Allow users to add these discovered tags to the list of content to sync.
 
 TODO
 
-- Progress display and start/stop controls for content update process.
-- Hide invalid sections and articles with no distribution rights.
-- UI formatting.
-- Marking sections, keywords and contributors for syncing
+- Contributor descriptions is lost on reload from disk.
+- Warn if article set is old
+- Ping for updates preference
+- Home page is favourites or most recent preference
+- Search for tags.
+- Can't abort download in establish phase
