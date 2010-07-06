@@ -14,7 +14,9 @@ import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsD
 import org.joda.time.DateTime;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,22 +52,30 @@ public class main extends ArticleListActivity {
 
 	
 	@Override
-	protected ArticleSet getArticleSet() {		
-		FavouriteSectionsAndTagsDAO dao = new FavouriteSectionsAndTagsDAO(articleDAO, this);
-	
-		List<Section> favouriteSections = dao.getFavouriteSections();
-		List<Tag> favouriteTags = dao.getFavouriteTags();
+	protected ArticleSet getArticleSet() {
+		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+		final boolean homepageFavourites = (Boolean) prefs.getBoolean("homepageFavourites", true);
 		
-		if (favouriteSections.isEmpty() && favouriteTags.isEmpty()) {
-			Log.i(TAG, "Using top stories article set as favourites are empty");
-			return new TopStoriesArticleSet();
+		if (homepageFavourites) {
+			FavouriteSectionsAndTagsDAO dao = new FavouriteSectionsAndTagsDAO(articleDAO, this);
+	
+			List<Section> favouriteSections = dao.getFavouriteSections();
+			List<Tag> favouriteTags = dao.getFavouriteTags();
+		
+			if (favouriteSections.isEmpty() && favouriteTags.isEmpty()) {
+				Log.i(TAG, "Using top stories article set as favourites are empty");
+				return new TopStoriesArticleSet();
+			} else {
+				return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);
+			}
+		
 		} else {
-			return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);
-		}		
+			return new TopStoriesArticleSet();
+		}
+		
 	}
 	
-	
-	
+		
 	@Override
 	protected String getRefinementDescription() {
 		return null;

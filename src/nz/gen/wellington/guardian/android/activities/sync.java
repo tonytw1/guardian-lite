@@ -23,8 +23,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -100,12 +102,18 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 			
 			List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();		
 			List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags(); // TODO move favourites dao to singleton.
-
+			
+			SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+			final boolean homepageFavourites = (Boolean) prefs.getBoolean("homepageFavourites", true);
+			
 			ArticleSet homePageArticleSet = new TopStoriesArticleSet();
 			if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
 				queueFavoriteSections(taskQueue, favouriteSections);
 				queueFavouriteTags(taskQueue, favouriteTags);
-				homePageArticleSet = new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);
+				
+				if (homepageFavourites) {
+					homePageArticleSet = new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);
+				}
 			}
 			
 			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), homePageArticleSet));
