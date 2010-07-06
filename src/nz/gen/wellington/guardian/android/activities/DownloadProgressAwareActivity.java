@@ -54,7 +54,7 @@ public class DownloadProgressAwareActivity extends MenuedActivity {
 	}
 	
 	final protected void showDownloadFailed(String url) {
-		final String statusMessage =  "Download failed: " + url;
+		final String statusMessage =  "Download failed (Press Refresh to retry)";
 		TextView status = (TextView) findViewById(R.id.DownloadProgress);
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);

@@ -19,6 +19,7 @@ import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import org.joda.time.DateTime;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 public class OpenPlatformJSONApi implements ContentSource {
@@ -56,7 +57,8 @@ public class OpenPlatformJSONApi implements ContentSource {
 		InputStream input = null;		
 		if (input == null) {
 			Log.i(TAG, "Fetching article set from live api: " + apiUrl);
-			input = getHttpInputStream(buildContentQueryUrl(articleSet, true, pageSize));	
+			announceDownloadStarted(articleSet.getName());
+			input = getHttpInputStream(buildContentQueryUrl(articleSet, true, pageSize));
 		}		
 		
 		if (input != null) {
@@ -68,6 +70,13 @@ public class OpenPlatformJSONApi implements ContentSource {
 		return null;
 	}
 	
+	
+	private void announceDownloadStarted(String url) {
+		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
+		intent.putExtra("type", HttpFetcher.DOWNLOAD_STARTED);
+		intent.putExtra("url", url);
+		context.sendBroadcast(intent);
+	}
 	
 
 	@Override

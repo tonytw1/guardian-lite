@@ -105,7 +105,7 @@ public class favourites extends ArticleListActivity {
 
 
 	@Override
-	protected String getRefinementDescription() {
+	protected String getRefinementDescription(String refinementType) {
 		// TODO Auto-generated method stub
 		return null;
 	}

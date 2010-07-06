@@ -162,7 +162,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	}
 	
 	protected abstract ArticleSet getArticleSet();
-	protected abstract String getRefinementDescription();	
+	protected abstract String getRefinementDescription(String refinementType);	
 	
 	class UpdateArticlesHandler extends Handler {		
 
@@ -254,8 +254,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    		LayoutInflater inflater = LayoutInflater.from(context);
 			    		
 			    		for (String refinementType : articleSet.getPermittedRefinements()) {
-			    			if (articleSet.getPermittedRefinements().contains(refinementType)) {
-			    				String description = refinementType + getRefinementDescription();	// TODO
+			    			if (articleSet.getPermittedRefinements().contains(refinementType) && refinements.keySet().contains(refinementType)) {
+			    				String description = getRefinementDescription(refinementType);
 			    				populateRefinementType(mainpane, inflater, description, refinements.get(refinementType));
 			    			}
 						}

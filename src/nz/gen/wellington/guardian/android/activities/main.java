@@ -1,23 +1,14 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.List;
-
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
-import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
-import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 
 import org.joda.time.DateTime;
 
 import android.app.Dialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -26,7 +17,6 @@ import android.widget.LinearLayout;
 
 public class main extends ArticleListActivity {
 	
-	private static final String TAG = "main";
 	private DateTime loaded;
 	
 	public main() {
@@ -58,7 +48,7 @@ public class main extends ArticleListActivity {
 	
 	
 	@Override
-	protected String getRefinementDescription() {
+	protected String getRefinementDescription(String refinementType) {
 		return null;
 	}
 	

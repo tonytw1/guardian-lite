@@ -32,8 +32,11 @@ public class keyword extends ArticleListActivity {
 		updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
 	}
 	
-	protected String getRefinementDescription() {
-		return "Articles tagged with " + getArticleSet().getName() + " have also been tagged with:";
+	protected String getRefinementDescription(String refinementType) {
+		if (refinementType.equals("keyword")) {
+			return "Articles tagged with " + getArticleSet().getName() + " have also been tagged with:";
+		}
+		return null;
 	}
 	
 	protected ArticleSet getArticleSet() {

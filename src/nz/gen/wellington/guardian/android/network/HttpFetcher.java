@@ -93,7 +93,6 @@ public class HttpFetcher {
 			get.addHeader(new BasicHeader("User-agent", "gzip"));
 			get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
 			
-			announceDownloadStarted(uri);
 			HttpResponse execute = client.execute(get);
 			if (execute.getStatusLine().getStatusCode() == 200) {
 				long contentLength = execute.getEntity().getContentLength();
@@ -131,13 +130,6 @@ public class HttpFetcher {
 	} 
 	
 	
-	private void announceDownloadStarted(String url) {
-		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
-		intent.putExtra("type", HttpFetcher.DOWNLOAD_STARTED);
-		intent.putExtra("url", url);
-		context.sendBroadcast(intent);
-	}
-
 	private void announceDownloadFailed(String url) {
 		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
 		intent.putExtra("type", HttpFetcher.DOWNLOAD_FAILED);

@@ -38,8 +38,13 @@ public class section extends ArticleListActivity {
 	}
 		
 	@Override
-	protected String getRefinementDescription() {
-		return "These tags have been used recently within the " + getArticleSet().getName() + " section:";
+	protected String getRefinementDescription(String refinementType) {
+		if (refinementType.equals("blog")) {
+			return "These blog tags have been used recently in the " + getArticleSet().getName() + " section:";
+		} else if (refinementType.equals("contributor")) { 
+			return "These contributors have appeared recently in the " + getArticleSet().getName() + " section:";
+		}	
+		return "These keywords have been used recently within the " + getArticleSet().getName() + " section:";
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
