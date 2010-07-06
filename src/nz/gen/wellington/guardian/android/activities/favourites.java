@@ -67,8 +67,8 @@ public class favourites extends ArticleListActivity {
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Home");
-		menu.add(0, 2, 0, "Sections");
 		menu.add(0, 5, 0, "Refresh");
+		menu.add(0, 2, 0, "Sections");
 	    return true;
 	}
 	
@@ -80,8 +80,12 @@ public class favourites extends ArticleListActivity {
 			return true;
 		case 2:
 			switchToSections();
+			return true;		
+		case 5:
+			refresh(true);
 			return true;
 		}
+		
 		return false;
 	}
 

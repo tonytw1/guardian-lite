@@ -3,8 +3,8 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.activities.ui.Plurals;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
-import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
@@ -17,18 +17,14 @@ import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateArticleSetTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
-import nz.gen.wellington.guardian.android.activities.ui.Plurals;
-
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
