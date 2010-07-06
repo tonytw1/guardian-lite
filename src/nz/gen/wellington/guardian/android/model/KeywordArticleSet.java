@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.model;
 
+// TODO renamed to tag article set
 public class KeywordArticleSet implements ArticleSet {
 	
 	private static final long serialVersionUID = 1L;

@@ -6,7 +6,9 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
+import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
@@ -14,8 +16,6 @@ import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateArticleSetTask;
-import nz.gen.wellington.guardian.android.services.UpdateSectionArticlesTask;
-import nz.gen.wellington.guardian.android.services.UpdateTagArticlesTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -190,7 +190,7 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 		if (tags != null) {
 			for (Tag tag : tags) {
 				Log.i(TAG, "Injecting favourite tag into update queue: " + tag.getName());
-				taskQueue.addArticleTask(new UpdateTagArticlesTask(tag, this.getApplicationContext()));
+				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new KeywordArticleSet(tag)));
 			}
 		}
 	}
@@ -199,8 +199,8 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	private void queueSections(TaskQueue taskQueue, List<Section> sections) {
 		if (sections != null) {
 			for (Section section : sections) {
-				Log.i(TAG, "Injecting favourite section into update queue: " + section.getName());
-				taskQueue.addArticleTask(new UpdateSectionArticlesTask(section, this.getApplicationContext()));
+				Log.i(TAG, "Injecting favourite section into update queue: " + section.getName());				
+				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new SectionArticleSet(section)));
 			}
 		}
 	}
