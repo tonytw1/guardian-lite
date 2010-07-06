@@ -2,20 +2,21 @@ package nz.gen.wellington.guardian.android.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 
 public class ArticleBundle implements Serializable {
 	
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 	
 	List<Article> articles;
-	List<Tag> refinements;
+	Map<String, List<Tag>> refinements;
 	String checksum;
 	DateTime timestamp;
 	private String description;
 	
-	public ArticleBundle(List<Article> articles, List<Tag> refinements, String checksum, DateTime timestamp, String description) {
+	public ArticleBundle(List<Article> articles, Map<String, List<Tag>> refinements, String checksum, DateTime timestamp, String description) {
 		this.articles = articles;
 		this.refinements = refinements;
 		this.checksum = checksum;
@@ -27,7 +28,7 @@ public class ArticleBundle implements Serializable {
 		return articles;
 	}
 
-	public List<Tag> getRefinements() {
+	public Map<String, List<Tag>> getRefinements() {
 		return refinements;
 	}
 

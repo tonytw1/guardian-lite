@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -68,11 +70,11 @@ public class OpenPlatformJSONParser {
 		return null;
 	}
 	
-	public List<Tag> getRefinements() {
+	public Map<String, List<Tag>> getRefinements() {
 		if (hb != null) {
 			return hb.getRefinements();
 		}
-		return new ArrayList<Tag>();
+		return new HashMap<String, List<Tag>>();
 	}
 
 	
@@ -95,7 +97,7 @@ public class OpenPlatformJSONParser {
 	 class ResultsHandler extends HandlerBase {
          
 		 List<Article> articles;
-		 List<Tag> refinements;
+		 Map<String, List<Tag>> refinements;
          Article article;
          String checksum;
          String description;
@@ -111,7 +113,7 @@ public class OpenPlatformJSONParser {
         	 this.sections = sections;
          }
                   
-         public List<Tag> getRefinements() {
+         public Map<String, List<Tag>> getRefinements() {
 			return refinements;
          }
          
@@ -141,7 +143,7 @@ public class OpenPlatformJSONParser {
 		public void startDocument() throws SAXException {
 			super.startDocument();
 			articles = new LinkedList<Article>();
-			refinements = new LinkedList<Tag>();
+			refinements = new HashMap<String, List<Tag>>();
 		}
 
          @Override
@@ -208,14 +210,20 @@ public class OpenPlatformJSONParser {
         	 }
         	 
         	 if (name.equals("refinement")) {
-        		 if (currentRefinementGroupType != null && currentRefinementGroupType.equals("keyword")) {
+        		 if (currentRefinementGroupType != null) {
         			 final String tagId = attributes.getValue("id");
         			 final String sectionId = tagId.split("/")[0];
-
+        			 
         			 Section section = getSectionById(sectionId);
         			 Log.i(TAG, "Found refinement keyword: " + tagId);
-        			 refinements.add(new Tag(attributes.getValue("display-name"), tagId, section));        			 
-        		 }        		 
+        			 
+        			 List<Tag> refinementGroup = refinements.get(currentRefinementGroupType);
+        			 if (refinementGroup == null) {
+        				 refinementGroup = new ArrayList<Tag>();
+        				 refinements.put(currentRefinementGroupType, refinementGroup);
+        			 }       			 
+        			 refinementGroup.add(new Tag(attributes.getValue("display-name"), tagId, section));        			 
+        		 }    		 
         	 }
         	         	 
         	 if (name.equals("asset")) {

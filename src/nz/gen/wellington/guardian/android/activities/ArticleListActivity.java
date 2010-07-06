@@ -247,18 +247,21 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	
 			    case 4:			    	
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
-			    	List<Tag> refinements = bundle.getRefinements();
+			    	Map<String, List<Tag>> refinements = bundle.getRefinements();
 			    	
 			    	if (refinements != null && !refinements.isEmpty()) {
 			    		LayoutInflater inflater = LayoutInflater.from(context);
-						View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);
-
-						TextView description = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);			    		
-			    		description.setText(getRefinementDescription());
 			    		
-			    		mainpane.addView(refinementsHeadingView);
+			    		for (String refinementType : refinements.keySet()) {
+			    			View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);
+			    			
+			    			TextView description = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);			    		
+			    			//description.setText(getRefinementDescription());
+			    			description.setText(refinementType);
+			    			mainpane.addView(refinementsHeadingView);			    			
+			    			TagListPopulatingService.populateTags(inflater, true, mainpane, refinements.get(refinementType), context);
+						}
 			    		
-			    		TagListPopulatingService.populateTags(inflater, true, mainpane, refinements, context);			    	
 			    	}
 			    	return;
 			    				    	
