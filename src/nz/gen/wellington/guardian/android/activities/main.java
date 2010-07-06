@@ -36,7 +36,7 @@ public class main extends ArticleListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);        
-        hindHeading();
+        hindHeading();	// TODO
     	updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
     	showSeperators = true;
     	showMainImage = false;

@@ -142,22 +142,21 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		return mainPane.getChildCount() == 0;
 	}
 	
-	protected void setHeading(String headingText) {
+	protected final void setHeading(String headingText) {
 		TextView heading = (TextView) findViewById(R.id.Heading);
 		heading.setText(headingText);		
 	}
 	
-	protected void hindHeading() {
-		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
-		heading.setVisibility(View.GONE);
-	}
-	
-	protected void setHeadingColour(String colour) {
+	protected final void setHeadingColour(String colour) {
 		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
 		heading.setBackgroundColor(Color.parseColor(colour));
 	}
 	
-	
+	protected final void hindHeading() {
+		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
+		heading.setVisibility(View.GONE);
+	}
+		
 	private ArticleBundle loadArticles(boolean uncached) {
 		return articleDAO.getArticleSetArticles(getArticleSet(), uncached);
 	}

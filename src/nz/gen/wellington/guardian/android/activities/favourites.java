@@ -5,31 +5,30 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class favourites extends Activity {
+public class favourites extends ArticleListActivity {
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.favourites);
-        
+        //setContentView(R.layout.favourites);        
         setHeading("Favourites");
         setHeadingColour("#0061A6");
+    	updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());	// TODO this should in super class.
+    	showSeperators = true;
+    	showMainImage = true;
 	}
 
 	
@@ -38,8 +37,8 @@ public class favourites extends Activity {
 		super.onStart();
 		
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
-		mainPane.removeAllViews();
-		populateFavourites();		
+		//mainPane.removeAllViews();
+		//populateFavourites();		
 	}
 
 
@@ -84,28 +83,28 @@ public class favourites extends Activity {
 		}
 		return false;
 	}
+
 	
-	
-	private void switchToMain() {
-		Intent intent = new Intent(this, main.class);
-		this.startActivity(intent);	
+	@Override
+	protected ArticleSet getArticleSet() {
+		FavouriteSectionsAndTagsDAO dao = new FavouriteSectionsAndTagsDAO(articleDAO, this);
+		
+		List<Section> favouriteSections = dao.getFavouriteSections();
+		List<Tag> favouriteTags = dao.getFavouriteTags();
+		
+		if (favouriteSections.isEmpty() && favouriteTags.isEmpty()) {
+			return null;	// TODO this needs to be null safed upstream
+			
+		} else {
+			return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);
+		}
 	}
-	
-	private void switchToSections() {
-		Intent intent = new Intent(this, sections.class);
-		this.startActivity(intent);		
-	}
-	
-	
-	// TODO duplication
-	protected void setHeading(String headingText) {
-		TextView heading = (TextView) findViewById(R.id.Heading);
-		heading.setText(headingText);		
-	}
-	// TODO duplication
-	protected void setHeadingColour(String colour) {
-		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
-		heading.setBackgroundColor(Color.parseColor(colour));
+
+
+	@Override
+	protected String getRefinementDescription() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
