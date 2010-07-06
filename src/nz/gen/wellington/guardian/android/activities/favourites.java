@@ -23,7 +23,7 @@ public class favourites extends ArticleListActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.favourites);        
+        setContentView(R.layout.favourites);        
         setHeading("Favourites");
         setHeadingColour("#0061A6");
     	updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());	// TODO this should in super class.
@@ -36,9 +36,9 @@ public class favourites extends ArticleListActivity {
 	protected void onStart() {
 		super.onStart();
 		
-		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
-		//mainPane.removeAllViews();
-		//populateFavourites();		
+		LinearLayout favouritesPane = (LinearLayout) findViewById(R.id.FavouritesPane);
+		favouritesPane.removeAllViews();
+		populateFavourites();		
 	}
 
 
@@ -50,7 +50,7 @@ public class favourites extends ArticleListActivity {
 		TextView description = (TextView) findViewById(R.id.Description);
 		if (hasFavourites) {
 			LayoutInflater inflater = LayoutInflater.from(this);
-			LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);
+			LinearLayout authorList = (LinearLayout) findViewById(R.id.FavouritesPane);
 		
 			boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();
 			TagListPopulatingService.populateSections(inflater, connectionIsAvailable, authorList, favouriteSections, this.getApplicationContext());
@@ -68,6 +68,7 @@ public class favourites extends ArticleListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Home");
 		menu.add(0, 2, 0, "Sections");
+		menu.add(0, 5, 0, "Refresh");
 	    return true;
 	}
 	
@@ -86,18 +87,16 @@ public class favourites extends ArticleListActivity {
 
 	
 	@Override
-	protected ArticleSet getArticleSet() {
+	protected ArticleSet getArticleSet() {	
 		FavouriteSectionsAndTagsDAO dao = new FavouriteSectionsAndTagsDAO(articleDAO, this);
 		
 		List<Section> favouriteSections = dao.getFavouriteSections();
 		List<Tag> favouriteTags = dao.getFavouriteTags();
 		
-		if (favouriteSections.isEmpty() && favouriteTags.isEmpty()) {
-			return null;	// TODO this needs to be null safed upstream
-			
-		} else {
-			return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);
+		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
+			return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);			
 		}
+		return null;	// TODO this needs to be null safed upstream
 	}
 
 

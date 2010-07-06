@@ -53,29 +53,10 @@ public class main extends ArticleListActivity {
 	
 	@Override
 	protected ArticleSet getArticleSet() {
-		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-		final boolean homepageFavourites = (Boolean) prefs.getBoolean("homepageFavourites", true);
-		
-		if (homepageFavourites) {
-			FavouriteSectionsAndTagsDAO dao = new FavouriteSectionsAndTagsDAO(articleDAO, this);
-	
-			List<Section> favouriteSections = dao.getFavouriteSections();
-			List<Tag> favouriteTags = dao.getFavouriteTags();
-		
-			if (favouriteSections.isEmpty() && favouriteTags.isEmpty()) {
-				Log.i(TAG, "Using top stories article set as favourites are empty");
-				return new TopStoriesArticleSet();
-			} else {
-				return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);
-			}
-		
-		} else {
-			return new TopStoriesArticleSet();
-		}
-		
+		return new TopStoriesArticleSet();		
 	}
 	
-		
+	
 	@Override
 	protected String getRefinementDescription() {
 		return null;

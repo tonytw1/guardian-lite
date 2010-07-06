@@ -104,21 +104,13 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 			
 			List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();		
 			List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags(); // TODO move favourites dao to singleton.
-			
-			SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-			final boolean homepageFavourites = (Boolean) prefs.getBoolean("homepageFavourites", true);
-			
-			ArticleSet homePageArticleSet = new TopStoriesArticleSet();
+		
 			if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
 				queueFavoriteSections(taskQueue, favouriteSections);
-				queueFavouriteTags(taskQueue, favouriteTags);
-				
-				if (homepageFavourites) {
-					homePageArticleSet = new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);
-				}
-			}
-			
-			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), homePageArticleSet));
+				queueFavouriteTags(taskQueue, favouriteTags);				
+				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(),  new FavouriteStoriesArticleSet(favouriteSections, favouriteTags)));
+			}						
+			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new TopStoriesArticleSet()));
 									
 			contentUpdateService.start();
 			updateStatus();
