@@ -17,6 +17,8 @@ import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateArticleSetTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
+import nz.gen.wellington.guardian.android.activities.ui.Plurals;
+
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -212,21 +214,13 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 			status.setVisibility(View.GONE);
 			return;
 		}
-		final String statusMessage =  articles + " article " + getPrural("set", articles) + " and " 
-		+ images + " " + getPrural("image", images) + " to load.";
+		final String statusMessage =  articles + " article " + Plurals.getPrural("set", articles) + " and " 
+		+ images + " " + Plurals.getPrural("image", images) + " to load.";
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);
 	}
 	
 	
-	private String getPrural(String word, int count) {
-		if (count != 1) {
-			return word + "s";
-		}
-		return word;
-	}
-
-
 	private void updateCurrentTask(String taskName) {
 		TextView currentTask = (TextView) findViewById(R.id.CurrentTask);
 		currentTask.setText(taskName);
