@@ -21,6 +21,7 @@ public class FileService {
 	public static final int INTERNAL_CACHE = 1;
 	public static final int SDCARD = 2;
 	public static final int EXTERNAL_SDCARD_SAMSUNG_I7500 = 3;
+	private static final String VERSION_SUFFIX = "v1";
 	
 	
 	public static FileOutputStream getFileOutputStream(Context context, String url) throws FileNotFoundException {
@@ -61,7 +62,7 @@ public class FileService {
 	}
 	
 	public static String getLocalFilename(String url) {
-		return url.replaceAll("/", "").replaceAll(":", "");
+		return url.replaceAll("/", "").replaceAll(":", "") + VERSION_SUFFIX;
 	}
 
 	public static void clear(Context context, String apiUrl) {
@@ -138,9 +139,9 @@ public class FileService {
 		case INTERNAL_CACHE:
 			return context.getCacheDir();
 		case SDCARD:
-			return getExternalSDCardCacheFolder("/guardian/");
+			return getExternalSDCardCacheFolder("/guardian-lite/");
 		case EXTERNAL_SDCARD_SAMSUNG_I7500:
-			return getExternalSDCardCacheFolder("/sd/guardian/");
+			return getExternalSDCardCacheFolder("/sd/guardian-lite/");
 
 		default:
 			return context.getCacheDir();
