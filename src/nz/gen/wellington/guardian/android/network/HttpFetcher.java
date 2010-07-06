@@ -121,7 +121,6 @@ public class HttpFetcher {
 									
 		} catch (Exception e) {
 			Log.e(TAG, "Http exception: " + e.getMessage());
-			announceDownloadFailed(uri);
 		}
 		return null;
 	}
