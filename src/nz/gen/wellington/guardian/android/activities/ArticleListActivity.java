@@ -175,11 +175,13 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		boolean isFirstOfSection;
 		Section currentSection;
 		private ArticleSet articleSet;
+		private boolean descriptionSet;
 		
 		public UpdateArticlesHandler(Context context, ArticleSet articleSet) {
 			super();
 			this.context = context;
 			this.articleSet = articleSet;
+			this.descriptionSet = false;
 			init();
 		}
 		
@@ -243,10 +245,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
 			    	Bundle descriptionData = msg.getData();
 			    	String descripton = descriptionData.getString("description");
-			    	if (descripton != null) {
-			    		TextView descriptionView = new TextView(context);
-			    		descriptionView.setText(descripton);
-			    		mainpane.addView(descriptionView, 0);
+			    	if (descripton != null && !descriptionSet) {
+			    		populateTagDescription(mainpane, descripton);
 			    	}
 			    	return;
 			    	
@@ -276,6 +276,15 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					mainpane.addView(message, 0);
 					return;
 			}
+		}
+
+
+		private void populateTagDescription(LinearLayout mainpane, String descripton) {
+			TextView descriptionView = new TextView(context);
+			descriptionView.setText(descripton);
+			descriptionView.setPadding(3, 3, 3, 15);
+			mainpane.addView(descriptionView, 0);
+			descriptionSet = true;
 		}
 
 		
@@ -421,6 +430,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				return;
 			}
 			
+			if (bundle.getDescription() != null) {
+				sendDescriptionReadyMessage(bundle.getDescription());
+			}
 			
 			Message m = new Message();
 			m.what = 4;
