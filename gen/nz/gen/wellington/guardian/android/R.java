@@ -24,14 +24,14 @@ public final class R {
     }
     public static final class id {
         public static final int ArticleImage=0x7f07000a;
-        public static final int ArticleListLayout=0x7f07001a;
-        public static final int AuthorList=0x7f07000f;
+        public static final int ArticleListLayout=0x7f07001b;
+        public static final int AuthorList=0x7f070010;
         public static final int Byline=0x7f07000d;
         public static final int Caption=0x7f07000b;
-        public static final int CurrentTask=0x7f070024;
+        public static final int CurrentTask=0x7f070025;
         public static final int Description=0x7f070004;
-        public static final int DownloadProgress=0x7f070013;
-        public static final int FavouritesPane=0x7f070015;
+        public static final int DownloadProgress=0x7f070014;
+        public static final int FavouritesPane=0x7f070016;
         public static final int GuardianLogo=0x7f070005;
         public static final int Heading=0x7f070003;
         public static final int HeadingLayout=0x7f070006;
@@ -39,28 +39,29 @@ public final class R {
         public static final int KingsPlace=0x7f070002;
         public static final int LinearLayout01=0x7f070001;
         public static final int LinearLayout02=0x7f070007;
-        public static final int LinearLayout03=0x7f070019;
-        public static final int MainPane=0x7f070016;
-        public static final int Ok=0x7f07001c;
-        public static final int Outer=0x7f070012;
+        public static final int LinearLayout03=0x7f07001a;
+        public static final int MainPane=0x7f070017;
+        public static final int Ok=0x7f07001d;
+        public static final int Outer=0x7f070013;
         public static final int PubDate=0x7f07000e;
-        public static final int Pubdate=0x7f070018;
-        public static final int RefinementsDescription=0x7f07001d;
-        public static final int Report=0x7f07001b;
-        public static final int Scroll=0x7f070014;
+        public static final int Pubdate=0x7f070019;
+        public static final int RefinementsDescription=0x7f07001e;
+        public static final int Report=0x7f07001c;
+        public static final int Scroll=0x7f070015;
         public static final int ScrollView01=0x7f070000;
-        public static final int SectionImage=0x7f07001e;
-        public static final int SectionName=0x7f07001f;
-        public static final int Seperator=0x7f070020;
+        public static final int SectionImage=0x7f07001f;
+        public static final int SectionName=0x7f070020;
+        public static final int Seperator=0x7f070021;
         public static final int Standfirst=0x7f070009;
-        public static final int Status=0x7f070023;
-        public static final int StatusMessage=0x7f070021;
-        public static final int StopDownloadButton=0x7f070025;
-        public static final int TagList=0x7f070010;
-        public static final int TagName=0x7f070011;
+        public static final int Status=0x7f070024;
+        public static final int StatusMessage=0x7f070022;
+        public static final int StopDownloadButton=0x7f070026;
+        public static final int TagLabel=0x7f07000f;
+        public static final int TagList=0x7f070011;
+        public static final int TagName=0x7f070012;
         public static final int TextView01=0x7f07000c;
-        public static final int TrailImage=0x7f070017;
-        public static final int buttonStart=0x7f070022;
+        public static final int TrailImage=0x7f070018;
+        public static final int buttonStart=0x7f070023;
     }
     public static final class layout {
         public static final int about_dialog=0x7f030000;

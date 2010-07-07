@@ -158,7 +158,11 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	}
 		
 	private ArticleBundle loadArticles(boolean uncached) {
-		return articleDAO.getArticleSetArticles(getArticleSet(), uncached);
+		ArticleSet articleSet = getArticleSet();
+		if (articleSet != null) {
+			return articleDAO.getArticleSetArticles(articleSet, uncached);
+		}
+		return null;
 	}
 	
 	protected abstract ArticleSet getArticleSet();
