@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
+
 import org.joda.time.DateTime;
 
 import android.content.Context;
@@ -21,7 +23,7 @@ public class FileService {
 	public static final int INTERNAL_CACHE = 1;
 	public static final int SDCARD = 2;
 	public static final int EXTERNAL_SDCARD_SAMSUNG_I7500 = 3;
-	private static final String VERSION_SUFFIX = "v1";
+	private static final String VERSION_SUFFIX = "v2";
 	
 	
 	public static FileOutputStream getFileOutputStream(Context context, String url) throws FileNotFoundException {
@@ -102,7 +104,7 @@ public class FileService {
 		FileFilter jsonFilesFilter = new FileFilter() {				
 			@Override
 			public boolean accept(File file) {
-				return calculateFileModTime(file).isBefore(new DateTime().minusDays(1));
+				return calculateFileModTime(file).isBefore(DateTimeHelper.now().minusDays(1));
 			}
 		};
 		deleteFiles(context, jsonFilesFilter);
@@ -157,7 +159,7 @@ public class FileService {
 	
 	
 	private static void touchFileModTime(File localFile) {
-		DateTime modTime = new DateTime();
+		DateTime modTime = DateTimeHelper.now();
 		localFile.setLastModified(modTime.toDate().getTime());
 	}
 	

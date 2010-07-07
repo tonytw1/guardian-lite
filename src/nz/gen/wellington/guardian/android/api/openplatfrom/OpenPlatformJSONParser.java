@@ -16,14 +16,13 @@ import javax.xml.parsers.SAXParserFactory;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ArticleBodyCleaner;
+import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +36,6 @@ import android.util.Log;
 public class OpenPlatformJSONParser {
 			
 	private static final String TAG = "OpenPlatformJSONParser";
-	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 	
 	public static final String ARTICLE_AVAILABLE = "nz.gen.wellington.guardian.android.api.ARTICLE_AVAILABLE";
 
@@ -167,8 +165,7 @@ public class OpenPlatformJSONParser {
         		 
         		 final String dateString = attributes.getValue("web-publication-date");
         		 try {
-        			 DateTimeFormatter fmt = DateTimeFormat.forPattern(DATE_TIME_FORMAT);
-        			 article.setPubDate(fmt.parseDateTime(dateString));
+        			 article.setPubDate(DateTimeHelper.parseDate(dateString));
         		 } catch (Exception e) {
         				Log.e(TAG, "Failed to parse date '" + dateString +  "': " + e.getMessage());
         		 }

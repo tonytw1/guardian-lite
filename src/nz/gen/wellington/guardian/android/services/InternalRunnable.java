@@ -3,6 +3,7 @@ package nz.gen.wellington.guardian.android.services;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.notification;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 
@@ -166,7 +167,7 @@ public class InternalRunnable implements Runnable {
 	 
 	
 		private String calculateTimeTaken(ContentUpdateReport report) {
-			Interval timeTaken = new Interval(report.getStartTime().getMillis(), new DateTime().getMillis());
+			Interval timeTaken = new Interval(report.getStartTime().getMillis(), DateTimeHelper.now().getMillis());
 		    PeriodFormatter pf = new PeriodFormatterBuilder().printZeroRarelyFirst()
 	        .appendYears().appendSuffix("y ", "y ")
 	        .appendMonths().appendSuffix("m" , "m ")

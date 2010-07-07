@@ -7,6 +7,7 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ContentSource;
+import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -15,8 +16,6 @@ import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
-
-import org.joda.time.DateTime;
 
 import android.content.Context;
 import android.content.Intent;
@@ -64,7 +63,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		if (input != null) {
 			List<Article> articles = contentParser.parseArticlesXml(input, sections, articleCallback);			
 			if (articles != null && !articles.isEmpty()) {
-				return new ArticleBundle(articles, contentParser.getRefinements(), contentParser.getChecksum(), new DateTime(), contentParser.getDescription());
+				return new ArticleBundle(articles, contentParser.getRefinements(), contentParser.getChecksum(), DateTimeHelper.now(), contentParser.getDescription());
 			}
 		}
 		return null;

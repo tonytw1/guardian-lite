@@ -1,5 +1,7 @@
 package nz.gen.wellington.guardian.android.model;
 
+import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
+
 import org.joda.time.DateTime;
 
 
@@ -15,7 +17,7 @@ public class ContentUpdateReport {
 		sectionCount = 0;
 		articleCount = 0;
 		imageCount = 0;
-		startTime = new DateTime();
+		startTime = DateTimeHelper.now();
 	}
 
 
