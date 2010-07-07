@@ -28,7 +28,7 @@ public class favourites extends ArticleListActivity {
         setHeadingColour("#0061A6");
     	updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());	// TODO this should in super class.
     	showSeperators = true;
-    	showMainImage = true;
+    	showMainImage = false;
 	}
 
 	
@@ -106,7 +106,6 @@ public class favourites extends ArticleListActivity {
 
 	@Override
 	protected String getRefinementDescription(String refinementType) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

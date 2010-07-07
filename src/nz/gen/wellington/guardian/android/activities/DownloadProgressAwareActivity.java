@@ -47,7 +47,7 @@ public class DownloadProgressAwareActivity extends MenuedActivity {
 	}
 	
 	final protected void showDownloadStart(String url) {
-		final String statusMessage =  "Downloading: " + url;
+		final String statusMessage =  "Downloading article set: " + url;
 		TextView status = (TextView) findViewById(R.id.DownloadProgress);
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);
