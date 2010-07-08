@@ -15,7 +15,7 @@ import nz.gen.wellington.guardian.android.model.Section;
 public interface ContentSource {
 
 	public List<Section> getSections();
-	ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback);
+	ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback, int pageSize);
 	public void stopLoading();
 	public String getRemoteChecksum(ArticleSet articleSet);
 

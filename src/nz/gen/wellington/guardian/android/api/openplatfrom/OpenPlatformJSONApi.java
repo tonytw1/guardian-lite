@@ -19,6 +19,8 @@ import nz.gen.wellington.guardian.android.network.HttpFetcher;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class OpenPlatformJSONApi implements ContentSource {
@@ -32,25 +34,18 @@ public class OpenPlatformJSONApi implements ContentSource {
 	private HttpFetcher httpFetcher;
 
 	private Context context;
-	private int pageSize;
-	private String trialKey;
+
 	
-	
-	public OpenPlatformJSONApi(Context context, int pageSize, String trialKey) {
+	public OpenPlatformJSONApi(Context context) {
 		this.context = context;
 		httpFetcher = new HttpFetcher(context);
-		contentParser = new OpenPlatformJSONParser(context);
-		this.pageSize = pageSize;
-		this.trialKey = trialKey;
+		contentParser = new OpenPlatformJSONParser(context);		
 	}
 
 	
 	@Override
-	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {		
-		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
-		if (!"sausages".equals(trialKey)) {
-			return null;
-		}
+	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback, int pageSize) {		
+		Log.i(TAG, "Fetching articles for: " + articleSet.getName());		
 		final String apiUrl = articleSet.getApiUrl();
 		
 		InputStream input = null;		
@@ -80,7 +75,11 @@ public class OpenPlatformJSONApi implements ContentSource {
 
 	@Override
 	public String getRemoteChecksum(ArticleSet articleSet) {
-		InputStream input = null;		
+		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);	// TODO page size moves up to argument
+		final String pageSizeString = prefs.getString("pageSize", "10");
+		int pageSize = Integer.parseInt(pageSizeString);
+		
+		InputStream input = null;
 		if (input == null) {
 			Log.i(TAG, "Fetching article set checksum from live api: " + articleSet.getApiUrl());
 			input = getHttpInputStream(buildContentQueryUrl(articleSet, false, pageSize));

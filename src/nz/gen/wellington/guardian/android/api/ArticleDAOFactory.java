@@ -3,8 +3,6 @@ package nz.gen.wellington.guardian.android.api;
 import nz.gen.wellington.guardian.android.api.openplatfrom.OpenPlatformJSONApi;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 public class ArticleDAOFactory {
 
@@ -16,13 +14,7 @@ public class ArticleDAOFactory {
 	}
 	
 	public static ContentSource getOpenPlatformApi(Context context) {
-		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
-
-		final String pageSizeString = prefs.getString("pageSize", "10");
-		int pageSize = Integer.parseInt(pageSizeString);
-		
-		final String trailKey = prefs.getString("trialKey", "");		
-		return new OpenPlatformJSONApi(context, pageSize, trailKey);
+		return new OpenPlatformJSONApi(context);
 	}
 	
 	public static TaskQueue getTaskQueue(Context context) {

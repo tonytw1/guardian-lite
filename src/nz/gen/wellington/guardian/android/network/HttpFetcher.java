@@ -95,9 +95,7 @@ public class HttpFetcher {
 			
 			HttpResponse execute = client.execute(get);
 			if (execute.getStatusLine().getStatusCode() == 200) {
-				long contentLength = execute.getEntity().getContentLength();
-				Log.d(TAG, "Content length: " + contentLength);
-				
+				long contentLength = execute.getEntity().getContentLength();				
 				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context, contentLength);				
 				return is;				
 			}

@@ -23,8 +23,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,8 +52,7 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "Starting content update service service");
-        startService(new Intent(this, ContentUpdateService.class)); 
+        startService(new Intent(this, ContentUpdateService.class));
         
         setContentView(R.layout.sync);
         		
@@ -98,15 +99,19 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 
 		case R.id.buttonStart:
 			
+			SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+			final String pageSizeString = prefs.getString("pageSize", "10");
+			int pageSize = Integer.parseInt(pageSizeString);
+			
 			List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();		
 			List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags(); // TODO move favourites dao to singleton.
 		
 			if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
-				queueFavoriteSections(taskQueue, favouriteSections);
-				queueFavouriteTags(taskQueue, favouriteTags);				
-				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(),  new FavouriteStoriesArticleSet(favouriteSections, favouriteTags)));
-			}						
-			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new TopStoriesArticleSet()));
+				queueSections(taskQueue, favouriteSections, pageSize);
+				queueTags(taskQueue, favouriteTags, pageSize);
+				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(),  new FavouriteStoriesArticleSet(favouriteSections, favouriteTags), pageSize));
+			}
+			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new TopStoriesArticleSet(), pageSize));
 									
 			contentUpdateService.start();
 			updateStatus();
@@ -171,26 +176,21 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	}
 
 
-	private void queueFavoriteSections(TaskQueue taskQueue, List<Section> favouriteSections) {
-		queueSections(taskQueue, favouriteSections);
-	}
-	
-	
-	private void queueFavouriteTags(TaskQueue taskQueue, List<Tag> tags) {
+	private void queueTags(TaskQueue taskQueue, List<Tag> tags, int pageSize) {
 		if (tags != null) {
 			for (Tag tag : tags) {
 				Log.i(TAG, "Injecting favourite tag into update queue: " + tag.getName());
-				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new KeywordArticleSet(tag)));
+				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new KeywordArticleSet(tag), pageSize));
 			}
 		}
 	}
 
 
-	private void queueSections(TaskQueue taskQueue, List<Section> sections) {
+	private void queueSections(TaskQueue taskQueue, List<Section> sections, int pageSize) {
 		if (sections != null) {
 			for (Section section : sections) {
 				Log.i(TAG, "Injecting favourite section into update queue: " + section.getName());				
-				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new SectionArticleSet(section)));
+				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new SectionArticleSet(section), pageSize));
 			}
 		}
 	}
@@ -253,13 +253,11 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	private ServiceConnection mConnection = new ServiceConnection() {
 	    public void onServiceConnected(ComponentName className, IBinder service) {
 	        contentUpdateService = ((ContentUpdateService.ContentUpdateServiceBinder)service).getService();
-	        Log.d(TAG, "Content update service is bound");
 	        updateStatus();
 	    }
 
 	    public void onServiceDisconnected(ComponentName className) {
 	        contentUpdateService = null;
-	        Log.d(TAG, "Content update service is unbound");
 	    }
 	};
 

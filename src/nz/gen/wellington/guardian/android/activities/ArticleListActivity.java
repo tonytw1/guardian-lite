@@ -110,10 +110,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			
 			loader = new Thread(updateArticlesRunner);
 			loader.start();
-			Log.d(TAG, "Loader started");
-
-		} else {
-			Log.i(TAG, "Loader already alive - not running");
 		}
 	}
 	
@@ -129,9 +125,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.d(TAG, "On stop - want to halt any running threads");
 		updateArticlesRunner.stop();
-		Log.d(TAG, "Loader stopped");
 		unregisterReceiver(articlesAvailableReceiver);
 		unregisterReceiver(downloadProgressReceiver);
 		hideDownloadProgress();
@@ -197,9 +191,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			
 			switch (msg.what) {	   
 			    case 1: 		
-			    	Article article = (Article) msg.getData().getSerializable("article");
-			    	Log.d("UpdateArticlesHandler", "Populating article");
-				
+			    	Article article = (Article) msg.getData().getSerializable("article");				
 					LayoutInflater mInflater = LayoutInflater.from(context);
 					LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);					
 					if (showSeperators) {
@@ -325,7 +317,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		}
 
 		private void populateArticleListView(Article article, View view, boolean shouldUseFeatureTrail) {
-			Log.d(TAG, "Populating view for article: " + article.getTitle());
 			TextView titleText = (TextView) view.findViewById(R.id.Headline);
 			titleText.setText(article.getTitle());
 			
@@ -416,7 +407,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		}
 
 		public void run() {
-			Log.d("UpdateArticlesRunner", "Loading articles");
 
 			if (running) {
 				bundle = loadArticles(uncached);
@@ -425,7 +415,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			if (bundle == null) {
 				Message m = new Message();
 				m.what = 2;
-				Log.d(TAG, "Sending message; articles failed to load");
 				updateArticlesHandler.sendMessage(m);
 				return;
 			}
@@ -473,7 +462,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			
 			if (running) {
 				for (Article article : downloadTrailImages) {
-					Log.d(TAG, "Downloading trail image: " + downloadTrailImages);
 					imageDAO.fetchLiveImage(article.getThumbnailUrl());
 					m = new Message();
 					m.what = 3;

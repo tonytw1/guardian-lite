@@ -58,7 +58,6 @@ public class ImageDAO {
 			return null;
 		}
 		
-		Log.d(TAG, "Image file bytes: " + Integer.toString(image.length));
 		Log.i(TAG, "Writing image to disk: " + url);
 		ObjectOutputStream out = null;
 		try {		

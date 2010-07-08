@@ -20,6 +20,8 @@ import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import org.joda.time.DateTime;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class ArticleDAO {
@@ -72,9 +74,13 @@ public class ArticleDAO {
 			}		
 		}
 		
+		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
+		final String pageSizeString = prefs.getString("pageSize", "10");
+		int pageSize = Integer.parseInt(pageSizeString);
+		
 		List<Section> sections = this.getSections();
 		if (sections != null) {
-			bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback);		
+			bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback, pageSize);		
 			if (bundle != null) {
 				Log.i(TAG, "Got article bundle from api call");
 				fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);

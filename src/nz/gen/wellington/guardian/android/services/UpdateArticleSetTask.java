@@ -15,12 +15,14 @@ public class UpdateArticleSetTask extends ArticleUpdateTask implements ContentUp
 
 	private static final String TAG = "UpdateTopStoriesTask";
 	private ArticleSet articleSet;
+	private int pageSize;
 	
 	
-	public UpdateArticleSetTask(Context context, ArticleSet articleSet) {
+	public UpdateArticleSetTask(Context context, ArticleSet articleSet, int pageSize) {
 		this.context = context;
 		this.articleDAO = ArticleDAOFactory.getDao(context);
 		this.articleSet = articleSet;
+		this.pageSize = pageSize;
 	}
 
 	
@@ -36,8 +38,8 @@ public class UpdateArticleSetTask extends ArticleUpdateTask implements ContentUp
 				
 		ContentSource api = ArticleDAOFactory.getOpenPlatformApi(context);
 		List<Section> sections = ArticleDAOFactory.getDao(context).getSections();
-		
-		ArticleBundle bundle = api.getArticles(articleSet, sections, null);
+			
+		ArticleBundle bundle = api.getArticles(articleSet, sections, null, pageSize);
 		if (bundle != null) {
 			FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
 			fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);

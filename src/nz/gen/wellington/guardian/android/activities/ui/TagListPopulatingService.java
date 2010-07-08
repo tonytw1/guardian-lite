@@ -11,7 +11,6 @@ import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ public class TagListPopulatingService {
 
 	public static void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<Tag> tags, Context context) {		
 		for (Tag tag : tags) {
-			Log.d(TAG, "Populating tag: " + tag.getId() + " (" + tag.getName() + ")");
+			//Log.d(TAG, "Populating tag: " + tag.getId() + " (" + tag.getName() + ")");
 			View tagView = inflater.inflate(R.layout.authorslist, null);
 						
 			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);

@@ -37,7 +37,6 @@ public abstract class ArticleUpdateTask {
 	final protected void processArticles(List<Article> articles) {
 		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
 		final boolean largeImagesPreference = (Boolean) prefs.getBoolean("largeImages", true);
-		Log.d(TAG, "Large images is: " + largeImagesPreference);
 		NetworkStatusService networkStatusService = new NetworkStatusService(context);
 		final boolean largeImages = largeImagesPreference || networkStatusService.isWifiConnection();
 		
@@ -56,7 +55,6 @@ public abstract class ArticleUpdateTask {
 	final protected void queueImageDownloadIsNotAvailableLocally(String imageUrl) {
 		if (imageUrl != null && running) {
 			if (!ArticleDAOFactory.getImageDao(context).isAvailableLocally(imageUrl)) {
-				Log.d(TAG, "Queuing file for fetching: " + imageUrl);
 				ArticleDAOFactory.getTaskQueue(context).addImageTask(new ImageFetchTask(imageUrl, context));
 			}
 		}

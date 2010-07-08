@@ -20,10 +20,8 @@ public class NetworkStatusService {
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		if (activeNetworkInfo != null) {
 			final boolean available = activeNetworkInfo.isAvailable();
-			Log.d(TAG, "Active network connection was found: " + available);
 			return available;
 		}
-		Log.d(TAG, "No active network connection was found");
 		return false;
 	}
 	

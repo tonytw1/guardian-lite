@@ -34,7 +34,6 @@ public class notification extends Activity implements OnClickListener {
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		
 		Intent callingIntent = this.getIntent();
-		Log.d(TAG, callingIntent.toString());
 		String report = (String) callingIntent.getExtras().getString("report");
 		
 		TextView heading = (TextView) findViewById(R.id.Report);

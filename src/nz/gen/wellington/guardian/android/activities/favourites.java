@@ -60,7 +60,7 @@ public class favourites extends ArticleListActivity {
 			
 		} else {
 			description.setText("No favourite sections of tags have been set.\n\nAdd favourites to populate the favourite artilces view and to " +
-					"indiciate which ariticles should be downloaded for offline viewing.");			
+					"indicate which articles should be downloaded for offline viewing.");			
 		}
 	}
 	
