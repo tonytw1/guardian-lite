@@ -54,7 +54,6 @@ public class HttpFetcher {
 					throws HttpException, IOException {
 				if (!request.containsHeader("Accept-Encoding")) {
 					request.addHeader("Accept-Encoding", "gzip");
-					Log.i(TAG, "Added gzip header");
 				}
 			}
 		});
@@ -70,7 +69,6 @@ public class HttpFetcher {
 					HeaderElement[] codecs = ceheader.getElements();
 					for (int i = 0; i < codecs.length; i++) {
 						if (codecs[i].getName().equalsIgnoreCase("gzip")) {
-							Log.i(TAG, "Got gzip response");
 							response.setEntity(new GzipDecompressingEntity(
 									response.getEntity()));
 							return;

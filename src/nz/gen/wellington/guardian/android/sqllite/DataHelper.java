@@ -11,11 +11,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
-import android.util.Log;
 
 public class DataHelper {
-
-	private static final String TAG = "DataHelper";
 	
 	private Context context;
 	private SQLiteDatabase db;
@@ -84,7 +81,6 @@ public class DataHelper {
 				final String id = cursor.getString(1);
 				final String name = cursor.getString(2);
 				final String sectionId = cursor.getString(3);
-				Log.i(TAG, type + ", " + name + ", " + id);
 				if (type.equals("tag")) {
 					favouriteTags.add(new Tag(name, id, sectionsMap.get(sectionId)));
 				}
@@ -103,10 +99,7 @@ public class DataHelper {
 		if (cursor.moveToFirst()) {
 			do {
 				final String type = cursor.getString(0);
-				final String id = cursor.getString(1);
-				final String name = cursor.getString(2);
 				final String sectionId = cursor.getString(3);
-				Log.i(TAG, type + ", " + name + ", " + id);
 				if (type.equals("section")) {
 					Section section = sectionsMap.get(sectionId);
 					if (section != null) {
@@ -156,7 +149,6 @@ public class DataHelper {
 		
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			Log.w("Example", "Upgrading database, this will drop tables and recreate.");
 			db.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE);
 			onCreate(db);
 		}
