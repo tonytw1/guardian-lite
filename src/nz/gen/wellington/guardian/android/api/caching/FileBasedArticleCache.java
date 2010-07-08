@@ -5,15 +5,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Date;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
-
-import org.joda.time.DateTime;
-
 import android.content.Context;
 import android.util.Log;
 
@@ -104,7 +102,7 @@ public class FileBasedArticleCache {
 	}
 
 
-	public DateTime getModificationTime(ArticleSet articleSet) {
+	public Date getModificationTime(ArticleSet articleSet) {
 		return FileService.getModificationTime(context, articleSet.getApiUrl());
 	}
 		

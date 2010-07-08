@@ -21,8 +21,6 @@ import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 
-import org.joda.time.DateTime;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -474,9 +472,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				}		
 			}
 			
-			if (bundle != null) {
-				DateTime modificationTime = bundle.getTimestamp();
-				Log.i(TAG, "Article bundle timestamp is: " + bundle.getTimestamp() + " / " + modificationTime);			
+			//if (bundle != null) {
+				//Date modificationTime = bundle.getTimestamp();
+				//Log.i(TAG, "Article bundle timestamp is: " + bundle.getTimestamp() + " / " + modificationTime);			
 				
 				/*
 				if (modificationTime != null) {
@@ -511,7 +509,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				}
 				*/
 				
-			}
+			//}
 			
 			return;				
 		}

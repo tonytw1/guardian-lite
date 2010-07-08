@@ -3,15 +3,8 @@ package nz.gen.wellington.guardian.android.services;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.notification;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
-import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -166,7 +159,9 @@ public class InternalRunnable implements Runnable {
 		}
 	 
 	
-		private String calculateTimeTaken(ContentUpdateReport report) {
+		private String calculateTimeTaken(ContentUpdateReport report) {	// TODO reimplement
+			return null;			
+			/*
 			Interval timeTaken = new Interval(report.getStartTime().getMillis(), DateTimeHelper.now().getMillis());
 		    PeriodFormatter pf = new PeriodFormatterBuilder().printZeroRarelyFirst()
 	        .appendYears().appendSuffix("y ", "y ")
@@ -179,6 +174,7 @@ public class InternalRunnable implements Runnable {
 
 			String duration = pf.print(timeTaken.toPeriod()).trim();
 			return duration;
+			*/
 		}
 		
 }

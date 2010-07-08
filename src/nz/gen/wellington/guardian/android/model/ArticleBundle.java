@@ -1,10 +1,9 @@
 package nz.gen.wellington.guardian.android.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import org.joda.time.DateTime;
 
 public class ArticleBundle implements Serializable {
 	
@@ -13,10 +12,10 @@ public class ArticleBundle implements Serializable {
 	List<Article> articles;
 	Map<String, List<Tag>> refinements;
 	String checksum;
-	DateTime timestamp;
+	Date timestamp;
 	private String description;
 	
-	public ArticleBundle(List<Article> articles, Map<String, List<Tag>> refinements, String checksum, DateTime timestamp, String description) {
+	public ArticleBundle(List<Article> articles, Map<String, List<Tag>> refinements, String checksum, Date timestamp, String description) {
 		this.articles = articles;
 		this.refinements = refinements;
 		this.checksum = checksum;
@@ -40,7 +39,7 @@ public class ArticleBundle implements Serializable {
 		return description;
 	}
 
-	public DateTime getTimestamp() {
+	public Date getTimestamp() {
 		return timestamp;
 	}
 	

@@ -5,10 +5,9 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Date;
 
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
-
-import org.joda.time.DateTime;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -46,7 +45,7 @@ public class FileService {
 		return localFile.exists() && localFile.canRead();
 	}
 	
-	public static DateTime getModificationTime(Context context, String apiUrl) {
+	public static Date getModificationTime(Context context, String apiUrl) {
 		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
 		//Log.i(TAG, "Checking mod time for file at: " + localFile.getAbsolutePath());
 		if (localFile.exists()) {
@@ -104,7 +103,7 @@ public class FileService {
 		FileFilter jsonFilesFilter = new FileFilter() {				
 			@Override
 			public boolean accept(File file) {
-				return calculateFileModTime(file).isBefore(DateTimeHelper.now().minusDays(1));
+				return calculateFileModTime(file).before(DateTimeHelper.yesterday());
 			}
 		};
 		deleteFiles(context, jsonFilesFilter);
@@ -151,16 +150,16 @@ public class FileService {
 	}
 	
 	
-	private static DateTime calculateFileModTime(File localFile) {
-		DateTime modTime = new DateTime(localFile.lastModified());
+	private static Date calculateFileModTime(File localFile) {
+		Date modTime = new Date(localFile.lastModified());
 		Log.i(TAG, "Mod time is: " + modTime.toString() + " for: " + localFile.getAbsolutePath());
 		return modTime;
 	}
 	
 	
 	private static void touchFileModTime(File localFile) {
-		DateTime modTime = DateTimeHelper.now();
-		localFile.setLastModified(modTime.toDate().getTime());
+		Date modTime = DateTimeHelper.now();
+		localFile.setLastModified(modTime.getTime());
 	}
 	
 	private static File getExternalSDCardCacheFolder(String folderPath) {

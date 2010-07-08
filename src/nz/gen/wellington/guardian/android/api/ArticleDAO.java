@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.api;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +17,6 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-
-import org.joda.time.DateTime;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -121,7 +119,7 @@ public class ArticleDAO {
 		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), new ArticleBundle(topStories, null, null, DateTimeHelper.now(), null));
 	}
 
-	public DateTime getModificationTime(ArticleSet articleSet) {
+	public Date getModificationTime(ArticleSet articleSet) {
 		return fileBasedArticleCache.getModificationTime(articleSet);
 	}
 

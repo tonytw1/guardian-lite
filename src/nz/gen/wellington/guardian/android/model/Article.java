@@ -2,18 +2,17 @@ package nz.gen.wellington.guardian.android.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import org.joda.time.DateTime;
 
 public class Article implements Serializable {
 
-	private static final long serialVersionUID = 5L;
+	private static final long serialVersionUID = 6L;
 	
 	String id;
 	String title;
 	String byline;
-	DateTime pubDate;
+	Date pubDate;
 	String standfirst;
 	String description;
 	
@@ -49,12 +48,12 @@ public class Article implements Serializable {
 		this.standfirst = standfirst;
 	}
 
-	public DateTime getPubDate() {
+	public Date getPubDate() {
 		return pubDate;
 	}
 
-	public void setPubDate(DateTime dateTime) {
-		this.pubDate = dateTime;
+	public void setPubDate(Date date) {
+		this.pubDate = date;
 	}
 
 	public void setTitle(String title) {
@@ -115,7 +114,8 @@ public class Article implements Serializable {
 
 	public String getPubDateString() {
 		if (this.pubDate != null) {
-			return pubDate.toString("EEEE d MMMM yyyy HH.mm");			
+			//return pubDate.toString("EEEE d MMMM yyyy HH.mm");	// TODO reimplement
+			return pubDate.toGMTString();
 		}
 		return null;
 	}

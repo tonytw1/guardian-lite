@@ -1,14 +1,13 @@
 package nz.gen.wellington.guardian.android.model;
 
+import java.util.Date;
 import java.util.List;
-
-import org.joda.time.DateTime;
 
 import android.graphics.Bitmap;
 
 public class ImageDecoratedArticle extends Article {
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	Article article;
 	Bitmap thumbnail;
 
@@ -41,7 +40,7 @@ public class ImageDecoratedArticle extends Article {
 		return article.getKeywords();
 	}
 
-	public DateTime getPubDate() {
+	public Date getPubDate() {
 		return article.getPubDate();
 	}
 	

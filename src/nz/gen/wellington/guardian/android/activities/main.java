@@ -1,12 +1,11 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.Date;
+
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
-
-import org.joda.time.DateTime;
-
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,7 +16,7 @@ import android.widget.LinearLayout;
 
 public class main extends ArticleListActivity {
 	
-	private DateTime loaded;
+	private Date loaded;
 	
 	public main() {
 	}
@@ -34,9 +33,9 @@ public class main extends ArticleListActivity {
 	
 	
 	@Override
-	protected boolean shouldRefreshView(LinearLayout mainPane) {
-		DateTime modtime = ArticleDAOFactory.getDao(this.getApplicationContext()).getModificationTime(new TopStoriesArticleSet());
-		boolean topStoriesFileHasChanged = modtime != null && modtime.isAfter(loaded);
+	protected boolean shouldRefreshView(LinearLayout mainPane) {	// TODO load is not set - main is the only one which uses this?
+		Date modtime = ArticleDAOFactory.getDao(this.getApplicationContext()).getModificationTime(new TopStoriesArticleSet());
+		boolean topStoriesFileHasChanged = modtime != null && modtime.after(loaded);
 		return super.shouldRefreshView(mainPane) || topStoriesFileHasChanged;
 	}
 
