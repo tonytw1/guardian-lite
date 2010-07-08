@@ -59,8 +59,8 @@ public class favourites extends ArticleListActivity {
 			description.setText("The following sections and tags have been marked as favourites.");			
 			
 		} else {
-			description.setText("No favourite sections of tags have been set.\n\nAdd favourites to influence the contents of the " +
-					"latest articles screen and to control which articles are downloaded for offline viewing.");			
+			description.setText("No favourite sections of tags have been set.\n\nAdd favourites to populate the favourite artilces view and to " +
+					"indiciate which ariticles should be downloaded for offline viewing.");			
 		}
 	}
 	
