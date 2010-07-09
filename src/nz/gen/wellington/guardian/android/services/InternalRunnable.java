@@ -1,8 +1,11 @@
 package nz.gen.wellington.guardian.android.services;
 
+import java.util.Date;
+
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.notification;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.app.Notification;
@@ -134,21 +137,19 @@ public class InternalRunnable implements Runnable {
 		}
 	 
 		private void sendNotification(ContentUpdateReport report) {		
-			int icon = R.drawable.notification_icon;	// TODO resize icon
-			CharSequence tickerText = "Content update complete";
-			long when = System.currentTimeMillis();
+			int icon = R.drawable.notification_icon;
+			CharSequence tickerText = "Content update complete";			
+			Date now = DateTimeHelper.now();
 			
-			Notification notification = new Notification(icon, tickerText, when);
+			Notification notification = new Notification(icon, tickerText, now.getTime());
 			
 			CharSequence contentTitle = "Content update complete";
-			
 			CharSequence contentText = "Fetched " + report.getArticleCount() + " articles" + 
-				//" and " +  report.getImageCount() + " images" 
-				" in " + calculateTimeTaken(report);
+				" in " + DateTimeHelper.calculateTimeTaken(report.getStartTime(), now);
 			
 			final String fullReport = "Fetched " + report.getArticleCount() + " articles" + 
 				" and " +  report.getImageCount() + " images" +
-				" in " + calculateTimeTaken(report);
+				" in " + DateTimeHelper.calculateTimeTaken(report.getStartTime(), now);
 			
 			Intent notificationIntent = new Intent(context, notification.class);
 			notificationIntent.putExtra("report", fullReport);		
@@ -157,24 +158,6 @@ public class InternalRunnable implements Runnable {
 			notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 			notificationManager.notify(ContentUpdateService.UPDATE_COMPLETE_NOTIFICATION_ID, notification);
 		}
-	 
-	
-		private String calculateTimeTaken(ContentUpdateReport report) {	// TODO reimplement
-			return null;			
-			/*
-			Interval timeTaken = new Interval(report.getStartTime().getMillis(), DateTimeHelper.now().getMillis());
-		    PeriodFormatter pf = new PeriodFormatterBuilder().printZeroRarelyFirst()
-	        .appendYears().appendSuffix("y ", "y ")
-	        .appendMonths().appendSuffix("m" , "m ")
-	        .appendDays().appendSuffix("d ", "d ")
-	        .appendHours().appendSuffix("h ", "h ")
-	        .appendMinutes().appendSuffix("m ", "m ")
-	        .appendSeconds().appendSuffix("s ", "s ")
-	        .toFormatter();
 
-			String duration = pf.print(timeTaken.toPeriod()).trim();
-			return duration;
-			*/
-		}
-		
+
 }

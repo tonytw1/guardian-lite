@@ -28,7 +28,7 @@ public class FileService {
 	public static FileOutputStream getFileOutputStream(Context context, String url) throws FileNotFoundException {
 		final String filepath = FileService.getLocalFilename(url);
 		File file = new File(getCacheDir(context) + "/" + filepath);
-		Log.i(TAG, "Opening output stream to: " + file.getAbsolutePath());
+		//Log.i(TAG, "Opening output stream to: " + file.getAbsolutePath());
 		return new FileOutputStream(file);
 	}
 		
@@ -57,7 +57,7 @@ public class FileService {
 	public static void touchFile(Context context, String apiUrl) {
 		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
 		if (localFile.exists()) {
-			Log.i(TAG, "Toching mod time for file at: " + localFile.getAbsolutePath());
+			//Log.i(TAG, "Touching mod time for file at: " + localFile.getAbsolutePath());
 			touchFileModTime(localFile);
 		}
 	}

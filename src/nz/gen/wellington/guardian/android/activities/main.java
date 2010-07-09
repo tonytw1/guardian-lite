@@ -31,14 +31,18 @@ public class main extends ArticleListActivity {
     	showMainImage = false;
 	}
 	
-	
+	// TODO reimplement
+	/* 
 	@Override
 	protected boolean shouldRefreshView(LinearLayout mainPane) {	// TODO load is not set - main is the only one which uses this?
+		if (loaded == null) {
+			return true;
+		}
 		Date modtime = ArticleDAOFactory.getDao(this.getApplicationContext()).getModificationTime(new TopStoriesArticleSet());
 		boolean topStoriesFileHasChanged = modtime != null && modtime.after(loaded);
 		return super.shouldRefreshView(mainPane) || topStoriesFileHasChanged;
 	}
-
+	*/
 	
 	@Override
 	protected ArticleSet getArticleSet() {

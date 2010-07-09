@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
+
 public class Article implements Serializable {
 
 	private static final long serialVersionUID = 6L;
@@ -114,8 +116,7 @@ public class Article implements Serializable {
 
 	public String getPubDateString() {
 		if (this.pubDate != null) {
-			//return pubDate.toString("EEEE d MMMM yyyy HH.mm");	// TODO reimplement
-			return pubDate.toGMTString();
+			return DateTimeHelper.format(pubDate, "EEEE d MMMM yyyy HH.mm");
 		}
 		return null;
 	}

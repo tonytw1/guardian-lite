@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 
 public class notification extends Activity implements OnClickListener {
 	
-	private static final String TAG = "notification";
 	private NotificationManager notificationManager;
 
 	Button ok;
@@ -54,6 +52,5 @@ public class notification extends Activity implements OnClickListener {
 			this.startActivity(intent);
 		}		
 	}
-	
 	
 }
