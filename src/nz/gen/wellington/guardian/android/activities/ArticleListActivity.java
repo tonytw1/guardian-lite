@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +13,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.api.openplatfrom.OpenPlatformJSONParser;
+import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -20,10 +22,8 @@ import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -57,6 +57,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	protected BroadcastReceiver downloadProgressReceiver;
 
 	private Thread loader;
+	private Date loaded;
 	
 	protected String[] permittedRefinements = {"keyword"};
 	
@@ -70,7 +71,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
 		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());
 
-		articlesAvailableReceiver = new ArticlesAvailableReceiver();
 		downloadProgressReceiver = new DownloadProgressReceiver();
 		
 		networkStatusService = new NetworkStatusService(this);		
@@ -129,10 +129,15 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		hideDownloadProgress();
 	}
 	
-		
+	
 	protected boolean shouldRefreshView(LinearLayout mainPane) {
-		return mainPane.getChildCount() == 0;
+		if (loaded == null || mainPane.getChildCount() == 0) {
+			return true;
+		}
+		Date modtime = ArticleDAOFactory.getDao(this.getApplicationContext()).getModificationTime(getArticleSet());
+		return modtime != null && modtime.after(loaded);
 	}
+	
 	
 	protected final void setHeading(String headingText) {
 		TextView heading = (TextView) findViewById(R.id.Heading);
@@ -374,16 +379,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		updateArticlesHandler.sendMessage(m);
 	}
 	
-	@Deprecated
-	class ArticlesAvailableReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Article article = (Article) intent.getSerializableExtra("article");
-			sendArticleReadyMessage(article);	
-		}		
-	}
 	
-
 	class UpdateArticlesRunner implements Runnable, ArticleCallback {		
 		boolean running;
 		ArticleDAO articleDAO;
@@ -511,6 +507,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				
 			//}
 			
+			loaded = DateTimeHelper.now();
 			return;				
 		}
 

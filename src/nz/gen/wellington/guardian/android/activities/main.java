@@ -1,9 +1,6 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.Date;
-
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import android.app.Dialog;
@@ -12,12 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 public class main extends ArticleListActivity {
-	
-	private Date loaded;
-	
+		
 	public main() {
 	}
 
@@ -31,18 +25,6 @@ public class main extends ArticleListActivity {
     	showMainImage = false;
 	}
 	
-	// TODO reimplement
-	/* 
-	@Override
-	protected boolean shouldRefreshView(LinearLayout mainPane) {	// TODO load is not set - main is the only one which uses this?
-		if (loaded == null) {
-			return true;
-		}
-		Date modtime = ArticleDAOFactory.getDao(this.getApplicationContext()).getModificationTime(new TopStoriesArticleSet());
-		boolean topStoriesFileHasChanged = modtime != null && modtime.after(loaded);
-		return super.shouldRefreshView(mainPane) || topStoriesFileHasChanged;
-	}
-	*/
 	
 	@Override
 	protected ArticleSet getArticleSet() {
