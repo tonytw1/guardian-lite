@@ -53,7 +53,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	boolean showMainImage = true;
 	NetworkStatusService networkStatusService;
 	
-	protected BroadcastReceiver articlesAvailableReceiver;
 	protected BroadcastReceiver downloadProgressReceiver;
 
 	private Thread loader;
@@ -115,7 +114,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		registerReceiver(articlesAvailableReceiver, new IntentFilter(OpenPlatformJSONParser.ARTICLE_AVAILABLE));
 		registerReceiver(downloadProgressReceiver, new IntentFilter(HttpFetcher.DOWNLOAD_PROGRESS));
 	}
 
@@ -124,7 +122,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	protected void onPause() {
 		super.onPause();
 		updateArticlesRunner.stop();
-		unregisterReceiver(articlesAvailableReceiver);
 		unregisterReceiver(downloadProgressReceiver);
 		hideDownloadProgress();
 	}
