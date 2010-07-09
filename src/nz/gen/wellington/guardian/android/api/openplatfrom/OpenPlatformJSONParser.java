@@ -15,14 +15,12 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
-import nz.gen.wellington.guardian.android.api.ArticleBodyCleaner;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -238,27 +236,27 @@ public class OpenPlatformJSONParser {
 			if (currentField != null) {
 				
 				if (currentField.equals("headline")) {
-					article.setTitle(ArticleBodyCleaner.stripHtml(sb.toString()));
+					article.setTitle(sb.toString());
 				}
 				
 				if (currentField.equals("byline")) {
-					article.setByline(ArticleBodyCleaner.stripHtml(sb.toString()));
+					article.setByline(sb.toString());
 				}
 				
 				if (currentField.equals("standfirst")) {
-					article.setStandfirst(ArticleBodyCleaner.stripHtml(sb.toString()));
+					article.setStandfirst(sb.toString());
 				}
 				
 				if (currentField.equals("thumbnail")) {
-					article.setThumbnailUrl(ArticleBodyCleaner.stripHtml(sb.toString()));
+					article.setThumbnailUrl(sb.toString());
 				}
 				
 				if (currentField.equals("body")) {
-					article.setDescription(ArticleBodyCleaner.stripHtml(sb.toString()));
+					article.setDescription(sb.toString());
 				}
 				
 				if (currentField.equals("caption")) {
-					article.setCaption(ArticleBodyCleaner.stripHtml(sb.toString()));
+					article.setCaption(sb.toString());
 				}
 				
 				currentField = null;
@@ -312,7 +310,7 @@ public class OpenPlatformJSONParser {
 			List<Section> sections = new LinkedList<Section>();
 			for (int i=0; i < results.length(); i++) {		
 				JSONObject section = results.getJSONObject(i);				
-				 final String sectionName = StringEscapeUtils.unescapeHtml(section.getString("webTitle"));
+				 final String sectionName = section.getString("webTitle");
 				 final String id = section.getString("id");
 				 sections.add(new Section(id, sectionName, SectionColourMap.getColourForSection(id)));
 			}
