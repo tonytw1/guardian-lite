@@ -8,11 +8,7 @@ import java.io.FileOutputStream;
 import java.util.Date;
 
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
-
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class FileService {
@@ -134,19 +130,7 @@ public class FileService {
 	
 	
 	protected static File getCacheDir(Context context) {				
-		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
-		final int cacheLocation = Integer.parseInt(prefs.getString("cacheLocation", Integer.toString(INTERNAL_CACHE)));		
-		switch (cacheLocation) {
-		case INTERNAL_CACHE:
-			return context.getCacheDir();
-		case SDCARD:
-			return getExternalSDCardCacheFolder("/guardian-lite/");
-		case EXTERNAL_SDCARD_SAMSUNG_I7500:
-			return getExternalSDCardCacheFolder("/sd/guardian-lite/");
-
-		default:
-			return context.getCacheDir();
-		}
+		return context.getCacheDir();
 	}
 	
 	
@@ -160,16 +144,6 @@ public class FileService {
 	private static void touchFileModTime(File localFile) {
 		Date modTime = DateTimeHelper.now();
 		localFile.setLastModified(modTime.getTime());
-	}
-	
-	private static File getExternalSDCardCacheFolder(String folderPath) {
-		File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + folderPath);
-		if ( folder.exists()) {
-			return folder;			
-		} else if (folder.mkdir()) {
-			return folder;
-		}
-		return null;
 	}
 	
 }

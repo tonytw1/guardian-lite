@@ -29,6 +29,5 @@ public abstract class MenuedActivity extends Activity {
 		Intent intent = new Intent(this, main.class);
 		this.startActivity(intent);	
 	}
-	
-	
+		
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="nz.gen.wellington.guardian.android" android:versionName="1.07" android:versionCode="8">
+      package="nz.gen.wellington.guardian.android" android:versionName="1.08" android:versionCode="9">
       
       
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="false">
      	     
         <activity android:label="@string/app_name" android:name=".activities.main" android:screenOrientation="portrait" android:launchMode="singleTask">
             <intent-filter>
