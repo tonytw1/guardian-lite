@@ -1,7 +1,12 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import nz.gen.wellington.guardian.android.R;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public abstract class MenuedActivity extends Activity {
 
@@ -28,6 +33,23 @@ public abstract class MenuedActivity extends Activity {
 	protected void switchToMain() {
 		Intent intent = new Intent(this, main.class);
 		this.startActivity(intent);	
+	}
+	
+	
+	
+	protected final void setHeading(String headingText) {
+		TextView heading = (TextView) findViewById(R.id.Heading);
+		heading.setText(headingText);		
+	}
+	
+	protected final void hideHeading() {
+		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
+		heading.setVisibility(View.GONE);
+	}
+	
+	protected final void setHeadingColour(String colour) {
+		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
+		heading.setBackgroundColor(Color.parseColor(colour));
 	}
 		
 }

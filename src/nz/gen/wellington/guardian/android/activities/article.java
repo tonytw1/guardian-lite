@@ -7,7 +7,6 @@ import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,19 +45,6 @@ public class article extends MenuedActivity {
 		} else {
         	Toast.makeText(this, "Could not load article", Toast.LENGTH_SHORT).show();
 		}	
-	}
-	
-	// TODO duplication
-	protected void setHeading(String headingText) {
-		TextView heading = (TextView) findViewById(R.id.Heading);
-		heading.setText(headingText);		
-	}
-	
-	
-	// TODO duplication
-	protected void setHeadingColour(String colour) {
-		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
-		heading.setBackgroundColor(Color.parseColor(colour));
 	}
 	
 	

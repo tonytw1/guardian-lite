@@ -11,7 +11,6 @@ import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +18,6 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class sections extends DownloadProgressAwareActivity {
@@ -97,17 +95,5 @@ public class sections extends DownloadProgressAwareActivity {
 		}
 		return false;
 	}
-	
-	
-	// TODO duplication
-	protected void setHeading(String headingText) {
-		TextView heading = (TextView) findViewById(R.id.Heading);
-		heading.setText(headingText);		
-	}
-	// TODO duplication
-	protected void setHeadingColour(String colour) {
-		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
-		heading.setBackgroundColor(Color.parseColor(colour));
-	}
-		
+			
 }
