@@ -167,6 +167,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			first = true;
 			isFirstOfSection = true;
 			currentSection = null;
+			descriptionSet = false;
 		}
 		
 		public void handleMessage(Message msg) {
