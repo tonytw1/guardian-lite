@@ -8,7 +8,8 @@ import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,12 +23,15 @@ import android.widget.Toast;
 
 public class article extends MenuedActivity {
 	
-	private static final String TAG = "article";
+	//private static final String TAG = "article";
 	
 	ListAdapter adapter;
 	private NetworkStatusService networkStatusService;
     private ImageDAO imageDAO;
-
+    private Article article;
+       
+	private MainImageUpdateHandler mainImageUpdateHandler;
+    private MainImageLoader mainImageLoader;
     
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,10 +40,14 @@ public class article extends MenuedActivity {
 		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());			
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
 		
+    	mainImageUpdateHandler = new MainImageUpdateHandler();
+    	
 		requestWindowFeature(Window.FEATURE_NO_TITLE);	
 		setContentView(R.layout.article);
 		
-		Article article = (Article) this.getIntent().getExtras().get("article");		
+		Article article = (Article) this.getIntent().getExtras().get("article");
+		this.article = article;
+		
 		if (article != null) {
 			populateArticle(article);
 		} else {
@@ -68,20 +76,19 @@ public class article extends MenuedActivity {
         standfirst.setText(article.getStandfirst());
         description.setText(article.getDescription());
         
-    	ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
     	
     	final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
     	
     	final String mainImageUrl = article.getMainImageUrl();
-		if (mainImageUrl != null) {
-			if (imageDAO.isAvailableLocally(mainImageUrl)) {
-				populateMainImage(article, imageDAO, imageView, mainImageUrl);
-				
-			} else if (connectionAvailable && networkStatusService.isWifiConnection()) {
-				Log.i(TAG, "Main image is not available locally, but will fetch because wifi is available");
-				// TODO implement
-			}
-		}	
+		if (mainImageUrl != null) {			
+			TextView caption = (TextView) findViewById(R.id.Caption);
+			caption.setText(article.getCaption());
+			
+			final boolean isWifiConnectionAvailable = networkStatusService.isConnectionAvailable() && networkStatusService.isWifiConnection();			
+			mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl(), isWifiConnectionAvailable);
+			Thread loader = new Thread(mainImageLoader);
+			loader.start();			
+		}
 		
 		LayoutInflater inflater = LayoutInflater.from(this);
 		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), article.getAuthors(), this.getApplicationContext());
@@ -89,15 +96,17 @@ public class article extends MenuedActivity {
 	}
 
 	
-	private void populateMainImage(Article article, ImageDAO imageDAO, ImageView imageView, final String mainImageUrl) {
-		Bitmap bitmap = imageDAO.getImage(mainImageUrl);
-		if (bitmap != null) {
-			imageView.setImageBitmap(bitmap);
+	private void populateMainImage(String mainImageUrl) {
+		if (article != null && mainImageUrl.equals(article.getMainImageUrl())) {
+			ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
 			TextView caption = (TextView) findViewById(R.id.Caption);
-			caption.setText(article.getCaption());
-			
-			imageView.setVisibility(View.VISIBLE);
-			caption.setVisibility(View.VISIBLE);
+
+			Bitmap bitmap = imageDAO.getImage(mainImageUrl);
+			if (bitmap != null) {
+				imageView.setImageBitmap(bitmap);			
+				imageView.setVisibility(View.VISIBLE);
+				caption.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 	
@@ -124,5 +133,59 @@ public class article extends MenuedActivity {
 	    }
 	    return false;
 	}
+	
+	
+	
+	
+	
+	class MainImageLoader implements Runnable {		
+
+		private ImageDAO imageDAO;
+		private String mainImageUrl;
+		private boolean isWifiConnectionAvailable;
+			
+		public MainImageLoader(ImageDAO imageDAO, String mainImageUrl, boolean isWifiConnectionAvailable) {
+			this.imageDAO = imageDAO;
+			this.mainImageUrl = mainImageUrl;
+			this.isWifiConnectionAvailable = isWifiConnectionAvailable;
+		}
+
+		@Override
+		public void run() {
+			if (imageDAO.isAvailableLocally(mainImageUrl)) {
+				sendMainImageAvailableMessage();
+				
+			} else if (isWifiConnectionAvailable) {
+				//Log.i(TAG, "Main image is not available locally, but will fetch because wifi is available");				
+				imageDAO.fetchLiveImage(mainImageUrl);
+				sendMainImageAvailableMessage();
+			}
+			return;
+		}
+
+		private void sendMainImageAvailableMessage() {
+			//Log.i(TAG, "Sending main image available message: " + mainImageUrl);
+			Message msg = new Message();
+			msg.what = 1;
+			msg.getData().putString("mainImageUrl", mainImageUrl);
+			mainImageUpdateHandler.sendMessage(msg);
+		}
 		
+	}
+		
+	
+	class MainImageUpdateHandler extends Handler {	
+		
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			
+			switch (msg.what) {	   
+			    case 1:
+			    final String mainImageUrl = msg.getData().getString("mainImageUrl");
+			    populateMainImage(mainImageUrl);
+			}
+		}
+		
+	}
+			
 }
