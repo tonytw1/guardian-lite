@@ -153,5 +153,13 @@ public class DataHelper {
 			onCreate(db);
 		}
 	}
+
+
+	public boolean haveRoom() {
+		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
+		int total = cursor.getCount();
+		closeCursor(cursor);		
+		return total < 20;	
+	}
 	
 }

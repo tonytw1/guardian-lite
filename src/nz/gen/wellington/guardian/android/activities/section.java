@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class section extends ArticleListActivity {
 	
@@ -88,9 +89,15 @@ public class section extends ArticleListActivity {
 	private void addToFavourites() {
 		DataHelper dh = new DataHelper(this);
 		if (!dh.isFavourite(section)) {
-			Log.i(TAG, "Adding current section to favourites: " + section.getName());
-			dh.addSection(section);
-			favouriteMenuItem.setTitle("Remove Favourite");
+			
+			boolean haveRoom = dh.haveRoom();
+			if (haveRoom) {
+				Log.i(TAG, "Adding current section to favourites: " + section.getName());
+				dh.addSection(section);
+				favouriteMenuItem.setTitle("Remove Favourite");
+			} else {
+	        	Toast.makeText(this, "Favourites list is full", Toast.LENGTH_LONG).show();
+			}
 	
 		} else {
 			Log.i(TAG, "Removing current section from favourites: " + section.getName());			

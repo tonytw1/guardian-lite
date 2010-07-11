@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListAdapter;
+import android.widget.Toast;
 
 public class keyword extends ArticleListActivity {
 
@@ -79,15 +80,19 @@ public class keyword extends ArticleListActivity {
 	private void addToFavourites() {
 		DataHelper dh = new DataHelper(this);
 		if (!dh.isFavourite(keyword)) {
-			Log.i(TAG, "Adding current tag to favourites: " + keyword.getName());
-			dh.addTag(keyword);
-			favouriteMenuItem.setTitle("Remove Favourite");			
-	
+			if (dh.haveRoom()) {
+				Log.i(TAG, "Adding current tag to favourites: " + keyword.getName());
+				dh.addTag(keyword);
+				favouriteMenuItem.setTitle("Remove Favourite");			
+			} else {
+	        	Toast.makeText(this, "Favourites list is full", Toast.LENGTH_LONG).show();
+			}
+		
 		} else {
 			Log.i(TAG, "Removing current tag from favourites: " + keyword.getName());			
 			dh.removeTag(keyword);
 			favouriteMenuItem.setTitle("Add to Favourites");
-		}
+		}		
 		dh.close();	
 	}
 	
