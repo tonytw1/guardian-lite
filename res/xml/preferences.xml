@@ -3,7 +3,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-<ListPreference android:entryValues="@array/pageSizeOptionValues" android:entries="@array/pageSizeOptionLabels" android:summary="Number of articles to include in each article set" android:title="Page size" android:key="pageSize" android:defaultValue="10"></ListPreference><CheckBoxPreference android:summaryOff="Large images will only be downloaded when connected via Wifi" android:enabled="true" android:key="largeImages" android:defaultValue="false" android:title="Large images mobile" android:summaryOn="Large images will always be downloaded"></CheckBoxPreference>
+<ListPreference android:entryValues="@array/pageSizeOptionValues" android:entries="@array/pageSizeOptionLabels" android:summary="Number of articles to include in each article set" android:title="Page size" android:key="pageSize" android:defaultValue="10"></ListPreference><CheckBoxPreference android:enabled="true" android:key="largeImages" android:defaultValue="false" android:title="Large image syncing" android:summaryOff="Large images will only be downloaded when syncing via Wifi" android:summaryOn="Large images will always be synced"></CheckBoxPreference>
 <ListPreference android:title="Cache location" android:key="cacheLocation" android:summary="Where should cached articles and images be stored" android:entryValues="@array/cacheLocationOptionValues" android:entries="@array/cacheLocationOptionLabels" android:defaultValue="1"></ListPreference>
 
 
