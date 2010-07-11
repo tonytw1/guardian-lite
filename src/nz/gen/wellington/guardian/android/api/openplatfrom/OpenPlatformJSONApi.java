@@ -103,10 +103,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		
 		if (input != null) {
 			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context);
-			List<Section> sections = jsonParser.parseSectionsJSON(input);
-			if (sections != null) {				
-				return stripJunkSections(sections);
-			}
+			return jsonParser.parseSectionsJSON(input);			
 		}
 		return null;
 	}
@@ -118,20 +115,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		httpFetcher.stopLoading();
 	}
 	
-	
-	private List<Section> stripJunkSections(List<Section> sections) {
-		List<Section> goodSections = new LinkedList<Section>();
-		List<String> badSections = Arrays.asList("Community", "Crosswords", "Extra", "Help", "Info", "Local", "From the Guardian", "From the Observer", "News", "Weather");
-		for (Section section : sections) {
-			if (!badSections.contains(section.getName())) {
-				goodSections.add(section);				
-			}
-		}
-		return goodSections;
-	}
-
-	
-	
+		
 	private String buildSectionsQueryUrl() {
 		StringBuilder url = new StringBuilder(API_HOST + "/" + SECTIONS_API_URL);
 		url.append("?format=json");
