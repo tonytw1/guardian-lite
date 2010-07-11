@@ -113,17 +113,13 @@ public class FileService {
 			Log.i(TAG, "No cache folder found");
 			return;
 		}
-		Log.i(TAG, "Cache dir path is: " + cacheDir.getPath());
-		Log.i(TAG, "Cache dir absolute path is: " + cacheDir.getAbsolutePath());
-				
 		
 		File[] listFiles = cacheDir.listFiles(jsonFilesFilter);
-		Log.i(TAG, "Cache dir file count: " + listFiles.length);
 		for (int i = 0; i < listFiles.length; i++) {
 			File cacheFile = listFiles[i];
-			Log.i(TAG, "Found cache file: " + cacheFile.getAbsolutePath());
+			//Log.i(TAG, "Found cache file: " + cacheFile.getAbsolutePath());
 			if (cacheFile.delete()) {
-				Log.i(TAG, "Deleted cache file: " + cacheFile.getAbsolutePath());				
+				//Log.i(TAG, "Deleted cache file: " + cacheFile.getAbsolutePath());				
 			}		
 		}
 	}
@@ -136,7 +132,6 @@ public class FileService {
 	
 	private static Date calculateFileModTime(File localFile) {
 		Date modTime = new Date(localFile.lastModified());
-		Log.i(TAG, "Mod time is: " + modTime.toString() + " for: " + localFile.getAbsolutePath());
 		return modTime;
 	}
 	

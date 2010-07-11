@@ -20,11 +20,10 @@ import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class ArticleDAO {
 		
-	private static final String TAG = "ArticleDAO";
+	//private static final String TAG = "ArticleDAO";
 	
 	InMemorySectionCache sectionCache;
 	FileBasedArticleCache fileBasedArticleCache;
@@ -52,7 +51,6 @@ public class ArticleDAO {
 		 
 		 sections = openPlatformApi.getSections();
 		 if (sections != null) {
-			Log.i(TAG, "Found " + sections.size() + " sections");
 			sectionCache.addAll(sections);
 			fileBasedSectionCache.putSections(sections);
 		}
@@ -61,13 +59,12 @@ public class ArticleDAO {
 	
 	
 	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, boolean uncached) {
-		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
+		//Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
 		
 		ArticleBundle bundle = null;
 		if (!uncached) {
 			bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);		
 			if (bundle != null) {
-				Log.i(TAG, "Got file cache hit for article set: " + articleSet.getName());
 				return bundle;
 			}		
 		}
@@ -80,12 +77,11 @@ public class ArticleDAO {
 		if (sections != null) {
 			bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback, pageSize);		
 			if (bundle != null) {
-				Log.i(TAG, "Got article bundle from api call");
 				fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);
 				return bundle;
 				
 			} else {
-				Log.w(TAG, "Article api call failed");
+				//Log.w(TAG, "Article api call failed");
 			}
 		}
 		return null;
@@ -125,7 +121,6 @@ public class ArticleDAO {
 
 
 	public void stopLoading() {
-		Log.i(TAG, "Stopping loading");
 		openPlatformApi.stopLoading();
 	}
 

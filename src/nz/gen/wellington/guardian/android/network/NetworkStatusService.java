@@ -35,7 +35,7 @@ public class NetworkStatusService {
 		if (activeNetworkInfo.getTypeName().equals("WIFI")) {
 			return true;
 		}
-		Log.i(TAG, "Active connection is of type: " + activeNetworkInfo.getTypeName());
+		//Log.i(TAG, "Active connection is of type: " + activeNetworkInfo.getTypeName());
 		return false;
 	}
 

@@ -122,7 +122,7 @@ public class HttpFetcher {
 
 	
 	public void stopLoading() {
-		Log.d(TAG, "Stopping loading");
+		//Log.d(TAG, "Stopping loading");
 	} 
 	
 	
@@ -130,7 +130,6 @@ public class HttpFetcher {
 		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
 		intent.putExtra("type", HttpFetcher.DOWNLOAD_FAILED);
 		intent.putExtra("url", url);
-		Log.i(TAG, "Broadcasting http fail: " + intent.toString());
 		context.sendBroadcast(intent);
 	}
 		

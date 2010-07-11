@@ -88,16 +88,15 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 	
 	protected void refresh(boolean unCached) {
-		Log.i(TAG, "Refresh requested");
+		//Log.i(TAG, "Refresh requested");
 	
 		if (!networkStatusService.isConnectionAvailable() && unCached) {
-			Log.i(TAG, "Not refreshing uncached as no connection is available");
+			//Log.i(TAG, "Not refreshing uncached as no connection is available");
 			return;
 		}
 				
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
 		if (loader == null || !loader.isAlive()) {
-			Log.i(TAG, "Requested run");
 			mainPane.removeAllViews();
 			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService);
 			updateArticlesRunner.setUncached(unCached);
@@ -244,7 +243,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	return;
 			    				    	
 			    case 5: 
-			    	Log.i(TAG, "Got updates available message");
 					mainpane = (LinearLayout) findViewById(R.id.MainPane);
 					TextView message = new TextView(context);
 					msg.getData().getString("modtime");

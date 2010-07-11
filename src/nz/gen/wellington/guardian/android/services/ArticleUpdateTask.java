@@ -28,7 +28,6 @@ public abstract class ArticleUpdateTask {
 	
 
 	final public void stop() {
-		Log.i(TAG, "Stopping");
 		articleDAO.stopLoading();
 		running = false;
 	}

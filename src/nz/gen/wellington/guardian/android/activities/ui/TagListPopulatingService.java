@@ -19,7 +19,7 @@ import android.widget.TextView;
 public class TagListPopulatingService {
 
 	
-	private static final String TAG = "TagListPopulatingService";
+	//private static final String TAG = "TagListPopulatingService";
 
 
 	public static void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<Tag> tags, Context context) {		

@@ -37,8 +37,7 @@ public class ContentUpdateService extends Service {
     
     
     public void start() {
-		Log.i(TAG, "Starting run");
-		internalRunnable = new InternalRunnable(this, (NotificationManager)getSystemService(NOTIFICATION_SERVICE));
+    	internalRunnable = new InternalRunnable(this, (NotificationManager)getSystemService(NOTIFICATION_SERVICE));
     	thread = new Thread(internalRunnable);
     	thread.setDaemon(true);
     	thread.start();
@@ -47,7 +46,6 @@ public class ContentUpdateService extends Service {
 
 
 	public void stop() {
-		Log.i(TAG, "Starting stop");
 		internalRunnable.stop();
 		//running = false;
 	}

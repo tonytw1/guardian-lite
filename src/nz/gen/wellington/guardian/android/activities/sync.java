@@ -127,7 +127,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 
 
 	private void updateStatus() {
-		Log.i(TAG, "Updating status");
 		if (contentUpdateService == null) {
 			Log.i(TAG, "Updating status - null");
 			start.setEnabled(false);
@@ -135,7 +134,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 			return;
 		}
 		
-		Log.i(TAG, "Updating status" + contentUpdateService.getStatus());
 		switch (contentUpdateService.getStatus()) {
 		case ContentUpdateService.STOPPED:
 			

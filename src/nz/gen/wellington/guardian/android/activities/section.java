@@ -88,7 +88,7 @@ public class section extends ArticleListActivity {
 	private void addToFavourites() {
 		DataHelper dh = new DataHelper(this);
 		if (!dh.isFavourite(section)) {
-			Log.i(TAG, "Adding current tag to favourites: " + section.getName());
+			Log.i(TAG, "Adding current section to favourites: " + section.getName());
 			dh.addSection(section);
 			favouriteMenuItem.setTitle("Remove Favourite");
 	

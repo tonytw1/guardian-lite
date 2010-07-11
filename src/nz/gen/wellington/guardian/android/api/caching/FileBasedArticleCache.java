@@ -13,11 +13,10 @@ import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import android.content.Context;
-import android.util.Log;
 
 public class FileBasedArticleCache {
 	
-	private static final String TAG = "FileBasedArticleCache";
+	//private static final String TAG = "FileBasedArticleCache";
 
 	private Context context;
 	
@@ -27,14 +26,14 @@ public class FileBasedArticleCache {
 	
 	
 	 public void putArticleSetArticles(ArticleSet articleSet, ArticleBundle bundle) {
-		 Log.i(TAG, "Writing to disk: " + articleSet.getName());
+		 //Log.i(TAG, "Writing to disk: " + articleSet.getName());
 		 try {
 			 FileOutputStream fos = FileService.getFileOutputStream(context, getLocalFileKeyForArticleSet(articleSet));
 			 ObjectOutputStream out = new ObjectOutputStream(fos);
 			 out.writeObject(bundle);
 			 out.close();
 		 } catch (IOException ex) {
-			 Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName() + ex.getMessage());
+			 //Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName() + ex.getMessage());
 		 }
 	 }
 
@@ -54,16 +53,14 @@ public class FileBasedArticleCache {
 			return null;
 		}
 		
-		final String filepath = FileService.getLocalFilename(localFileKey);
-		Log.i(TAG, "Reading from disk: " + filepath);
 		try {
 			FileInputStream fis = FileService.getFileInputStream(context, localFileKey);
 
-			Log.i(TAG, "Reading from disk: " + filepath);
+			//Log.i(TAG, "Reading from disk: " + filepath);
 			ObjectInputStream in = new ObjectInputStream(fis);
 			ArticleBundle loaded = (ArticleBundle) in.readObject();
 			in.close();
-			Log.i(TAG, "Finished reading from disk: " + filepath);
+			//Log.i(TAG, "Finished reading from disk: " + filepath);
 			if (loaded != null) {
 								
 				if (articleCallback != null) {
@@ -72,16 +69,16 @@ public class FileBasedArticleCache {
 					}
 				}
 					
-				Log.i(TAG, "Loaded " + loaded.getArticles().size() + " articles");
-				Log.i(TAG, "Content checksum is: " + loaded.getChecksum());
+				//Log.i(TAG, "Loaded " + loaded.getArticles().size() + " articles");
+				//Log.i(TAG, "Content checksum is: " + loaded.getChecksum());
 				return loaded;
 			}
 			return null;
 
 		} catch (IOException ex) {
-			Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName() + ex.getMessage());
+			//Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName() + ex.getMessage());
 		} catch (ClassNotFoundException ex) {
-			Log.e(TAG, "Exception while writing article set: " + articleSet.getName() + ex.getMessage());
+			//Log.e(TAG, "Exception while writing article set: " + articleSet.getName() + ex.getMessage());
 		}
 		return null;
 	}
@@ -93,11 +90,11 @@ public class FileBasedArticleCache {
 	
 		
 	public void clear(ArticleSet articleSet) {
-		Log.i(TAG, "Clearing article set: " + articleSet.getName());
+		//Log.i(TAG, "Clearing article set: " + articleSet.getName());
 		if (FileService.isLocallyCached(context, articleSet.getApiUrl())) {
 			FileService.clear(context, articleSet.getApiUrl());
 		} else {
-			Log.i(TAG, "No local copy to clear:" + articleSet.getApiUrl());
+			//Log.i(TAG, "No local copy to clear:" + articleSet.getApiUrl());
 		}
 	}
 

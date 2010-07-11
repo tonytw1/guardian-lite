@@ -11,11 +11,10 @@ import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 public class ImageDAO {
 
-	private static final String TAG = "ImageDAO";
+	//private static final String TAG = "ImageDAO";
 	
 	private HttpFetcher httpFetcher;
 	private Context context;
@@ -31,7 +30,6 @@ public class ImageDAO {
 	
 	
 	public Bitmap getImage(String url) {
-		Log.i(TAG, "Reading from disk: " + url);
 		try {
 			InputStream fis = FileService.getFileInputStream(context, url);
 			ObjectInputStream in = new ObjectInputStream(fis);
@@ -41,24 +39,23 @@ public class ImageDAO {
 			return decodeImage(image);
 			
 		} catch (IOException ex) {
-			Log.e(TAG, "IO Exception while writing article set: " + url + ex.getMessage());
+			//Log.e(TAG, "IO Exception while writing article set: " + url + ex.getMessage());
 		} catch (ClassNotFoundException ex) {
-			Log.e(TAG, "Exception while writing article set: " + url + ex.getMessage());
+			//Log.e(TAG, "Exception while writing article set: " + url + ex.getMessage());
 		}
 		return null;
 	}
 
 
 	public Bitmap fetchLiveImage(String url) {
-		Log.i(TAG, "Fetching image: " + url);
 		byte[] image = httpFetcher.httpFetchStream(url);
 		
 		if (image == null) {
-			Log.i(TAG, "Could not fetch image: " + url);
+			//Log.i(TAG, "Could not fetch image: " + url);
 			return null;
 		}
 		
-		Log.i(TAG, "Writing image to disk: " + url);
+		//Log.i(TAG, "Writing image to disk: " + url);
 		ObjectOutputStream out = null;
 		try {		
 			FileOutputStream fos = FileService.getFileOutputStream(context, url);

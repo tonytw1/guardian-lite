@@ -54,7 +54,6 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 	
 
 	private void announceProgress(String url, int totalRead) {
-		Log.i(TAG, Integer.toString(totalRead));
 		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
 		intent.putExtra("type", HttpFetcher.DOWNLOAD_UPDATE);
 		intent.putExtra("url", url);

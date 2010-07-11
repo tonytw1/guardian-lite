@@ -50,7 +50,6 @@ public class InternalRunnable implements Runnable {
 	}
 	
 	public int getStatus() {
-		Log.i(TAG, "GET Internal status is: " + this.status + this.toString());
 		return this.status;
 	}
 	
@@ -59,7 +58,6 @@ public class InternalRunnable implements Runnable {
 	}
 	
 	public void stop() {
-		Log.i(TAG, "Starting stop");
 		taskQueue.clear();
 		if (currentTask != null) {
 			currentTask.stop();
@@ -70,8 +68,6 @@ public class InternalRunnable implements Runnable {
 	 private void internalRun() {
 	    	
 	    	while(running) {
-	    		Log.i(TAG, "Internal status is: " + status);
-
 	    		this.status = ContentUpdateService.RUNNING;
 
 	    		ContentUpdateTaskRunnable task = getNextTask();
