@@ -10,10 +10,12 @@ public class ImageFetchTask implements ContentUpdateTaskRunnable {
 	private String url;
 	private Context context;
 	private ContentUpdateReport report;
+	private String description;
 
-	public ImageFetchTask(String thumbnailUrl, Context context) {
+	public ImageFetchTask(String thumbnailUrl, Context context, String description) {
 		this.url = thumbnailUrl;
 		this.context = context;
+		this.description = description;
 	}
 
 	
@@ -33,6 +35,9 @@ public class ImageFetchTask implements ContentUpdateTaskRunnable {
 	
 	@Override
 	public String getTaskName() {
+		if (description != null) {
+			return "Fetching image: " + description;
+		}
 		return "Fetching image: " + url;
 	}
 
