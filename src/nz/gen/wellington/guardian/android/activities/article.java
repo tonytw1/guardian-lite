@@ -6,11 +6,10 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,16 +21,22 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class article extends Activity {
+public class article extends MenuedActivity {
+	
+	private static final String TAG = "article";
 	
 	ListAdapter adapter;
 	private NetworkStatusService networkStatusService;
-	
+    private ImageDAO imageDAO;
+
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		this.networkStatusService = new NetworkStatusService(this.getApplicationContext());
+		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());			
+		networkStatusService = new NetworkStatusService(this.getApplicationContext());
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);	
 		setContentView(R.layout.article);
 		
@@ -40,10 +45,9 @@ public class article extends Activity {
 			populateArticle(article);
 		} else {
         	Toast.makeText(this, "Could not load article", Toast.LENGTH_SHORT).show();
-		}
+		}	
 	}
 	
-
 	// TODO duplication
 	protected void setHeading(String headingText) {
 		TextView heading = (TextView) findViewById(R.id.Heading);
@@ -78,15 +82,20 @@ public class article extends Activity {
         standfirst.setText(article.getStandfirst());
         description.setText(article.getDescription());
         
-        ImageDAO imageDAO = ArticleDAOFactory.getImageDao(this);
     	ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
     	
+    	final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
+    	
     	final String mainImageUrl = article.getMainImageUrl();
-		if (mainImageUrl != null && imageDAO.isAvailableLocally(mainImageUrl)) {
-    		populateMainImage(article, imageDAO, imageView, mainImageUrl);
-    	}
-        		
-		final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
+		if (mainImageUrl != null) {
+			if (imageDAO.isAvailableLocally(mainImageUrl)) {
+				populateMainImage(article, imageDAO, imageView, mainImageUrl);
+				
+			} else if (connectionAvailable && networkStatusService.isWifiConnection()) {
+				Log.i(TAG, "Main image is not available locally, but will fetch because wifi is available");
+				// TODO implement
+			}
+		}	
 		
 		LayoutInflater inflater = LayoutInflater.from(this);
 		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), article.getAuthors(), this.getApplicationContext());
@@ -106,10 +115,7 @@ public class article extends Activity {
 		}
 	}
 	
-	
-	
-	
-	
+		
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Home");
 		menu.add(0, 2, 0, "Favourites");
@@ -131,22 +137,6 @@ public class article extends Activity {
 	    	return true;
 	    }
 	    return false;
-	}
-	
-	
-	private void switchToMain() {
-		Intent intent = new Intent(this, main.class);
-		this.startActivity(intent);	
-	}
-	
-	private void switchToFavourites() {
-		Intent intent = new Intent(this, favourites.class);
-		this.startActivity(intent);		
-	}
-	
-	private void switchToSections() {
-		Intent intent = new Intent(this, sections.class);
-		this.startActivity(intent);		
 	}
 		
 }
