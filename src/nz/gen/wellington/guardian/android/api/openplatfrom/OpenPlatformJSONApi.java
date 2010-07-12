@@ -1,8 +1,6 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
@@ -16,18 +14,16 @@ import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class OpenPlatformJSONApi implements ContentSource {
 		
-	private static final String TAG = "OpenPlatformJSONApi";
+	//private static final String TAG = "OpenPlatformJSONApi";
 
-	private static final String API_HOST = "http://content-api-proxy.appspot.com";	
+	private static final String API_HOST = "http://guardian-lite.appspot.com";	
 	public static final String SECTIONS_API_URL = "sections";
 	
 	private OpenPlatformJSONParser contentParser;
