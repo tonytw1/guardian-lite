@@ -5,11 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import android.util.Log;
+import nz.gen.wellington.guardian.android.activities.ui.Plurals;
 
 public class DateTimeHelper {
 
-	private static final String TAG = "DateTimeHelper";
+	//private static final String TAG = "DateTimeHelper";
 	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 	
 	public static Date parseDate(String dateString) {
@@ -40,8 +40,19 @@ public class DateTimeHelper {
 	
 	public static String calculateTimeTaken(Date startTime, Date now) {
 		long mills = now.getTime() - startTime.getTime();
-		long seconds = mills / 1000;
-		return Long.toString(seconds) + " seconds";
+		int seconds = new Long(mills / 1000).intValue();
+		if (seconds < 60) {
+			return Long.toString(seconds) + " seconds";
+		}
+	
+		StringBuilder output = new StringBuilder();
+		int minutes = (seconds / 60);
+		int remainer = (seconds % 60);
+		output.append(minutes + " " + Plurals.getPrural("minute", minutes));
+		if (remainer > 0) {
+			output.append(remainer + " " + Plurals.getPrural("second", remainer));
+		}
+		return output.toString();
 	}
 	
 }
