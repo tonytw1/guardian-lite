@@ -50,7 +50,7 @@ public class DateTimeHelper {
 		int remainer = (seconds % 60);
 		output.append(minutes + " " + Plurals.getPrural("minute", minutes));
 		if (remainer > 0) {
-			output.append(remainer + " " + Plurals.getPrural("second", remainer));
+			output.append(" " + remainer + " " + Plurals.getPrural("second", remainer));
 		}
 		return output.toString();
 	}
