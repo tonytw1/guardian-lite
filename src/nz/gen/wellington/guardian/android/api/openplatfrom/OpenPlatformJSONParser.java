@@ -57,11 +57,11 @@ public class OpenPlatformJSONParser {
 			return hb.getArticles();
 
 		} catch (SAXException e) {
-			Log.e(TAG, e.getMessage());
+			//Log.e(TAG, e.getMessage());
 		} catch (IOException e) {
-			Log.e(TAG, e.getMessage());
+			//Log.e(TAG, e.getMessage());
 		} catch (ParserConfigurationException e) {
-			Log.e(TAG, e.getMessage());
+			//Log.e(TAG, e.getMessage());
 		}
 		return null;
 	}
@@ -146,7 +146,6 @@ public class OpenPlatformJSONParser {
          public void startElement(String name, AttributeList attributes) throws SAXException {        	 
         	 super.startElement(name, attributes);
         	 if (!running) {
-        		 Log.i(TAG, "Parser stopping");
         		 throw new SAXException("Parse has been stopped");        		 
         	 }
         	 
@@ -165,7 +164,7 @@ public class OpenPlatformJSONParser {
         		 try {
         			 article.setPubDate(DateTimeHelper.parseDate(dateString));
         		 } catch (Exception e) {
-        				Log.e(TAG, "Failed to parse date '" + dateString +  "': " + e.getMessage());
+        			 Log.e(TAG, "Failed to parse date '" + dateString +  "': " + e.getMessage());
         		 }
         	 }
                  
@@ -210,7 +209,6 @@ public class OpenPlatformJSONParser {
         			 final String sectionId = tagId.split("/")[0];
         			 
         			 Section section = getSectionById(sectionId);
-        			 Log.i(TAG, "Found refinement keyword: " + tagId);
         			 
         			 List<Tag> refinementGroup = refinements.get(currentRefinementGroupType);
         			 if (refinementGroup == null) {
@@ -318,9 +316,9 @@ public class OpenPlatformJSONParser {
 			return sections;			
 			
 		} catch (JSONException e) {
-			Log.e(TAG, "JSONException while parsing articles: " + e.getMessage());
+			//Log.e(TAG, "JSONException while parsing articles: " + e.getMessage());
 		} catch (IOException e) {
-			Log.e(TAG, "IOException while parsing articles: " + e.getMessage());
+			//Log.e(TAG, "IOException while parsing articles: " + e.getMessage());
 		}
 		return null;
 	}

@@ -128,7 +128,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 
 	private void updateStatus() {
 		if (contentUpdateService == null) {
-			Log.i(TAG, "Updating status - null");
 			start.setEnabled(false);
 			stop.setEnabled(false);
 			return;
@@ -177,7 +176,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	private void queueTags(TaskQueue taskQueue, List<Tag> tags, int pageSize) {
 		if (tags != null) {
 			for (Tag tag : tags) {
-				Log.i(TAG, "Injecting favourite tag into update queue: " + tag.getName());
 				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new KeywordArticleSet(tag), pageSize));
 			}
 		}
@@ -187,7 +185,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	private void queueSections(TaskQueue taskQueue, List<Section> sections, int pageSize) {
 		if (sections != null) {
 			for (Section section : sections) {
-				Log.i(TAG, "Injecting favourite section into update queue: " + section.getName());				
 				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new SectionArticleSet(section), pageSize));
 			}
 		}

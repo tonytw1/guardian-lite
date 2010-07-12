@@ -33,9 +33,7 @@ public class UpdateArticleSetTask extends ArticleUpdateTask implements ContentUp
 	
 	
 	@Override
-	public void run() {
-		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
-				
+	public void run() {				
 		ContentSource api = ArticleDAOFactory.getOpenPlatformApi(context);
 		List<Section> sections = ArticleDAOFactory.getDao(context).getSections();
 			

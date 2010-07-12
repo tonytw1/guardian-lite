@@ -45,12 +45,12 @@ public class OpenPlatformJSONApi implements ContentSource {
 	
 	@Override
 	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback, int pageSize) {		
-		Log.i(TAG, "Fetching articles for: " + articleSet.getName());		
+		//Log.i(TAG, "Fetching articles for: " + articleSet.getName());		
 		final String apiUrl = articleSet.getApiUrl();
 		
 		InputStream input = null;		
 		if (input == null) {
-			Log.i(TAG, "Fetching article set from live api: " + apiUrl);
+			//Log.i(TAG, "Fetching article set from live api: " + apiUrl);
 			announceDownloadStarted(articleSet.getName());
 			input = getHttpInputStream(buildContentQueryUrl(articleSet, true, pageSize));
 		}		
@@ -81,7 +81,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		
 		InputStream input = null;
 		if (input == null) {
-			Log.i(TAG, "Fetching article set checksum from live api: " + articleSet.getApiUrl());
+			//Log.i(TAG, "Fetching article set checksum from live api: " + articleSet.getApiUrl());
 			input = getHttpInputStream(buildContentQueryUrl(articleSet, false, pageSize));
 		}		
 		
@@ -97,7 +97,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	public List<Section> getSections() {		
 		InputStream input = null;		
 		if (input == null) {
-			Log.i(TAG, "Fetching section list from live api");
+			//Log.i(TAG, "Fetching section list from live api");
 			input = getHttpInputStream(buildSectionsQueryUrl());
 		}
 		

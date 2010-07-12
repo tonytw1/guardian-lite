@@ -106,7 +106,6 @@ public class InternalRunnable implements Runnable {
 	
 	 
 	 private ContentUpdateTaskRunnable getNextTask() {
-	    	Log.i(TAG, "Getting next task");    
 	    	synchronized(taskQueue) {    	
 	    		return taskQueue.getNext();    		   		    		
 	    	}

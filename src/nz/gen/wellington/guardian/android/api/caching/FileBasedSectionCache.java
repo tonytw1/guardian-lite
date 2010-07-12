@@ -62,12 +62,10 @@ public class FileBasedSectionCache {
 
 
 	public void clear() {
-		Log.i(TAG, "Clearing sections");
 		if (FileService.isLocallyCached(context, OpenPlatformJSONApi.SECTIONS_API_URL)) {			
 			FileService.clear(context, OpenPlatformJSONApi.SECTIONS_API_URL);
-			Log.i(TAG, "Cleared: " + OpenPlatformJSONApi.SECTIONS_API_URL);
 		} else {
-			Log.i(TAG, "No local copy to clear:" + OpenPlatformJSONApi.SECTIONS_API_URL);
+			//Log.i(TAG, "No local copy to clear:" + OpenPlatformJSONApi.SECTIONS_API_URL);
 		}
 	}
 		

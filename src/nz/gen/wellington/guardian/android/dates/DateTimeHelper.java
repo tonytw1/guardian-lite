@@ -17,7 +17,7 @@ public class DateTimeHelper {
 		 try {
 			 return dateFormat.parse(dateString);
 		} catch (ParseException e) {
-			Log.w(TAG, "Failed to parse date string: " + dateString);
+			//Log.w(TAG, "Failed to parse date string: " + dateString);
 		}
 		return null;
 	}

@@ -64,13 +64,13 @@ public class FileService {
 
 	public static void clear(Context context, String apiUrl) {
 		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
-		Log.i(TAG, "Clearing: " + localFile.getAbsolutePath());
+		//Log.i(TAG, "Clearing: " + localFile.getAbsolutePath());
 		localFile.delete();
 	}
 
 	
 	public static void clearAll(Context context) {		
-		Log.i(TAG, "Clearing all cache files");				
+		//Log.i(TAG, "Clearing all cache files");				
 		FileFilter allFilesFilter = new FileFilter() {				
 			@Override
 			public boolean accept(File file) {
@@ -82,7 +82,7 @@ public class FileService {
 	
 	
 	public static void clearAllArticleSets(Context context) {		
-		Log.i(TAG, "Clearing all article set cache files");
+		//Log.i(TAG, "Clearing all article set cache files");
 				
 		FileFilter jsonFilesFilter = new FileFilter() {				
 			@Override
@@ -110,7 +110,7 @@ public class FileService {
 	private static void deleteFiles(Context context, FileFilter jsonFilesFilter) {		
 		File cacheDir = getCacheDir(context);
 		if (cacheDir == null) {
-			Log.i(TAG, "No cache folder found");
+			Log.w(TAG, "No cache folder found");
 			return;
 		}
 		
