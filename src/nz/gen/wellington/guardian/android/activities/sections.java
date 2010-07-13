@@ -41,7 +41,6 @@ public class sections extends DownloadProgressAwareActivity {
 		setHeadingColour("#0061A6");
 		
 		downloadProgressReceiver = new DownloadProgressReceiver();
-		
 	}
 	
 		
@@ -80,6 +79,7 @@ public class sections extends DownloadProgressAwareActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Home");
 		menu.add(0, 2, 0, "Favourites");
+		menu.add(0, 3, 0, "Search tags");
 	    return true;
 	}
 	
@@ -91,6 +91,9 @@ public class sections extends DownloadProgressAwareActivity {
 			return true;
 		case 2:
 			switchToFavourites();
+			return true;
+		case 3:
+			switchToTagSearch();
 			return true;
 		}
 		return false;

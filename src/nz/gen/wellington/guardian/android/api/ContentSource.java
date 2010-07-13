@@ -6,6 +6,7 @@ import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.Tag;
 
 /*
  * This interface is here to remind you that you can source content from the Content API,
@@ -18,5 +19,6 @@ public interface ContentSource {
 	ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback, int pageSize);
 	public void stopLoading();
 	public String getRemoteChecksum(ArticleSet articleSet);
+	public List<Tag> searchTags(String searchTerm);
 
 }

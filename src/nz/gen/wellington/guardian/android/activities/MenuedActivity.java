@@ -35,7 +35,10 @@ public abstract class MenuedActivity extends Activity {
 		this.startActivity(intent);	
 	}
 	
-	
+	protected void switchToTagSearch() {
+		Intent intent = new Intent(this, tagsearch.class);
+		this.startActivity(intent);
+	}
 	
 	protected final void setHeading(String headingText) {
 		TextView heading = (TextView) findViewById(R.id.Heading);

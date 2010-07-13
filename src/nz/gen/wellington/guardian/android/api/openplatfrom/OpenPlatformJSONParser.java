@@ -286,8 +286,49 @@ public class OpenPlatformJSONParser {
 		
 	 }
 
-
-	public List<Section> parseSectionsJSON(InputStream input) {
+	 
+	 public List<Tag> parseTagsJSON(InputStream input) {
+		 try {			
+				StringBuilder content = new StringBuilder();
+				BufferedReader in = new BufferedReader(new InputStreamReader(input));
+				String str;
+				while ((str = in.readLine()) != null) {
+					content.append(str);
+					content.append("\n");
+				}
+				in.close();
+				
+				JSONObject json = new JSONObject(content.toString());
+				if (!isResponseOk(json)) {
+					return null;				
+				}
+				JSONObject response = json.getJSONObject("response");
+				JSONArray results = response.getJSONArray("results");
+					
+				List<Tag> tags = new LinkedList<Tag>();
+				for (int i=0; i < results.length(); i++) {		
+					JSONObject tag = results.getJSONObject(i);				
+					final String id = tag.getString("id");
+					final String tagName = tag.getString("webTitle");
+					
+					final String sectionId = tag.getString("sectionId");
+					final String sectionName = tag.getString("sectionName");
+					Section section = new Section(sectionId, sectionName, "#ff0000");	// TODO use section map!					
+					tags.add(new Tag(tagName, id, section));
+				}
+				
+				return tags;			
+				
+			} catch (JSONException e) {
+				//Log.e(TAG, "JSONException while parsing articles: " + e.getMessage());
+			} catch (IOException e) {
+				//Log.e(TAG, "IOException while parsing articles: " + e.getMessage());
+			}
+			return null;
+	 }
+	 
+	 
+	 public List<Section> parseSectionsJSON(InputStream input) {	// TODO JSON methods should not be in the XML class.
 		try {			
 			StringBuilder content = new StringBuilder();
 			BufferedReader in = new BufferedReader(new InputStreamReader(input));

@@ -33,8 +33,9 @@
 		<activity android:name=".activities.perferences" android:screenOrientation="portrait"></activity>
 		<activity android:name=".activities.favourites" android:screenOrientation="portrait"></activity>
 		<activity android:name=".activities.notification" android:noHistory="true"></activity>
+		<activity android:name=".activities.tagsearch" android:screenOrientation="portrait"></activity>
 
-	</application>
+</application>
 
 <uses-sdk android:minSdkVersion="3" />
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>

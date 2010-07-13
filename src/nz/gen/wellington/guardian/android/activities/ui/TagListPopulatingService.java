@@ -53,7 +53,7 @@ public class TagListPopulatingService {
 			populateSectionClicker(tag.getSection(), tagView, context);	    		
 		
 		} else {			
-			NetworkStatusService networkStatusService = new NetworkStatusService(context);
+			NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO push out NSS and context
 			boolean isLocallyCached = FileService.isLocallyCached(context, new KeywordArticleSet(tag).getApiUrl());
 	    	boolean contentIsAvailable = isLocallyCached || networkStatusService.isConnectionAvailable();
 	    	if (contentIsAvailable) {

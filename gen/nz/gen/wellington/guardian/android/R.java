@@ -36,6 +36,7 @@ public final class R {
         public static final int Heading=0x7f070003;
         public static final int HeadingLayout=0x7f070006;
         public static final int Headline=0x7f070008;
+        public static final int Input=0x7f070027;
         public static final int KingsPlace=0x7f070002;
         public static final int LinearLayout01=0x7f070001;
         public static final int LinearLayout02=0x7f070007;
@@ -49,6 +50,7 @@ public final class R {
         public static final int Report=0x7f07001c;
         public static final int Scroll=0x7f070015;
         public static final int ScrollView01=0x7f070000;
+        public static final int Search=0x7f070028;
         public static final int SectionImage=0x7f07001f;
         public static final int SectionName=0x7f070020;
         public static final int Seperator=0x7f070021;
@@ -78,6 +80,7 @@ public final class R {
         public static final int sectionslist=0x7f03000b;
         public static final int seperator=0x7f03000c;
         public static final int sync=0x7f03000d;
+        public static final int tagsearch=0x7f03000e;
     }
     public static final class string {
         public static final int app_name=0x7f060000;
