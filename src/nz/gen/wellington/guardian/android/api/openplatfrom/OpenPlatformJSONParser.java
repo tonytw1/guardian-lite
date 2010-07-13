@@ -311,18 +311,21 @@ public class OpenPlatformJSONParser {
 					final String id = tag.getString("id");
 					final String tagName = tag.getString("webTitle");
 					
-					final String sectionId = tag.getString("sectionId");
-					final String sectionName = tag.getString("sectionName");
-					Section section = new Section(sectionId, sectionName, "#ff0000");	// TODO use section map!					
-					tags.add(new Tag(tagName, id, section));
+					Section section = null;
+					if (tag.has("sectionId")) {
+						final String sectionId = tag.getString("sectionId");
+						final String sectionName = tag.getString("sectionName");
+						section = new Section(sectionId, sectionName, "#ff0000");	// TODO use section map!
+					}
+					tags.add(new Tag(tagName, id, section));					
 				}
 				
 				return tags;			
 				
 			} catch (JSONException e) {
-				//Log.e(TAG, "JSONException while parsing articles: " + e.getMessage());
+				Log.e(TAG, "JSONException while parsing articles: " + e.getMessage());
 			} catch (IOException e) {
-				//Log.e(TAG, "IOException while parsing articles: " + e.getMessage());
+				Log.e(TAG, "IOException while parsing articles: " + e.getMessage());
 			}
 			return null;
 	 }
