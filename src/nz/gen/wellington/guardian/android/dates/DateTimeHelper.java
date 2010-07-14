@@ -39,8 +39,7 @@ public class DateTimeHelper {
 	}
 	
 	public static String calculateTimeTaken(Date startTime, Date now) {
-		long mills = now.getTime() - startTime.getTime();
-		int seconds = new Long(mills / 1000).intValue();
+		int seconds = durationInSecords(startTime, now);
 		if (seconds < 60) {
 			return Long.toString(seconds) + " seconds";
 		}
@@ -54,5 +53,19 @@ public class DateTimeHelper {
 		}
 		return output.toString();
 	}
+	
+	
+	public static boolean isMoreThanHoursOld(Date then, int hours) {
+		int seconds = durationInSecords(then, now());
+		return (seconds > (hours * 3600));
+	}
+
+	
+	private static int durationInSecords(Date startTime, Date now) {
+		long mills = now.getTime() - startTime.getTime();
+		int seconds = new Long(mills / 1000).intValue();
+		return seconds;
+	}
+
 	
 }

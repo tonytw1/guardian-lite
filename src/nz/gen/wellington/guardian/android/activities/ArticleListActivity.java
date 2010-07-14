@@ -229,8 +229,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    case 5: 
 					mainpane = (LinearLayout) findViewById(R.id.MainPane);
 					TextView message = new TextView(context);
-					msg.getData().getString("modtime");
-					message.setText("Updates to this article set are available (Refresh to view)");
+					final String modtime = msg.getData().getString("modtime");
+					message.setText("This article set has last downloaded: " + modtime);
 					mainpane.addView(message, 0);
 					return;
 			}
@@ -431,13 +431,22 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				}		
 			}
 			
-			//if (bundle != null) {
-				//Date modificationTime = bundle.getTimestamp();
+			if (bundle != null) {
+				Date modificationTime = bundle.getTimestamp();
 				//Log.i(TAG, "Article bundle timestamp is: " + bundle.getTimestamp() + " / " + modificationTime);			
 				
-				/*
-				if (modificationTime != null) {
+				
+				if (modificationTime != null && DateTimeHelper.isMoreThanHoursOld(modificationTime, 1)) {					
+					m = new Message();
+					m.what = 5;
+					Bundle bundle = new Bundle();
+					bundle.putString("modtime", modificationTime.toString());					
+					m.setData(bundle);
+					updateArticlesHandler.sendMessage(m);
+				}
 					
+					
+					/*
 					if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(10))) {
 						Log.i(TAG, "Checking remote checksum local copy is older than 10 minutes and network is available");
 					
@@ -446,15 +455,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 						if (remoteChecksum != null) {
 							if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {
 								Log.i(TAG, "Remote content checksum is different: " + localChecksum + ":" + remoteChecksum);
-								m = new Message();
-								m.what = 5;
-								Bundle bundle = new Bundle();
-								bundle.putString("modtime", modificationTime.toString());
-								bundle.putString("localChecksum", localChecksum);
-								bundle.putString("remoteChecksum", remoteChecksum);
-								m.setData(bundle);
-								updateArticlesHandler.sendMessage(m);
-							
 							} else {
 								Log.i(TAG, "No remote content change detected: " + localChecksum + ":" + remoteChecksum);
 								articleDAO.touchFile(getArticleSet());
@@ -464,11 +464,12 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 							Log.e(TAG, "Remote checksum was null");							
 						}
 					}
+					*/
 					
-				}
-				*/
 				
-			//}
+				
+				
+			}
 			
 			loaded = DateTimeHelper.now();
 			return;				
