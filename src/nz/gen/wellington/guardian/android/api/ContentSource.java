@@ -1,6 +1,7 @@
 package nz.gen.wellington.guardian.android.api;
 
 import java.util.List;
+import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
@@ -19,6 +20,6 @@ public interface ContentSource {
 	ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback, int pageSize);
 	public void stopLoading();
 	public String getRemoteChecksum(ArticleSet articleSet);
-	public List<Tag> searchTags(String searchTerm);
+	public List<Tag> searchTags(String searchTerm, Map<String, Section> sections);
 
 }

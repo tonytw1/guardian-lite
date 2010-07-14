@@ -287,8 +287,8 @@ public class OpenPlatformJSONParser {
 	 }
 
 	 
-	 public List<Tag> parseTagsJSON(InputStream input) {
-		 try {			
+	 public List<Tag> parseTagsJSON(InputStream input, Map<String, Section> sections) {
+		 try {
 				StringBuilder content = new StringBuilder();
 				BufferedReader in = new BufferedReader(new InputStreamReader(input));
 				String str;
@@ -310,14 +310,20 @@ public class OpenPlatformJSONParser {
 					JSONObject tag = results.getJSONObject(i);				
 					final String id = tag.getString("id");
 					final String tagName = tag.getString("webTitle");
+					final String type = tag.getString("type");
 					
 					Section section = null;
-					if (tag.has("sectionId")) {
-						final String sectionId = tag.getString("sectionId");
-						final String sectionName = tag.getString("sectionName");
-						section = new Section(sectionId, sectionName, "#ff0000");	// TODO use section map!
+					if (type.equals("contributor")) {
+						tags.add(new Tag(tagName, id, null));
+					} else {
+						if (tag.has("sectionId")) {
+							final String sectionId = tag.getString("sectionId");
+							section = sections.get(sectionId);
+							if (section != null) {
+								tags.add(new Tag(tagName, id, section));													
+							}
+						}
 					}
-					tags.add(new Tag(tagName, id, section));					
 				}
 				
 				return tags;			

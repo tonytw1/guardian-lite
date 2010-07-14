@@ -2,10 +2,8 @@ package nz.gen.wellington.guardian.android.api.openplatfrom;
 
 import java.io.InputStream;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.http.client.utils.URLEncodedUtils;
+import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ContentSource;
@@ -112,7 +110,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	
 		
 	@Override
-	public List<Tag> searchTags(String searchTerm) {
+	public List<Tag> searchTags(String searchTerm, Map<String, Section> sections) {
 		InputStream input = null;		
 		if (input == null) {
 			Log.i(TAG, "Fetching tag list from live api: " + searchTerm);
@@ -122,7 +120,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		
 		if (input != null) {
 			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context);
-			return jsonParser.parseTagsJSON(input);			
+			return jsonParser.parseTagsJSON(input, sections);			
 		}
 		return null;
 	}

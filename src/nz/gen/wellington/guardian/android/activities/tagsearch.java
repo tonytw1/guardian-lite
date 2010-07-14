@@ -2,16 +2,18 @@ package nz.gen.wellington.guardian.android.activities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
+import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentSource;
+import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,13 +25,12 @@ import android.widget.Toast;
 
 
 public class tagsearch extends DownloadProgressAwareActivity implements OnClickListener {
-
-	private static final String TAG = "tagsearch";
 	
 	private Button search;
 	private NetworkStatusService networkStatusService;
 	private List<Tag> searchResults;
 	private ContentSource api;
+	private Map<String, Section> sections;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,8 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		
 		api = ArticleDAOFactory.getOpenPlatformApi(this.getApplicationContext());
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
+		ArticleDAO articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
+		sections = articleDAO.getSectionsMap();
 		
 		search = (Button) findViewById(R.id.Search);        
 		search.setOnClickListener(this);
@@ -60,16 +63,12 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 			case R.id.Search:	{
 				
 				EditText input = (EditText) findViewById(R.id.Input);
-				final String searchTerm = input.getText().toString();
+				final String searchTerm = input.getText().toString().trim();
 				
-				if (!(searchTerm.trim().equals(""))) {
-					
-					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					mgr.hideSoftInputFromWindow(input.getWindowToken(), 0);
-					
-					List<Tag> results = api.searchTags(searchTerm);
+				if (!(searchTerm.trim().equals(""))) {					
+					hideKeyboard(input);
+					List<Tag> results = api.searchTags(searchTerm, sections);
 					if (results != null) {
-						Log.i(TAG, "Found tags: " + results);
 						searchResults = results;
 						populateSearchResults();
 						
@@ -81,6 +80,12 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 			}
 		}
 		return;
+	}
+
+
+	private void hideKeyboard(EditText input) {
+		InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		mgr.hideSoftInputFromWindow(input.getWindowToken(), 0);
 	}
 
 	
