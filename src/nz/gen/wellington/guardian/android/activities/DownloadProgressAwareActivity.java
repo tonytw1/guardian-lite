@@ -5,12 +5,37 @@ import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 public class DownloadProgressAwareActivity extends MenuedActivity {
+		
+	private DownloadProgressReceiver downloadProgressReceiver;
 	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+		downloadProgressReceiver = new DownloadProgressReceiver();
+	}
+	
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		registerReceiver(downloadProgressReceiver, new IntentFilter(HttpFetcher.DOWNLOAD_PROGRESS));
+	}
 
+		
+	@Override
+	protected void onPause() {
+		super.onPause();
+		unregisterReceiver(downloadProgressReceiver);
+		hideDownloadProgress();
+	}
+	
+	
 	class DownloadProgressReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {

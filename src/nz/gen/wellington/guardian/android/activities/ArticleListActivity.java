@@ -19,17 +19,13 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
-import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -52,8 +48,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	boolean showMainImage = true;
 	NetworkStatusService networkStatusService;
 	
-	protected BroadcastReceiver downloadProgressReceiver;
-
 	private Thread loader;
 	private Date loaded;
 	
@@ -69,8 +63,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
 		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());
 
-		downloadProgressReceiver = new DownloadProgressReceiver();
-		
 		networkStatusService = new NetworkStatusService(this);		
 		updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService);		
 	}
@@ -110,18 +102,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	
 	@Override
-	protected void onResume() {
-		super.onResume();
-		registerReceiver(downloadProgressReceiver, new IntentFilter(HttpFetcher.DOWNLOAD_PROGRESS));
-	}
-
-		
-	@Override
 	protected void onPause() {
 		super.onPause();
 		updateArticlesRunner.stop();
-		unregisterReceiver(downloadProgressReceiver);
-		hideDownloadProgress();
 	}
 	
 	

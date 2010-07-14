@@ -116,6 +116,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		InputStream input = null;		
 		if (input == null) {
 			Log.i(TAG, "Fetching tag list from live api: " + searchTerm);
+			announceDownloadStarted("tag results");
 			input = getHttpInputStream(buildTagSearchQueryUrl(searchTerm, 20));
 		}
 		

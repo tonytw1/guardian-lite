@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
-public class tagsearch extends MenuedActivity implements OnClickListener {
+public class tagsearch extends DownloadProgressAwareActivity implements OnClickListener {
 
 	private static final String TAG = "tagsearch";
 	
