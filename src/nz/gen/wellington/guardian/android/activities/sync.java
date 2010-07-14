@@ -11,7 +11,6 @@ import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
-import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
@@ -27,7 +26,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,7 +33,7 @@ import android.widget.TextView;
 
 public class sync extends DownloadProgressAwareActivity implements OnClickListener {
 	
-	private static final String TAG = "sync";
+	//private static final String TAG = "sync";
 
 	Button start;
 	Button stop;
@@ -45,7 +43,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	
 	BroadcastReceiver taskStartReceiver;
 	BroadcastReceiver queueChangeReceiver;
-	BroadcastReceiver downloadProgressReceiver;
 	BroadcastReceiver batchCompletionReceiver;
 	
 	@Override
@@ -65,7 +62,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
         
         taskStartReceiver = new TaskStartReceiver();
         queueChangeReceiver = new QueueChangeReceiver();
-        downloadProgressReceiver = new DownloadProgressReceiver();
         batchCompletionReceiver = new BatchCompletionReceiver();
         
         doBindService();
@@ -77,7 +73,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 		super.onResume();		
 		registerReceiver(taskStartReceiver, new IntentFilter(ContentUpdateService.TASK_START));		
 		registerReceiver(queueChangeReceiver, new IntentFilter(TaskQueue.QUEUE_CHANGED));
-		registerReceiver(downloadProgressReceiver, new IntentFilter(HttpFetcher.DOWNLOAD_PROGRESS));
 		registerReceiver(batchCompletionReceiver, new IntentFilter(ContentUpdateService.BATCH_COMPLETION));
 		updateStatus();
 	}
@@ -88,7 +83,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 		super.onPause();
 		unregisterReceiver(taskStartReceiver);
 		unregisterReceiver(queueChangeReceiver);
-		unregisterReceiver(downloadProgressReceiver);
 		unregisterReceiver(batchCompletionReceiver);	
 	}
 

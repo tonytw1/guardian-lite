@@ -35,7 +35,7 @@ import android.widget.TextView;
 
 public abstract class ArticleListActivity extends DownloadProgressAwareActivity {
 	
-	private static final String TAG = "ArticleListActivity";
+	//private static final String TAG = "ArticleListActivity";
 	
 	UpdateArticlesHandler updateArticlesHandler;
 	UpdateArticlesRunner updateArticlesRunner;

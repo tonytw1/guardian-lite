@@ -7,10 +7,7 @@ import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,12 +23,9 @@ public class sections extends DownloadProgressAwareActivity {
 	private ArticleDAO articleDAO;
 	
 	
-	protected BroadcastReceiver downloadProgressReceiver;
-
-	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
-		super.onStart();
+		super.onCreate(savedInstanceState);
 		articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -39,28 +33,18 @@ public class sections extends DownloadProgressAwareActivity {
 		
 		setHeading("Sections");
 		setHeadingColour("#0061A6");
-		
-		downloadProgressReceiver = new DownloadProgressReceiver();
 	}
 	
 		
 	@Override
 	public void onResume() {
 		super.onResume();
-		registerReceiver(downloadProgressReceiver, new IntentFilter(HttpFetcher.DOWNLOAD_PROGRESS));
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
 		mainPane.removeAllViews();
 		populateSections();        
 	}
 
-		
-	@Override
-	public void onPause() {
-		super.onPause();
-		unregisterReceiver(downloadProgressReceiver);
-	}
-	
-		
+			
 	private void populateSections() {
 		List<Section> sections = articleDAO.getSections();		
 		if (sections != null) {
