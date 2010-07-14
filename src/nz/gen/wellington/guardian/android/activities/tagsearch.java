@@ -33,7 +33,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
-		super.onStart();
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tagsearch);
 		
 		api = ArticleDAOFactory.getOpenPlatformApi(this.getApplicationContext());
