@@ -229,8 +229,14 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    case 5: 
 					mainpane = (LinearLayout) findViewById(R.id.MainPane);
 					TextView message = new TextView(context);
-					final String modtime = msg.getData().getString("modtime");
-					message.setText("This article set has last downloaded: " + modtime);
+					//final String modtime = msg.getData().getString("modtime");
+					
+					if (networkStatusService.isConnectionAvailable()) {
+						message.setText("This article set has last downloaded more than an 2 hours ago. Refresh to check for updates.");
+					} else {
+						message.setText("This article set has last downloaded more than an 2 hours ago and may be out of date.");
+					}
+					
 					mainpane.addView(message, 0);
 					return;
 			}
@@ -436,7 +442,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				//Log.i(TAG, "Article bundle timestamp is: " + bundle.getTimestamp() + " / " + modificationTime);			
 				
 				
-				if (modificationTime != null && DateTimeHelper.isMoreThanHoursOld(modificationTime, 1)) {					
+				if (modificationTime != null && DateTimeHelper.isMoreThanHoursOld(modificationTime, 2)) {					
 					m = new Message();
 					m.what = 5;
 					Bundle bundle = new Bundle();
@@ -447,7 +453,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					
 					
 					/*
-					if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(10))) {
+				if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(10))) {
 						Log.i(TAG, "Checking remote checksum local copy is older than 10 minutes and network is available");
 					
 						String localChecksum = bundle.getChecksum();
