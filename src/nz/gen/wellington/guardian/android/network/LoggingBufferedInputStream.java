@@ -6,12 +6,9 @@ import java.io.InputStream;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 public class LoggingBufferedInputStream extends BufferedInputStream {
 	
-	private static final String TAG = "LoggingBufferedInputStream";
-
 	Context context;
 	int totalRead;
 	long contentLength;
@@ -33,8 +30,8 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 	public synchronized int read(byte[] buffer, int offset, int length) throws IOException {
 		int read = super.read(buffer, offset, length);
 		totalRead = totalRead + read;
-		announceProgress("dsjd", totalRead);
-		return read;	
+		announceProgress("", totalRead);	// TODO do we want to advertise the download name?
+		return read;
 	}
 	
 	@Override
@@ -44,15 +41,13 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 		announceProgress("dsjd", totalRead);
 		return read;
 	}
-	
-	
+		
 	@Override
 	public synchronized void close() throws IOException {
 		super.close();
 		announceDownloadCompleted("");
 	}
 	
-
 	private void announceProgress(String url, int totalRead) {
 		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
 		intent.putExtra("type", HttpFetcher.DOWNLOAD_UPDATE);
@@ -62,7 +57,6 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 		context.sendBroadcast(intent);
 	}
 
-	
 	
 	private void announceDownloadCompleted(String url) {
 		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);

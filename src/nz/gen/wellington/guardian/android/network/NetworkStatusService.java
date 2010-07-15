@@ -3,11 +3,9 @@ package nz.gen.wellington.guardian.android.network;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 public class NetworkStatusService {
 	
-	private static final String TAG = "NetworkStatusService";
 	private Context context;
 	
 	public NetworkStatusService(Context context) {
@@ -35,7 +33,6 @@ public class NetworkStatusService {
 		if (activeNetworkInfo.getTypeName().equals("WIFI")) {
 			return true;
 		}
-		//Log.i(TAG, "Active connection is of type: " + activeNetworkInfo.getTypeName());
 		return false;
 	}
 
