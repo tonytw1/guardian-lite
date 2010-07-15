@@ -4,7 +4,7 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.caching.FileService;
-import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -54,7 +54,7 @@ public class TagListPopulatingService {
 		
 		} else {			
 			NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO push out NSS and context
-			boolean isLocallyCached = FileService.isLocallyCached(context, new KeywordArticleSet(tag).getApiUrl());
+			boolean isLocallyCached = FileService.isLocallyCached(context, new TagArticleSet(tag).getApiUrl());
 	    	boolean contentIsAvailable = isLocallyCached || networkStatusService.isConnectionAvailable();
 	    	if (contentIsAvailable) {
 	    		ListKeywordClicker clicker = new ListKeywordClicker(tag);

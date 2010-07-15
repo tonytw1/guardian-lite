@@ -6,7 +6,7 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.Plurals;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
-import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -170,7 +170,7 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	private void queueTags(TaskQueue taskQueue, List<Tag> tags, int pageSize) {
 		if (tags != null) {
 			for (Tag tag : tags) {
-				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new KeywordArticleSet(tag), pageSize));
+				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new TagArticleSet(tag), pageSize));
 			}
 		}
 	}

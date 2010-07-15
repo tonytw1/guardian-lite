@@ -1,7 +1,7 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.sqllite.DataHelper;
 import android.os.Bundle;
@@ -41,7 +41,7 @@ public class keyword extends ArticleListActivity {
 	}
 	
 	protected ArticleSet getArticleSet() {
-		return new KeywordArticleSet(keyword);
+		return new TagArticleSet(keyword);
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {

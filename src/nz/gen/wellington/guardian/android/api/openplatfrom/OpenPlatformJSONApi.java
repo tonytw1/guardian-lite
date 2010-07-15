@@ -12,7 +12,7 @@ import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
-import nz.gen.wellington.guardian.android.model.KeywordArticleSet;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -162,7 +162,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 			url.append("&section=" + articleSet.getApiUrl());			
 		}
 		
-		if (articleSet instanceof KeywordArticleSet) {
+		if (articleSet instanceof TagArticleSet) {
 			url.append("&tag=" + articleSet.getApiUrl());			
 		}
 		
