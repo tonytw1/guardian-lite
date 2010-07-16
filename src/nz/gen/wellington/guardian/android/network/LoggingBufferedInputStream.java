@@ -38,7 +38,7 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 	public int read(byte[] buffer) throws IOException {
 		int read =  super.read(buffer);
 		totalRead = totalRead + read;
-		announceProgress("dsjd", totalRead);
+		announceProgress("", totalRead);
 		return read;
 	}
 		

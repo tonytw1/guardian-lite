@@ -51,7 +51,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		InputStream input = null;		
 		if (input == null) {
 			//Log.i(TAG, "Fetching article set from live api: " + apiUrl);
-			announceDownloadStarted(articleSet.getName());
+			announceDownloadStarted(articleSet.getName() + " article set");
 			input = getHttpInputStream(buildContentQueryUrl(articleSet, true, pageSize));
 		}		
 		
@@ -65,10 +65,10 @@ public class OpenPlatformJSONApi implements ContentSource {
 	}
 	
 	
-	private void announceDownloadStarted(String url) {
+	private void announceDownloadStarted(String downloadName) {
 		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
 		intent.putExtra("type", HttpFetcher.DOWNLOAD_STARTED);
-		intent.putExtra("url", url);
+		intent.putExtra("url", downloadName);
 		context.sendBroadcast(intent);
 	}
 	
