@@ -37,6 +37,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	private Map<String, Section> sections;
 	private TagSearchResultsHandler tagSearchResultsHandler;
 	
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,6 +60,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	protected void onResume() {
 		super.onResume();
 		search.setEnabled(networkStatusService.isConnectionAvailable());
+		// TODO text warning if no connection is available
 		populateSearchResults();
 	}
 
@@ -118,9 +120,9 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 
 		@Override
 		public void run() {
-			List<Tag> results = fetchTagResults(this.searchTeam);			
+			List<Tag> results = fetchTagResults(this.searchTeam);
 			if (results != null) {
-				searchResults = results;
+				searchResults = results;				
 				Message msg = new Message();
 				msg.what = RESULTS_LOADED;
 				tagSearchResultsHandler.sendMessage(msg);				
@@ -145,7 +147,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	}
 
 	
-	private void populateSearchResults() {		
+	private void populateSearchResults() {
 		LinearLayout resultsPane = (LinearLayout) findViewById(R.id.TagList);
 		resultsPane.removeAllViews();
 		LayoutInflater inflater = LayoutInflater.from(this);

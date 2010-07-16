@@ -232,9 +232,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					//final String modtime = msg.getData().getString("modtime");
 					
 					if (networkStatusService.isConnectionAvailable()) {
-						message.setText("This article set has last downloaded more than an 2 hours ago. Refresh to check for updates.");
+						message.setText("This article set was last downloaded more than 2 hours ago. Refresh to check for updates.");
 					} else {
-						message.setText("This article set has last downloaded more than an 2 hours ago and may be out of date.");
+						message.setText("This article set was last downloaded more than 2 hours ago and may be out of date.");
 					}
 					
 					mainpane.addView(message, 0);
