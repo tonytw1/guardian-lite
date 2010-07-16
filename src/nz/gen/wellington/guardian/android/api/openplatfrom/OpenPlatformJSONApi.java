@@ -74,11 +74,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 	
 
 	@Override
-	public String getRemoteChecksum(ArticleSet articleSet) {
-		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);	// TODO page size moves up to argument
-		final String pageSizeString = prefs.getString("pageSize", "10");
-		int pageSize = Integer.parseInt(pageSizeString);
-		
+	public String getRemoteChecksum(ArticleSet articleSet, int pageSize) {		
 		InputStream input = null;
 		if (input == null) {
 			//Log.i(TAG, "Fetching article set checksum from live api: " + articleSet.getApiUrl());

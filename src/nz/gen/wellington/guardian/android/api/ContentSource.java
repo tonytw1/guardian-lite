@@ -18,8 +18,8 @@ public interface ContentSource {
 
 	public List<Section> getSections();
 	ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback, int pageSize);
+	public String getRemoteChecksum(ArticleSet articleSet, int pageSize);
 	public void stopLoading();
-	public String getRemoteChecksum(ArticleSet articleSet);
 	public List<Tag> searchTags(String searchTerm, Map<String, Section> sections);
 
 }

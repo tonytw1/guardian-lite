@@ -60,7 +60,6 @@ public class ArticleDAO {
 	
 	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, boolean uncached) {
 		//Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
-		
 		ArticleBundle bundle = null;
 		if (!uncached) {
 			bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);		
@@ -69,13 +68,9 @@ public class ArticleDAO {
 			}		
 		}
 		
-		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
-		final String pageSizeString = prefs.getString("pageSize", "10");
-		int pageSize = Integer.parseInt(pageSizeString);
-		
 		List<Section> sections = this.getSections();
 		if (sections != null) {
-			bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback, pageSize);		
+			bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback, getPageSizePreference());		
 			if (bundle != null) {
 				fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);
 				return bundle;
@@ -86,12 +81,20 @@ public class ArticleDAO {
 		}
 		return null;
 	}
-
 	
-	public String getArticleSetRemoteChecksum(ArticleSet articleSet) {
-		return openPlatformApi.getRemoteChecksum(articleSet);
+	
+	public String getArticleSetRemoteChecksum(ArticleSet articleSet) {	
+		return openPlatformApi.getRemoteChecksum(articleSet, getPageSizePreference());
 	}
 	
+
+	private int getPageSizePreference() {
+		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
+		final String pageSizeString = prefs.getString("pageSize", "10");
+		int pageSize = Integer.parseInt(pageSizeString);
+		return pageSize;
+	}
+
 	
 	public void evictSections() {
 		sectionCache.clear();
