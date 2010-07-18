@@ -79,7 +79,7 @@ public class TagListPopulatingService {
 	}
 
 	
-	private static void populateSectionClicker(Section section, View tagView, boolean contentIsAvailable) {
+	public static void populateSectionClicker(Section section, View tagView, boolean contentIsAvailable) {
     	if (contentIsAvailable) {
     		SectionClicker clicker = new SectionClicker(section);
     		tagView.setOnClickListener(clicker);

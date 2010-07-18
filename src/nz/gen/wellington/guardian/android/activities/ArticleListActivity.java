@@ -12,11 +12,13 @@ import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.api.caching.FileService;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
@@ -273,10 +275,15 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			seperator.setBackgroundColor(Color.parseColor(SectionColourMap.getColourForSection(section.getId())));
 			TextView heading = (TextView) seperator.findViewById(R.id.TagName);
 			heading.setText(section.getName());
-			
-			TagListPopulatingService.populateSectionClicker(section, seperator, context);			
+	
+			NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO content is available decision is quite duplicated now.
+	    	boolean isLocallyCached = FileService.isLocallyCached(context, new SectionArticleSet(section).getApiUrl());	    	
+	    	boolean contentIsAvailable = isLocallyCached || networkStatusService.isConnectionAvailable();
+	    				
+			TagListPopulatingService.populateSectionClicker(section, seperator, contentIsAvailable);
 			mainpane.addView(seperator);
 		}
+		
 
 		private View chooseTrailView(LayoutInflater mInflater, boolean shouldUseFeatureTrail) {
 			View view;
@@ -438,10 +445,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			}
 			
 			if (bundle != null) {
-				Date modificationTime = bundle.getTimestamp();
-				//Log.i(TAG, "Article bundle timestamp is: " + bundle.getTimestamp() + " / " + modificationTime);			
-				
-				
+				Date modificationTime = bundle.getTimestamp();				
 				if (modificationTime != null && DateTimeHelper.isMoreThanHoursOld(modificationTime, 2)) {					
 					m = new Message();
 					m.what = 5;
@@ -450,30 +454,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					m.setData(bundle);
 					updateArticlesHandler.sendMessage(m);
 				}
-					
-					
-					/*
-				if (networkStatusService.isConnectionAvailable() && modificationTime.isBefore(new DateTime().minusMinutes(10))) {
-						Log.i(TAG, "Checking remote checksum local copy is older than 10 minutes and network is available");
-					
-						String localChecksum = bundle.getChecksum();
-						String remoteChecksum = articleDAO.getArticleSetRemoteChecksum(getArticleSet());
-						if (remoteChecksum != null) {
-							if (localChecksum != null && !localChecksum.equals(remoteChecksum)) {
-								Log.i(TAG, "Remote content checksum is different: " + localChecksum + ":" + remoteChecksum);
-							} else {
-								Log.i(TAG, "No remote content change detected: " + localChecksum + ":" + remoteChecksum);
-								articleDAO.touchFile(getArticleSet());
-							}
-							
-						} else {
-							Log.e(TAG, "Remote checksum was null");							
-						}
-					}
-					*/
-					
-				
-				
 				
 			}
 			
