@@ -1,13 +1,15 @@
 package nz.gen.wellington.guardian.android.activities.ui;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.caching.FileService;
-import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.content.Context;
 import android.graphics.Color;
@@ -23,18 +25,17 @@ public class TagListPopulatingService {
 
 
 	public static void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<Tag> tags, Context context) {		
+		Set<String> duplicatedTagNames = getDuplicatedTagNames(tags);		
 		for (Tag tag : tags) {
-			//Log.d(TAG, "Populating tag: " + tag.getId() + " (" + tag.getName() + ")");
-			View tagView = inflater.inflate(R.layout.authorslist, null);
-						
+			View tagView = inflater.inflate(R.layout.authorslist, null);						
 			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
-			titleText.setText(tag.getName());
-			
+			titleText.setText(getDeduplicatedTagName(tag, duplicatedTagNames.contains(tag.getName())));			
 			populateClicker(tag, tagView, context);
 	    	tagList.addView(tagView);
 		}
 	}
-	
+
+
 	
 	public static void populateSections(LayoutInflater inflater, boolean connectionIsAvailable,  ViewGroup tagList, List<Section> sections, Context context) {
 		for (Section section: sections) {
@@ -82,4 +83,27 @@ public class TagListPopulatingService {
 		
 	}
 	
+
+	private static Set<String> getDuplicatedTagNames(List<Tag> tags) {
+		Set<String> duplicatedTagNames = new HashSet<String>();		
+		Set<String> allTagNames = new HashSet<String>();
+		for (Tag tag : tags) {
+			if (allTagNames.contains(tag.getName())) {
+				duplicatedTagNames.add(tag.getName());
+			}
+			allTagNames.add(tag.getName());
+		}
+		return duplicatedTagNames;
+	}
+	
+	
+	private static String getDeduplicatedTagName(Tag tag, boolean tagNameIsDuplicated) {
+		if (tagNameIsDuplicated && tag.getSection() != null) {
+			return tag.getSection().getName() + " - " + tag.getName();
+		} else {
+			return tag.getName();
+		}
+	}
+	
 }
+
