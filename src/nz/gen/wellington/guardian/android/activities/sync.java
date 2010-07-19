@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.Calendar;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
@@ -16,6 +17,8 @@ import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.services.UpdateArticleSetTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,7 +28,9 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -64,7 +69,7 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
         queueChangeReceiver = new QueueChangeReceiver();
         batchCompletionReceiver = new BatchCompletionReceiver();
         
-        doBindService();
+        doBindService();        
 	}
 	
 
@@ -75,6 +80,7 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 		registerReceiver(queueChangeReceiver, new IntentFilter(TaskQueue.QUEUE_CHANGED));
 		registerReceiver(batchCompletionReceiver, new IntentFilter(ContentUpdateService.BATCH_COMPLETION));
 		updateStatus();
+		setAlarm();
 	}
 
 	
@@ -117,6 +123,16 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 			break;
 		}
 		
+	}
+	
+	
+	public void setAlarm() {
+		AlarmManager alarmManager = (AlarmManager) this.getApplicationContext().getSystemService(Context.ALARM_SERVICE);		
+		Intent i=new Intent(this.getApplicationContext(), OnAlarmReceiver.class);
+		PendingIntent pi= PendingIntent.getBroadcast(this.getApplicationContext(), 0, i, 0);
+		
+		Log.i("SYNC", "Setting alarm");
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 60000, pi);
 	}
 
 

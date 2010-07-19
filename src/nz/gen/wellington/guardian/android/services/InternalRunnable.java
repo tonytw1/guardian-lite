@@ -71,18 +71,20 @@ public class InternalRunnable implements Runnable {
 	    		this.status = ContentUpdateService.RUNNING;
 
 	    		ContentUpdateTaskRunnable task = getNextTask();
-	    		if (networkStatusService.isConnectionAvailable()) {
-
-	    			announceTaskBeginning(task);
-	    			task.setReport(report);
-	    			currentTask = task;
-	    			task.run();
-	    			taskQueue.remove(task);    		
-	    			announceTaskCompletion(task);
-	    			currentTask = null;
-	    			
-	    		} else {
-	    			Log.i(TAG, "Not running update task as network is not available");
+	    		if (task != null) {
+		    		if (networkStatusService.isConnectionAvailable()) {
+	
+		    			announceTaskBeginning(task);
+		    			task.setReport(report);
+		    			currentTask = task;
+		    			task.run();
+		    			taskQueue.remove(task);    		
+		    			announceTaskCompletion(task);
+		    			currentTask = null;
+		    			
+		    		} else {
+		    			Log.i(TAG, "Not running update task as network is not available");
+		    		}
 	    		}
 	    		
 	    		if (taskQueue.isEmpty()) {

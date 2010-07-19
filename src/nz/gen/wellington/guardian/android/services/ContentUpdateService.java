@@ -1,5 +1,7 @@
 package nz.gen.wellington.guardian.android.services;
 
+import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
@@ -32,6 +34,18 @@ public class ContentUpdateService extends Service {
 
 	
     @Override
+	public void onStart(Intent intent, int startId) {
+		super.onStart(intent, startId);
+		Log.i(TAG, "Got start command");
+		
+		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
+		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new TopStoriesArticleSet(), 10));
+		
+		this.start();
+	}
+
+
+	@Override
     public void onCreate() {
     }
     
