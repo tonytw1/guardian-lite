@@ -5,7 +5,7 @@
       
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="false">
      	     
-        <activity android:label="@string/app_name" android:name=".activities.main" android:screenOrientation="portrait" android:launchMode="singleTask">
+        <activity android:label="@string/app_name" android:name=".activities.main"  android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -17,23 +17,23 @@
     		</intent-filter>
 		</activity>
 
-		<activity android:label="Sections" android:name=".activities.sections" android:screenOrientation="portrait" >
+		<activity android:label="Sections" android:name=".activities.sections"  >
 			<intent-filter>
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".activities.section" android:screenOrientation="portrait" ><intent-filter></intent-filter>
+		<activity android:name=".activities.section"  ><intent-filter></intent-filter>
 		</activity>
 
-		<activity android:name=".activities.sync" android:screenOrientation="portrait"></activity>
+		<activity android:name=".activities.sync" ></activity>
 
 		<service android:name=".services.ContentUpdateService" android:enabled="true"></service>
 		
-		<activity android:name=".activities.keyword" android:screenOrientation="portrait" ></activity>
-		<activity android:name=".activities.perferences" android:screenOrientation="portrait"></activity>
-		<activity android:name=".activities.favourites" android:screenOrientation="portrait"></activity>
+		<activity android:name=".activities.keyword"  ></activity>
+		<activity android:name=".activities.perferences" ></activity>
+		<activity android:name=".activities.favourites" ></activity>
 		<activity android:name=".activities.notification" android:noHistory="true"></activity>
-		<activity android:name=".activities.tagsearch" android:screenOrientation="portrait"></activity>
+		<activity android:name=".activities.tagsearch" ></activity>
 
 <receiver android:name=".activities.TimedSyncAlarmReceiver"></receiver>
 </application>
