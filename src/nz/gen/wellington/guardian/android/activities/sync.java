@@ -1,14 +1,10 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.Calendar;
-
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.Plurals;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,7 +21,7 @@ import android.widget.TextView;
 
 public class sync extends DownloadProgressAwareActivity implements OnClickListener {
 	
-	//private static final String TAG = "sync";
+	private static final String TAG = "sync";
 
 	Button start;
 	Button stop;
@@ -67,7 +63,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 		registerReceiver(queueChangeReceiver, new IntentFilter(TaskQueue.QUEUE_CHANGED));
 		registerReceiver(batchCompletionReceiver, new IntentFilter(ContentUpdateService.BATCH_COMPLETION));
 		updateStatus();
-		setAlarm();
 	}
 
 	
@@ -80,7 +75,8 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	}
 
 
-	public void onClick(View src) {		
+	public void onClick(View src) {
+		Log.d(TAG, "Got click on: " + src.toString());
 		switch (src.getId()) {
 
 		case R.id.buttonStart:
@@ -95,20 +91,34 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 			updateStatus();
 			break;
 		}
-		
 	}
 
+	/*
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		Log.i(TAG, "Got checkbox change");
+		if (buttonView.getId() == R.id.Autosync) {
+			CheckBox checkbox = (CheckBox) findViewById(R.id.Autosync);
+			if (checkbox.isChecked()) {
+				
+				TimePicker downloadTimePicker = (TimePicker) findViewById(R.id.DownloadTimePicker);
+				
+				Date time = Calendar.getInstance().getTime();
+				time.setHours(downloadTimePicker.getCurrentHour());
+				time.setMinutes(downloadTimePicker.getCurrentMinute());
+				setAlarm(time.getTime());
+				
+				Toast.makeText(this.getApplicationContext(), "Scheduled download set", Toast.LENGTH_SHORT);
+				
+			} else {
+				cancelAlarm();
+				Toast.makeText(this.getApplicationContext(), "Scheduled download canceled", Toast.LENGTH_SHORT);
+			}
+		}
+	}
+	*/
 	
-	public void setAlarm() {
-		AlarmManager alarmManager = (AlarmManager) this.getApplicationContext().getSystemService(Context.ALARM_SERVICE);		
-		Intent i=new Intent(this.getApplicationContext(), TimedSyncAlarmReceiver.class);
-		PendingIntent pi= PendingIntent.getBroadcast(this.getApplicationContext(), 0, i, 0);
-		
-		Log.i("SYNC", "Setting alarm");
-		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 60000 * 60, pi);
-	}
-
-
+	
 	private void updateStatus() {
 		if (contentUpdateService == null) {
 			start.setEnabled(false);

@@ -7,4 +7,5 @@
 
 
 
+<CheckBoxPreference android:title="Auto sync" android:key="autoSync"></CheckBoxPreference>
 </PreferenceScreen>
