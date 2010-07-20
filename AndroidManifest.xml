@@ -35,7 +35,7 @@
 		<activity android:name=".activities.notification" android:noHistory="true"></activity>
 		<activity android:name=".activities.tagsearch" android:screenOrientation="portrait"></activity>
 
-<receiver android:name=".activities.OnAlarmReceiver"></receiver>
+<receiver android:name=".activities.TimedSyncAlarmReceiver"></receiver>
 </application>
 
 <uses-sdk android:minSdkVersion="3" />

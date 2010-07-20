@@ -1,22 +1,12 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import java.util.Calendar;
-import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.Plurals;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
-import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
-import nz.gen.wellington.guardian.android.model.TagArticleSet;
-import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.SectionArticleSet;
-import nz.gen.wellington.guardian.android.model.Tag;
-import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
-import nz.gen.wellington.guardian.android.services.UpdateArticleSetTask;
-import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -25,11 +15,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -94,26 +81,12 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 
 
 	public void onClick(View src) {		
-		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
 		switch (src.getId()) {
 
 		case R.id.buttonStart:
-			
-			SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-			final String pageSizeString = prefs.getString("pageSize", "10");
-			int pageSize = Integer.parseInt(pageSizeString);
-			
-			List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();		
-			List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags(); // TODO move favourites dao to singleton.
-		
-			if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
-				queueSections(taskQueue, favouriteSections, pageSize);
-				queueTags(taskQueue, favouriteTags, pageSize);
-				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(),  new FavouriteStoriesArticleSet(favouriteSections, favouriteTags), pageSize));
-			}
-			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new TopStoriesArticleSet(), pageSize));
-									
-			contentUpdateService.start();
+			Intent serviceIntent = new Intent(this.getApplicationContext(), ContentUpdateService.class);
+			serviceIntent.setAction("RUN");
+			contentUpdateService.startService(serviceIntent);
 			updateStatus();
 			break;
 		
@@ -124,15 +97,15 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 		}
 		
 	}
-	
+
 	
 	public void setAlarm() {
 		AlarmManager alarmManager = (AlarmManager) this.getApplicationContext().getSystemService(Context.ALARM_SERVICE);		
-		Intent i=new Intent(this.getApplicationContext(), OnAlarmReceiver.class);
+		Intent i=new Intent(this.getApplicationContext(), TimedSyncAlarmReceiver.class);
 		PendingIntent pi= PendingIntent.getBroadcast(this.getApplicationContext(), 0, i, 0);
 		
 		Log.i("SYNC", "Setting alarm");
-		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 60000, pi);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 60000 * 60, pi);
 	}
 
 
@@ -182,24 +155,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 		}
 	}
 
-
-	private void queueTags(TaskQueue taskQueue, List<Tag> tags, int pageSize) {
-		if (tags != null) {
-			for (Tag tag : tags) {
-				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new TagArticleSet(tag), pageSize));
-			}
-		}
-	}
-
-
-	private void queueSections(TaskQueue taskQueue, List<Section> sections, int pageSize) {
-		if (sections != null) {
-			for (Section section : sections) {
-				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new SectionArticleSet(section), pageSize));
-			}
-		}
-	}
-	
 	
 	private void updateQueueStatus(int articles, int images) {	
 		TextView status = (TextView) findViewById(R.id.Status);
