@@ -17,7 +17,6 @@ public class perferences extends PreferenceActivity {
 	
 	
 	private static final int ONE_DAY = 60000 * 60 * 24;
-	private static final String TAG = "perferences";
 
 	
 	@Override
