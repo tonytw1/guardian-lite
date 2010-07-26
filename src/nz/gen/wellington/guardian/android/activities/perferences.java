@@ -16,9 +16,10 @@ import android.util.Log;
 public class perferences extends PreferenceActivity {
 	
 	
-	private static final int TIMED_DOWNLOAD_REPEAT_INTERVAL = 60000 * 60;
+	private static final int TIMED_DOWNLOAD_REPEAT_INTERVAL = 60000 * 60 * 24;
+	private static final String TAG = "perferences";
 
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,8 +39,15 @@ public class perferences extends PreferenceActivity {
 				
 				boolean autoSyncEnabled = (Boolean) newValue;
 				if (autoSyncEnabled) {
-					long timeInMillis = Calendar.getInstance().getTimeInMillis() + (60 * 1000);
-					setAlarm(timeInMillis);
+					Calendar time = Calendar.getInstance();
+					boolean isToday = time.get(Calendar.HOUR_OF_DAY) < 6;					
+					time.set(Calendar.HOUR_OF_DAY, 6);
+					time.set(Calendar.MINUTE, 0);
+					long timeInMillis = time.getTimeInMillis() + (60 * 1000);
+					if (!isToday) {
+						timeInMillis = timeInMillis + TIMED_DOWNLOAD_REPEAT_INTERVAL;
+					}
+					setAlarm(timeInMillis);		
 				} else {
 					cancelAlarm();
 				}
@@ -51,9 +59,8 @@ public class perferences extends PreferenceActivity {
 
 	
 	private void setAlarm(long timeInMillis) {
-		AlarmManager alarmManager = (AlarmManager) this.getApplicationContext().getSystemService(Context.ALARM_SERVICE);		
-		Log.i("SYNC", "Setting alarm");
-
+		Log.i(TAG, "Setting sync alarm for: " + timeInMillis);
+		AlarmManager alarmManager = (AlarmManager) this.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 		PendingIntent pi = makePendingIntent();		
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, TIMED_DOWNLOAD_REPEAT_INTERVAL, pi);
 	}

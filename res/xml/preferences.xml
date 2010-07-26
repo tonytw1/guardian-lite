@@ -7,5 +7,5 @@
 
 
 
-<CheckBoxPreference android:title="Auto sync" android:key="autoSync"></CheckBoxPreference>
+<CheckBoxPreference android:title="Auto sync" android:key="autoSync" android:summaryOn="Favourites will be downloaded at 6AM"></CheckBoxPreference>
 </PreferenceScreen>
