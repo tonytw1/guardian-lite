@@ -63,7 +63,6 @@ public class perferences extends PreferenceActivity {
 
 	
 	private void setAlarm(long timeInMillis) {
-		Log.i(TAG, "Setting sync alarm for: " + timeInMillis);
 		AlarmManager alarmManager = (AlarmManager) this.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 		PendingIntent pi = makePendingIntent();		
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, ONE_DAY, pi);
@@ -79,7 +78,6 @@ public class perferences extends PreferenceActivity {
 	
 	private void cancelAlarm() {
 		AlarmManager alarmManager = (AlarmManager) this.getApplicationContext().getSystemService(Context.ALARM_SERVICE);		
-		Log.i("SYNC", "Clearing alarm");
 		alarmManager.cancel(makePendingIntent());		
 	}
 	
