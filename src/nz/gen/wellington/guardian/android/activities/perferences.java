@@ -1,6 +1,7 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import nz.gen.wellington.guardian.android.R;
 import android.app.AlarmManager;
@@ -15,9 +16,8 @@ import android.util.Log;
 
 public class perferences extends PreferenceActivity {
 	
-	
+	private static final String TAG = "perferences";	
 	private static final int ONE_DAY = 60000 * 60 * 24;
-
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,24 +34,23 @@ public class perferences extends PreferenceActivity {
 		@Override
 		public boolean onPreferenceChange(Preference preference, Object newValue) {			
 			Log.i("PreferenceActivity", "Preference has been updated: " + preference.getKey());
-			if (preference.getKey().equals("autoSync")) {
-				
+			if (preference.getKey().equals("autoSync")) {				
 				boolean autoSyncEnabled = (Boolean) newValue;
 				if (autoSyncEnabled) {
 					setAlarm(getNextAutoSyncTime());		
 				} else {
 					cancelAlarm();
 				}
-			}			
+			}
 			return true;
 		}
 		
 		private long getNextAutoSyncTime() {
-			Calendar time = Calendar.getInstance();
-			boolean isToday = time.get(Calendar.HOUR_OF_DAY) < 6;					
+			Calendar time = Calendar.getInstance();			
+			boolean isToday = time.get(Calendar.HOUR_OF_DAY) < 6;
 			time.set(Calendar.HOUR_OF_DAY, 6);
 			time.set(Calendar.MINUTE, 0);
-			long timeInMillis = time.getTimeInMillis() + (60 * 1000);
+			long timeInMillis = time.getTimeInMillis();
 			if (!isToday) {
 				timeInMillis = timeInMillis + ONE_DAY;
 			}
@@ -63,7 +62,8 @@ public class perferences extends PreferenceActivity {
 	
 	private void setAlarm(long timeInMillis) {
 		AlarmManager alarmManager = (AlarmManager) this.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-		PendingIntent pi = makePendingIntent();		
+		PendingIntent pi = makePendingIntent();
+		Log.i(TAG, "Setting sync alarm for: " + new Date(timeInMillis).toLocaleString());
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, ONE_DAY, pi);
 	}
 

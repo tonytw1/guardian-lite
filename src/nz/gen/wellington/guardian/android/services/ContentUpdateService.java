@@ -48,16 +48,14 @@ public class ContentUpdateService extends Service {
 		super.onStart(intent, startId);
 		if (intent != null && intent.getAction() != null && intent.getAction().equals("RUN")) {
 			Log.i(TAG, "Got start command");
-			TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
-			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new TopStoriesArticleSet(), 10));		
 			this.start();
 		}
 	}
 
         
     public void start() {
+    	Log.i(TAG, "Queuing tasks");
     	queueUpdateTasks();
-    	
     	internalRunnable = new InternalRunnable(this, (NotificationManager)getSystemService(NOTIFICATION_SERVICE));
     	thread = new Thread(internalRunnable);
     	thread.setDaemon(true);
@@ -95,15 +93,13 @@ public class ContentUpdateService extends Service {
 	
 	private void queueUpdateTasks() {
 		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
-
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 		final String pageSizeString = prefs.getString("pageSize", "10");
 		int pageSize = Integer.parseInt(pageSizeString);
-
 		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();
 		List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(
 				ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags(); // TODO  move to singleton
-																		
+			
 		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
 			queueSections(taskQueue, favouriteSections, pageSize);
 			queueTags(taskQueue, favouriteTags, pageSize);
