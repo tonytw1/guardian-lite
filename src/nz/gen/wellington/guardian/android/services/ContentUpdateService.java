@@ -93,21 +93,26 @@ public class ContentUpdateService extends Service {
 	
 	private void queueUpdateTasks() {
 		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
+		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());	// TODO shouldn't be lined like this.
-		final String pageSizeString = prefs.getString("pageSize", "10");
-		int pageSize = Integer.parseInt(pageSizeString);
-		
-		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();
-		List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(
-			ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags(); // TODO  move to singleton
-			
+		final int pageSize = getPageSize();		
 		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new TopStoriesArticleSet(), pageSize));
+		
+		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections(); 
+		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
 		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
 			queueSections(taskQueue, favouriteSections, pageSize);
 			queueTags(taskQueue, favouriteTags, pageSize);
 			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new FavouriteStoriesArticleSet(favouriteSections, favouriteTags), pageSize));
 		}
+	}
+
+
+	private int getPageSize() {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());	// TODO shouldn't be lined like this.
+		final String pageSizeString = prefs.getString("pageSize", "10");
+		int pageSize = Integer.parseInt(pageSizeString);
+		return pageSize;
 	}
 
 	

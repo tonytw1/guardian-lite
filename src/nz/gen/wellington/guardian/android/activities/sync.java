@@ -93,31 +93,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 		}
 	}
 
-	/*
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		Log.i(TAG, "Got checkbox change");
-		if (buttonView.getId() == R.id.Autosync) {
-			CheckBox checkbox = (CheckBox) findViewById(R.id.Autosync);
-			if (checkbox.isChecked()) {
-				
-				TimePicker downloadTimePicker = (TimePicker) findViewById(R.id.DownloadTimePicker);
-				
-				Date time = Calendar.getInstance().getTime();
-				time.setHours(downloadTimePicker.getCurrentHour());
-				time.setMinutes(downloadTimePicker.getCurrentMinute());
-				setAlarm(time.getTime());
-				
-				Toast.makeText(this.getApplicationContext(), "Scheduled download set", Toast.LENGTH_SHORT);
-				
-			} else {
-				cancelAlarm();
-				Toast.makeText(this.getApplicationContext(), "Scheduled download canceled", Toast.LENGTH_SHORT);
-			}
-		}
-	}
-	*/
-	
 	
 	private void updateStatus() {
 		if (contentUpdateService == null) {

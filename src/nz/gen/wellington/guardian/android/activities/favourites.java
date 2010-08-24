@@ -43,8 +43,9 @@ public class favourites extends ArticleListActivity {
 
 
 	private void populateFavourites() {
-		List<Section> favouriteSections = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteSections();
-		List<Tag> favouriteTags = new FavouriteSectionsAndTagsDAO(ArticleDAOFactory.getDao(this.getApplicationContext()), this.getApplicationContext()).getFavouriteTags();
+		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
+		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections();
+		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
 		
 		boolean hasFavourites= !favouriteSections.isEmpty() || !favouriteTags.isEmpty();
 		TextView description = (TextView) findViewById(R.id.Description);
@@ -92,10 +93,9 @@ public class favourites extends ArticleListActivity {
 	
 	@Override
 	protected ArticleSet getArticleSet() {	
-		FavouriteSectionsAndTagsDAO dao = new FavouriteSectionsAndTagsDAO(articleDAO, this);
-		
-		List<Section> favouriteSections = dao.getFavouriteSections();
-		List<Tag> favouriteTags = dao.getFavouriteTags();
+		FavouriteSectionsAndTagsDAO favouriteSectionAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
+		List<Section> favouriteSections = favouriteSectionAndTagsDAO.getFavouriteSections();
+		List<Tag> favouriteTags = favouriteSectionAndTagsDAO.getFavouriteTags();
 		
 		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
 			return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);			
