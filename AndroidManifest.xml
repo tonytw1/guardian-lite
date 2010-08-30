@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="nz.gen.wellington.guardian.android" android:versionName="1.13" android:versionCode="14">
-      
-      
+   	package="nz.gen.wellington.guardian.android" android:versionName="1.13" android:versionCode="14">
+   	
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="false">
      	     
         <activity android:label="@string/app_name" android:name=".activities.main"  android:launchMode="singleTask">
@@ -35,12 +34,28 @@
 		<activity android:name=".activities.notification" android:noHistory="true"></activity>
 		<activity android:name=".activities.tagsearch" ></activity>
 
-<receiver android:name=".activities.TimedSyncAlarmReceiver"></receiver>
-</application>
-
-<uses-sdk android:minSdkVersion="3" />
-<uses-permission android:name="android.permission.INTERNET"></uses-permission>
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-
-<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+		<receiver android:name=".activities.TimedSyncAlarmReceiver"></receiver>
+		
+		
+		<receiver android:name=".widgets.TopStoriesWidget" android:label="@string/widget_name">
+		    <intent-filter>
+    		    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+    		</intent-filter>
+    		<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget" />
+		</receiver>
+				
+		<receiver android:name=".widgets.FavouriteStoriesWidget" android:label="@string/favourites_widget_name">
+		    <intent-filter>
+    		    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+    		</intent-filter>
+    		<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget" />
+		</receiver>
+				
+	</application>
+	
+	<uses-sdk android:minSdkVersion="3" />
+	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+	
 </manifest> 
