@@ -17,7 +17,7 @@ import android.util.Log;
 public class perferences extends PreferenceActivity {
 	
 	private static final String TAG = "perferences";	
-	private static final int ONE_DAY = 60000 * 60 * 24;
+	private static final long ONE_DAY = 60000 * 60 * 24;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

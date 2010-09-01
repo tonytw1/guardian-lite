@@ -18,6 +18,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -43,14 +44,16 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	protected void refresh(Context context, int[] appWidgetIds) {
 		ArticleBundle topStories = getArticleSet(context);
 
-		if (topStories != null) {						
+		RemoteViews widgetView = new RemoteViews(context.getPackageName(), R.layout.widget);
+		if (topStories != null && topStories.getArticles() != null && topStories.getArticles().size() > 2) {
+			//Log.i("Widget", "Have articles");
+			
 			ImageDAO imageDAO = ArticleDAOFactory.getImageDao(context);			
-			RemoteViews widgetView = new RemoteViews(context.getPackageName(), R.layout.widget);
 			
 			List<Article> randomArticles = selectTwoRandomArticleWithTrailImages(topStories.getArticles());
 			if (randomArticles.size() > 0) {
 				populateArticle(widgetView, imageDAO, randomArticles.get(0), context);				
-			} 			
+			}
 			if (randomArticles.size() > 1) {
 				populateSecondArticle(widgetView, imageDAO, randomArticles.get(1), context);								
 			}
@@ -59,8 +62,7 @@ public class TopStoriesWidget extends AppWidgetProvider {
 			manager.updateAppWidget(appWidgetIds, widgetView);
 			
 		} else {
-			// TODO error screen
-			//Log.w(TAG, "Top stories was null");
+			//Log.i("Widget", "No articles");		
 		}
 	}
 	

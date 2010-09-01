@@ -109,7 +109,7 @@ public class ContentUpdateService extends Service {
 
 
 	private int getPageSize() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());	// TODO shouldn't be lined like this.
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
 		final String pageSizeString = prefs.getString("pageSize", "10");
 		int pageSize = Integer.parseInt(pageSizeString);
 		return pageSize;

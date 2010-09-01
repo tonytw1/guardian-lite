@@ -4,10 +4,10 @@
   android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent" android:id="@+id/WidgetItemLayout">
 
 <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" 
-android:paddingTop="0px" android:background="#222" android:layout_gravity="top" android:layout_height="wrap_content" android:visibility="gone" android:id="@+id/WidgetFirstItem">
+android:paddingTop="0px" android:background="#222" android:layout_gravity="top" android:layout_height="wrap_content" android:visibility="gone" android:id="@+id/WidgetFirstItem" android:layout_marginTop="0px">
 
 <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/WidgetImage" android:adjustViewBounds="true" 
-android:paddingRight="4px" android:visibility="gone" android:maxWidth="75px" android:paddingBottom="1px" android:paddingTop="1px" android:paddingLeft="0px"></ImageView>
+android:paddingRight="4px" android:visibility="gone" android:paddingBottom="1px" android:paddingTop="1px" android:paddingLeft="0px" android:maxWidth="73px"></ImageView>
 
 <LinearLayout android:id="@+id/LinearLayout02" android:layout_height="fill_parent" android:layout_width="fill_parent" android:orientation="vertical" android:paddingTop="0px">
 
@@ -18,12 +18,14 @@ android:paddingRight="4px" android:visibility="gone" android:maxWidth="75px" and
 </LinearLayout>
 </LinearLayout>
 
-<LinearLayout android:id="@+id/LinearLayout05" android:layout_height="fill_parent" android:layout_gravity="bottom" android:layout_width="fill_parent"><LinearLayout android:layout_width="fill_parent" android:orientation="horizontal" android:background="#222" android:layout_height="wrap_content" android:layout_gravity="bottom" android:paddingTop="0px" android:visibility="gone" android:id="@+id/WidgetSecondItem">
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/WidgetSecondImage" android:adjustViewBounds="true" android:paddingRight="4px" android:visibility="gone" android:maxWidth="75px" android:paddingBottom="1px" android:paddingTop="1px" android:paddingLeft="0px"></ImageView>
+<LinearLayout android:id="@+id/LinearLayout05" android:layout_height="fill_parent" android:layout_gravity="top" android:layout_width="fill_parent"><LinearLayout android:layout_width="fill_parent" android:orientation="horizontal" android:background="#222" android:layout_height="wrap_content" android:layout_gravity="top" android:paddingTop="0px" android:visibility="gone" android:id="@+id/WidgetSecondItem" android:layout_marginTop="7px">
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/WidgetSecondImage" android:adjustViewBounds="true" android:paddingRight="4px" android:visibility="gone" android:paddingBottom="1px" android:paddingTop="1px" android:paddingLeft="0px" android:maxWidth="73px"></ImageView>
 <LinearLayout android:id="@+id/LinearLayout04" android:layout_height="fill_parent" android:layout_width="fill_parent" android:orientation="vertical">
 <TextView android:text="@+id/TextView01" android:id="@+id/WidgetSecondHeadline" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#fff" android:paddingTop="0px" android:textSize="5pt"></TextView>
 <TextView android:text="@+id/TextView02" android:id="@+id/WidgetSecondStandfirst" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="4pt" android:paddingBottom="1px"></TextView>
 </LinearLayout>
 
-</LinearLayout></LinearLayout>
+</LinearLayout>
+</LinearLayout>
+
 </LinearLayout>
