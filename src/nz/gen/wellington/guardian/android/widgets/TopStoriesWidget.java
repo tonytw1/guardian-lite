@@ -59,7 +59,7 @@ public class TopStoriesWidget extends AppWidgetProvider {
 		} else {			
 			Article errorMessage = new Article();
 			errorMessage.setTitle("No articles available");
-			errorMessage.setStandfirst("You may need to resync this article set");
+			errorMessage.setStandfirst("You may need to sync this article set");
 			populateArticle(widgetView, imageDAO, errorMessage, context);
 		}
 		
