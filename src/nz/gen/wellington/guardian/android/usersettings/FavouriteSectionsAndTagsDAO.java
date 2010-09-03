@@ -35,4 +35,12 @@ public class FavouriteSectionsAndTagsDAO {
 		return tags;
 	}
 	
+	
+	public boolean hasFavourites() {
+		DataHelper dh = new DataHelper(context);
+		boolean hasFavourites = dh.hasFavourites();
+		dh.close();
+		return hasFavourites;
+	}
+	
 }

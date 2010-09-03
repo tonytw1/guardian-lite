@@ -16,16 +16,17 @@ public class FavouriteStoriesWidget extends TopStoriesWidget {
 	protected ArticleBundle getArticleSet(Context context) {
 		ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
 		FavouriteSectionsAndTagsDAO favouritesDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(context);
-		ArticleSet favouriteArticlesSet = new FavouriteStoriesArticleSet(favouritesDAO.getFavouriteSections(), favouritesDAO.getFavouriteTags());
-		return articleDAO.getArticleSetArticles(favouriteArticlesSet, false);	
+		if (favouritesDAO.hasFavourites()) {
+			ArticleSet favouriteArticlesSet = new FavouriteStoriesArticleSet(favouritesDAO.getFavouriteSections(), favouritesDAO.getFavouriteTags());
+			return articleDAO.getArticleSetArticles(favouriteArticlesSet, false);
+		}
+		return null;
 	}
-
+	
 	@Override
 	protected Intent getClickIntent(Context context) {
 		return new Intent(context, favourites.class);
 
 	}
-
-	
 	
 }

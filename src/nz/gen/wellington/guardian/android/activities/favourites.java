@@ -44,12 +44,12 @@ public class favourites extends ArticleListActivity {
 
 	private void populateFavourites() {
 		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
-		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections();
-		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
-		
-		boolean hasFavourites= !favouriteSections.isEmpty() || !favouriteTags.isEmpty();
+
 		TextView description = (TextView) findViewById(R.id.Description);
-		if (hasFavourites) {
+		if (favouriteSectionsAndTagsDAO.hasFavourites()) {
+			List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections();
+			List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
+		
 			LayoutInflater inflater = LayoutInflater.from(this);
 			LinearLayout authorList = (LinearLayout) findViewById(R.id.FavouritesPane);
 		

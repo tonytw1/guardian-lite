@@ -31,6 +31,20 @@ public class DataHelper {
 		this.db = openHelper.getWritableDatabase();
 		this.insertStmt = this.db.compileStatement(INSERT);
 	}
+	
+	public boolean hasFavourites() {	// TODO count query rather than select all
+		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
+		int total = cursor.getCount();
+		closeCursor(cursor);		
+		return total > 0;	
+	}
+
+	public boolean haveRoom() {
+		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
+		int total = cursor.getCount();
+		closeCursor(cursor);		
+		return total < 20;	
+	}
 		
 		
 	public long insert(String type, String apiid, String name, String sectionid) {
@@ -152,14 +166,6 @@ public class DataHelper {
 			db.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE);
 			onCreate(db);
 		}
-	}
-
-
-	public boolean haveRoom() {
-		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
-		int total = cursor.getCount();
-		closeCursor(cursor);		
-		return total < 20;	
 	}
 	
 }
