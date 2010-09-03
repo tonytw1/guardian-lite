@@ -23,7 +23,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 public class TopStoriesWidget extends AppWidgetProvider {
-		
+	
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {		
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -42,15 +42,13 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	
 	
 	protected void refresh(Context context, int[] appWidgetIds) {
-		ArticleBundle topStories = getArticleSet(context);
-
+		ArticleBundle stories = getArticleSet(context);
+		
+		ImageDAO imageDAO = ArticleDAOFactory.getImageDao(context);
 		RemoteViews widgetView = new RemoteViews(context.getPackageName(), R.layout.widget);
-		if (topStories != null && topStories.getArticles() != null && topStories.getArticles().size() > 2) {
-			//Log.i("Widget", "Have articles");
+		if (stories != null && stories.getArticles() != null && stories.getArticles().size() > 2) {
 			
-			ImageDAO imageDAO = ArticleDAOFactory.getImageDao(context);			
-			
-			List<Article> randomArticles = selectTwoRandomArticleWithTrailImages(topStories.getArticles());
+			List<Article> randomArticles = selectTwoRandomArticleWithTrailImages(stories.getArticles());
 			if (randomArticles.size() > 0) {
 				populateArticle(widgetView, imageDAO, randomArticles.get(0), context);				
 			}
@@ -58,12 +56,15 @@ public class TopStoriesWidget extends AppWidgetProvider {
 				populateSecondArticle(widgetView, imageDAO, randomArticles.get(1), context);								
 			}
 			
-			AppWidgetManager manager = AppWidgetManager.getInstance(context);
-			manager.updateAppWidget(appWidgetIds, widgetView);
-			
-		} else {
-			//Log.i("Widget", "No articles");		
+		} else {			
+			Article errorMessage = new Article();
+			errorMessage.setTitle("No articles available");
+			errorMessage.setStandfirst("You may need to resync this article set");
+			populateArticle(widgetView, imageDAO, errorMessage, context);
 		}
+		
+		AppWidgetManager manager = AppWidgetManager.getInstance(context);
+		manager.updateAppWidget(appWidgetIds, widgetView);
 	}
 	
 	
@@ -95,7 +96,6 @@ public class TopStoriesWidget extends AppWidgetProvider {
 			widgetView.setViewVisibility(R.id.WidgetImage, View.GONE);
 		}
 		
-
 		Intent intent = getClickIntent(context);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 		widgetView.setOnClickPendingIntent(R.id.WidgetFirstItem, pendingIntent);
