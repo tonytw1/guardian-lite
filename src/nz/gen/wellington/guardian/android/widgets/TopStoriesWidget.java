@@ -8,6 +8,7 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.main;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
@@ -36,7 +37,7 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	
 	protected ArticleBundle getArticleSet(Context context) {
 		ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
-		ArticleBundle topStories = articleDAO.getArticleSetArticles(new TopStoriesArticleSet(), false);
+		ArticleBundle topStories = articleDAO.getArticleSetArticles(new TopStoriesArticleSet(), ContentFetchType.LOCAL_ONLY);
 		return topStories;
 	}
 	
@@ -81,6 +82,7 @@ public class TopStoriesWidget extends AppWidgetProvider {
 			attempts = attempts + 1 ;
 		}
 		
+		Log.i("TAG", randomArticles+"'");
 		return randomArticles;
 	}
 	

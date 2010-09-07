@@ -3,6 +3,7 @@ package nz.gen.wellington.guardian.android.widgets;
 import nz.gen.wellington.guardian.android.activities.favourites;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
@@ -13,12 +14,12 @@ import android.content.Intent;
 public class FavouriteStoriesWidget extends TopStoriesWidget {
 
 	@Override
-	protected ArticleBundle getArticleSet(Context context) {
+	protected ArticleBundle getArticleSet(Context context) {	// TODO return article set, not it's articles
 		ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
 		FavouriteSectionsAndTagsDAO favouritesDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(context);
 		if (favouritesDAO.hasFavourites()) {
 			ArticleSet favouriteArticlesSet = new FavouriteStoriesArticleSet(favouritesDAO.getFavouriteSections(), favouritesDAO.getFavouriteTags());
-			return articleDAO.getArticleSetArticles(favouriteArticlesSet, false);
+			return articleDAO.getArticleSetArticles(favouriteArticlesSet, ContentFetchType.LOCAL_ONLY);
 		}
 		return null;
 	}

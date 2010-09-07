@@ -11,6 +11,7 @@ import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.api.caching.FileService;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
@@ -119,10 +120,13 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	}
 	
 	
-	private ArticleBundle loadArticles(boolean uncached) {
+	private ArticleBundle loadArticles(boolean uncached) {	// TODO push out uncached parameter
 		ArticleSet articleSet = getArticleSet();
 		if (articleSet != null) {
-			return articleDAO.getArticleSetArticles(articleSet, uncached);
+			if (uncached) {
+				return articleDAO.getArticleSetArticles(articleSet, ContentFetchType.UNCACHED);
+			}
+			return articleDAO.getArticleSetArticles(articleSet, ContentFetchType.NORMAL);
 		}
 		return null;
 	}

@@ -58,14 +58,14 @@ public class ArticleDAO {
 	}
 	
 	
-	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, boolean uncached) {
+	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ContentFetchType fetchType) {
 		//Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
 		ArticleBundle bundle = null;
-		if (!uncached) {
+		if (!ContentFetchType.UNCACHED.equals(fetchType)) {
 			bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);		
 			if (bundle != null) {
 				return bundle;
-			}		
+			}
 		}
 		
 		List<Section> sections = this.getSections();
