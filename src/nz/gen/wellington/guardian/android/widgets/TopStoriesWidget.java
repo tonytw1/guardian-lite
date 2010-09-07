@@ -12,6 +12,7 @@ import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
+import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -35,15 +36,12 @@ public class TopStoriesWidget extends AppWidgetProvider {
 		return new Intent(context, main.class);
 	}
 	
-	protected ArticleBundle getArticleSet(Context context) {
-		ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
-		ArticleBundle topStories = articleDAO.getArticleSetArticles(new TopStoriesArticleSet(), ContentFetchType.LOCAL_ONLY);
-		return topStories;
+	protected ArticleSet getArticleSet(Context context) {
+		return new TopStoriesArticleSet();
 	}
 	
-	
-	protected void refresh(Context context, int[] appWidgetIds) {
-		ArticleBundle stories = getArticleSet(context);
+	private void refresh(Context context, int[] appWidgetIds) {
+		ArticleBundle stories = getArticles(context);
 		
 		ImageDAO imageDAO = ArticleDAOFactory.getImageDao(context);
 		RemoteViews widgetView = new RemoteViews(context.getPackageName(), R.layout.widget);
@@ -69,7 +67,17 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	}
 	
 	
-	protected List<Article> selectTwoRandomArticleWithTrailImages(List<Article> articles) {
+	private ArticleBundle getArticles(Context context) {
+		ArticleSet articleSet = getArticleSet(context);
+		if (articleSet == null) {
+			return null;
+		}
+		ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
+		return articleDAO.getArticleSetArticles(articleSet, ContentFetchType.LOCAL_ONLY);
+	}
+	
+	
+	private List<Article> selectTwoRandomArticleWithTrailImages(List<Article> articles) {
 		List<Article> randomArticles = new ArrayList<Article>();
 		int attempts = 0;
 		
@@ -86,7 +94,7 @@ public class TopStoriesWidget extends AppWidgetProvider {
 		return randomArticles;
 	}
 	
-	protected void populateArticle(RemoteViews widgetView, ImageDAO imageDAO, Article article, Context context) {		
+	private void populateArticle(RemoteViews widgetView, ImageDAO imageDAO, Article article, Context context) {		
 		widgetView.setTextViewText(R.id.WidgetHeadline, article.getTitle());
 		widgetView.setTextViewText(R.id.WidgetStandfirst, article.getStandfirst());
 		
@@ -106,7 +114,7 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	}
 		
 	// This is abit messy - 1.5 api does not allow nested views, hence this duplication
-	protected void populateSecondArticle(RemoteViews widgetView, ImageDAO imageDAO, Article article, Context context) {
+	private void populateSecondArticle(RemoteViews widgetView, ImageDAO imageDAO, Article article, Context context) {
 		widgetView.setTextViewText(R.id.WidgetSecondHeadline, article.getTitle());
 		widgetView.setTextViewText(R.id.WidgetSecondStandfirst, article.getStandfirst());
 		
