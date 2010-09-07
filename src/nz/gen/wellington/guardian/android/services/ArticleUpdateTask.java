@@ -39,14 +39,14 @@ public abstract class ArticleUpdateTask {
 			for (Article article : articles) {
 				if (article.getThumbnailUrl() != null) {
 					String description = article.getTitle() + " - trail image";					
-					queueImageDownloadIsNotAvailableLocally(article.getThumbnailUrl(), description);
+					queueImageDownloadIfNotAvailableLocally(article.getThumbnailUrl(), description);
 				}
 				if (largeImages && article.getMainImageUrl() != null) {
 					String description = article.getTitle() + " - main image";
 					if (article.getCaption() != null) {
 						description = article.getCaption();
 					}
-					queueImageDownloadIsNotAvailableLocally(article.getMainImageUrl(), description);
+					queueImageDownloadIfNotAvailableLocally(article.getMainImageUrl(), description);
 				}
 				report.setArticleCount(report.getArticleCount()+1);
 			}
@@ -54,7 +54,7 @@ public abstract class ArticleUpdateTask {
 	}
 	
 	
-	final protected void queueImageDownloadIsNotAvailableLocally(String imageUrl, String description) {
+	final protected void queueImageDownloadIfNotAvailableLocally(String imageUrl, String description) {
 		if (imageUrl != null && running) {
 			if (!ArticleDAOFactory.getImageDao(context).isAvailableLocally(imageUrl)) {
 				ArticleDAOFactory.getTaskQueue(context).addImageTask(new ImageFetchTask(imageUrl, context, description));

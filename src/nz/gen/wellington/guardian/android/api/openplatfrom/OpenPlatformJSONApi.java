@@ -12,15 +12,13 @@ import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
-import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class OpenPlatformJSONApi implements ContentSource {

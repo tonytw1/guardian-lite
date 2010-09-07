@@ -13,10 +13,8 @@ import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsD
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class ContentUpdateService extends Service {
@@ -95,45 +93,33 @@ public class ContentUpdateService extends Service {
 		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
 		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		
-		final int pageSize = getPageSize();		
-		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new TopStoriesArticleSet(), pageSize));
+		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new TopStoriesArticleSet()));
 		
 		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections(); 
 		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
 		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
-			queueSections(taskQueue, favouriteSections, pageSize);
-			queueTags(taskQueue, favouriteTags, pageSize);
-			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new FavouriteStoriesArticleSet(favouriteSections, favouriteTags), pageSize));
+			queueSections(taskQueue, favouriteSections);
+			queueTags(taskQueue, favouriteTags);
+			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new FavouriteStoriesArticleSet(favouriteSections, favouriteTags)));
 		}
 	}
-
-
-	private int getPageSize() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-		final String pageSizeString = prefs.getString("pageSize", "10");
-		int pageSize = Integer.parseInt(pageSizeString);
-		return pageSize;
-	}
-
 	
-	private void queueTags(TaskQueue taskQueue, List<Tag> tags, int pageSize) {
+	
+	private void queueTags(TaskQueue taskQueue, List<Tag> tags) {
 		if (tags != null) {
 			for (Tag tag : tags) {
 				taskQueue.addArticleTask(new UpdateArticleSetTask(this
-						.getApplicationContext(), new TagArticleSet(tag),
-						pageSize));
+						.getApplicationContext(), new TagArticleSet(tag)));
 			}
 		}
 	}
 
 	
-	private void queueSections(TaskQueue taskQueue, List<Section> sections,
-			int pageSize) {
+	private void queueSections(TaskQueue taskQueue, List<Section> sections) {
 		if (sections != null) {
 			for (Section section : sections) {
-				taskQueue.addArticleTask(new UpdateArticleSetTask(this
-						.getApplicationContext(),
-						new SectionArticleSet(section), pageSize));
+				UpdateArticleSetTask articleTask = new UpdateArticleSetTask(this.getApplicationContext(), new SectionArticleSet(section));
+				taskQueue.addArticleTask(articleTask);
 			}
 		}
 	}
