@@ -23,7 +23,6 @@ public class FavouriteStoriesWidget extends TopStoriesWidget {
 	@Override
 	protected Intent getClickIntent(Context context) {
 		return new Intent(context, favourites.class);
-
 	}
 	
 }

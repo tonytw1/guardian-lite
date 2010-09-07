@@ -64,10 +64,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		setContentView(R.layout.main);
 		viewsWaitingForTrailImages = new HashMap<String, View>();
 		articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
-		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());
-
-		networkStatusService = new NetworkStatusService(this);		
-		updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService);		
+		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());		
+		networkStatusService = new NetworkStatusService(this);
 	}
 	
 	
@@ -77,25 +75,29 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);		
 		boolean mainPaneNeedsPopulating = shouldRefreshView(mainPane);
 		if (mainPaneNeedsPopulating) {
-			refresh(false);
+			populateArticles(ContentFetchType.NORMAL);
 		}
 	}
 
 	
-	protected void refresh(boolean unCached) {
+	protected void refresh() {
+		populateArticles(ContentFetchType.UNCACHED);
+	}
+	
+	
+	private void populateArticles(ContentFetchType fetchType) {
 		//Log.i(TAG, "Refresh requested");
 	
-		if (!networkStatusService.isConnectionAvailable() && unCached) {
+		if (!networkStatusService.isConnectionAvailable() && ContentFetchType.UNCACHED.equals(fetchType)) {	// TODO knowledge of connections requirements should be on the fetch type.
 			//Log.i(TAG, "Not refreshing uncached as no connection is available");
 			return;
 		}
-				
+		
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
 		if (loader == null || !loader.isAlive()) {
 			mainPane.removeAllViews();
-			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService);
-			updateArticlesRunner.setUncached(unCached);
-
+			
+			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService, fetchType);
 			updateArticlesHandler.init();
 			
 			loader = new Thread(updateArticlesRunner);
@@ -107,11 +109,13 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		updateArticlesRunner.stop();
+		if (updateArticlesHandler != null) {
+			updateArticlesRunner.stop();
+		}
 	}
 	
 	
-	protected boolean shouldRefreshView(LinearLayout mainPane) {
+	private boolean shouldRefreshView(LinearLayout mainPane) {
 		if (loaded == null || mainPane.getChildCount() == 0) {
 			return true;
 		}
@@ -120,19 +124,19 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	}
 	
 	
-	private ArticleBundle loadArticles(boolean uncached) {	// TODO push out uncached parameter
+	private ArticleBundle loadArticles(ContentFetchType fetchType) {
 		ArticleSet articleSet = getArticleSet();
 		if (articleSet != null) {
-			if (uncached) {
-				return articleDAO.getArticleSetArticles(articleSet, ContentFetchType.UNCACHED);
-			}
-			return articleDAO.getArticleSetArticles(articleSet, ContentFetchType.NORMAL);
+			return articleDAO.getArticleSetArticles(articleSet, fetchType);
 		}
 		return null;
 	}
 	
+	
 	protected abstract ArticleSet getArticleSet();
 	protected abstract String getRefinementDescription(String refinementType);	
+
+	
 	
 	class UpdateArticlesHandler extends Handler {		
 
@@ -150,8 +154,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			this.descriptionSet = false;
 			init();
 		}
-		
-		
+				
 		public void init() {
 			first = true;
 			isFirstOfSection = true;
@@ -365,25 +368,21 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		ArticleDAO articleDAO;
 		ImageDAO imageDAO;
 		NetworkStatusService networkStatusService;
-		boolean uncached;
+		ContentFetchType fetchType;
 		
-		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, NetworkStatusService networkStatusService) {
+		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, NetworkStatusService networkStatusService, ContentFetchType fetchType) {
 			this.articleDAO = articleDAO;
 			this.imageDAO = imageDAO;
 			this.running = true;
 			this.networkStatusService = networkStatusService;
 			articleDAO.setArticleReadyCallback(this);
-			this.uncached = false;
+			this.fetchType = fetchType;
 		}
 		
-		public void setUncached(boolean uncached) {
-			this.uncached = uncached;		
-		}
-
 		public void run() {
 
-			if (running) {
-				bundle = loadArticles(uncached);
+			if (running) {			
+				bundle = loadArticles(fetchType);
 			}
 			
 			if (bundle == null) {

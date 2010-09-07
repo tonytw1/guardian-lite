@@ -79,7 +79,7 @@ public class section extends ArticleListActivity {
 			addToFavourites();
 			return true;
 		case 5:
-			refresh(true);
+			refresh();
 			return true;
 		}
 		return false;

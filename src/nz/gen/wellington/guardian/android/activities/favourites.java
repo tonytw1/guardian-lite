@@ -83,7 +83,7 @@ public class favourites extends ArticleListActivity {
 			switchToSections();
 			return true;		
 		case 5:
-			refresh(true);
+			refresh();
 			return true;
 		}
 		
