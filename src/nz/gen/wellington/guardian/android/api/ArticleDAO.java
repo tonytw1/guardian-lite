@@ -20,10 +20,11 @@ import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class ArticleDAO {
 		
-	//private static final String TAG = "ArticleDAO";
+	private static final String TAG = "ArticleDAO";
 	
 	InMemorySectionCache sectionCache;
 	FileBasedArticleCache fileBasedArticleCache;
@@ -59,17 +60,33 @@ public class ArticleDAO {
 	
 	
 	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ContentFetchType fetchType) {
-		//Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName());
+		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName() + " (" + fetchType.name() + ")");
+
 		ArticleBundle bundle = null;
 		if (!ContentFetchType.UNCACHED.equals(fetchType)) {
 			bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);		
-			if (bundle != null) {
+			if (bundle != null && !ContentFetchType.CHECKSUM.equals(fetchType)) {
 				return bundle;
 			}
 		}
-		
+				
 		List<Section> sections = this.getSections();
+		if (ContentFetchType.CHECKSUM.equals(fetchType) && bundle != null) {
+			if (bundle.getChecksum() != null) {				
+				Log.i(TAG, "Checking for checksum sync - local article set has checksum: " + bundle.getChecksum());
+				final String remoteChecksum = openPlatformApi.getRemoteChecksum(articleSet, getPageSizePreference());
+				Log.i(TAG, "Comparing checksums: " + bundle.getChecksum() + ":" + remoteChecksum);
+				boolean checksumsMatch = remoteChecksum != null && remoteChecksum.equals(bundle.getChecksum());
+				if (checksumsMatch) {
+					Log.i(TAG, "Remote checksum matches local copy. Not refetching");
+					// TODO touch timestamp
+					return bundle;
+				}
+			}
+		}
+		
 		if (sections != null) {
+			Log.i(TAG, "Fetching from live");
 			bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback, getPageSizePreference());		
 			if (bundle != null) {
 				fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);

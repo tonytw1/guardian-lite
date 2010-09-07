@@ -75,20 +75,20 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);		
 		boolean mainPaneNeedsPopulating = shouldRefreshView(mainPane);
 		if (mainPaneNeedsPopulating) {
-			populateArticles(ContentFetchType.NORMAL);
+			populateArticles(ContentFetchType.CHECKSUM);
 		}
 	}
 
 	
 	protected void refresh() {
-		populateArticles(ContentFetchType.UNCACHED);
+		populateArticles(ContentFetchType.CHECKSUM);
 	}
 	
 	
 	private void populateArticles(ContentFetchType fetchType) {
 		//Log.i(TAG, "Refresh requested");
 	
-		if (!networkStatusService.isConnectionAvailable() && ContentFetchType.UNCACHED.equals(fetchType)) {	// TODO knowledge of connections requirements should be on the fetch type.
+		if (!networkStatusService.isConnectionAvailable() && ContentFetchType.CHECKSUM.equals(fetchType)) {	// TODO knowledge of connections requirements should be on the fetch type.
 			//Log.i(TAG, "Not refreshing uncached as no connection is available");
 			return;
 		}
