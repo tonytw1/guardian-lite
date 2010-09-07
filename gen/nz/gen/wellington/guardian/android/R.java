@@ -41,8 +41,8 @@ public final class R {
         public static final int LinearLayout01=0x7f070001;
         public static final int LinearLayout02=0x7f070007;
         public static final int LinearLayout03=0x7f07001a;
-        public static final int LinearLayout04=0x7f070032;
-        public static final int LinearLayout05=0x7f07002f;
+        public static final int LinearLayout04=0x7f070031;
+        public static final int LinearLayout05=0x7f07002e;
         public static final int MainPane=0x7f070017;
         public static final int Ok=0x7f07001d;
         public static final int Outer=0x7f070013;
@@ -64,17 +64,16 @@ public final class R {
         public static final int TagList=0x7f070011;
         public static final int TagName=0x7f070012;
         public static final int TextView01=0x7f07000c;
-        public static final int TextView02=0x7f07002d;
         public static final int TrailImage=0x7f070018;
         public static final int WidgetFirstItem=0x7f07002a;
         public static final int WidgetHeadline=0x7f07002c;
         public static final int WidgetImage=0x7f07002b;
         public static final int WidgetItemLayout=0x7f070029;
-        public static final int WidgetSecondHeadline=0x7f070033;
-        public static final int WidgetSecondImage=0x7f070031;
-        public static final int WidgetSecondItem=0x7f070030;
-        public static final int WidgetSecondStandfirst=0x7f070034;
-        public static final int WidgetStandfirst=0x7f07002e;
+        public static final int WidgetSecondHeadline=0x7f070032;
+        public static final int WidgetSecondImage=0x7f070030;
+        public static final int WidgetSecondItem=0x7f07002f;
+        public static final int WidgetSecondStandfirst=0x7f070033;
+        public static final int WidgetStandfirst=0x7f07002d;
         public static final int buttonStart=0x7f070023;
     }
     public static final class layout {
