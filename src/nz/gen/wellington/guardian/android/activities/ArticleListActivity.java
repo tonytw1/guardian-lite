@@ -75,7 +75,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);		
 		boolean mainPaneNeedsPopulating = shouldRefreshView(mainPane);
 		if (mainPaneNeedsPopulating) {
-			populateArticles(ContentFetchType.CHECKSUM);
+			populateArticles(ContentFetchType.NORMAL);
 		}
 	}
 
