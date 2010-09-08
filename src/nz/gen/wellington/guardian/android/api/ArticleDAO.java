@@ -16,7 +16,6 @@ import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
-import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -31,7 +30,6 @@ public class ArticleDAO {
 	FileBasedSectionCache fileBasedSectionCache;
 	ArticleCallback articleCallback;
 	ContentSource openPlatformApi;
-	NetworkStatusService networkStatusService;
 	private Context context;
 	
 	public ArticleDAO(Context context) {
@@ -39,7 +37,6 @@ public class ArticleDAO {
 		this.fileBasedArticleCache = new FileBasedArticleCache(context);
 		this.fileBasedSectionCache = new FileBasedSectionCache(context);
 		openPlatformApi = ArticleDAOFactory.getOpenPlatformApi(context);
-		this.networkStatusService = new NetworkStatusService(context);
 		this.context = context;
 	}
 	
@@ -61,49 +58,66 @@ public class ArticleDAO {
 	
 	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ContentFetchType fetchType) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName() + " (" + fetchType.name() + ")");
-
-		ArticleBundle bundle = null;
-		if (!ContentFetchType.UNCACHED.equals(fetchType)) {
-			bundle = fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);		
-			if (bundle != null && !ContentFetchType.CHECKSUM.equals(fetchType)) {
-				return bundle;
-			}
-		}
 				
-		List<Section> sections = this.getSections();
-		if (ContentFetchType.CHECKSUM.equals(fetchType) && bundle != null) {
-			if (bundle.getChecksum() != null) {				
-				Log.i(TAG, "Checking for checksum sync - local article set has checksum: " + bundle.getChecksum());
+		if (fetchType.equals(ContentFetchType.LOCAL_ONLY)) {
+			return getLocalBundle(articleSet);
+		}
+		
+		if (fetchType.equals(ContentFetchType.UNCACHED)) {
+			return fetchFromLive(articleSet);			
+		}
+		
+		if (fetchType.equals(ContentFetchType.CHECKSUM)) {
+			ArticleBundle localCopy = getLocalBundle(articleSet);
+			if (localCopy != null && localCopy.getChecksum() != null) {
+				Log.i(TAG, "Checking for checksum sync - local article set has checksum: " + localCopy.getChecksum());
 				final String remoteChecksum = openPlatformApi.getRemoteChecksum(articleSet, getPageSizePreference());
-				Log.i(TAG, "Comparing checksums: " + bundle.getChecksum() + ":" + remoteChecksum);
-				boolean checksumsMatch = remoteChecksum != null && remoteChecksum.equals(bundle.getChecksum());
+				boolean checksumsMatch = remoteChecksum != null && remoteChecksum.equals(localCopy.getChecksum());
 				if (checksumsMatch) {
 					Log.i(TAG, "Remote checksum matches local copy. Not refetching");
-					// TODO touch timestamp
-					return bundle;
+					return localCopy;
+
+				} else {
+					return fetchFromLive(articleSet);								
 				}
 			}
 		}
 		
-		if (sections != null) {
-			Log.i(TAG, "Fetching from live");
-			bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback, getPageSizePreference());		
-			if (bundle != null) {
-				fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);
-				return bundle;
-				
+		if (fetchType.equals(ContentFetchType.NORMAL)) {
+			ArticleBundle localCopy = getLocalBundle(articleSet);
+			if (localCopy != null) {
+				return localCopy;
 			} else {
-				//Log.w(TAG, "Article api call failed");
-			}
+				return fetchFromLive(articleSet);
+			}			
 		}
+		
 		return null;
 	}
-	
-	
+
+		
 	public String getArticleSetRemoteChecksum(ArticleSet articleSet) {	
 		return openPlatformApi.getRemoteChecksum(articleSet, getPageSizePreference());
 	}
 	
+		
+	private ArticleBundle getLocalBundle(ArticleSet articleSet) {
+		return fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
+	}
+	
+		
+	private ArticleBundle fetchFromLive(ArticleSet articleSet) {
+		Log.i(TAG, "Fetching from live");
+		List<Section> sections = this.getSections();
+		if (sections != null) {
+			ArticleBundle bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback, getPageSizePreference());		
+			if (bundle != null) {
+				fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);
+				return bundle;				
+			}
+		}
+		return null;
+	}
 
 	private int getPageSizePreference() {
 		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
@@ -160,10 +174,5 @@ public class ArticleDAO {
 		}
 		return sectionsMap;
 	}
-
-
-	public void touchFile(ArticleSet articleSet) {
-		FileService.touchFile(context, articleSet.getApiUrl());		
-	}
-		
+	
 }
