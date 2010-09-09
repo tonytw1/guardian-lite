@@ -1,6 +1,7 @@
 package nz.gen.wellington.guardian.android.widgets;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -20,7 +21,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -45,25 +45,36 @@ public class TopStoriesWidget extends AppWidgetProvider {
 		
 		ImageDAO imageDAO = ArticleDAOFactory.getImageDao(context);
 		RemoteViews widgetView = new RemoteViews(context.getPackageName(), R.layout.widget);
-		if (stories != null && stories.getArticles() != null && stories.getArticles().size() > 2) {
+		if (stories != null && stories.getArticles() != null) {
 			
 			List<Article> randomArticles = selectTwoRandomArticleWithTrailImages(stories.getArticles());
 			if (randomArticles.size() > 0) {
-				populateArticle(widgetView, imageDAO, randomArticles.get(0), context);				
+				populateArticle(widgetView, imageDAO, randomArticles.get(0), context);
+
+				if (randomArticles.size() > 1) {
+					populateSecondArticle(widgetView, imageDAO, randomArticles.get(1), context);								
+				} else {
+					widgetView.setViewVisibility(R.id.WidgetSecondItem, View.GONE);
+				}
+				
+			} else {
+				showNoArticlesMessage(context, imageDAO, widgetView);				
 			}
-			if (randomArticles.size() > 1) {
-				populateSecondArticle(widgetView, imageDAO, randomArticles.get(1), context);								
-			}
-			
+						
 		} else {			
-			Article errorMessage = new Article();
-			errorMessage.setTitle("No articles available");
-			errorMessage.setStandfirst("You may need to sync this article set");
-			populateArticle(widgetView, imageDAO, errorMessage, context);
+			showNoArticlesMessage(context, imageDAO, widgetView);
 		}
 		
 		AppWidgetManager manager = AppWidgetManager.getInstance(context);
 		manager.updateAppWidget(appWidgetIds, widgetView);
+	}
+
+	private void showNoArticlesMessage(Context context, ImageDAO imageDAO,
+			RemoteViews widgetView) {
+		Article errorMessage = new Article();
+		errorMessage.setTitle("No articles available");
+		errorMessage.setStandfirst("You may need to sync this article set");
+		populateArticle(widgetView, imageDAO, errorMessage, context);
 	}
 	
 	
@@ -79,20 +90,30 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	
 	private List<Article> selectTwoRandomArticleWithTrailImages(List<Article> articles) {
 		List<Article> randomArticles = new ArrayList<Article>();
-		int attempts = 0;
 		
+		int attempts = 0;		
+		List<Article> articleWithTrailImages = selectArticlesWithTrailImages(articles);
 		while (randomArticles.size() < 2 && attempts < 50) {
-			int articleIndex = new Random().nextInt(articles.size()-1);
-			Article article = articles.get(articleIndex);			
-			if (article.getThumbnailUrl() != null && !randomArticles.contains(article)) {
+			int articleIndex = new Random(new Date().getTime()).nextInt(articleWithTrailImages.size()-1);
+			Article article = articleWithTrailImages.get(articleIndex);			
+			if (!randomArticles.contains(article)) {
 				randomArticles.add(article);
 			}
 			attempts = attempts + 1 ;
-		}
-		
-		Log.i("TAG", randomArticles+"'");
+		}		
 		return randomArticles;
 	}
+
+	private List<Article> selectArticlesWithTrailImages(List<Article> articles) {
+		List<Article> articleWithTrailImages = new ArrayList<Article>();
+		for (Article article : articles) {
+			if (article.getThumbnailUrl() != null) {
+				articleWithTrailImages.add(article);
+			}
+		}
+		return articleWithTrailImages;
+	}
+	
 	
 	private void populateArticle(RemoteViews widgetView, ImageDAO imageDAO, Article article, Context context) {		
 		widgetView.setTextViewText(R.id.WidgetHeadline, article.getTitle());
