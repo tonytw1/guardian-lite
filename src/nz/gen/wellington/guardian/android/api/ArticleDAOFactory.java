@@ -9,6 +9,7 @@ public class ArticleDAOFactory {
 
 	private static TaskQueue taskQueue;
 	private static ImageDAO imageDAO;
+	private static SectionDAO sectionDAO;
 	private static FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
 	
 	public static ArticleDAO getDao(Context context) {
@@ -35,9 +36,16 @@ public class ArticleDAOFactory {
 	
 	public static FavouriteSectionsAndTagsDAO getFavouriteSectionsAndTagsDAO(Context context) {
 		if (favouriteSectionsAndTagsDAO == null) {
-			favouriteSectionsAndTagsDAO = new FavouriteSectionsAndTagsDAO(getDao(context), context);			
+			favouriteSectionsAndTagsDAO = new FavouriteSectionsAndTagsDAO(getSectionDAO(context), context);			
 		}
 		return favouriteSectionsAndTagsDAO;
+	}
+
+	public static SectionDAO getSectionDAO(Context context) {
+		if (sectionDAO == null) {
+			sectionDAO = new SectionDAO(context);
+		}
+		return sectionDAO;
 	}
 	
 }

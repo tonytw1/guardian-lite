@@ -6,6 +6,7 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.os.Bundle;
@@ -20,14 +21,14 @@ import android.widget.Toast;
 public class sections extends DownloadProgressAwareActivity {
 		
 	ListAdapter adapter;
-	private ArticleDAO articleDAO;
+	private SectionDAO sectionDAO;
 	
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
-
+		sectionDAO = ArticleDAOFactory.getSectionDAO(this.getApplicationContext());
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.sections);
 		
@@ -46,7 +47,7 @@ public class sections extends DownloadProgressAwareActivity {
 
 			
 	private void populateSections() {
-		List<Section> sections = articleDAO.getSections();		
+		List<Section> sections = sectionDAO.getSections();		
 		if (sections != null) {
 			LayoutInflater inflater = LayoutInflater.from(this);		
 			LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);

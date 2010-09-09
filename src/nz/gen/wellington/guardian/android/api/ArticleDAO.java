@@ -1,15 +1,11 @@
 package nz.gen.wellington.guardian.android.api;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
-import nz.gen.wellington.guardian.android.api.caching.FileBasedSectionCache;
 import nz.gen.wellington.guardian.android.api.caching.FileService;
-import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
@@ -25,37 +21,20 @@ public class ArticleDAO {
 		
 	private static final String TAG = "ArticleDAO";
 	
-	InMemorySectionCache sectionCache;
 	FileBasedArticleCache fileBasedArticleCache;
-	FileBasedSectionCache fileBasedSectionCache;
 	ArticleCallback articleCallback;
 	ContentSource openPlatformApi;
 	private Context context;
+	private SectionDAO sectionsDAO;
 	
 	public ArticleDAO(Context context) {
-		this.sectionCache = CacheFactory.getSectionCache();
-		this.fileBasedArticleCache = new FileBasedArticleCache(context);
-		this.fileBasedSectionCache = new FileBasedSectionCache(context);
+		this.fileBasedArticleCache = new FileBasedArticleCache(context);		
 		openPlatformApi = ArticleDAOFactory.getOpenPlatformApi(context);
-		this.context = context;
+		this.sectionsDAO = ArticleDAOFactory.getSectionDAO(context);
+		this.context = context; // TODO shouldn't need to hold this on a field - inject it into all dependancies then discard
 	}
 	
-	
-	public List<Section> getSections() {
-		 List<Section> sections = fileBasedSectionCache.getSections();
-		 if (sections != null) {
-			 return sections;
-		 }
-		 
-		 sections = openPlatformApi.getSections();
-		 if (sections != null) {
-			sectionCache.addAll(sections);
-			fileBasedSectionCache.putSections(sections);
-		}
-		return sections;
-	}
-	
-	
+		
 	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ContentFetchType fetchType) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName() + " (" + fetchType.name() + ")");
 				
@@ -108,7 +87,7 @@ public class ArticleDAO {
 		
 	private ArticleBundle fetchFromLive(ArticleSet articleSet) {
 		Log.i(TAG, "Fetching from live");
-		List<Section> sections = this.getSections();
+		List<Section> sections = sectionsDAO.getSections();
 		if (sections != null) {
 			ArticleBundle bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback, getPageSizePreference());		
 			if (bundle != null) {
@@ -124,12 +103,6 @@ public class ArticleDAO {
 		final String pageSizeString = prefs.getString("pageSize", "10");
 		int pageSize = Integer.parseInt(pageSizeString);
 		return pageSize;
-	}
-
-	
-	public void evictSections() {
-		sectionCache.clear();
-		fileBasedSectionCache.clear();
 	}
 	
 	public void clearExpiredCacheFiles(Context context) {
@@ -161,18 +134,6 @@ public class ArticleDAO {
 
 	public void setArticleReadyCallback(ArticleCallback articleCallback) {
 		this.articleCallback = articleCallback;		
-	}
-
-
-	public Map<String, Section> getSectionsMap() {
-		Map<String, Section> sectionsMap = new HashMap<String, Section>();
-		List<Section> sections = this.getSections();
-		if (sections != null) {
-			for (Section section : sections) {
-				sectionsMap.put(section.getId(), section);
-			}
-		}
-		return sectionsMap;
 	}
 	
 }

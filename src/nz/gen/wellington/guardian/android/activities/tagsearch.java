@@ -6,9 +6,9 @@ import java.util.Map;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
-import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentSource;
+import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
@@ -36,6 +36,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	private ContentSource api;
 	private Map<String, Section> sections;
 	private TagSearchResultsHandler tagSearchResultsHandler;
+	private SectionDAO sectionDAO;
 	
 	
 	@Override
@@ -45,8 +46,8 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		
 		api = ArticleDAOFactory.getOpenPlatformApi(this.getApplicationContext());
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
-		ArticleDAO articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
-		sections = articleDAO.getSectionsMap();
+		sectionDAO = ArticleDAOFactory.getSectionDAO(this.getApplicationContext());
+		sections = sectionDAO.getSectionsMap();
 		
 		search = (Button) findViewById(R.id.Search);        
 		search.setOnClickListener(this);
