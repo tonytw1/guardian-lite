@@ -1,27 +1,28 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
-import nz.gen.wellington.guardian.android.sqllite.DataHelper;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
+import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListAdapter;
 import android.widget.Toast;
 
 public class keyword extends ArticleListActivity {
 
 	private static final String TAG = "keyword";
 
-	ListAdapter adapter;
-	Tag keyword;
-	MenuItem favouriteMenuItem;
-		
+	private Tag keyword;
+	private MenuItem favouriteMenuItem;
+	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
+		this.favouriteSectionsAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		keyword = (Tag) this.getIntent().getExtras().get("keyword");		
 		if (keyword.getSection() != null) {
 			setHeading(keyword.getSection().getName() + " - " + keyword.getName());
@@ -48,13 +49,11 @@ public class keyword extends ArticleListActivity {
 		menu.add(0, 1, 0, "Home");	
 		menu.add(0, 5, 0, "Refresh");
 		
-		DataHelper dh = new DataHelper(this);
-		if (dh.isFavourite(keyword)) {
+		if (favouriteSectionsAndTagsDAO.isFavourite(keyword)) {
 			favouriteMenuItem = menu.add(0, 4, 0, "Remove Favourite");
 		} else {
 			favouriteMenuItem = menu.add(0, 4, 0, "Add to Favourites");
 		}
-		dh.close();
 		
 	    return true;
 	}
@@ -78,11 +77,10 @@ public class keyword extends ArticleListActivity {
 
 	
 	private void addToFavourites() {
-		DataHelper dh = new DataHelper(this);
-		if (!dh.isFavourite(keyword)) {
-			if (dh.haveRoom()) {
-				Log.i(TAG, "Adding current tag to favourites: " + keyword.getName());
-				dh.addTag(keyword);
+		
+		if (!favouriteSectionsAndTagsDAO.isFavourite(keyword)) {
+			Log.i(TAG, "Adding current tag to favourites: " + keyword.getName());
+			if (favouriteSectionsAndTagsDAO.addTag(keyword)) {
 				favouriteMenuItem.setTitle("Remove Favourite");			
 			} else {
 	        	Toast.makeText(this, "Favourites list is full", Toast.LENGTH_LONG).show();
@@ -90,10 +88,9 @@ public class keyword extends ArticleListActivity {
 		
 		} else {
 			Log.i(TAG, "Removing current tag from favourites: " + keyword.getName());			
-			dh.removeTag(keyword);
+			favouriteSectionsAndTagsDAO.removeTag(keyword);
 			favouriteMenuItem.setTitle("Add to Favourites");
 		}		
-		dh.close();	
 	}
 	
 }

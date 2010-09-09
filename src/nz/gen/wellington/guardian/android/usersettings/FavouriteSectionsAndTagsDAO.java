@@ -10,37 +10,52 @@ import android.content.Context;
 
 public class FavouriteSectionsAndTagsDAO {
 	
-	SectionDAO sectionDAO;
-	private Context context;
-
+	private SectionDAO sectionDAO;
+	private DataHelper dh;
 	
 	public FavouriteSectionsAndTagsDAO(SectionDAO sectionDAO, Context context) {
 		this.sectionDAO = sectionDAO;
-		this.context = context;
+		this.dh = new DataHelper(context);
 	}
-	
-	
+		
 	public List<Section> getFavouriteSections() {
-		DataHelper dh = new DataHelper(context);	// TODO setup in constructor
-		List<Section> sections = dh.getFavouriteSections(sectionDAO.getSectionsMap());	// TODO dh should get sections itself
-		dh.close();
+		List<Section> sections = dh.getFavouriteSections(sectionDAO.getSectionsMap());	// todo dh should get sections itself
 		return sections;
 	}
-	
-	
+		
 	public List<Tag> getFavouriteTags() {
-		DataHelper dh = new DataHelper(context);
 		List<Tag> tags = dh.getFavouriteTags(sectionDAO.getSectionsMap());
-		dh.close();
 		return tags;
 	}
 	
-	
 	public boolean hasFavourites() {
-		DataHelper dh = new DataHelper(context);
 		boolean hasFavourites = dh.hasFavourites();
-		dh.close();
 		return hasFavourites;
+	}
+
+
+	public boolean isFavourite(Tag tag) {
+		return dh.isFavourite(tag);
+	}
+
+	public boolean addTag(Tag tag) {
+		return dh.addTag(tag);
+	}
+
+	public void removeTag(Tag tag) {
+		dh.removeTag(tag);
+	}
+	
+	public boolean isFavourite(Section section) {
+		return dh.isFavourite(section);
+	}
+
+	public boolean addSection(Section section) {
+		return dh.addSection(section);		
+	}
+
+	public void removeSection(Section section) {
+		dh.removeSection(section);		
 	}
 	
 }

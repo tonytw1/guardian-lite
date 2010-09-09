@@ -14,79 +14,84 @@ import android.database.sqlite.SQLiteStatement;
 
 public class DataHelper {
 	
-	private Context context;
-	private SQLiteDatabase db;
-
 	private static final String DATABASE_NAME = "guardian-lite.db";
 	private static final int DATABASE_VERSION = 1;
 	private static final String TAG_TABLE = "favourites";
 
-	private SQLiteStatement insertStmt;
 	private static final String INSERT = "insert into " + TAG_TABLE + "(type, apiid, name, sectionid) values (?, ?, ?, ?)";
-	
+
+	OpenHelper openHelper;
 
 	public DataHelper(Context context) {
-		this.context = context;
-		OpenHelper openHelper = new OpenHelper(this.context);
-		this.db = openHelper.getWritableDatabase();
-		this.insertStmt = this.db.compileStatement(INSERT);
+		openHelper = new OpenHelper(context);
 	}
 	
 	public boolean hasFavourites() {	// TODO count query rather than select all
-		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
+		SQLiteDatabase db = openHelper.getReadableDatabase();		
+		Cursor cursor = db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
 		int total = cursor.getCount();
-		closeCursor(cursor);		
+		closeCursor(cursor);
+		db.close();
 		return total > 0;	
 	}
-
-	public boolean haveRoom() {
-		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
-		int total = cursor.getCount();
-		closeCursor(cursor);		
-		return total < 20;	
-	}
-		
-		
+	
 	public long insert(String type, String apiid, String name, String sectionid) {
-		this.insertStmt.bindString(1, type);
-		this.insertStmt.bindString(2, apiid);
-		this.insertStmt.bindString(3, name);
-		this.insertStmt.bindString(4, sectionid);
-		return this.insertStmt.executeInsert();		
+		SQLiteDatabase db = openHelper.getWritableDatabase();
+		SQLiteStatement insertStmt = db.compileStatement(INSERT);
+		insertStmt.bindString(1, type);
+		insertStmt.bindString(2, apiid);
+		insertStmt.bindString(3, name);
+		insertStmt.bindString(4, sectionid);
+		long result = insertStmt.executeInsert();
+		db.close();
+		return result;
 	}
 	
 		
 	public void deleteAll() {
-		this.db.delete(TAG_TABLE, null, null);
+		SQLiteDatabase db = openHelper.getWritableDatabase();
+		db.delete(TAG_TABLE, null, null);
+		db.close();
 	}
 	
 	
 	public boolean isFavourite(Tag tag) {
-		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'tag' and apiid = ? ", new String[] { tag.getId() }, null, null, "name asc");
+		SQLiteDatabase db = openHelper.getReadableDatabase();
+		Cursor cursor = db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'tag' and apiid = ? ", new String[] { tag.getId() }, null, null, "name asc");
 		final boolean isFavourite = cursor.getCount() > 0;
 		closeCursor(cursor);
-		return isFavourite;	
+		final boolean result = isFavourite;	
+		db.close();
+		return result;
 	}
 	
 
 	public boolean isFavourite(Section section) {
-		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'section' and apiid = ? ", new String[] { section.getId() }, null, null, "name asc");
+		SQLiteDatabase db = openHelper.getReadableDatabase();
+		Cursor cursor = db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'section' and apiid = ? ", new String[] { section.getId() }, null, null, "name asc");
 		final boolean isFavourite = cursor.getCount() > 0;
-		closeCursor(cursor);
+		closeCursor(cursor);		
+		db.close();
 		return isFavourite;	
 	}
 	
+	
 	public void removeSection(Section section) {
-		this.db.delete(TAG_TABLE, " apiid = ? ", new String[] { section.getId() });
+		SQLiteDatabase db = openHelper.getWritableDatabase();
+		db.delete(TAG_TABLE, " apiid = ? ", new String[] { section.getId() });
+		db.close();
 	}
 	
 	public void removeTag(Tag tag) {
-		this.db.delete(TAG_TABLE, " apiid = ? ", new String[] { tag.getId() });		
+		SQLiteDatabase db = openHelper.getWritableDatabase();
+		db.delete(TAG_TABLE, " apiid = ? ", new String[] { tag.getId() });
+		db.close();
 	}
 	
 	
 	public List<Tag> getFavouriteTags(Map<String, Section> sectionsMap) {
-		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");
+		SQLiteDatabase db = openHelper.getReadableDatabase();
+		Cursor cursor = db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");
 		
 		List<Tag> favouriteTags = new ArrayList<Tag>();
 		if (cursor.moveToFirst()) {
@@ -102,12 +107,14 @@ public class DataHelper {
 			} while (cursor.moveToNext());
 		}
 		closeCursor(cursor);
+		db.close();
 		return favouriteTags;
 	}
 
 
 	public List<Section> getFavouriteSections(Map<String, Section> sectionsMap) {
-		Cursor cursor = this.db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");
+		SQLiteDatabase db = openHelper.getReadableDatabase();
+		Cursor cursor = db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");
 		
 		List<Section> favouriteSections = new ArrayList<Section>();
 		if (cursor.moveToFirst()) {
@@ -124,32 +131,47 @@ public class DataHelper {
 			} while (cursor.moveToNext());
 		}
 		closeCursor(cursor);
+		db.close();
 		return favouriteSections;
 	}
 	
 	
-	public void addTag(Tag keyword) {
-		this.insert("tag", keyword.getId(), keyword.getName(), (keyword.getSection() != null) ? keyword.getSection().getId(): "global");
+	public boolean addTag(Tag keyword) {
+		SQLiteDatabase db = openHelper.getWritableDatabase();
+		boolean result = false;
+		if (haveRoom(db)) {
+			this.insert("tag", keyword.getId(), keyword.getName(), (keyword.getSection() != null) ? keyword.getSection().getId(): "global");
+			result = true;
+		}
+		db.close();
+		return result;		
 	}
 	
 	
-	public void addSection(Section section) {
-		this.insert("section", section.getId(), section.getName(), section.getId());		
+	public boolean addSection(Section section) {
+		SQLiteDatabase db = openHelper.getReadableDatabase();
+		boolean result = false;
+		if (this.haveRoom(db)) {
+			this.insert("section", section.getId(), section.getName(), section.getId());
+		}
+		db.close();
+		return result;
 	}
 	
 	
-	public void close() {
-		db.close();		
+	private boolean haveRoom(SQLiteDatabase db) {
+		Cursor cursor = db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
+		int total = cursor.getCount();
+		closeCursor(cursor);
+		return total < 20;	
 	}
-	
 	
 	private void closeCursor(Cursor cursor) {
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-	}
-	
-	
+	}	
+		
 	private static class OpenHelper extends SQLiteOpenHelper {
 
 		OpenHelper(Context context) {

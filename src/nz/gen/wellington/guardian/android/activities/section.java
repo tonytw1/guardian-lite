@@ -3,10 +3,11 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.Arrays;
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
-import nz.gen.wellington.guardian.android.sqllite.DataHelper;
+import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,11 +19,12 @@ public class section extends ArticleListActivity {
 	private static final String TAG = "section";	
 	private Section section;
 	private MenuItem favouriteMenuItem;
-	
+	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);        
+        super.onCreate(savedInstanceState);
+        this.favouriteSectionsAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
         section = (Section) this.getIntent().getExtras().get("section");
     	setHeading(section.getName());
     	setHeadingColour(section.getColour());
@@ -52,14 +54,11 @@ public class section extends ArticleListActivity {
 		menu.add(0, 1, 0, "Home");
 		menu.add(0, 5, 0, "Refresh");
 		
-		DataHelper dh = new DataHelper(this);
-		if (dh.isFavourite(section)) {
+		if (favouriteSectionsAndTagsDAO.isFavourite(section)) {
 			favouriteMenuItem = menu.add(0, 4, 0, "Remove Favourite");
 		} else {
 			favouriteMenuItem = menu.add(0, 4, 0, "Add to Favourites");
-		}
-		dh.close();
-		
+		}		
 	    return true;
 	}
 	
@@ -86,14 +85,10 @@ public class section extends ArticleListActivity {
 	}
 	
 	
-	private void addToFavourites() {
-		DataHelper dh = new DataHelper(this);
-		if (!dh.isFavourite(section)) {
-			
-			boolean haveRoom = dh.haveRoom();
-			if (haveRoom) {
-				Log.i(TAG, "Adding current section to favourites: " + section.getName());
-				dh.addSection(section);
+	private void addToFavourites() {		
+		if (!favouriteSectionsAndTagsDAO.isFavourite(section)) {
+			Log.i(TAG, "Adding current section to favourites: " + section.getName());			
+			if (favouriteSectionsAndTagsDAO.addSection(section)) {
 				favouriteMenuItem.setTitle("Remove Favourite");
 			} else {
 	        	Toast.makeText(this, "Favourites list is full", Toast.LENGTH_LONG).show();
@@ -101,10 +96,9 @@ public class section extends ArticleListActivity {
 	
 		} else {
 			Log.i(TAG, "Removing current section from favourites: " + section.getName());			
-			dh.removeSection(section);
+			favouriteSectionsAndTagsDAO.removeSection(section);
 			favouriteMenuItem.setTitle("Add to Favourites");
-		}
-		dh.close();	
+		}		
 	}
 	
 }
