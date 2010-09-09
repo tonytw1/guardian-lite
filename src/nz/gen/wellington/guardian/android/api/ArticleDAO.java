@@ -13,28 +13,27 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class ArticleDAO {
 		
 	private static final String TAG = "ArticleDAO";
 	
-	FileBasedArticleCache fileBasedArticleCache;
-	ArticleCallback articleCallback;
-	ContentSource openPlatformApi;
-	private Context context;
+	private FileBasedArticleCache fileBasedArticleCache;
+	private ArticleCallback articleCallback;
+	private ContentSource openPlatformApi;
 	private SectionDAO sectionsDAO;
+	private PreferencesDAO preferencesDAO;
+	
 	
 	public ArticleDAO(Context context) {
-		this.fileBasedArticleCache = new FileBasedArticleCache(context);		
+		fileBasedArticleCache = new FileBasedArticleCache(context);		
 		openPlatformApi = ArticleDAOFactory.getOpenPlatformApi(context);
-		this.sectionsDAO = ArticleDAOFactory.getSectionDAO(context);
-		this.context = context; // TODO shouldn't need to hold this on a field - inject it into all dependancies then discard
+		sectionsDAO = ArticleDAOFactory.getSectionDAO(context);
+		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(context);
 	}
 	
-		
+	
 	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ContentFetchType fetchType) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName() + " (" + fetchType.name() + ")");
 				
@@ -50,7 +49,7 @@ public class ArticleDAO {
 			ArticleBundle localCopy = getLocalBundle(articleSet);
 			if (localCopy != null && localCopy.getChecksum() != null) {
 				Log.i(TAG, "Checking for checksum sync - local article set has checksum: " + localCopy.getChecksum());
-				final String remoteChecksum = openPlatformApi.getRemoteChecksum(articleSet, getPageSizePreference());
+				final String remoteChecksum = openPlatformApi.getRemoteChecksum(articleSet, preferencesDAO.getPageSizePreference());
 				boolean checksumsMatch = remoteChecksum != null && remoteChecksum.equals(localCopy.getChecksum());
 				if (checksumsMatch) {
 					Log.i(TAG, "Remote checksum matches local copy. Not refetching");
@@ -76,7 +75,7 @@ public class ArticleDAO {
 
 		
 	public String getArticleSetRemoteChecksum(ArticleSet articleSet) {	
-		return openPlatformApi.getRemoteChecksum(articleSet, getPageSizePreference());
+		return openPlatformApi.getRemoteChecksum(articleSet, preferencesDAO.getPageSizePreference());
 	}
 	
 		
@@ -89,7 +88,7 @@ public class ArticleDAO {
 		Log.i(TAG, "Fetching from live");
 		List<Section> sections = sectionsDAO.getSections();
 		if (sections != null) {
-			ArticleBundle bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback, getPageSizePreference());		
+			ArticleBundle bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback, preferencesDAO.getPageSizePreference());		
 			if (bundle != null) {
 				fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);
 				return bundle;				
@@ -98,13 +97,6 @@ public class ArticleDAO {
 		return null;
 	}
 
-	private int getPageSizePreference() {
-		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(context);
-		final String pageSizeString = prefs.getString("pageSize", "10");
-		int pageSize = Integer.parseInt(pageSizeString);
-		return pageSize;
-	}
-	
 	public void clearExpiredCacheFiles(Context context) {
 		FileService.clearExpiredCacheFiles(context);
 	}

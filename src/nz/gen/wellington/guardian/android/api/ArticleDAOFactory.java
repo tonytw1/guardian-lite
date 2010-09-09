@@ -11,6 +11,7 @@ public class ArticleDAOFactory {
 	private static ImageDAO imageDAO;
 	private static SectionDAO sectionDAO;
 	private static FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
+	private static PreferencesDAO preferencesDAO;
 	
 	public static ArticleDAO getDao(Context context) {
 		return new ArticleDAO(context);	
@@ -46,6 +47,13 @@ public class ArticleDAOFactory {
 			sectionDAO = new SectionDAO(context);
 		}
 		return sectionDAO;
+	}
+
+	public static PreferencesDAO getPreferencesDAO(Context context) {
+		if (preferencesDAO == null) {
+			preferencesDAO = new PreferencesDAO(context);
+		}
+		return preferencesDAO;
 	}
 	
 }
