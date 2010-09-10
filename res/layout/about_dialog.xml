@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical" android:gravity="left" android:layout_width="fill_parent" android:layout_height="fill_parent">
-<ScrollView android:id="@+id/ScrollView01" android:layout_width="fill_parent" android:layout_height="fill_parent"><LinearLayout android:id="@+id/LinearLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="vertical"><ImageView android:layout_height="wrap_content" android:id="@+id/KingsPlace" android:layout_width="fill_parent" android:paddingBottom="0px" android:paddingTop="0px" android:paddingLeft="10px" android:paddingRight="10px"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Heading" android:text="Guardian Lite" android:textColor="#fff" android:textStyle="bold" android:textSize="8pt" android:paddingLeft="10px"></TextView>
+  android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:gravity="top">
+<ScrollView android:id="@+id/ScrollView01" android:layout_width="fill_parent" android:layout_height="fill_parent"><LinearLayout android:id="@+id/LinearLayout01" android:layout_width="fill_parent" android:orientation="vertical" android:paddingTop="0px" android:layout_gravity="top" android:layout_height="wrap_content"><ImageView android:id="@+id/KingsPlace" android:paddingBottom="0px" android:paddingTop="0px" android:paddingLeft="0px" android:paddingRight="0px" android:layout_marginTop="0px" android:layout_height="fill_parent" android:layout_width="wrap_content" android:adjustViewBounds="true"></ImageView>
 
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingLeft="10px" android:paddingRight="10px" android:id="@+id/Description" 
-android:text=""></TextView>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Description" 
+android:text="" android:paddingRight="2px" android:paddingLeft="0px" android:layout_marginTop="8px"></TextView><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/GuardianLogo" android:layout_gravity="left" android:paddingLeft="0px" android:paddingTop="0px"></ImageView>
 
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/GuardianLogo" android:layout_gravity="left" android:paddingTop="6px" android:paddingLeft="6px"></ImageView>
+
 </LinearLayout>
 </ScrollView>
 

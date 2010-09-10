@@ -19,8 +19,9 @@ public final class R {
     public static final class drawable {
         public static final int icon=0x7f020000;
         public static final int kingsplace=0x7f020001;
-        public static final int notification_icon=0x7f020002;
-        public static final int poweredbyguardian=0x7f020003;
+        public static final int kingsplace_night=0x7f020002;
+        public static final int notification_icon=0x7f020003;
+        public static final int poweredbyguardian=0x7f020004;
     }
     public static final class id {
         public static final int ArticleImage=0x7f07000a;
@@ -29,12 +30,12 @@ public final class R {
         public static final int Byline=0x7f07000d;
         public static final int Caption=0x7f07000b;
         public static final int CurrentTask=0x7f070025;
-        public static final int Description=0x7f070004;
+        public static final int Description=0x7f070003;
         public static final int DownloadProgress=0x7f070014;
         public static final int FavouritesPane=0x7f070016;
-        public static final int GuardianLogo=0x7f070005;
-        public static final int Heading=0x7f070003;
-        public static final int HeadingLayout=0x7f070006;
+        public static final int GuardianLogo=0x7f070004;
+        public static final int Heading=0x7f070006;
+        public static final int HeadingLayout=0x7f070005;
         public static final int Headline=0x7f070008;
         public static final int Input=0x7f070027;
         public static final int KingsPlace=0x7f070002;
