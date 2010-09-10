@@ -25,6 +25,15 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 public class TopStoriesWidget extends AppWidgetProvider {
+
+	ArticleViews firstArticleViews = new ArticleViews(
+			R.id.WidgetFirstItem, R.id.WidgetHeadline, R.id.WidgetStandfirst,
+			R.id.WidgetImage);
+	
+	ArticleViews secondArticleViews = new ArticleViews(
+			R.id.WidgetSecondItem, R.id.WidgetSecondHeadline,
+			R.id.WidgetSecondStandfirst, R.id.WidgetSecondImage);
+	
 	
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {		
@@ -40,6 +49,7 @@ public class TopStoriesWidget extends AppWidgetProvider {
 		return new TopStoriesArticleSet();
 	}
 	
+	
 	private void refresh(Context context, int[] appWidgetIds) {
 		ArticleBundle stories = getArticles(context);
 		
@@ -49,10 +59,9 @@ public class TopStoriesWidget extends AppWidgetProvider {
 			
 			List<Article> randomArticles = selectTwoRandomArticleWithTrailImages(stories.getArticles());
 			if (randomArticles.size() > 0) {
-				populateArticle(widgetView, imageDAO, randomArticles.get(0), context);
-
+				populateArticle(widgetView, imageDAO, randomArticles.get(0), context, firstArticleViews);
 				if (randomArticles.size() > 1) {
-					populateSecondArticle(widgetView, imageDAO, randomArticles.get(1), context);								
+					populateArticle(widgetView, imageDAO, randomArticles.get(1), context, secondArticleViews);
 				} else {
 					widgetView.setViewVisibility(R.id.WidgetSecondItem, View.GONE);
 				}
@@ -69,12 +78,13 @@ public class TopStoriesWidget extends AppWidgetProvider {
 		manager.updateAppWidget(appWidgetIds, widgetView);
 	}
 
+	
 	private void showNoArticlesMessage(Context context, ImageDAO imageDAO,
 			RemoteViews widgetView) {
 		Article errorMessage = new Article();
 		errorMessage.setTitle("No articles available");
 		errorMessage.setStandfirst("You may need to sync this article set");
-		populateArticle(widgetView, imageDAO, errorMessage, context);
+		populateArticle(widgetView, imageDAO, errorMessage, context, firstArticleViews);
 	}
 	
 	
@@ -115,43 +125,37 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	}
 	
 	
-	private void populateArticle(RemoteViews widgetView, ImageDAO imageDAO, Article article, Context context) {		
-		widgetView.setTextViewText(R.id.WidgetHeadline, article.getTitle());
-		widgetView.setTextViewText(R.id.WidgetStandfirst, article.getStandfirst());
+	private void populateArticle(RemoteViews widgetView, ImageDAO imageDAO, Article article, Context context, ArticleViews articleViews) {
+		widgetView.setTextViewText(articleViews.headline, article.getTitle());
+		widgetView.setTextViewText(articleViews.standfirst, article.getStandfirst());
 		
 		if (article.getThumbnailUrl() != null && imageDAO.isAvailableLocally(article.getThumbnailUrl())) {				
 			Bitmap trailImage = imageDAO.getImage(article.getThumbnailUrl());
-			widgetView.setViewVisibility(R.id.WidgetImage, View.VISIBLE);
-			widgetView.setImageViewBitmap(R.id.WidgetImage, trailImage);
+			widgetView.setViewVisibility(articleViews.image, View.VISIBLE);
+			widgetView.setImageViewBitmap(articleViews.image, trailImage);
 		} else {
-			widgetView.setViewVisibility(R.id.WidgetImage, View.GONE);
+			widgetView.setViewVisibility(articleViews.image, View.GONE);
 		}
 		
 		Intent intent = getClickIntent(context);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-		widgetView.setOnClickPendingIntent(R.id.WidgetFirstItem, pendingIntent);
-		
-		widgetView.setViewVisibility(R.id.WidgetFirstItem, View.VISIBLE);
+		widgetView.setOnClickPendingIntent(articleViews.view, pendingIntent);		
+		widgetView.setViewVisibility(articleViews.view, View.VISIBLE);
 	}
-		
-	// This is abit messy - 1.5 api does not allow nested views, hence this duplication
-	private void populateSecondArticle(RemoteViews widgetView, ImageDAO imageDAO, Article article, Context context) {
-		widgetView.setTextViewText(R.id.WidgetSecondHeadline, article.getTitle());
-		widgetView.setTextViewText(R.id.WidgetSecondStandfirst, article.getStandfirst());
-		
-		if (article.getThumbnailUrl() != null && imageDAO.isAvailableLocally(article.getThumbnailUrl())) {				
-			Bitmap trailImage = imageDAO.getImage(article.getThumbnailUrl());
-			widgetView.setViewVisibility(R.id.WidgetSecondImage, View.VISIBLE);
-			widgetView.setImageViewBitmap(R.id.WidgetSecondImage, trailImage);
-		} else {
-			widgetView.setViewVisibility(R.id.WidgetSecondImage, View.GONE);
-		}
-		
-		Intent intent = getClickIntent(context);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-		widgetView.setOnClickPendingIntent(R.id.WidgetSecondItem, pendingIntent);
-		
-		widgetView.setViewVisibility(R.id.WidgetSecondItem, View.VISIBLE);
-	}
+	
+	
+	private  class ArticleViews {
+		int view;
+		int headline;
+		int standfirst;
+		int image;
 
+		public ArticleViews(int view, int headline, int standfirst, int image) {
+			this.view = view;
+			this.headline = headline;
+			this.standfirst = standfirst;
+			this.image = image;
+		}		
+	}
+	
 }
