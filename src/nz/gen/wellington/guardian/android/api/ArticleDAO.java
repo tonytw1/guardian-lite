@@ -47,7 +47,7 @@ public class ArticleDAO {
 		}
 		
 		if (fetchType.equals(ContentFetchType.CHECKSUM)) {
-			ArticleBundle localCopy = getLocalBundle(articleSet);
+			ArticleBundle localCopy = fileBasedArticleCache.getArticleSetArticles(articleSet, null);
 			if (localCopy != null && localCopy.getChecksum() != null) {
 				Log.i(TAG, "Checking for checksum sync - local article set has checksum: " + localCopy.getChecksum());
 				final String remoteChecksum = openPlatformApi.getRemoteChecksum(articleSet, preferencesDAO.getPageSizePreference());
@@ -55,6 +55,7 @@ public class ArticleDAO {
 				boolean checksumsMatch = remoteChecksum != null && remoteChecksum.equals(localCopy.getChecksum());
 				if (checksumsMatch) {
 					Log.i(TAG, "Remote checksum matches local copy. Not refetching");
+					getLocalBundle(articleSet);
 					fileBasedArticleCache.touchArticleSet(articleSet);
 					return localCopy;
 					
