@@ -36,6 +36,11 @@ public class FileBasedArticleCache {
 			 //Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName() + ex.getMessage());
 		 }
 	 }
+	 
+	 
+	 public void touchArticleSet(ArticleSet articleSet) {
+		 FileService.touchFile(context, articleSet.getApiUrl());		 
+	 }
 
 
 	private String getLocalFileKeyForArticleSet(ArticleSet articleSet) {
