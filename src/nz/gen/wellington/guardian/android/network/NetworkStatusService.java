@@ -5,16 +5,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 public class NetworkStatusService {
-	
-	private Context context;
+		
+	private ConnectivityManager connectivityManager;
 	
 	public NetworkStatusService(Context context) {
-		this.context = context;
+		connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 	}
-
-
+	
 	public boolean isConnectionAvailable() {
-		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		if (activeNetworkInfo != null) {
 			final boolean available = activeNetworkInfo.isAvailable();
@@ -25,7 +23,6 @@ public class NetworkStatusService {
 	
 	
 	public boolean isWifiConnection() {
-		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		if (activeNetworkInfo == null) {
 			return false;
