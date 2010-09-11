@@ -27,13 +27,15 @@ public class UpdateArticleSetTask implements ContentUpdateTaskRunnable {
 	private ArticleSet articleSet;
 		
 	public UpdateArticleSetTask(Context context, ArticleSet articleSet) {
-		this.articleSet = articleSet;
-		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(context);
+		articleDAO = ArticleDAOFactory.getDao(context);
 		imageDAO = ArticleDAOFactory.getImageDao(context);
+		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(context);
+		
 		networkStatusService = new NetworkStatusService(context);
 		taskQueue = ArticleDAOFactory.getTaskQueue(context);
+		
+		this.articleSet = articleSet;
 	}
-
 	
 	@Override
 	public String getTaskName() {
