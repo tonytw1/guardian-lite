@@ -11,8 +11,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
+// TODO null safe all db opens.
 public class SqlLiteFavouritesDAO {
+	
+	private static final String TAG = "SqlLiteFavouritesDAO";
 	
 	private static final String DATABASE_NAME = "guardian-lite.db";
 	private static final int DATABASE_VERSION = 1;
@@ -90,24 +94,27 @@ public class SqlLiteFavouritesDAO {
 	
 	
 	public List<Tag> getFavouriteTags(Map<String, Section> sectionsMap) {
-		SQLiteDatabase db = openHelper.getReadableDatabase();
-		Cursor cursor = db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");
-		
 		List<Tag> favouriteTags = new ArrayList<Tag>();
-		if (cursor.moveToFirst()) {
-			do {
-				final String type = cursor.getString(0);
-				final String id = cursor.getString(1);
-				final String name = cursor.getString(2);
-				final String sectionId = cursor.getString(3);
-				if (type.equals("tag")) {
-					favouriteTags.add(new Tag(name, id, sectionsMap.get(sectionId)));
-				}
-				
-			} while (cursor.moveToNext());
+		SQLiteDatabase db = openHelper.getReadableDatabase();
+		if (db != null && db.isOpen()) {
+			Cursor cursor = db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
+			if (cursor.moveToFirst()) {
+				do {
+					final String type = cursor.getString(0);
+					final String id = cursor.getString(1);
+					final String name = cursor.getString(2);
+					final String sectionId = cursor.getString(3);
+					if (type.equals("tag")) {
+						favouriteTags.add(new Tag(name, id, sectionsMap.get(sectionId)));
+					}
+					
+				} while (cursor.moveToNext());
+			}
+			closeCursor(cursor);
+			db.close();
+		} else {
+			Log.i(TAG, "Could not open readable database connection");
 		}
-		closeCursor(cursor);
-		db.close();
 		return favouriteTags;
 	}
 
@@ -153,6 +160,7 @@ public class SqlLiteFavouritesDAO {
 		boolean result = false;
 		if (this.haveRoom(db)) {
 			this.insert("section", section.getId(), section.getName(), section.getId());
+			result = true;
 		}
 		db.close();
 		return result;
