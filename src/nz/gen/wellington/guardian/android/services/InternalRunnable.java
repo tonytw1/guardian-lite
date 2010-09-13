@@ -9,6 +9,8 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.tasks.ContentUpdateTaskRunnable;
+import nz.gen.wellington.guardian.android.tasks.PurgeExpiredContentTask;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

@@ -1,4 +1,4 @@
-package nz.gen.wellington.guardian.android.services;
+package nz.gen.wellington.guardian.android.tasks;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
 

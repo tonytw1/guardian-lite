@@ -2,6 +2,8 @@ package nz.gen.wellington.guardian.android.services;
 
 import java.util.LinkedList;
 
+import nz.gen.wellington.guardian.android.tasks.ContentUpdateTaskRunnable;
+
 import android.content.Context;
 import android.content.Intent;
 
