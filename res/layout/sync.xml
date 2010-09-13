@@ -2,16 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center">
+    android:gravity="center" android:layout_height="wrap_content">
 
 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/StatusMessage"></TextView><Button android:id="@+id/buttonStart" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Download"></Button>
 
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Status"></TextView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/CurrentTask"></TextView>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Status"></TextView>
 
 
 
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/DownloadProgress"></TextView><Button android:layout_height="wrap_content" android:text="Stop" android:layout_width="fill_parent" android:id="@+id/StopDownloadButton"></Button>
+<Button android:layout_height="wrap_content" android:text="Stop" android:layout_width="fill_parent" android:id="@+id/StopDownloadButton"></Button><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/CurrentTask"></TextView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/DownloadProgress"></TextView>
 
 
 
