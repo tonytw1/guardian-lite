@@ -24,7 +24,7 @@ import android.util.Log;
 
 public class ContentApiStyleApi implements ContentSource {
 		
-	private static final String TAG = "OpenPlatformJSONApi";
+	private static final String TAG = "ContentApiStyleApi";
 
 	private static final String API_HOST = "http://guardian-lite.appspot.com";	
 	public static final String SECTIONS_API_URL = "sections";
@@ -98,8 +98,8 @@ public class ContentApiStyleApi implements ContentSource {
 		}
 		
 		if (input != null) {
-			ContentApiStyleXmlParser jsonParser = new ContentApiStyleXmlParser(context);
-			return jsonParser.parseSectionsJSON(input);			
+			ContentApiStyleJSONParser jsonParser = new ContentApiStyleJSONParser();	// TODO push up
+			return jsonParser.parseSectionsJSON(input);
 		}
 		return null;
 	}
@@ -115,8 +115,8 @@ public class ContentApiStyleApi implements ContentSource {
 		}
 		
 		if (input != null) {
-			ContentApiStyleXmlParser jsonParser = new ContentApiStyleXmlParser(context);
-			return jsonParser.parseTagsJSON(input, sections);			
+			ContentApiStyleJSONParser jsonParser = new ContentApiStyleJSONParser();
+			return jsonParser.parseTagsJSON(input, sections);
 		}
 		return null;
 	}

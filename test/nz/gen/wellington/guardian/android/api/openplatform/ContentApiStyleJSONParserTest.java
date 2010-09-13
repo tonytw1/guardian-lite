@@ -9,15 +9,15 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import junit.framework.TestCase;
-import nz.gen.wellington.guardian.android.api.openplatfrom.OpenPlatformJSONParser;
+import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiStyleJSONParser;
 import nz.gen.wellington.guardian.android.model.Section;
 
 import org.json.JSONObject;
 import org.junit.Test;
 
-public class OpenPlatformJSONParserTest extends TestCase {
+public class ContentApiStyleJSONParserTest extends TestCase {
 
-	OpenPlatformJSONParser parser = new OpenPlatformJSONParser(null);
+	ContentApiStyleJSONParser parser = new ContentApiStyleJSONParser();
 	
 	@Test
 	public void testCanParseSectionContentResults() throws Exception {			
