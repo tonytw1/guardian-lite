@@ -8,6 +8,7 @@ import java.util.Map;
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
+import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -148,6 +149,9 @@ public class OpenPlatformJSONApi implements ContentSource {
 		StringBuilder url = new StringBuilder(API_HOST + "/search");
 		if (articleSet instanceof FavouriteStoriesArticleSet) {
 			 url = new StringBuilder(API_HOST + "/favourites");
+		}
+		if (articleSet instanceof AboutArticleSet) {
+			 url = new StringBuilder(API_HOST + "/about");
 		}
 		
 		url.append("?format=xml");

@@ -122,7 +122,10 @@ public class OpenPlatformJSONParser {
          }
 
          private Section getSectionById(String sectionId) {
- 			for (Section section : sections) {
+        	 if (sectionId == null) {
+        		 return null;
+        	 }
+        	 for (Section section : sections) {
  				if (section.getId().equals(sectionId)) {
  					return section;
  				}
@@ -262,15 +265,15 @@ public class OpenPlatformJSONParser {
 			}
 
 			if (name.equals("content")) {
-				boolean isArticleValid = article.getSection() != null;
-				if (isArticleValid) {
+				//boolean isArticleValid = article.getSection() != null || articles
+				//if (isArticleValid) {
 					articles.add(article);
 					if (articleCallback !=  null) {
 						articleCallback.articleReady(article);
 					}
-				} else {
-					Log.w(TAG, "Invalid article: " + article.getId());
-				}
+				//} else {
+				//	Log.w(TAG, "Invalid article: " + article.getId());
+				//}
 			}
 		}
 
