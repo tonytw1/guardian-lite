@@ -26,7 +26,7 @@
 
 		<activity android:name=".activities.sync" ></activity>
 
-		<service android:name=".services.ContentUpdateService" android:enabled="true"></service>
+		<service android:name=".contentupdate.ContentUpdateService" android:enabled="true"></service>
 		
 		<activity android:name=".activities.keyword"  ></activity>
 		<activity android:name=".activities.perferences" ></activity>
