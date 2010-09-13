@@ -4,6 +4,7 @@ import java.util.Date;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.notification;
+import nz.gen.wellington.guardian.android.activities.ui.Plurals;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
@@ -150,7 +151,7 @@ public class InternalRunnable implements Runnable {
 			" in " + DateTimeHelper.calculateTimeTaken(report.getStartTime(), now);
 		
 		final String fullReport = "Fetched " + report.getArticleCount() + " articles" + 
-			" and " +  report.getImageCount() + " images" +
+			" and " +  report.getImageCount() + Plurals.getPrural("image", report.getImageCount()) +
 			" in " + DateTimeHelper.calculateTimeTaken(report.getStartTime(), now);
 		
 		Intent notificationIntent = new Intent(context, notification.class);
