@@ -81,7 +81,7 @@ public class about extends ArticleListActivity {
 	}
 	
 	private boolean isDaylightInLondon() {
-		Calendar londonCal = new GregorianCalendar(TimeZone.getTimeZone("Europe/London")).getInstance();	// TODO deprecation
+		Calendar londonCal = GregorianCalendar.getInstance(TimeZone.getTimeZone("Europe/London"));
 		int londonHour = londonCal.get(Calendar.HOUR_OF_DAY);
 		return londonHour > 6 && londonHour < 21;
 	}
