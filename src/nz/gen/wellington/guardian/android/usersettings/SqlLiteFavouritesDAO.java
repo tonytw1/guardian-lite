@@ -30,7 +30,7 @@ public class SqlLiteFavouritesDAO {
 		openHelper = new OpenHelper(context);
 	}
 	
-	public boolean hasFavourites() {	// TODO count query rather than select all
+	public synchronized boolean hasFavourites() {	// TODO count query rather than select all
 		SQLiteDatabase db = openHelper.getReadableDatabase();		
 		Cursor cursor = db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
 		int total = cursor.getCount();
@@ -39,7 +39,7 @@ public class SqlLiteFavouritesDAO {
 		return total > 0;	
 	}
 	
-	public long insert(String type, String apiid, String name, String sectionid) {
+	public synchronized long insert(String type, String apiid, String name, String sectionid) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
 		SQLiteStatement insertStmt = db.compileStatement(INSERT);
 		insertStmt.bindString(1, type);
@@ -52,14 +52,14 @@ public class SqlLiteFavouritesDAO {
 	}
 	
 		
-	public void deleteAll() {
+	public synchronized void deleteAll() {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
 		db.delete(TAG_TABLE, null, null);
 		db.close();
 	}
 	
 	
-	public boolean isFavourite(Tag tag) {
+	public synchronized boolean isFavourite(Tag tag) {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		Cursor cursor = db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'tag' and apiid = ? ", new String[] { tag.getId() }, null, null, "name asc");
 		final boolean isFavourite = cursor.getCount() > 0;
@@ -70,7 +70,7 @@ public class SqlLiteFavouritesDAO {
 	}
 	
 
-	public boolean isFavourite(Section section) {
+	public synchronized boolean isFavourite(Section section) {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		Cursor cursor = db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'section' and apiid = ? ", new String[] { section.getId() }, null, null, "name asc");
 		final boolean isFavourite = cursor.getCount() > 0;
@@ -80,20 +80,20 @@ public class SqlLiteFavouritesDAO {
 	}
 	
 	
-	public void removeSection(Section section) {
+	public synchronized void removeSection(Section section) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
 		db.delete(TAG_TABLE, " apiid = ? ", new String[] { section.getId() });
 		db.close();
 	}
 	
-	public void removeTag(Tag tag) {
+	public synchronized void removeTag(Tag tag) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
 		db.delete(TAG_TABLE, " apiid = ? ", new String[] { tag.getId() });
 		db.close();
 	}
 	
 	
-	public List<Tag> getFavouriteTags(Map<String, Section> sectionsMap) {
+	public synchronized List<Tag> getFavouriteTags(Map<String, Section> sectionsMap) {
 		List<Tag> favouriteTags = new ArrayList<Tag>();
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		if (db != null && db.isOpen()) {
@@ -119,7 +119,7 @@ public class SqlLiteFavouritesDAO {
 	}
 
 
-	public List<Section> getFavouriteSections(Map<String, Section> sectionsMap) {
+	public synchronized List<Section> getFavouriteSections(Map<String, Section> sectionsMap) {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		Cursor cursor = db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");
 		
@@ -143,7 +143,7 @@ public class SqlLiteFavouritesDAO {
 	}
 	
 	
-	public boolean addTag(Tag keyword) {
+	public synchronized boolean addTag(Tag keyword) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
 		boolean result = false;
 		if (haveRoom(db)) {
@@ -155,7 +155,7 @@ public class SqlLiteFavouritesDAO {
 	}
 	
 	
-	public boolean addSection(Section section) {
+	public synchronized boolean addSection(Section section) {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		boolean result = false;
 		if (this.haveRoom(db)) {
