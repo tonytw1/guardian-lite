@@ -1,6 +1,6 @@
 package nz.gen.wellington.guardian.android.api;
 
-import nz.gen.wellington.guardian.android.api.openplatfrom.OpenPlatformJSONApi;
+import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiStyleApi;
 import nz.gen.wellington.guardian.android.services.TaskQueue;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
@@ -19,7 +19,7 @@ public class ArticleDAOFactory {
 	}
 	
 	public static ContentSource getOpenPlatformApi(Context context) {
-		return new OpenPlatformJSONApi(context);
+		return new ContentApiStyleApi(context);
 	}
 	
 	public static TaskQueue getTaskQueue(Context context) {

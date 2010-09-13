@@ -22,23 +22,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public class OpenPlatformJSONApi implements ContentSource {
+public class ContentApiStyleApi implements ContentSource {
 		
 	private static final String TAG = "OpenPlatformJSONApi";
 
 	private static final String API_HOST = "http://guardian-lite.appspot.com";	
 	public static final String SECTIONS_API_URL = "sections";
 	
-	private OpenPlatformJSONParser contentParser;
+	private ContentApiStyleXmlParser contentParser;
 	private HttpFetcher httpFetcher;
 
 	private Context context;
 
 	
-	public OpenPlatformJSONApi(Context context) {
+	public ContentApiStyleApi(Context context) {
 		this.context = context;
 		httpFetcher = new HttpFetcher(context);
-		contentParser = new OpenPlatformJSONParser(context);		
+		contentParser = new ContentApiStyleXmlParser(context);		
 	}
 
 	
@@ -98,7 +98,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		
 		if (input != null) {
-			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context);
+			ContentApiStyleXmlParser jsonParser = new ContentApiStyleXmlParser(context);
 			return jsonParser.parseSectionsJSON(input);			
 		}
 		return null;
@@ -115,7 +115,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		}
 		
 		if (input != null) {
-			OpenPlatformJSONParser jsonParser = new OpenPlatformJSONParser(context);
+			ContentApiStyleXmlParser jsonParser = new ContentApiStyleXmlParser(context);
 			return jsonParser.parseTagsJSON(input, sections);			
 		}
 		return null;

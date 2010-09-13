@@ -31,7 +31,7 @@ import org.xml.sax.SAXException;
 import android.content.Context;
 import android.util.Log;
 
-public class OpenPlatformJSONParser {
+public class ContentApiStyleXmlParser {
 			
 	private static final String TAG = "OpenPlatformJSONParser";
 	
@@ -40,7 +40,7 @@ public class OpenPlatformJSONParser {
 	private boolean running;
 	ResultsHandler hb;
 	
-	public OpenPlatformJSONParser(Context context) {
+	public ContentApiStyleXmlParser(Context context) {
 		running = true;
 	}
 
