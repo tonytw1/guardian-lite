@@ -77,6 +77,7 @@ public class OpenPlatformJSONApi implements ContentSource {
 		InputStream input = null;
 		if (input == null) {
 			//Log.i(TAG, "Fetching article set checksum from live api: " + articleSet.getApiUrl());
+			announceDownloadStarted("Checking " + articleSet.getName() + " article set");
 			input = getHttpInputStream(buildContentQueryUrl(articleSet, false, pageSize));
 		}		
 		
