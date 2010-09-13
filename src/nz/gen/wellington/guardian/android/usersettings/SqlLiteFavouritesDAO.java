@@ -1,4 +1,4 @@
-package nz.gen.wellington.guardian.android.sqllite;
+package nz.gen.wellington.guardian.android.usersettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
-public class DataHelper {
+public class SqlLiteFavouritesDAO {
 	
 	private static final String DATABASE_NAME = "guardian-lite.db";
 	private static final int DATABASE_VERSION = 1;
@@ -22,7 +22,7 @@ public class DataHelper {
 
 	OpenHelper openHelper;
 
-	public DataHelper(Context context) {
+	public SqlLiteFavouritesDAO(Context context) {
 		openHelper = new OpenHelper(context);
 	}
 	
