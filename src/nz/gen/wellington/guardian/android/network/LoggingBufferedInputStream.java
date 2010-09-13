@@ -30,7 +30,7 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 	public synchronized int read(byte[] buffer, int offset, int length) throws IOException {
 		int read = super.read(buffer, offset, length);
 		totalRead = totalRead + read;
-		announceProgress("", totalRead);	// TODO do we want to advertise the download name?
+		announceProgress("", totalRead);
 		return read;
 	}
 	
