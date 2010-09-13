@@ -1,4 +1,4 @@
-package nz.gen.wellington.guardian.android.tasks;
+package nz.gen.wellington.guardian.android.contentupdate.tasks;
 
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;

@@ -1,4 +1,4 @@
-package nz.gen.wellington.guardian.android.services;
+package nz.gen.wellington.guardian.android.contentupdate;
 
 import java.util.Date;
 
@@ -6,11 +6,11 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.notification;
 import nz.gen.wellington.guardian.android.activities.ui.Plurals;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.contentupdate.tasks.ContentUpdateTaskRunnable;
+import nz.gen.wellington.guardian.android.contentupdate.tasks.PurgeExpiredContentTask;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import nz.gen.wellington.guardian.android.tasks.ContentUpdateTaskRunnable;
-import nz.gen.wellington.guardian.android.tasks.PurgeExpiredContentTask;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

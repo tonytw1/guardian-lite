@@ -1,15 +1,15 @@
-package nz.gen.wellington.guardian.android.services;
+package nz.gen.wellington.guardian.android.contentupdate;
 
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.contentupdate.tasks.UpdateArticleSetTask;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
-import nz.gen.wellington.guardian.android.tasks.UpdateArticleSetTask;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.NotificationManager;
 import android.app.Service;

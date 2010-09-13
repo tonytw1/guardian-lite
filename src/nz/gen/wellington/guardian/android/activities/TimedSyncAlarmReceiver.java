@@ -3,8 +3,8 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.Date;
 
 import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.contentupdate.ContentUpdateService;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
-import nz.gen.wellington.guardian.android.services.ContentUpdateService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

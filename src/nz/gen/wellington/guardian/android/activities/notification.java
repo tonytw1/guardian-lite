@@ -1,7 +1,7 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.services.ContentUpdateService;
+import nz.gen.wellington.guardian.android.contentupdate.ContentUpdateService;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
