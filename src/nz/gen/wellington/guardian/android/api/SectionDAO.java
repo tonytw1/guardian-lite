@@ -24,13 +24,19 @@ public class SectionDAO {
 
 	
 	public List<Section> getSections() {
-		 List<Section> sections = fileBasedSectionCache.getSections();
-		 if (sections != null) {
-			 return sections;
-		 }
-		 
-		 sections = api.getSections();
-		 if (sections != null) {
+		List<Section> sections = sectionCache.getAll();
+		if (sections != null && !sections.isEmpty()) {
+			return sections;
+		}
+		
+		sections = fileBasedSectionCache.getSections();
+		if (sections != null) {
+			sectionCache.addAll(sections);
+			return sections;
+		}
+		
+		sections = api.getSections();
+		if (sections != null) {
 			sectionCache.addAll(sections);
 			fileBasedSectionCache.putSections(sections);
 		}
