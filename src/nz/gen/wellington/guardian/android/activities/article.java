@@ -90,7 +90,16 @@ public class article extends MenuedActivity {
 			loader.start();			
 		}
 		
+		final boolean isTagged = !article.getAuthors().isEmpty() || !article.getKeywords().isEmpty();
+		if (isTagged) {
+			populateTags(article, connectionAvailable);
+		}
+	}
+
+	
+	private void populateTags(Article article, final boolean connectionAvailable) {
 		LayoutInflater inflater = LayoutInflater.from(this);
+		findViewById(R.id.TagLabel).setVisibility(View.VISIBLE);
 		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), article.getAuthors(), this.getApplicationContext());
 		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.TagList), article.getKeywords(), this.getApplicationContext());
 	}
