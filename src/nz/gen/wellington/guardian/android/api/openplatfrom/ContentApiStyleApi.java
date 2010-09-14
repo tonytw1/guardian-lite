@@ -29,7 +29,8 @@ public class ContentApiStyleApi implements ContentSource {
 	private static final String API_HOST = "http://guardian-lite.appspot.com";	
 	public static final String SECTIONS_API_URL = "sections";
 	
-	private ContentApiStyleXmlParser contentParser;
+	private ContentApiStyleXmlParser contentXmlParser;
+	private ContentApiStyleJSONParser contentJsonParser;
 	private HttpFetcher httpFetcher;
 
 	private Context context;
@@ -38,7 +39,8 @@ public class ContentApiStyleApi implements ContentSource {
 	public ContentApiStyleApi(Context context) {
 		this.context = context;
 		httpFetcher = new HttpFetcher(context);
-		contentParser = new ContentApiStyleXmlParser(context);		
+		contentXmlParser = new ContentApiStyleXmlParser(context);
+		contentJsonParser = new ContentApiStyleJSONParser();
 	}
 
 	
@@ -55,9 +57,9 @@ public class ContentApiStyleApi implements ContentSource {
 		}		
 		
 		if (input != null) {
-			List<Article> articles = contentParser.parseArticlesXml(input, sections, articleCallback);			
+			List<Article> articles = contentXmlParser.parseArticlesXml(input, sections, articleCallback);			
 			if (articles != null && !articles.isEmpty()) {
-				return new ArticleBundle(articles, contentParser.getRefinements(), contentParser.getChecksum(), DateTimeHelper.now(), contentParser.getDescription());
+				return new ArticleBundle(articles, contentXmlParser.getRefinements(), contentXmlParser.getChecksum(), DateTimeHelper.now(), contentXmlParser.getDescription());
 			}
 		}
 		return null;
@@ -82,8 +84,8 @@ public class ContentApiStyleApi implements ContentSource {
 		}		
 		
 		if (input != null) {
-			contentParser.parseArticlesXml(input, null, null);
-			return contentParser.getChecksum();			
+			contentXmlParser.parseArticlesXml(input, null, null);
+			return contentXmlParser.getChecksum();			
 		}
 		return null;
 	}
@@ -98,8 +100,7 @@ public class ContentApiStyleApi implements ContentSource {
 		}
 		
 		if (input != null) {
-			ContentApiStyleJSONParser jsonParser = new ContentApiStyleJSONParser();	// TODO push up
-			return jsonParser.parseSectionsJSON(input);
+			return contentJsonParser.parseSectionsJSON(input);
 		}
 		return null;
 	}
@@ -113,10 +114,8 @@ public class ContentApiStyleApi implements ContentSource {
 			announceDownloadStarted("tag results");
 			input = getHttpInputStream(buildTagSearchQueryUrl(searchTerm, 20));
 		}
-		
 		if (input != null) {
-			ContentApiStyleJSONParser jsonParser = new ContentApiStyleJSONParser();
-			return jsonParser.parseTagsJSON(input, sections);
+			return contentJsonParser.parseTagsJSON(input, sections);
 		}
 		return null;
 	}
@@ -124,7 +123,7 @@ public class ContentApiStyleApi implements ContentSource {
 
 	@Override
 	public void stopLoading() {
-		contentParser.stop();
+		contentXmlParser.stop();
 		httpFetcher.stopLoading();
 	}
 	
