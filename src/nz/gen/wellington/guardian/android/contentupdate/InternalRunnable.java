@@ -153,7 +153,7 @@ public class InternalRunnable implements Runnable {
 			" in " + DateTimeHelper.calculateTimeTaken(report.getStartTime(), now);
 		
 		final String fullReport = "Fetched " + report.getArticleCount() + " articles" + 
-			" and " +  report.getImageCount() + Plurals.getPrural("image", report.getImageCount()) +
+			" and " +  report.getImageCount() + " " + Plurals.getPrural("image", report.getImageCount()) +
 			" in " + DateTimeHelper.calculateTimeTaken(report.getStartTime(), now);
 		
 		Intent notificationIntent = new Intent(context, notification.class);
