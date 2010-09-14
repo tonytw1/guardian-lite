@@ -17,8 +17,7 @@ public class main extends ArticleListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);        
         hideHeading();
-    	updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
-    	showSeperators = true;
+        showSeperators = true;
     	showMainImage = false;
 	}
 	

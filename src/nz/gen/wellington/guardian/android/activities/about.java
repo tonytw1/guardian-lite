@@ -17,9 +17,7 @@ public class about extends ArticleListActivity {
 		
 	@Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
-        
+        super.onCreate(savedInstanceState);        
 		setContentView(R.layout.about);
 		setHeading("Guardian Lite - About");
 				

@@ -30,8 +30,6 @@ public class keyword extends ArticleListActivity {
 		} else {
 			setHeading(keyword.getName());
 		}	
-
-		updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
 	}
 	
 	protected String getRefinementDescription(String refinementType) {

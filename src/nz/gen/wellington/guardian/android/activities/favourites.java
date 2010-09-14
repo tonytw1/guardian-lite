@@ -26,7 +26,6 @@ public class favourites extends ArticleListActivity {
         setContentView(R.layout.favourites);        
         setHeading("Favourites");
         setHeadingColour("#0061A6");
-    	updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());	// TODO this should in super class.
     	showSeperators = true;
     	showMainImage = false;
 	}
