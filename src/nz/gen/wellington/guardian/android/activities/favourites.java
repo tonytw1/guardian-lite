@@ -45,10 +45,19 @@ public class favourites extends ArticleListActivity {
 		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
 
 		TextView description = (TextView) findViewById(R.id.Description);
-		if (favouriteSectionsAndTagsDAO.hasFavourites()) {
-			List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections();
-			List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
 		
+		// TODO - this implies two sqllite queries in a row - needs to be done in one open open and close if possible.
+		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections();
+		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
+		
+		boolean favouritesLoadedCorrectly = (favouriteSections != null && favouriteTags != null);
+		if (!favouritesLoadedCorrectly) {
+			description.setText("There was a problem loading your favorite sections and tags.");			
+			return;
+		}
+		
+		boolean hasFavourites = !favouriteSections.isEmpty() || !favouriteTags.isEmpty();
+		if (hasFavourites) {		
 			LayoutInflater inflater = LayoutInflater.from(this);
 			LinearLayout authorList = (LinearLayout) findViewById(R.id.FavouritesPane);
 		

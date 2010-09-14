@@ -27,6 +27,7 @@ public class FavouriteSectionsAndTagsDAO {
 		return tags;
 	}
 	
+	@Deprecated // TODO remove for potential performance reasons
 	public boolean hasFavourites() {
 		boolean hasFavourites = sqlLiteDAO.hasFavourites();
 		return hasFavourites;
