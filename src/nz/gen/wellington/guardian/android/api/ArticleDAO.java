@@ -55,9 +55,8 @@ public class ArticleDAO {
 				boolean checksumsMatch = remoteChecksum != null && remoteChecksum.equals(localCopy.getChecksum());
 				if (checksumsMatch) {
 					Log.i(TAG, "Remote checksum matches local copy. Not refetching");
-					getLocalBundle(articleSet);
-					fileBasedArticleCache.touchArticleSet(articleSet);
-					return localCopy;
+					fileBasedArticleCache.touchArticleSet(articleSet, DateTimeHelper.now());
+					return getLocalBundle(articleSet);		// TODO duplicate read, for the proposes of triggering the call back only is abit rubbish. Should be able to reset on localcopy bundle
 					
 				} else {
 					return fetchFromLive(articleSet);								

@@ -50,11 +50,11 @@ public class FileService {
 		return null;
 	}
 	
-	public static void touchFile(Context context, String apiUrl) {
+	public static void touchFile(Context context, String apiUrl, Date modTime) {
 		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
 		if (localFile.exists()) {
 			//Log.i(TAG, "Touching mod time for file at: " + localFile.getAbsolutePath());
-			touchFileModTime(localFile);
+			touchFileModTime(localFile, modTime);
 		}
 	}
 	
@@ -136,8 +136,7 @@ public class FileService {
 	}
 	
 	
-	private static void touchFileModTime(File localFile) {
-		Date modTime = DateTimeHelper.now();
+	private static void touchFileModTime(File localFile, Date modTime) {
 		localFile.setLastModified(modTime.getTime());
 	}
 	
