@@ -101,15 +101,12 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	private List<Article> selectTwoRandomArticleWithTrailImages(List<Article> articles) {
 		List<Article> randomArticles = new ArrayList<Article>();
 		
-		int attempts = 0;		
 		List<Article> articleWithTrailImages = selectArticlesWithTrailImages(articles);
-		while (randomArticles.size() < 2 && attempts < 50) {
+		while (randomArticles.size() < 2 && !articleWithTrailImages.isEmpty()) {
 			int articleIndex = new Random(new Date().getTime()).nextInt(articleWithTrailImages.size()-1);
 			Article article = articleWithTrailImages.get(articleIndex);			
-			if (!randomArticles.contains(article)) {
-				randomArticles.add(article);
-			}
-			attempts = attempts + 1 ;
+			randomArticles.add(article);
+			articleWithTrailImages.remove(article);			
 		}		
 		return randomArticles;
 	}
