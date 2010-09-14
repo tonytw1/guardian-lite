@@ -19,6 +19,7 @@ public class main extends ArticleListActivity {
         hideHeading();
         showSeperators = true;
     	showMainImage = false;
+		updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
 	}
 	
 	

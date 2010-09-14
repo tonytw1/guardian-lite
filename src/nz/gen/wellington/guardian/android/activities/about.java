@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.activities.ArticleListActivity.UpdateArticlesHandler;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import android.os.Bundle;
@@ -29,7 +30,8 @@ public class about extends ArticleListActivity {
 				);
 				
 		ImageView poweredByTheGuardian = (ImageView) findViewById(R.id.PoweredByTheGuardian);
-		poweredByTheGuardian.setImageResource(R.drawable.poweredbyguardian);    	   	
+		poweredByTheGuardian.setImageResource(R.drawable.poweredbyguardian);
+		updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
 	}
 	
 	@Override

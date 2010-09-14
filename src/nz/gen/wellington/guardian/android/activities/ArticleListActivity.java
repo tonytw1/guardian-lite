@@ -66,7 +66,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
 		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());		
 		networkStatusService = new NetworkStatusService(this);
-		updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
 	}
 	
 	
