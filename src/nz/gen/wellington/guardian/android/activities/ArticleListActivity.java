@@ -142,6 +142,14 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	class UpdateArticlesHandler extends Handler {		
 
+		private static final int ARTICLE_READY = 1;
+		private static final int TRAIL_IMAGE_IS_AVAILABLE_FOR_ARTICLE = 3;
+		private static final int DESCRIPTION_TEXT_READY = 6;
+		private static final int DRAW_REFINEMENTS = 4;
+		private static final int SHOW_ARTICLE_SET_OUT_OF_DATE_WARNING = 5;
+		public static final int NO_ARTICLES = 2;
+
+		
 		private Context context;
 		boolean first = true;
 		boolean isFirstOfSection;
@@ -167,8 +175,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			
-			switch (msg.what) {	   
-			    case 1: 		
+			switch (msg.what) {
+				
+			    case ARTICLE_READY: 		
 			    	Article article = (Article) msg.getData().getSerializable("article");				
 					LayoutInflater mInflater = LayoutInflater.from(context);
 					LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);					
@@ -184,20 +193,16 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 						}
 					}
 					
-				boolean isContributorArticleSet = articleSet.getApiUrl().startsWith("profile");
-				boolean shouldUseFeatureTrail = showMainImage && first && !isContributorArticleSet && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
+					boolean isContributorArticleSet = articleSet.getApiUrl().startsWith("profile");
+					boolean shouldUseFeatureTrail = showMainImage && first && !isContributorArticleSet && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
 					View articleTrailView = chooseTrailView(mInflater, shouldUseFeatureTrail);
 					populateArticleListView(article, articleTrailView, shouldUseFeatureTrail);
 					mainpane.addView(articleTrailView);
 					first = false;
 					return;
-			    			    
-			    case 2: 
-			    	// TODO on screen test
-			    	return;
-			    			    
-			    case 3: 
-
+					
+					
+			    case TRAIL_IMAGE_IS_AVAILABLE_FOR_ARTICLE:
 			    	Bundle data = msg.getData();
 			    	if (data.containsKey("id")) {
 			    		final String id = data.getString("id");
@@ -210,8 +215,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	}			    
 			    	return;
 			    	
-			    	
-			    case 6:
+			    				    
+			    case DESCRIPTION_TEXT_READY:
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
 			    	Bundle descriptionData = msg.getData();
 			    	String descripton = descriptionData.getString("description");
@@ -220,7 +225,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	}
 			    	return;
 			    	
-			    case 4:			    	
+			    	
+			    case DRAW_REFINEMENTS:			    	
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
 			    	Map<String, List<Tag>> refinements = bundle.getRefinements();
 			    	
@@ -236,8 +242,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    		
 			    	}
 			    	return;
-			    				    	
-			    case 5: 
+			    			
+			    	
+			    case SHOW_ARTICLE_SET_OUT_OF_DATE_WARNING: 
 					mainpane = (LinearLayout) findViewById(R.id.MainPane);
 					TextView message = new TextView(context);
 					//final String modtime = msg.getData().getString("modtime");
@@ -250,6 +257,10 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					
 					mainpane.addView(message, 0);
 					return;
+					
+			    case NO_ARTICLES: 
+			    	// TODO on screen test
+			    	return;
 			}
 		}
 
@@ -346,7 +357,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	private void sendArticleReadyMessage(Article article) {
 		Message m = new Message();			
-		m.what = 1;
+		m.what = UpdateArticlesHandler.ARTICLE_READY;
 		Bundle bundle = new Bundle();
 		bundle.putSerializable("article", article);			
 		m.setData(bundle);		
@@ -357,7 +368,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	private void sendDescriptionReadyMessage(String description) {
 		Message m = new Message();			
-		m.what = 6;
+		m.what = UpdateArticlesHandler.DESCRIPTION_TEXT_READY;
 		Bundle bundle = new Bundle();
 		bundle.putString("description", description);			
 		m.setData(bundle);		
@@ -399,10 +410,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			}
 			
 			Message m = new Message();
-			m.what = 4;
+			m.what = UpdateArticlesHandler.DRAW_REFINEMENTS;
 			updateArticlesHandler.sendMessage(m);
-			
-			
+					
 			List<Article> downloadTrailImages = new LinkedList<Article>();
 			boolean first = true;
 			for (Article article : bundle.getArticles()) {
@@ -418,7 +428,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				if (imageUrl != null) {
 					if (imageDAO.isAvailableLocally(imageUrl)) {
 						m = new Message();
-						m.what = 3;						
+						m.what = UpdateArticlesHandler.TRAIL_IMAGE_IS_AVAILABLE_FOR_ARTICLE;						
 						Bundle bundle = new Bundle();
 						bundle.putString("id", article.getId());
 						bundle.putString("url", imageUrl);
@@ -439,7 +449,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				for (Article article : downloadTrailImages) {
 					imageDAO.fetchLiveImage(article.getThumbnailUrl());
 					m = new Message();
-					m.what = 3;
+					m.what = UpdateArticlesHandler.TRAIL_IMAGE_IS_AVAILABLE_FOR_ARTICLE;
 					Bundle bundle = new Bundle();
 					bundle.putString("id", article.getId());
 					bundle.putString("url", article.getThumbnailUrl());
@@ -453,7 +463,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				Date modificationTime = bundle.getTimestamp();				
 				if (modificationTime != null && DateTimeHelper.isMoreThanHoursOld(modificationTime, 2)) {					
 					m = new Message();
-					m.what = 5;
+					m.what = UpdateArticlesHandler.SHOW_ARTICLE_SET_OUT_OF_DATE_WARNING;
 					Bundle bundle = new Bundle();
 					bundle.putString("modtime", modificationTime.toString());					
 					m.setData(bundle);
