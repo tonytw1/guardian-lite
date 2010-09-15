@@ -31,7 +31,6 @@ public class about extends ArticleListActivity {
 				
 		ImageView poweredByTheGuardian = (ImageView) findViewById(R.id.PoweredByTheGuardian);
 		poweredByTheGuardian.setImageResource(R.drawable.poweredbyguardian);
-		updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
 	}
 	
 	@Override

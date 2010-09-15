@@ -40,22 +40,23 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	//private static final String TAG = "ArticleListActivity";
 	
-	UpdateArticlesHandler updateArticlesHandler;
-	UpdateArticlesRunner updateArticlesRunner;
-	ArticleBundle bundle;
-	Map<String, View> viewsWaitingForTrailImages;
 	protected ArticleDAO articleDAO;
 	protected ImageDAO imageDAO;
+	private NetworkStatusService networkStatusService;
+	
+	private UpdateArticlesHandler updateArticlesHandler;
+	private UpdateArticlesRunner updateArticlesRunner;
+	
+	private ArticleBundle bundle;
+	private Map<String, View> viewsWaitingForTrailImages;
 
 	boolean showSeperators = false;
 	boolean showMainImage = true;
-	NetworkStatusService networkStatusService;
-	
+		
 	private Thread loader;
 	private Date loaded;
 	
 	protected String[] permittedRefinements = {"keyword"};
-	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +98,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		if (loader == null || !loader.isAlive()) {
 			mainPane.removeAllViews();
 			
+			updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
 			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService, fetchType);
 			updateArticlesHandler.init();
 			

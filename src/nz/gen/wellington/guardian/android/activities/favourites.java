@@ -28,7 +28,6 @@ public class favourites extends ArticleListActivity {
         setHeadingColour("#0061A6");
     	showSeperators = true;
     	showMainImage = false;
-		updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
 	}
 
 	
