@@ -5,7 +5,6 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.activities.ArticleListActivity.UpdateArticlesHandler;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import android.os.Bundle;

@@ -1,5 +1,8 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
@@ -17,7 +20,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,21 +27,25 @@ public class article extends MenuedActivity {
 	
 	//private static final String TAG = "article";
 	
-	ListAdapter adapter;
 	private NetworkStatusService networkStatusService;
     private ImageDAO imageDAO;
+    
     private Article article;
        
 	private MainImageUpdateHandler mainImageUpdateHandler;
     private MainImageLoader mainImageLoader;
+
+    private Map<String, Bitmap> images;
+    
     
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+				
 		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());			
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
 		
+		images = new HashMap<String, Bitmap>();
     	mainImageUpdateHandler = new MainImageUpdateHandler();
     	
 		requestWindowFeature(Window.FEATURE_NO_TITLE);	
@@ -55,6 +61,13 @@ public class article extends MenuedActivity {
 		}	
 	}
 	
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		images.clear();
+	}
+
 	
 	private void populateArticle(Article article) {		
 		if (article.getSection() != null) {
@@ -106,20 +119,21 @@ public class article extends MenuedActivity {
 
 	
 	private void populateMainImage(String mainImageUrl) {
-		if (article != null && mainImageUrl.equals(article.getMainImageUrl())) {
-			ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
-			TextView caption = (TextView) findViewById(R.id.Caption);
-
-			Bitmap bitmap = imageDAO.getImage(mainImageUrl);
-			if (bitmap != null) {
-				imageView.setImageBitmap(bitmap);			
-				imageView.setVisibility(View.VISIBLE);
-				caption.setVisibility(View.VISIBLE);
+		if (article != null && article.getMainImageUrl() != null && article.getMainImageUrl().equals(mainImageUrl)) {		
+			if (images.containsKey(mainImageUrl)) {		
+				Bitmap bitmap = images.get(mainImageUrl);
+				if (bitmap != null) {
+					ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
+					TextView caption = (TextView) findViewById(R.id.Caption);				
+					imageView.setImageBitmap(bitmap);			
+					imageView.setVisibility(View.VISIBLE);
+					caption.setVisibility(View.VISIBLE);
+				}
 			}
 		}
 	}
 	
-		
+	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Home");
 		menu.add(0, 2, 0, "Favourites");
@@ -144,15 +158,12 @@ public class article extends MenuedActivity {
 	}
 	
 	
-	
-	
-	
 	class MainImageLoader implements Runnable {		
 
 		private ImageDAO imageDAO;
 		private String mainImageUrl;
 		private boolean isWifiConnectionAvailable;
-			
+		
 		public MainImageLoader(ImageDAO imageDAO, String mainImageUrl, boolean isWifiConnectionAvailable) {
 			this.imageDAO = imageDAO;
 			this.mainImageUrl = mainImageUrl;
@@ -161,21 +172,27 @@ public class article extends MenuedActivity {
 
 		@Override
 		public void run() {
+			Bitmap image = null;
 			if (imageDAO.isAvailableLocally(mainImageUrl)) {
-				sendMainImageAvailableMessage();
+				image = imageDAO.getImage(mainImageUrl);
 				
 			} else if (isWifiConnectionAvailable) {
 				//Log.i(TAG, "Main image is not available locally, but will fetch because wifi is available");				
-				imageDAO.fetchLiveImage(mainImageUrl);
-				sendMainImageAvailableMessage();
+				image = imageDAO.fetchLiveImage(mainImageUrl);
 			}
+			
+			if (image != null) {
+				images.put(mainImageUrl, image);
+				sendMainImageAvailableMessage(mainImageUrl);
+			}
+			
 			return;
 		}
 
-		private void sendMainImageAvailableMessage() {
+		private void sendMainImageAvailableMessage(String mainImageUrl) {
 			//Log.i(TAG, "Sending main image available message: " + mainImageUrl);
 			Message msg = new Message();
-			msg.what = 1;
+			msg.what = MainImageUpdateHandler.MAIN_IMAGE_AVAILABLE;
 			msg.getData().putString("mainImageUrl", mainImageUrl);
 			mainImageUpdateHandler.sendMessage(msg);
 		}
@@ -183,18 +200,19 @@ public class article extends MenuedActivity {
 	}
 		
 	
-	class MainImageUpdateHandler extends Handler {	
+	class MainImageUpdateHandler extends Handler {
 		
+		private static final int MAIN_IMAGE_AVAILABLE = 1;
+
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			
 			switch (msg.what) {	   
-			    case 1:
+			    case MAIN_IMAGE_AVAILABLE:
 			    final String mainImageUrl = msg.getData().getString("mainImageUrl");
 			    populateMainImage(mainImageUrl);
 			}
-		}
-		
+		}		
 	}
 			
 }
