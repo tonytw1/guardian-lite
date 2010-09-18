@@ -7,11 +7,9 @@ import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.api.caching.FileService;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
-import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
 import android.util.Log;
@@ -49,6 +47,7 @@ public class ArticleDAO {
 		if (fetchType.equals(ContentFetchType.CHECKSUM)) {
 			ArticleBundle localCopy = fileBasedArticleCache.getArticleSetArticles(articleSet, null);
 			if (localCopy != null && localCopy.getChecksum() != null) {
+				
 				Log.i(TAG, "Checking for checksum sync - local article set has checksum: " + localCopy.getChecksum());
 				final String remoteChecksum = openPlatformApi.getRemoteChecksum(articleSet, preferencesDAO.getPageSizePreference());
 				Log.i(TAG, "Remote checksum is: " + remoteChecksum);
@@ -113,10 +112,7 @@ public class ArticleDAO {
 		fileBasedArticleCache.clear(articleSet);
 	}
 	
-	public void saveTopStories(List<Article> topStories) {
-		fileBasedArticleCache.putArticleSetArticles(new TopStoriesArticleSet(), new ArticleBundle(topStories, null, null, DateTimeHelper.now(), null));
-	}
-
+	
 	public Date getModificationTime(ArticleSet articleSet) {
 		return fileBasedArticleCache.getModificationTime(articleSet);
 	}

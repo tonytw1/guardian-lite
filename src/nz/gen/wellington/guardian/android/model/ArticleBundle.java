@@ -12,7 +12,7 @@ public class ArticleBundle implements Serializable {
 	List<Article> articles;
 	Map<String, List<Tag>> refinements;
 	String checksum;
-	Date timestamp;
+	@Deprecated Date timestamp;
 	private String description;
 	
 	public ArticleBundle(List<Article> articles, Map<String, List<Tag>> refinements, String checksum, Date timestamp, String description) {
@@ -37,10 +37,6 @@ public class ArticleBundle implements Serializable {
 	
 	public String getDescription() {
 		return description;
-	}
-
-	public Date getTimestamp() {
-		return timestamp;
 	}
 	
 }

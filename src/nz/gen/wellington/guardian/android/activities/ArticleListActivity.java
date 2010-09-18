@@ -99,7 +99,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			mainPane.removeAllViews();
 			
 			updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
-			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService, fetchType);
+			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService, fetchType, getArticleSet());
 			updateArticlesHandler.init();
 			
 			loader = new Thread(updateArticlesRunner);
@@ -126,8 +126,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	}
 	
 	
-	private ArticleBundle loadArticles(ContentFetchType fetchType) {
-		ArticleSet articleSet = getArticleSet();
+	private ArticleBundle loadArticles(ContentFetchType fetchType, ArticleSet articleSet) {
 		if (articleSet != null) {
 			return articleDAO.getArticleSetArticles(articleSet, fetchType);
 		}
@@ -382,20 +381,22 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		ImageDAO imageDAO;
 		NetworkStatusService networkStatusService;
 		ContentFetchType fetchType;
+		private ArticleSet articleSet;
 		
-		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, NetworkStatusService networkStatusService, ContentFetchType fetchType) {
+		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, NetworkStatusService networkStatusService, ContentFetchType fetchType, ArticleSet articleSet) {
 			this.articleDAO = articleDAO;
 			this.imageDAO = imageDAO;
 			this.running = true;
 			this.networkStatusService = networkStatusService;
 			articleDAO.setArticleReadyCallback(this);
 			this.fetchType = fetchType;
+			this.articleSet = articleSet;
 		}
 		
 		public void run() {
 
-			if (running) {			
-				bundle = loadArticles(fetchType);
+			if (running) {
+				bundle = loadArticles(fetchType, articleSet);
 			}
 			
 			if (bundle == null) {
@@ -460,8 +461,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			}
 			
 			if (bundle != null) {
-				Date modificationTime = bundle.getTimestamp();				
-				if (modificationTime != null && DateTimeHelper.isMoreThanHoursOld(modificationTime, 2)) {					
+				Date modificationTime = articleDAO.getModificationTime(articleSet);
+				if (modificationTime != null && DateTimeHelper.isMoreThanHoursOld(modificationTime, 2)) {
 					m = new Message();
 					m.what = UpdateArticlesHandler.SHOW_ARTICLE_SET_OUT_OF_DATE_WARNING;
 					Bundle bundle = new Bundle();
