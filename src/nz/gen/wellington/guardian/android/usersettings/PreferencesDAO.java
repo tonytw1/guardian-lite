@@ -22,4 +22,8 @@ public class PreferencesDAO {
 		return (Boolean) prefs.getBoolean("largeImages", false);
 	}
 	
+	public boolean getMainPicturesPreference() {
+		return (Boolean) prefs.getBoolean("mainImages", false);
+	}
+	
 }

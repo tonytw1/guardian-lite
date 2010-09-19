@@ -9,6 +9,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +30,7 @@ public class article extends MenuedActivity {
 	
 	private NetworkStatusService networkStatusService;
     private ImageDAO imageDAO;
+    private PreferencesDAO preferencesDAO;
     
     private Article article;
        
@@ -41,8 +43,9 @@ public class article extends MenuedActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-				
-		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());			
+		
+		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());
+		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(this.getApplicationContext());
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
 		
 		images = new HashMap<String, Bitmap>();
@@ -97,8 +100,10 @@ public class article extends MenuedActivity {
 			TextView caption = (TextView) findViewById(R.id.Caption);
 			caption.setText(article.getCaption());
 			
-			final boolean isWifiConnectionAvailable = networkStatusService.isConnectionAvailable() && networkStatusService.isWifiConnection();			
-			mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl(), isWifiConnectionAvailable);
+			final boolean isWifiConnectionAvailable = networkStatusService.isConnectionAvailable() && networkStatusService.isWifiConnection();
+			final boolean downloadMainImage = isWifiConnectionAvailable || preferencesDAO.getMainPicturesPreference();
+						
+			mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl(), downloadMainImage);
 			Thread loader = new Thread(mainImageLoader);
 			loader.start();			
 		}
