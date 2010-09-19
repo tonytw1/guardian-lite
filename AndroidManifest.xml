@@ -3,12 +3,17 @@
    	package="nz.gen.wellington.guardian.android" android:versionName="1.16" android:versionCode="17">
    	
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="false">
-     	     
-        <activity android:label="@string/app_name" android:name=".activities.main"  android:launchMode="singleTask">
+    
+     	<activity android:name=".activities.startup">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>    	
+    	</activity>
+    	    	 	        	 	     
+    	<activity android:name=".activities.about" />   	
+    	 	     
+        <activity android:label="@string/app_name" android:name=".activities.main"  android:launchMode="singleTask">
         </activity>
       	
     	<activity android:label="View Article" android:name=".activities.article" >
@@ -51,7 +56,6 @@
     		<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget" />
 		</receiver>
 				
-	<activity android:name=".activities.about"></activity>
 </application>
 	
 	<uses-sdk android:minSdkVersion="3" />
