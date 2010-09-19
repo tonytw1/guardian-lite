@@ -13,6 +13,8 @@ public final class R {
         public static final int cacheLocationOptionValues=0x7f050001;
         public static final int pageSizeOptionLabels=0x7f050002;
         public static final int pageSizeOptionValues=0x7f050003;
+        public static final int syncTypeOptionLabels=0x7f050004;
+        public static final int syncTypeOptionValues=0x7f050005;
     }
     public static final class attr {
     }

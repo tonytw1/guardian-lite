@@ -12,4 +12,18 @@
 <string-array name="pageSizeOptionValues"><item>10</item>
 <item>15</item>
 </string-array>
+
+
+<string-array name="syncTypeOptionLabels">
+<item>Never</item>
+<item>Daily</item>
+<item>Hourly</item>
+</string-array>
+
+<string-array name="syncTypeOptionValues">
+<item>NEVER</item>
+<item>DAILY</item>
+<item>HOURLY</item>
+</string-array>
+
 </resources>

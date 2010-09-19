@@ -12,8 +12,11 @@ import android.util.Log;
 
 public class ContentUpdateAlarmSetter {
 	
-	private static final long ONE_DAY = 60000 * 60 * 24;
 	private static final String TAG = "ContentUpdateAlarmSetter";
+	
+	private static final long ONE_MINUTE = 60000;
+	private static final long ONE_HOUR = ONE_MINUTE * 60;
+	private static final long ONE_DAY = ONE_HOUR * 24;
 	
 	private Context context;
 	
@@ -21,14 +24,24 @@ public class ContentUpdateAlarmSetter {
 		this.context = context;
 	}
 
-	public void setContentUpdateAlarm() {
+	public void setDailyContentUpdateAlarm() {
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		PendingIntent pi = makeContentUpdatePendingIntent();
 		
-		final long timeInMillis = getNextAutoSyncTime();
-		Log.i(TAG, "Setting sync alarm for: " + new Date(timeInMillis).toLocaleString());
+		final long timeInMillis = getNextDailyAutoSyncTime();
+		Log.i(TAG, "Setting daily sync alarm for: " + new Date(timeInMillis).toLocaleString());
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, ONE_DAY, pi);
 	}
+	
+	public void setHourlyContentUpdateAlarm() {
+		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		PendingIntent pi = makeContentUpdatePendingIntent();
+		
+		final long timeInMillis = getNextHourlyAutoSyncTime();
+		Log.i(TAG, "Setting hourly sync alarm for: " + new Date(timeInMillis).toLocaleString());
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, ONE_HOUR, pi);
+	}
+	
 
 	public void cancelAlarm() {
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);		
@@ -41,7 +54,13 @@ public class ContentUpdateAlarmSetter {
 		return pi;
 	}
 	
-	private long getNextAutoSyncTime() {
+	private long getNextHourlyAutoSyncTime() {
+		Calendar time = Calendar.getInstance();					
+		long timeInMillis = time.getTimeInMillis() + ONE_MINUTE;		
+		return timeInMillis;
+	}
+	
+	private long getNextDailyAutoSyncTime() {
 		Calendar time = Calendar.getInstance();			
 		boolean isToday = time.get(Calendar.HOUR_OF_DAY) < 6;
 		time.set(Calendar.HOUR_OF_DAY, 6);

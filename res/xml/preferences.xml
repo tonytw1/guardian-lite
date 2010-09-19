@@ -7,5 +7,10 @@
 <CheckBoxPreference android:enabled="true" android:key="mainImages" android:defaultValue="false" android:title="Large images" android:summaryOff="Large images will only be downloaded inline when connected via Wifi" android:summaryOn="Large images will be downloaded inline, even on a mobile connection (may transfer alot of data)"></CheckBoxPreference>
 <CheckBoxPreference android:enabled="true" android:key="largeImages" android:defaultValue="false" android:title="Large image syncing" android:summaryOff="Large images will only be downloaded when syncing via Wifi" android:summaryOn="Large images will always be synced"></CheckBoxPreference>
 
-<CheckBoxPreference android:title="Auto sync" android:key="autoSync" android:summaryOn="Favourites will be downloaded at 6AM"></CheckBoxPreference>
+<ListPreference android:entryValues="@array/syncTypeOptionValues" android:entries="@array/syncTypeOptionLabels" 
+android:summary="When should top stories and favourites be automatically synced (requires background data)" android:title="Automatic syncing" android:key="syncType" android:defaultValue="NONE"></ListPreference>
+
+
+
+
 </PreferenceScreen>
