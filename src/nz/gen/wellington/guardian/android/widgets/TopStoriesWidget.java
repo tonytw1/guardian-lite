@@ -83,11 +83,14 @@ public class TopStoriesWidget extends AppWidgetProvider {
 			RemoteViews widgetView) {
 		Article errorMessage = new Article();
 		errorMessage.setTitle("No articles available");
-		errorMessage.setStandfirst("You may need to sync this article set");
+		errorMessage.setStandfirst(getNoArticlesExplainationText());
 		populateArticle(widgetView, imageDAO, errorMessage, context, firstArticleViews);
 	}
-	
-	
+
+	protected String getNoArticlesExplainationText() {
+		return "You may need to sync this article set";
+	}
+		
 	private ArticleBundle getArticles(Context context) {
 		ArticleSet articleSet = getArticleSet(context);
 		if (articleSet == null) {

@@ -33,5 +33,10 @@ public class FavouriteStoriesWidget extends TopStoriesWidget {
 	protected Intent getClickIntent(Context context) {
 		return new Intent(context, favourites.class);
 	}
-	
+
+	@Override
+	protected String getNoArticlesExplainationText() {
+		return "You may not have any favourites set or the articles may not have synced yet";
+	}
+		
 }
