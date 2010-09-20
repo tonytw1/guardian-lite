@@ -28,15 +28,8 @@ public class perferences extends PreferenceActivity {
 		@Override
 		public boolean onPreferenceChange(Preference preference, Object newValue) {			
 			Log.i("PreferenceActivity", "Preference has been updated: " + preference.getKey());
-			if (preference.getKey().equals("syncType")) {				
-				String syncType = (String) newValue;
-				if (syncType.equals("DAILY")) {
-					alarmSetter.setDailyContentUpdateAlarm();					
-				} else if (syncType.equals("HOURLY")) {
-					alarmSetter.setHourlyContentUpdateAlarm();					
-				} else {
-					alarmSetter.cancelAlarm();
-				}
+			if (preference.getKey().equals("syncType")) {
+				alarmSetter.setAlarmFor(newValue);				
 			}
 			return true;
 		}

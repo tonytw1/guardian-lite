@@ -23,8 +23,19 @@ public class ContentUpdateAlarmSetter {
 	public ContentUpdateAlarmSetter(Context context) {
 		this.context = context;
 	}
-
-	public void setDailyContentUpdateAlarm() {
+	
+	
+	public void setAlarmFor(Object syncType) {
+		if (syncType.equals("DAILY")) {
+			setDailyContentUpdateAlarm();					
+		} else if (syncType.equals("HOURLY")) {
+			setHourlyContentUpdateAlarm();					
+		} else {
+			cancelAlarm();
+		}		
+	}
+	
+	private void setDailyContentUpdateAlarm() {
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		PendingIntent pi = makeContentUpdatePendingIntent();
 		
@@ -33,7 +44,7 @@ public class ContentUpdateAlarmSetter {
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, ONE_DAY, pi);
 	}
 	
-	public void setHourlyContentUpdateAlarm() {
+	private void setHourlyContentUpdateAlarm() {
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		PendingIntent pi = makeContentUpdatePendingIntent();
 		
@@ -42,8 +53,7 @@ public class ContentUpdateAlarmSetter {
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, ONE_HOUR, pi);
 	}
 	
-
-	public void cancelAlarm() {
+	private void cancelAlarm() {
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);		
 		alarmManager.cancel(makeContentUpdatePendingIntent());		
 	}
@@ -56,7 +66,7 @@ public class ContentUpdateAlarmSetter {
 	
 	private long getNextHourlyAutoSyncTime() {
 		Calendar time = Calendar.getInstance();					
-		long timeInMillis = time.getTimeInMillis() + ONE_MINUTE;		
+		long timeInMillis = time.getTimeInMillis() + ONE_HOUR;		
 		return timeInMillis;
 	}
 	

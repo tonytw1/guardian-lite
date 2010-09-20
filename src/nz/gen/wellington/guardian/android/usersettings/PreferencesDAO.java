@@ -19,7 +19,11 @@ public class PreferencesDAO {
 	}
 
 	public String getLargePicturesPreference() {
-		return (String) prefs.getString("largeImageOption", "WIFI_ONLY");
+		return (String) prefs.getString("largeImagesOption", "WIFI_ONLY");
+	}
+	
+	public String getSyncPreference() {
+		return (String) prefs.getString("syncType", "NEVER");
 	}
 	
 }

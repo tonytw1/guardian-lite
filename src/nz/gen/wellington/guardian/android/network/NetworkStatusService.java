@@ -22,7 +22,7 @@ public class NetworkStatusService {
 	}
 	
 	public boolean isBackgroundDataAvailable() {
-		return connectivityManager.getBackgroundDataSetting();
+		return connectivityManager.getBackgroundDataSetting() && isConnectionAvailable();
 	}
 	
 	public boolean isWifiConnection() {

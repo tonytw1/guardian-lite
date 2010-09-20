@@ -51,7 +51,7 @@ public class article extends MenuedActivity {
 		images = new HashMap<String, Bitmap>();
     	mainImageUpdateHandler = new MainImageUpdateHandler();
     	
-		requestWindowFeature(Window.FEATURE_NO_TITLE);	
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.article);
 		
 		Article article = (Article) this.getIntent().getExtras().get("article");
@@ -101,7 +101,7 @@ public class article extends MenuedActivity {
 			caption.setText(article.getCaption());
 			
 			final boolean isWifiConnectionAvailable = networkStatusService.isConnectionAvailable() && networkStatusService.isWifiConnection();
-			final boolean downloadMainImage = isWifiConnectionAvailable || preferencesDAO.getLargePicturesPreference().equals("ALWAYS");
+			final boolean downloadMainImage = isWifiConnectionAvailable || (networkStatusService.isConnectionAvailable() && preferencesDAO.getLargePicturesPreference().equals("ALWAYS"));
 			
 			mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl(), downloadMainImage);
 			Thread loader = new Thread(mainImageLoader);
