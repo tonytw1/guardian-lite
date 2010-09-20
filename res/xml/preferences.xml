@@ -4,13 +4,10 @@
 
 <ListPreference android:entryValues="@array/pageSizeOptionValues" android:entries="@array/pageSizeOptionLabels" android:summary="Number of articles to include in each article set" android:title="Page size" android:key="pageSize" android:defaultValue="10"></ListPreference>
 
-<CheckBoxPreference android:enabled="true" android:key="mainImages" android:defaultValue="false" android:title="Large images" android:summaryOff="Large images will only be downloaded inline when connected via Wifi" android:summaryOn="Large images will be downloaded inline, even on a mobile connection (may transfer alot of data)"></CheckBoxPreference>
-<CheckBoxPreference android:enabled="true" android:key="largeImages" android:defaultValue="false" android:title="Large image syncing" android:summaryOff="Large images will only be downloaded when syncing via Wifi" android:summaryOn="Large images will always be synced"></CheckBoxPreference>
+<ListPreference android:entryValues="@array/largeImageOptionValues" android:entries="@array/largeImageOptionLabels" 
+android:summary="When should large article images be downloaded" android:title="Load large images" android:key="largeImagesOption" android:defaultValue="WIFI_ONLY"></ListPreference>
 
 <ListPreference android:entryValues="@array/syncTypeOptionValues" android:entries="@array/syncTypeOptionLabels" 
-android:summary="When should top stories and favourites be automatically synced (requires background data)" android:title="Automatic syncing" android:key="syncType" android:defaultValue="NONE"></ListPreference>
-
-
-
+android:summary="When to automatically download top stories and favourites (requires background data)" android:title="Automatic syncing" android:key="syncType" android:defaultValue="NONE"></ListPreference>
 
 </PreferenceScreen>

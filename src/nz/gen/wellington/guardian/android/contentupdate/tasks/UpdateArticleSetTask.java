@@ -64,7 +64,7 @@ public class UpdateArticleSetTask implements ContentUpdateTaskRunnable {
 	
 		
 	private void processArticles(List<Article> articles) {
-		final boolean queueMainImagesForDownload = preferencesDAO.getLargePicturesPreference() || networkStatusService.isWifiConnection();		
+		final boolean queueMainImagesForDownload = preferencesDAO.getLargePicturesPreference().equals("ALWAYS") || networkStatusService.isWifiConnection();		
 		if (articles != null) {
 			for (Article article : articles) {
 				if (article.getThumbnailUrl() != null) {

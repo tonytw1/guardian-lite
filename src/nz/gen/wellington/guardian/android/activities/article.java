@@ -101,8 +101,8 @@ public class article extends MenuedActivity {
 			caption.setText(article.getCaption());
 			
 			final boolean isWifiConnectionAvailable = networkStatusService.isConnectionAvailable() && networkStatusService.isWifiConnection();
-			final boolean downloadMainImage = isWifiConnectionAvailable || preferencesDAO.getMainPicturesPreference();
-						
+			final boolean downloadMainImage = isWifiConnectionAvailable || preferencesDAO.getLargePicturesPreference().equals("ALWAYS");
+			
 			mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl(), downloadMainImage);
 			Thread loader = new Thread(mainImageLoader);
 			loader.start();			

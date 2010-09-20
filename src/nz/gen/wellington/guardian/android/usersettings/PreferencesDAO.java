@@ -18,12 +18,8 @@ public class PreferencesDAO {
 		return pageSize;
 	}
 
-	public boolean getLargePicturesPreference() {
-		return (Boolean) prefs.getBoolean("largeImages", false);
-	}
-	
-	public boolean getMainPicturesPreference() {
-		return (Boolean) prefs.getBoolean("mainImages", false);
+	public String getLargePicturesPreference() {
+		return (String) prefs.getString("largeImageOption", "WIFI_ONLY");
 	}
 	
 }

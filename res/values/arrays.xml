@@ -5,18 +5,19 @@
 <string-array name="cacheLocationOptionValues">
 <item>1</item>
 </string-array>
-<string-array name="pageSizeOptionLabels"><item>10</item>
+<string-array name="pageSizeOptionLabels">
+<item>10</item>
 <item>15</item>
 </string-array>
 
-<string-array name="pageSizeOptionValues"><item>10</item>
+<string-array name="pageSizeOptionValues">
+<item>10</item>
 <item>15</item>
 </string-array>
-
 
 <string-array name="syncTypeOptionLabels">
 <item>Never</item>
-<item>Daily</item>
+<item>Daily at 6am</item>
 <item>Hourly</item>
 </string-array>
 
@@ -24,6 +25,16 @@
 <item>NEVER</item>
 <item>DAILY</item>
 <item>HOURLY</item>
+</string-array>
+
+<string-array name="largeImageOptionLabels">
+<item>via Wifi only</item>
+<item>Always</item>
+</string-array>
+
+<string-array name="largeImageOptionValues">
+<item>WIFI_ONLY</item>
+<item>ALWAYS</item>
 </string-array>
 
 </resources>
