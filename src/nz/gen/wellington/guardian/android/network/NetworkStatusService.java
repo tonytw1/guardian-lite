@@ -21,6 +21,10 @@ public class NetworkStatusService {
 		return false;
 	}
 	
+	public boolean isBackgroundDataAvailable() {
+		return connectivityManager.getBackgroundDataSetting();
+	}
+	
 	public boolean isWifiConnection() {
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		if (activeNetworkInfo == null) {

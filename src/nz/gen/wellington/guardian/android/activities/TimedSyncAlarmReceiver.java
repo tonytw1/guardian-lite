@@ -5,6 +5,7 @@ import java.util.Date;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.contentupdate.ContentUpdateService;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,17 +14,18 @@ import android.content.Context;
 import android.content.Intent;
 
 public class TimedSyncAlarmReceiver extends BroadcastReceiver {
-
-	private static final String TAG = "TimedSyncAlarmReceiver";
-
-	ContentUpdateService contentUpdateService;
+	
+	private NetworkStatusService networkStatusService;
 	
 	@Override
-	public void onReceive(Context context, Intent intent) {		
-        Intent serviceIntent = new Intent(context, ContentUpdateService.class);
-        serviceIntent.setAction("RUN");
-        sendNotification(context);
-        context.startService(serviceIntent);
+	public void onReceive(Context context, Intent intent) {
+		networkStatusService = new NetworkStatusService(context);
+		if (networkStatusService.isBackgroundDataAvailable()) {
+			Intent serviceIntent = new Intent(context, ContentUpdateService.class);
+			serviceIntent.setAction("RUN");
+			sendNotification(context);
+			context.startService(serviceIntent);
+		}
 	}
 	
 	private void sendNotification(Context context) {
