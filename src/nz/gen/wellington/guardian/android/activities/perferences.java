@@ -29,7 +29,7 @@ public class perferences extends PreferenceActivity {
 		public boolean onPreferenceChange(Preference preference, Object newValue) {			
 			Log.i("PreferenceActivity", "Preference has been updated: " + preference.getKey());
 			if (preference.getKey().equals("syncType")) {
-				alarmSetter.setAlarmFor(newValue);				
+				alarmSetter.setAlarmFor((String) newValue);
 			}
 			return true;
 		}

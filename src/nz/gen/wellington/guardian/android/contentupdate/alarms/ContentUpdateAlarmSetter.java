@@ -25,14 +25,15 @@ public class ContentUpdateAlarmSetter {
 	}
 	
 	
-	public void setAlarmFor(Object syncType) {
+	public void setAlarmFor(String syncType) {
+		Log.i(TAG, "Setting sync alarm for preference: " + syncType);
 		if (syncType.equals("DAILY")) {
 			setDailyContentUpdateAlarm();					
 		} else if (syncType.equals("HOURLY")) {
 			setHourlyContentUpdateAlarm();					
 		} else {
 			cancelAlarm();
-		}		
+		}
 	}
 	
 	private void setDailyContentUpdateAlarm() {
