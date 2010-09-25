@@ -75,7 +75,9 @@ public class TopStoriesWidget extends AppWidgetProvider {
 		}
 		
 		AppWidgetManager manager = AppWidgetManager.getInstance(context);
-		manager.updateAppWidget(appWidgetIds, widgetView);
+		if (manager != null) {
+			manager.updateAppWidget(appWidgetIds, widgetView);
+		}
 	}
 
 	
