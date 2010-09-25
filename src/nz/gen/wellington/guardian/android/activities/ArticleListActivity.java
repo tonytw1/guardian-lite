@@ -181,8 +181,11 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					LayoutInflater mInflater = LayoutInflater.from(context);
 					LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);					
 					if (showSeperators) {
-						if (currentSection == null || !currentSection.getId().equals(article.getSection().getId())) {
-							isFirstOfSection = true;
+						
+						if (article.getSection() != null) {
+							if (currentSection == null || !currentSection.getId().equals(article.getSection().getId())) {
+								isFirstOfSection = true;
+							}
 						}
 
 						if (isFirstOfSection) {
