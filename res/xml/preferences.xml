@@ -8,6 +8,6 @@
 android:summary="When should large article images be downloaded" android:title="Load large images" android:key="largeImagesOption" android:defaultValue="WIFI_ONLY"></ListPreference>
 
 <ListPreference android:entryValues="@array/syncTypeOptionValues" android:entries="@array/syncTypeOptionLabels" 
-android:summary="When to automatically download top stories and favourites (requires background data)" android:title="Automatic syncing" android:key="syncType" android:defaultValue="NONE"></ListPreference>
+android:summary="When to automatically download top stories and favourites (requires background data)" android:title="Automatic syncing" android:key="syncType" android:defaultValue="NEVER"></ListPreference>
 
 </PreferenceScreen>
