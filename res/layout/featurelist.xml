@@ -3,8 +3,8 @@
 android:orientation="vertical">
  
 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:textColor="#fff" android:id="@+id/Headline" android:paddingBottom="2px" android:textSize="8pt"></TextView><ImageView android:id="@+id/TrailImage" android:adjustViewBounds="true" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerInside"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Caption" android:textSize="5pt" android:visibility="gone" android:paddingBottom="10px"></TextView><LinearLayout android:id="@+id/LinearLayout02" android:paddingRight="8px" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingBottom="5px" android:orientation="vertical">
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="7pt" android:id="@+id/Pubdate"></TextView>
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Standfirst" android:textSize="7pt"></TextView>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Pubdate" android:textSize="5pt"></TextView>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Standfirst" android:textSize="6.25pt"></TextView>
 </LinearLayout>
 
 </LinearLayout>
