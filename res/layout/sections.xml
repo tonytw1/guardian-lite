@@ -4,10 +4,10 @@
   android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="fill_parent">
     
 <LinearLayout android:layout_height="wrap_content" android:id="@+id/HeadingLayout" android:layout_width="fill_parent">
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingBottom="2px" android:paddingLeft="2px" android:paddingTop="2px" android:textStyle="bold" android:id="@+id/Heading" android:textColor="#fff"></TextView>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingBottom="2px" android:paddingLeft="2px" android:paddingTop="2px" android:textStyle="bold" android:id="@+id/Heading" android:textColor="#fff" android:textSize="7pt"></TextView>
 </LinearLayout>
 
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/DownloadProgress" android:visibility="gone"></TextView>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/DownloadProgress" android:visibility="gone" android:textSize="7pt"></TextView>
 
 <ScrollView android:id="@+id/ScrollView01" android:layout_height="wrap_content" android:layout_width="fill_parent">
 <LinearLayout android:layout_height="wrap_content" android:id="@+id/MainPane" android:orientation="vertical" android:layout_width="wrap_content"></LinearLayout>
