@@ -1,4 +1,0 @@
-
-<LinearLayout android:id="@+id/LinearLayout01" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:adjustViewBounds="true" android:paddingBottom="6px" android:paddingRight="8px" android:paddingTop="6px" android:id="@+id/SectionImage"></ImageView>
-<TextView android:text="@+id/TextView01" android:layout_height="wrap_content" android:id="@+id/SectionName" android:textStyle="bold" android:textSize="10pt" android:paddingTop="2px" android:layout_width="fill_parent"></TextView>
-</LinearLayout>
