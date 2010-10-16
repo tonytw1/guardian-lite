@@ -29,6 +29,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -268,10 +269,13 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 
 		private void populateTagDescription(LinearLayout mainpane, String descripton) {
+			// TODO move to a layout file
 			TextView descriptionView = new TextView(context);
 			descriptionView.setText(descripton);
 			descriptionView.setPadding(3, 3, 3, 15);
 			mainpane.addView(descriptionView, 0);
+			descriptionView.setTextSize(TypedValue.COMPLEX_UNIT_PT, 7);
+			descriptionView.setLineSpacing(new Float(0), new Float(1.1));
 			descriptionSet = true;
 		}
 
