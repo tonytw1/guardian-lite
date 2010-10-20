@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,13 +58,21 @@ public class article extends MenuedActivity {
 		Article article = (Article) this.getIntent().getExtras().get("article");
 		this.article = article;
 		
-		if (article != null) {
+		if (article != null) {			
 			populateArticle(article);
+			
 		} else {
         	Toast.makeText(this, "Could not load article", Toast.LENGTH_SHORT).show();
 		}	
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		TextView standfirst = (TextView) findViewById(R.id.Standfirst);
+		TextView description = (TextView) findViewById(R.id.Description);
+		setFontSize(standfirst, description);
+	}
 	
 	@Override
 	protected void onPause() {
@@ -84,6 +93,8 @@ public class article extends MenuedActivity {
         TextView standfirst = (TextView) findViewById(R.id.Standfirst);
         TextView description = (TextView) findViewById(R.id.Description);
         
+        setFontSize(standfirst, description);
+        
         headline.setText(article.getTitle());
         if (article.getPubDate() != null) {
         	pubDate.setText(article.getPubDateString());
@@ -92,7 +103,7 @@ public class article extends MenuedActivity {
         standfirst.setText(article.getStandfirst());
         description.setText(article.getDescription());
         
-    	
+            	
     	final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
     	
     	final String mainImageUrl = article.getMainImageUrl();
@@ -112,6 +123,13 @@ public class article extends MenuedActivity {
 		if (isTagged) {
 			populateTags(article, connectionAvailable);
 		}
+	}
+
+
+	private void setFontSize(TextView standfirst, TextView description) {
+		int baseSize = preferencesDAO.getBaseFontSize();
+        standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+        description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
 	}
 
 	

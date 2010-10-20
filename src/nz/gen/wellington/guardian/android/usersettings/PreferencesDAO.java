@@ -25,5 +25,11 @@ public class PreferencesDAO {
 	public String getSyncPreference() {
 		return (String) prefs.getString("syncType", "NEVER");
 	}
+
+	public int getBaseFontSize() {
+		final String baseSizeString = prefs.getString("baseFontSize", "7");
+		int baseSize = Integer.parseInt(baseSizeString);
+		return baseSize;
+	}
 	
 }

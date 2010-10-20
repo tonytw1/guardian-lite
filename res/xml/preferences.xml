@@ -10,4 +10,6 @@ android:summary="When should large article images be downloaded" android:title="
 <ListPreference android:entryValues="@array/syncTypeOptionValues" android:entries="@array/syncTypeOptionLabels" 
 android:summary="When to automatically download top stories and favourites (requires background data)" android:title="Automatic syncing" android:key="syncType" android:defaultValue="NEVER"></ListPreference>
 
+
+<ListPreference android:entryValues="@array/fontBaseSizeOptionValues" android:entries="@array/fontBaseSizeOptionLabels" android:summary="Preferred body text size" android:title="Font size" android:key="baseFontSize" android:defaultValue="7"></ListPreference>
 </PreferenceScreen>
