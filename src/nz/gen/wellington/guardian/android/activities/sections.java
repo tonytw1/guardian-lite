@@ -14,15 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.Toast;
 
 public class sections extends DownloadProgressAwareActivity {
 		
-	ListAdapter adapter;
 	private SectionDAO sectionDAO;
-	
-	
+		
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
