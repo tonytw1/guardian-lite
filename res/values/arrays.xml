@@ -16,12 +16,12 @@
 </string-array>
 
 <string-array name="fontBaseSizeOptionLabels">
-	<item>7</item>
-	<item>8</item>
-	<item>9</item>
-	<item>10</item>
-	<item>11</item>
-	<item>12</item>	
+	<item>7pt</item>
+	<item>8pt</item>
+	<item>9pt</item>
+	<item>10pt</item>
+	<item>11pt</item>
+	<item>12pt</item>	
 </string-array>
 
 <string-array name="fontBaseSizeOptionValues">
