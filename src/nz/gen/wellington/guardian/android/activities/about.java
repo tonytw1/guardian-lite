@@ -25,7 +25,7 @@ public class about extends ArticleListActivity {
 		description.setText("This unofficial application was developed by Tony McCrae of Eel Pie Consulting Limited.\n\n" +
 				"Articles are retreived from the Guardian's RSS feeds. Tag information is supplied by the Guardian Content API.\n\n" +
 				"For more information see:\nhttp://eelpieconsulting.co.uk/guardianlite\n\n" +
-				"Application © 2010 Eel Pie Consulting Limited\n"
+				"Application Â© 2010 Eel Pie Consulting Limited\n"
 				);
 				
 		ImageView poweredByTheGuardian = (ImageView) findViewById(R.id.PoweredByTheGuardian);
