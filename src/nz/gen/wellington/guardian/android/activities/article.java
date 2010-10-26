@@ -26,9 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class article extends MenuedActivity {
-	
-	//private static final String TAG = "article";
-	
+		
 	private NetworkStatusService networkStatusService;
     private ImageDAO imageDAO;
     private PreferencesDAO preferencesDAO;
@@ -69,9 +67,8 @@ public class article extends MenuedActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		TextView standfirst = (TextView) findViewById(R.id.Standfirst);
-		TextView description = (TextView) findViewById(R.id.Description);
-		setFontSize(standfirst, description);
+		final int baseSize = preferencesDAO.getBaseFontSize();
+		setFontSize(baseSize);
 	}
 	
 	@Override
@@ -93,7 +90,8 @@ public class article extends MenuedActivity {
         TextView standfirst = (TextView) findViewById(R.id.Standfirst);
         TextView description = (TextView) findViewById(R.id.Description);
         
-        setFontSize(standfirst, description);
+		final int baseSize = preferencesDAO.getBaseFontSize();
+        setFontSize(baseSize);
         
         headline.setText(article.getTitle());
         if (article.getPubDate() != null) {
@@ -126,8 +124,19 @@ public class article extends MenuedActivity {
 	}
 
 
-	private void setFontSize(TextView standfirst, TextView description) {
-		int baseSize = preferencesDAO.getBaseFontSize();
+	private void setFontSize(int baseSize) {
+		TextView headline = (TextView) findViewById(R.id.Headline);
+		TextView caption = (TextView) findViewById(R.id.Caption);
+		TextView pubDate = (TextView) findViewById(R.id.PubDate);
+		TextView byline = (TextView) findViewById(R.id.Byline);
+		TextView standfirst = (TextView) findViewById(R.id.Standfirst);
+		TextView description = (TextView) findViewById(R.id.Description);
+		
+		headline.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize + 1);
+		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize - 2);
+		caption.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize -2);
+		byline.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize - 2);
         standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
         description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
 	}
@@ -200,7 +209,6 @@ public class article extends MenuedActivity {
 				image = imageDAO.getImage(mainImageUrl);
 				
 			} else if (isWifiConnectionAvailable) {
-				//Log.i(TAG, "Main image is not available locally, but will fetch because wifi is available");				
 				image = imageDAO.fetchLiveImage(mainImageUrl);
 			}
 			
@@ -213,7 +221,6 @@ public class article extends MenuedActivity {
 		}
 
 		private void sendMainImageAvailableMessage(String mainImageUrl) {
-			//Log.i(TAG, "Sending main image available message: " + mainImageUrl);
 			Message msg = new Message();
 			msg.what = MainImageUpdateHandler.MAIN_IMAGE_AVAILABLE;
 			msg.getData().putString("mainImageUrl", mainImageUrl);
