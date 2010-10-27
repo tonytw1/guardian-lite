@@ -39,7 +39,7 @@
 		<activity android:name=".activities.notification" android:noHistory="true"></activity>
 		<activity android:name=".activities.tagsearch" ></activity>
 
-		<receiver android:name=".activities.TimedSyncAlarmReceiver"></receiver>
+		<receiver android:name=".contentupdate.alarms.ContentUpdateAlarmReceiver"></receiver>
 		
 		
 		<receiver android:name=".widgets.TopStoriesWidget" android:label="@string/widget_name">
