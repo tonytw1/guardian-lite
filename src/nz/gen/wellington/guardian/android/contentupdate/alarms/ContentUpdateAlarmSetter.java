@@ -3,7 +3,6 @@ package nz.gen.wellington.guardian.android.contentupdate.alarms;
 import java.util.Calendar;
 import java.util.Date;
 
-import nz.gen.wellington.guardian.android.activities.TimedSyncAlarmReceiver;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -60,7 +59,7 @@ public class ContentUpdateAlarmSetter {
 	}
 	
 	private PendingIntent makeContentUpdatePendingIntent() {
-		Intent i=new Intent(context, TimedSyncAlarmReceiver.class);
+		Intent i=new Intent(context, ContentUpdateAlarmReceiver.class);
 		PendingIntent pi= PendingIntent.getBroadcast(context, 0, i, 0);
 		return pi;
 	}
