@@ -87,7 +87,6 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 	
 	private void populateSplashImage() {
 		ImageView slashImage = (ImageView) findViewById(R.id.SplashImage);
-		slashImage.setImageResource(R.drawable.kingsplace_night);
 		if (isDaylightInLondon()) {
 			slashImage.setImageResource(R.drawable.kingsplace);
 		} else {
