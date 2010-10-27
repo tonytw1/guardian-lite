@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class article extends MenuedActivity {
+public class article extends MenuedActivity implements FontResizingActivity {
 		
 	private NetworkStatusService networkStatusService;
     private ImageDAO imageDAO;
@@ -124,7 +124,7 @@ public class article extends MenuedActivity {
 	}
 
 
-	private void setFontSize(int baseSize) {
+	public void setFontSize(int baseSize) {
 		TextView headline = (TextView) findViewById(R.id.Headline);
 		TextView caption = (TextView) findViewById(R.id.Caption);
 		TextView pubDate = (TextView) findViewById(R.id.PubDate);

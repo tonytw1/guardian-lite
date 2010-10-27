@@ -5,19 +5,26 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class about extends ArticleListActivity {
+public class about extends ArticleListActivity implements FontResizingActivity {
 		
+	private PreferencesDAO preferencesDAO;
+
 	@Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);        
+        super.onCreate(savedInstanceState);
+		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(this.getApplicationContext());
+		
 		setContentView(R.layout.about);
 		setHeading("Guardian Lite - About");
 				
@@ -30,12 +37,22 @@ public class about extends ArticleListActivity {
 				
 		ImageView poweredByTheGuardian = (ImageView) findViewById(R.id.PoweredByTheGuardian);
 		poweredByTheGuardian.setImageResource(R.drawable.poweredbyguardian);
+		
+		final int baseSize = preferencesDAO.getBaseFontSize();
+		setFontSize(baseSize);
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
 		populateSplashImage();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		final int baseSize = preferencesDAO.getBaseFontSize();
+		setFontSize(baseSize);
 	}
 	
 	@Override
@@ -82,6 +99,14 @@ public class about extends ArticleListActivity {
 		Calendar londonCal = GregorianCalendar.getInstance(TimeZone.getTimeZone("Europe/London"));
 		int londonHour = londonCal.get(Calendar.HOUR_OF_DAY);
 		return londonHour > 6 && londonHour < 21;
+	}
+	
+	public void setFontSize(int baseSize) {
+		TextView about = (TextView) findViewById(R.id.About);
+		TextView contentCredit = (TextView) findViewById(R.id.ContentCredit);
+		
+		about.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+		contentCredit.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);		
 	}
 	
 }
