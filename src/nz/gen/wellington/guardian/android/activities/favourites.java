@@ -11,23 +11,38 @@ import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class favourites extends ArticleListActivity {
+public class favourites extends ArticleListActivity implements FontResizingActivity {
 	
+	private PreferencesDAO preferencesDAO;
+
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		
+        preferencesDAO = ArticleDAOFactory.getPreferencesDAO(this.getApplicationContext());
+        
         setContentView(R.layout.favourites);        
         setHeading("Favourites");
         setHeadingColour("#0061A6");
     	showSeperators = true;
     	showMainImage = false;
+	}
+	
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		final int baseSize = preferencesDAO.getBaseFontSize();
+		setFontSize(baseSize);
 	}
 
 	
@@ -115,6 +130,13 @@ public class favourites extends ArticleListActivity {
 	@Override
 	protected String getRefinementDescription(String refinementType) {
 		return null;
+	}
+
+
+	@Override
+	public void setFontSize(int baseSize) {
+		TextView description = (TextView) findViewById(R.id.Description);
+        description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
 	}
 	
 }
