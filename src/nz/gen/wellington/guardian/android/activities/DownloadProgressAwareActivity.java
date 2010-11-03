@@ -8,15 +8,20 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 public class DownloadProgressAwareActivity extends MenuedActivity {
 		
 	private DownloadProgressReceiver downloadProgressReceiver;
+	private TextView status;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        
+		status = (TextView) findViewById(R.id.DownloadProgress);
 		downloadProgressReceiver = new DownloadProgressReceiver();
 	}
 	
@@ -32,61 +37,63 @@ public class DownloadProgressAwareActivity extends MenuedActivity {
 	protected void onPause() {
 		super.onPause();
 		unregisterReceiver(downloadProgressReceiver);
-		hideDownloadProgress();
+		if (status == null) {
+			return;
+		}
+		hideDownloadProgress(status);
 	}
 	
 	
 	class DownloadProgressReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			final int type = intent.getIntExtra("type", 0);
-			switch (type) {
-			
-			case HttpFetcher.DOWNLOAD_STARTED:
-				showDownloadStart(intent.getStringExtra("url"));
-				return;
-						
-			case HttpFetcher.DOWNLOAD_UPDATE:
-				updateDownloadProgress(
-						intent.getIntExtra("bytes_received", 0),
-						intent.getLongExtra("bytes_expected", 0));
-				return;
+			if (status != null) {
+				final int type = intent.getIntExtra("type", 0);
 				
-			case HttpFetcher.DOWNLOAD_COMPLETED:
-				hideDownloadProgress();
-				return;
+				switch (type) {
 				
-			case HttpFetcher.DOWNLOAD_FAILED:
-				showDownloadFailed(intent.getStringExtra("url"));
-				return;
+				case HttpFetcher.DOWNLOAD_STARTED:
+					showDownloadStart(intent.getStringExtra("url"), status);
+					return;
+							
+				case HttpFetcher.DOWNLOAD_UPDATE:
+					updateDownloadProgress(
+							intent.getIntExtra("bytes_received", 0),
+							intent.getLongExtra("bytes_expected", 0), status);
+					return;
+					
+				case HttpFetcher.DOWNLOAD_COMPLETED:
+					hideDownloadProgress(status);
+					return;
+					
+				case HttpFetcher.DOWNLOAD_FAILED:
+					showDownloadFailed(intent.getStringExtra("url"), status);
+					return;
+				}
 			}
-		}				
+		}
 	}
 	
 	
-	final protected void updateDownloadProgress(int received, long  expected) {
+	final protected void updateDownloadProgress(int received, long  expected, TextView status) {
 		final String statusMessage =  received + " / " +  Long.toString(expected);
-		TextView status = (TextView) findViewById(R.id.DownloadProgress);
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);
 	}
 	
-	final protected void showDownloadStart(String url) {
+	final protected void showDownloadStart(String url, TextView status) {
 		final String statusMessage =  "Downloading: " + url;
-		TextView status = (TextView) findViewById(R.id.DownloadProgress);
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);
 	}
 	
-	final protected void showDownloadFailed(String url) {
+	final protected void showDownloadFailed(String url, TextView status) {
 		final String statusMessage =  "Download failed (Press Refresh to retry)";
-		TextView status = (TextView) findViewById(R.id.DownloadProgress);
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);
 	}
 	
-	final protected void hideDownloadProgress() {
-		TextView status = (TextView) findViewById(R.id.DownloadProgress);
+	final protected void hideDownloadProgress(View status) {
 		status.setVisibility(View.GONE);
 	}
 	

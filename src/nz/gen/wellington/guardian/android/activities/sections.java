@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -25,9 +24,7 @@ public class sections extends DownloadProgressAwareActivity {
 		super.onCreate(savedInstanceState);
 		sectionDAO = ArticleDAOFactory.getSectionDAO(this.getApplicationContext());
 		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.sections);
-		
+		setContentView(R.layout.sections);		
 		setHeading("Sections");
 		setHeadingColour("#0061A6");
 	}
