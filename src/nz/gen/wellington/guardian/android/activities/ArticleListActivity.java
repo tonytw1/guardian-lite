@@ -23,6 +23,7 @@ import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -32,12 +33,11 @@ import android.os.Message;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public abstract class ArticleListActivity extends DownloadProgressAwareActivity {
+public abstract class ArticleListActivity extends DownloadProgressAwareActivity implements FontResizingActivity {
 	
 	//private static final String TAG = "ArticleListActivity";
 	
@@ -50,6 +50,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	private ArticleBundle bundle;
 	private Map<String, View> viewsWaitingForTrailImages;
+	private PreferencesDAO preferencesDAO;
 
 	boolean showSeperators = false;
 	boolean showMainImage = true;
@@ -67,6 +68,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
 		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());		
 		networkStatusService = new NetworkStatusService(this);
+		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(this.getApplicationContext());
 	}
 	
 	
@@ -76,17 +78,34 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);		
 		boolean mainPaneNeedsPopulating = shouldRefreshView(mainPane);
 		if (mainPaneNeedsPopulating) {
-			populateArticles(ContentFetchType.NORMAL);
+			populateArticles(ContentFetchType.NORMAL, preferencesDAO.getBaseFontSize());
 		}
+	}
+	
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		final int baseSize = preferencesDAO.getBaseFontSize();
+		setFontSize(baseSize);
 	}
 
 	
+	@Override
+	public void setFontSize(int baseSize) {
+		TextView description = (TextView) findViewById(R.id.Description);
+		if (description != null) {
+			description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+		}
+	}
+
+
 	protected void refresh() {
-		populateArticles(ContentFetchType.CHECKSUM);
+		populateArticles(ContentFetchType.CHECKSUM, preferencesDAO.getBaseFontSize());
 	}
 	
 	
-	private void populateArticles(ContentFetchType fetchType) {
+	private void populateArticles(ContentFetchType fetchType, int baseFontSize) {
 		//Log.i(TAG, "Refresh requested");
 	
 		if (!networkStatusService.isConnectionAvailable() && ContentFetchType.CHECKSUM.equals(fetchType)) {	// TODO knowledge of connections requirements should be on the fetch type.
@@ -98,7 +117,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		if (loader == null || !loader.isAlive()) {
 			mainPane.removeAllViews();
 			
-			updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet());
+			updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet(), baseFontSize);
 			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService, fetchType, getArticleSet());
 			updateArticlesHandler.init();
 			
@@ -155,12 +174,14 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		Section currentSection;
 		private ArticleSet articleSet;
 		private boolean descriptionSet;
+		private int baseFontSize;
 		
-		public UpdateArticlesHandler(Context context, ArticleSet articleSet) {
+		public UpdateArticlesHandler(Context context, ArticleSet articleSet, int baseFontSize) {
 			super();
 			this.context = context;
 			this.articleSet = articleSet;
 			this.descriptionSet = false;
+			this.baseFontSize = baseFontSize;
 			init();
 		}
 				
@@ -222,8 +243,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
 			    	Bundle descriptionData = msg.getData();
 			    	String descripton = descriptionData.getString("description");
-			    	if (descripton != null && !descriptionSet) {
-			    		populateTagDescription(mainpane, descripton);
+			    	if (descripton != null && !descriptionSet) {			    	
+			    		populateTagDescription(mainpane, descripton, baseFontSize);
 			    	}
 			    	return;
 			    	
@@ -267,13 +288,14 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		}
 
 
-		private void populateTagDescription(LinearLayout mainpane, String descripton) {
-			// TODO move to a layout file
+		private void populateTagDescription(LinearLayout mainpane, String descripton, int fontSize) {
+			// TODO move to the layout file
 			TextView descriptionView = new TextView(context);
+			descriptionView.setId(R.id.Description);
 			descriptionView.setText(descripton);
 			descriptionView.setPadding(3, 3, 3, 15);
 			mainpane.addView(descriptionView, 0);
-			descriptionView.setTextSize(TypedValue.COMPLEX_UNIT_PT, 7);
+			descriptionView.setTextSize(TypedValue.COMPLEX_UNIT_PT, fontSize);	// TODO duplicated setting code
 			descriptionView.setLineSpacing(new Float(0), new Float(1.1));
 			descriptionSet = true;
 		}
