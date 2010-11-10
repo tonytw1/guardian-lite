@@ -35,5 +35,9 @@ public class PreferencesDAO {
 	public String getApiPrefix() {
 		return (String) prefs.getString("apiLocation", "http://guardian-lite.appspot.com");
 	}
+
+	public String getApiKey() {
+		return (String) prefs.getString("apiKey", null);
+	}
 	
 }

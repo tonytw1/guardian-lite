@@ -16,4 +16,6 @@ android:summary="When to automatically download top stories and favourites (requ
 android:summary="Content API location to use" android:title="Content API location" 
 android:key="apiLocation" android:defaultValue="http://guardian-lite.appspot.com"></ListPreference>
 
+
+<EditTextPreference android:summary="Your Guardian Content API key" android:key="apiKey" android:title="Content API key"></EditTextPreference>
 </PreferenceScreen>

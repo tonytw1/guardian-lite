@@ -54,7 +54,6 @@ public class ContentApiStyleApi implements ContentSource {
 		
 		InputStream input = null;		
 		if (input == null) {
-			//Log.i(TAG, "Fetching article set from live api: " + apiUrl);
 			announceDownloadStarted(articleSet.getName() + " article set");
 			input = getHttpInputStream(buildContentQueryUrl(articleSet, true, pageSize));
 		}		
@@ -176,6 +175,11 @@ public class ContentApiStyleApi implements ContentSource {
 			url.append("&show-tags=all");
 		}
 		url.append("&page-size=" + pageSize);
+		
+		final String apiKey = preferencesDAO.getApiKey();
+		if (apiKey != null && !apiKey.trim().equals("")) {
+			url.append("&api-key=" + apiKey);
+		}
 		return url.toString();
 	}
 
