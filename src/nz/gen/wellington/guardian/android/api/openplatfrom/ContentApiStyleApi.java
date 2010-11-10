@@ -172,8 +172,8 @@ public class ContentApiStyleApi implements ContentSource {
 		}
 
 		if (showAll) {
-			url.append("&show-fields=true");	// TODO is all in api
-			url.append("&show-tags=true");
+			url.append("&show-fields=all");
+			url.append("&show-tags=all");
 		}
 		url.append("&page-size=" + pageSize);
 		return url.toString();
