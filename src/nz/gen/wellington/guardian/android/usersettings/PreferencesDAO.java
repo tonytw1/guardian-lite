@@ -32,4 +32,8 @@ public class PreferencesDAO {
 		return baseSize;
 	}
 	
+	public String getApiPrefix() {
+		return (String) prefs.getString("apiLocation", "http://guardian-lite.appspot.com");
+	}
+	
 }

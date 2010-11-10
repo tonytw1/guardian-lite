@@ -55,4 +55,14 @@
 <item>ALWAYS</item>
 </string-array>
 
+<string-array name="apiLocationLabels">
+<item>Guardian Lite proxy</item>
+<item>Official Content API</item>
+</string-array>
+
+<string-array name="apiLocationValues">
+<item>http://guardian-lite.appspot.com</item>
+<item>http://content.guardianapis.com</item>
+</string-array>
+
 </resources>

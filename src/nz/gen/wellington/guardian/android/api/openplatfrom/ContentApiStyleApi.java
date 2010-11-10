@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
+import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
@@ -18,6 +19,7 @@ import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -25,12 +27,12 @@ import android.util.Log;
 public class ContentApiStyleApi implements ContentSource {
 		
 	private static final String TAG = "ContentApiStyleApi";
-
-	private static final String API_HOST = "http://guardian-lite.appspot.com";	
+	
 	public static final String SECTIONS_API_URL = "sections";
 	
 	private ContentApiStyleXmlParser contentXmlParser;
 	private ContentApiStyleJSONParser contentJsonParser;
+	private PreferencesDAO preferencesDAO;
 	private HttpFetcher httpFetcher;
 
 	private Context context;
@@ -41,6 +43,7 @@ public class ContentApiStyleApi implements ContentSource {
 		httpFetcher = new HttpFetcher(context);
 		contentXmlParser = new ContentApiStyleXmlParser(context);
 		contentJsonParser = new ContentApiStyleJSONParser();
+		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(context);
 	}
 
 	
@@ -129,7 +132,7 @@ public class ContentApiStyleApi implements ContentSource {
 	
 		
 	private String buildSectionsQueryUrl() {
-		StringBuilder url = new StringBuilder(API_HOST + "/" + SECTIONS_API_URL);
+		StringBuilder url = new StringBuilder(getApiPrefix() + "/" + SECTIONS_API_URL);
 		url.append("?format=json");
 		return url.toString();
 	}
@@ -146,12 +149,12 @@ public class ContentApiStyleApi implements ContentSource {
 
 	
 	protected String buildContentQueryUrl(ArticleSet articleSet, boolean showAll, int pageSize) {		
-		StringBuilder url = new StringBuilder(API_HOST + "/search");
+		StringBuilder url = new StringBuilder(getApiPrefix() + "/search");
 		if (articleSet instanceof FavouriteStoriesArticleSet) {
-			 url = new StringBuilder(API_HOST + "/favourites");
+			 url = new StringBuilder(getApiPrefix() + "/favourites");
 		}
 		if (articleSet instanceof AboutArticleSet) {
-			 url = new StringBuilder(API_HOST + "/about");
+			 url = new StringBuilder(getApiPrefix() + "/about");
 		}
 		
 		url.append("?format=xml");
@@ -174,6 +177,11 @@ public class ContentApiStyleApi implements ContentSource {
 		}
 		url.append("&page-size=" + pageSize);
 		return url.toString();
+	}
+
+
+	private String getApiPrefix() {
+		return preferencesDAO.getApiPrefix();
 	}
 	
 	

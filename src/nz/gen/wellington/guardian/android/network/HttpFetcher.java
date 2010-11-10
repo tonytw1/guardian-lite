@@ -92,11 +92,14 @@ public class HttpFetcher {
 			get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
 			
 			HttpResponse execute = client.execute(get);
-			if (execute.getStatusLine().getStatusCode() == 200) {
+			final int statusCode = execute.getStatusLine().getStatusCode();
+			if (statusCode == 200) {
 				long contentLength = execute.getEntity().getContentLength();				
 				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context, contentLength);				
-				return is;				
+				return is;
 			}
+			
+			Log.w(TAG, "Fetch of '" + uri + "' failed: " + statusCode);
 			announceDownloadFailed(uri);
 			return null;
 			
