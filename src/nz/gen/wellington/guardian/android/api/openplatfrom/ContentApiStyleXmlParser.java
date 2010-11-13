@@ -116,7 +116,8 @@ public class ContentApiStyleXmlParser {
          }
 
          private Section getSectionById(String sectionId) {
-        	 if (sectionId == null) {
+        	 // TODO sections null check should be at a much higher level.
+        	 if (sections == null || sectionId == null) {
         		 return null;
         	 }
         	 for (Section section : sections) {
