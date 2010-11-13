@@ -35,7 +35,7 @@ public class ArticleDAO {
 	
 	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ContentFetchType fetchType) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName() + " (" + fetchType.name() + ")");
-				
+		
 		if (fetchType.equals(ContentFetchType.LOCAL_ONLY)) {
 			return getLocalBundle(articleSet);
 		}
@@ -60,6 +60,11 @@ public class ArticleDAO {
 				} else {
 					return fetchFromLive(articleSet);								
 				}
+				
+			} else {
+				// TODO Content api sourced article sets do not have a checksum at this point.
+				Log.i(TAG, "No checksumed local copy available - fetching from live");
+				return fetchFromLive(articleSet);
 			}
 		}
 		

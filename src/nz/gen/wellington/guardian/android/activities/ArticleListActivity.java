@@ -107,10 +107,10 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	
 	private void populateArticles(ContentFetchType fetchType, int baseFontSize) {
-		//Log.i(TAG, "Refresh requested");
+		Log.i(TAG, "Refresh requested");
 	
 		if (!networkStatusService.isConnectionAvailable() && ContentFetchType.CHECKSUM.equals(fetchType)) {	// TODO knowledge of connections requirements should be on the fetch type.
-			//Log.i(TAG, "Not refreshing uncached as no connection is available");
+			Log.i(TAG, "Not refreshing uncached as no connection is available");
 			return;
 		}
 		
