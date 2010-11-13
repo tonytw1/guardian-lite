@@ -28,6 +28,9 @@ public class ContentApiStyleApi implements ContentSource {
 		
 	private static final String TAG = "ContentApiStyleApi";
 	
+	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://guardian-lite.appspot.com";
+	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
+	
 	public static final String SECTIONS_API_URL = "sections";
 	
 	private ContentApiStyleXmlParser contentXmlParser;
@@ -185,7 +188,10 @@ public class ContentApiStyleApi implements ContentSource {
 
 
 	private String getApiPrefix() {
-		return preferencesDAO.getApiPrefix();
+		if (preferencesDAO.getApiPrefix()) {
+			return CONTENT_API_URL;			
+		}
+		return GUARDIAN_LITE_PROXY_API_PREFIX;
 	}
 	
 	

@@ -12,9 +12,9 @@
 	</PreferenceCategory>
 	
 	<PreferenceCategory android:title="Developer options">
-		<ListPreference android:entryValues="@array/apiLocationValues" android:entries="@array/apiLocationLabels" 
-	android:summary="Content API location to use" android:title="Content API location" android:key="apiLocation" android:defaultValue="http://guardian-lite.appspot.com"></ListPreference>
-		<EditTextPreference android:summary="Your Guardian Content API key" android:key="apiKey" android:title="Content API key"></EditTextPreference>
-	</PreferenceCategory>
+		<CheckBoxPreference android:title="Use Content API" android:key="useContentApi" android:summary="Access the Guardian Content API directly (Developers only)"></CheckBoxPreference>
+		<EditTextPreference android:summary="Your Guardian Content API key" android:title="Content API key" android:key="contentApiKey"></EditTextPreference>
+	
+</PreferenceCategory>
 	
 </PreferenceScreen>

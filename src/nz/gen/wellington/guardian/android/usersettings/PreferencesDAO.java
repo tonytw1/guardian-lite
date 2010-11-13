@@ -32,12 +32,12 @@ public class PreferencesDAO {
 		return baseSize;
 	}
 	
-	public String getApiPrefix() {
-		return (String) prefs.getString("apiLocation", "http://guardian-lite.appspot.com");
+	public boolean getApiPrefix() {
+		return prefs.getBoolean("useContentApi", false);		
 	}
 
 	public String getApiKey() {
-		return (String) prefs.getString("apiKey", null);
+		return (String) prefs.getString("contentApiKey", null);
 	}
 	
 }
