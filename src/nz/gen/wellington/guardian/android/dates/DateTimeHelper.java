@@ -5,19 +5,25 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.util.Log;
+
 import nz.gen.wellington.guardian.android.activities.ui.Plurals;
 
 public class DateTimeHelper {
 
-	//private static final String TAG = "DateTimeHelper";
+	private static final String TAG = "DateTimeHelper";
 	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 	
 	public static Date parseDate(String dateString) {
 		 SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
 		 try {
+			 if (dateString.endsWith("Z")) {
+				 dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+				 dateFormat.setTimeZone(java.util.TimeZone.getTimeZone("Zulu"));
+			 }		 
 			 return dateFormat.parse(dateString);
 		} catch (ParseException e) {
-			//Log.w(TAG, "Failed to parse date string: " + dateString);
+			 Log.e(TAG, "Failed to parse date '" + dateString +  "': " + e.getMessage());
 		}
 		return null;
 	}

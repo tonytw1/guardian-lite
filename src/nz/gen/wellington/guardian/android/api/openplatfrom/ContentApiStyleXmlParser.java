@@ -159,11 +159,7 @@ public class ContentApiStyleXmlParser {
         		 
         		 
         		 final String dateString = attributes.getValue("web-publication-date");
-        		 try {
-        			 article.setPubDate(DateTimeHelper.parseDate(dateString));
-        		 } catch (Exception e) {
-        			 Log.e(TAG, "Failed to parse date '" + dateString +  "': " + e.getMessage());
-        		 }
+        		 article.setPubDate(DateTimeHelper.parseDate(dateString));        		 
         	 }
                  
         	 if (name.equals("field")) {                             
