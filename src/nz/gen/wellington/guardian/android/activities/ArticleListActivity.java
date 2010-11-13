@@ -30,6 +30,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,7 @@ import android.widget.TextView;
 
 public abstract class ArticleListActivity extends DownloadProgressAwareActivity implements FontResizingActivity {
 	
-	//private static final String TAG = "ArticleListActivity";
+	private static final String TAG = "ArticleListActivity";
 	
 	protected ArticleDAO articleDAO;
 	protected ImageDAO imageDAO;
@@ -117,8 +118,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		if (loader == null || !loader.isAlive()) {
 			mainPane.removeAllViews();
 			
-			updateArticlesHandler = new UpdateArticlesHandler(this, getArticleSet(), baseFontSize);
-			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService, fetchType, getArticleSet());
+			final ArticleSet articleSet = getArticleSet();
+			updateArticlesHandler = new UpdateArticlesHandler(this, articleSet, baseFontSize);
+			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService, fetchType, articleSet);
 			updateArticlesHandler.init();
 			
 			loader = new Thread(updateArticlesRunner);
@@ -269,9 +271,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	
 			    case SHOW_ARTICLE_SET_OUT_OF_DATE_WARNING: 
 					mainpane = (LinearLayout) findViewById(R.id.MainPane);
-					TextView message = new TextView(context);
-					//final String modtime = msg.getData().getString("modtime");
-					
+					TextView message = new TextView(context);					
 					if (networkStatusService.isConnectionAvailable()) {
 						message.setText("This article set was last downloaded more than 2 hours ago. Refresh to check for updates.");
 					} else {
@@ -281,8 +281,13 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					mainpane.addView(message, 0);
 					return;
 					
-			    case NO_ARTICLES: 
-			    	// TODO on screen test
+			    case NO_ARTICLES:
+			    	Log.i(TAG, "Displaying no articles available message");			    	
+			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
+					TextView noArticlesMessage = new TextView(context);
+					noArticlesMessage.setTextSize(baseFontSize + 10, TypedValue.COMPLEX_UNIT_PT);
+					noArticlesMessage.setText("No articles available.");
+					mainpane.addView(noArticlesMessage, 0);
 			    	return;
 			}
 		}
@@ -428,8 +433,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			}
 			
 			if (bundle == null) {
+				Log.i(TAG, "Article bundle was null");
 				Message m = new Message();
-				m.what = 2;
+				m.what = UpdateArticlesHandler.NO_ARTICLES;
 				updateArticlesHandler.sendMessage(m);
 				return;
 			}
