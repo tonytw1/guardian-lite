@@ -13,15 +13,14 @@ import android.widget.TextView;
 
 public class DownloadProgressAwareActivity extends MenuedActivity {
 		
+	public static final String TAG = "DownloadProgressAwareActivity";
 	private DownloadProgressReceiver downloadProgressReceiver;
 	private TextView status;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        
-		status = (TextView) findViewById(R.id.DownloadProgress);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);        
 		downloadProgressReceiver = new DownloadProgressReceiver();
 	}
 	
@@ -29,6 +28,7 @@ public class DownloadProgressAwareActivity extends MenuedActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		status = (TextView) findViewById(R.id.DownloadProgress);
 		registerReceiver(downloadProgressReceiver, new IntentFilter(HttpFetcher.DOWNLOAD_PROGRESS));
 	}
 
@@ -47,9 +47,8 @@ public class DownloadProgressAwareActivity extends MenuedActivity {
 	class DownloadProgressReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (status != null) {
-				final int type = intent.getIntExtra("type", 0);
-				
+			final int type = intent.getIntExtra("type", 0);
+			if (status != null) {				
 				switch (type) {
 				
 				case HttpFetcher.DOWNLOAD_STARTED:
@@ -69,9 +68,9 @@ public class DownloadProgressAwareActivity extends MenuedActivity {
 				case HttpFetcher.DOWNLOAD_FAILED:
 					showDownloadFailed(intent.getStringExtra("url"), status);
 					return;
-				}
+				}					
 			}
-		}
+		}	
 	}
 	
 	
@@ -81,7 +80,7 @@ public class DownloadProgressAwareActivity extends MenuedActivity {
 		status.setVisibility(View.VISIBLE);
 	}
 	
-	final protected void showDownloadStart(String url, TextView status) {
+	final protected void showDownloadStart(String url, TextView status) {		
 		final String statusMessage =  "Downloading: " + url;
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);
