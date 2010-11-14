@@ -2,15 +2,18 @@ package nz.gen.wellington.guardian.android.widgets;
 
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.activities.favourites;
+import nz.gen.wellington.guardian.android.activities.favouritewidget;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 public class FavouriteStoriesWidget extends TopStoriesWidget {
 
@@ -30,13 +33,18 @@ public class FavouriteStoriesWidget extends TopStoriesWidget {
 	}
 	
 	@Override
-	protected Intent getClickIntent(Context context) {
-		return new Intent(context, favourites.class);
-	}
-
-	@Override
 	protected String getNoArticlesExplainationText() {
 		return "You may not have any favourites set or the articles may not have synced yet";
 	}
+
+	@Override
+	protected PendingIntent createShowArticleIntent(Context context, Article article) {
+		Intent intent = new Intent(context, favouritewidget.class);		
+		intent.setData(Uri.withAppendedPath(Uri.parse("content://article/id"), String.valueOf(article.getId())));
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+		return pendingIntent;
+	}
+	
+	
 		
 }

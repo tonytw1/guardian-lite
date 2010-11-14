@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.activities.main;
+import nz.gen.wellington.guardian.android.activities.mainwidget;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
@@ -21,6 +21,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -39,10 +40,6 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {		
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 		refresh(context, appWidgetIds);
-	}
-		
-	protected Intent getClickIntent(Context context) {
-		return new Intent(context, main.class);
 	}
 	
 	protected ArticleSet getArticleSet(Context context) {
@@ -139,10 +136,16 @@ public class TopStoriesWidget extends AppWidgetProvider {
 			widgetView.setViewVisibility(articleViews.image, View.GONE);
 		}
 		
-		Intent intent = getClickIntent(context);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+		PendingIntent pendingIntent = createShowArticleIntent(context, article);
 		widgetView.setOnClickPendingIntent(articleViews.view, pendingIntent);		
 		widgetView.setViewVisibility(articleViews.view, View.VISIBLE);
+	}
+
+	protected PendingIntent createShowArticleIntent(Context context, Article article) {
+		Intent intent = new Intent(context, mainwidget.class);		
+		intent.setData(Uri.withAppendedPath(Uri.parse("content://article/id"), String.valueOf(article.getId())));
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+		return pendingIntent;
 	}
 	
 	

@@ -55,8 +55,11 @@
     		</intent-filter>
     		<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget" />
 		</receiver>
+		
+		<activity android:name=".activities.mainwidget" android:noHistory="true" />
+		<activity android:name=".activities.favouritewidget" android:noHistory="true" />
 				
-	</application>
+</application>
 	
 	<supports-screens largeScreens="true" normalScreens="true" smallScreens="false" anyDensity="true" />
 	
