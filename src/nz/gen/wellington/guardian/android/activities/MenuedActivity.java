@@ -26,7 +26,7 @@ public abstract class MenuedActivity extends Activity {
 	}
 	
 	protected final void switchToPreferences() {
-		Intent intent = new Intent(this, perferences.class);
+		Intent intent = new Intent(this, preferences.class);
 		this.startActivity(intent);	
 	}
 	

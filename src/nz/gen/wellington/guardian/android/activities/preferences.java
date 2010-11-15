@@ -8,7 +8,7 @@ import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.util.Log;
 
-public class perferences extends PreferenceActivity {
+public class preferences extends PreferenceActivity {
 		
 	private ContentUpdateAlarmSetter alarmSetter;
 	
