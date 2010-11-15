@@ -10,8 +10,9 @@ import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.Activity;
 
-public class favouritewidget extends Activity {
+public class favouritewidget extends WidgetClickthroughActivity {
 	
+	@Override
 	protected ArticleSet getArticleSet() {	
 		FavouriteSectionsAndTagsDAO favouriteSectionAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
 		List<Section> favouriteSections = favouriteSectionAndTagsDAO.getFavouriteSections();
@@ -21,6 +22,11 @@ public class favouritewidget extends Activity {
 			return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);			
 		}
 		return null;
+	}
+
+	@Override
+	protected Class<? extends Activity> getDefaultActivity() {
+		return favourites.class;
 	}
 
 }

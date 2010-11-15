@@ -19,30 +19,38 @@ public abstract class WidgetClickthroughActivity extends Activity {
 	}
 
 	protected void onResume() {
-		super.onResume();
+		super.onResume();		
+		Intent intent = new Intent(this, getDefaultActivity());
+		
 		Uri dataUri = this.getIntent().getData();
 		if (dataUri != null) {
 			final String articleId = dataUri.getLastPathSegment();
-
-			ArticleSet articleSet = getArticleSet();
-			ArticleDAO articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
-			ArticleBundle bundle = articleDAO.getArticleSetArticles(articleSet, ContentFetchType.LOCAL_ONLY);
-			if (bundle != null) {
-				for (Article article : bundle.getArticles()) {
-					if (article.getId().equals(articleId)) {
-						Intent intent = new Intent(this, article.class);
-						intent.putExtra("article", article);
-						this.startActivity(intent);
-						return;
-					}
-				}
-			}
+			final Article article = getArticleById(articleId);
 			
+			if (article != null) {
+				intent = new Intent(this, article.class);
+				intent.putExtra("article", article);
+			}			
 		}
-		Intent intent = new Intent(this, main.class);
 		this.startActivity(intent);
 	}
+
+	protected abstract Class<? extends Activity> getDefaultActivity();
 	
 	protected abstract ArticleSet getArticleSet();
+		
+	private Article getArticleById(final String articleId) {
+		ArticleSet articleSet = getArticleSet();
+		ArticleDAO articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
+		ArticleBundle bundle = articleDAO.getArticleSetArticles(articleSet, ContentFetchType.LOCAL_ONLY);
+		if (bundle != null) {
+			for (Article article : bundle.getArticles()) {
+				if (article.getId().equals(articleId)) {
+					return article;
+				}
+			}
+		}
+		return null;
+	}
 	
 }
