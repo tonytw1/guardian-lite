@@ -33,7 +33,7 @@
 
 		<service android:name=".contentupdate.ContentUpdateService" android:enabled="true"></service>
 		
-		<activity android:name=".activities.keyword"  ></activity>
+		<activity android:name=".activities.tag"  ></activity>
 		<activity android:name=".activities.perferences" ></activity>
 		<activity android:name=".activities.favourites" ></activity>
 		<activity android:name=".activities.notification" android:noHistory="true"></activity>

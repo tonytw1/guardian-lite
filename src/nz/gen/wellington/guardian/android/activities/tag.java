@@ -11,10 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-// TODO rename; this is really a TAG based activity, not a keyword one.
-public class keyword extends ArticleListActivity {
+public class tag extends ArticleListActivity {
 
-	private static final String TAG = "keyword";
+	private static final String TAG = "tag";
 
 	private Tag keyword;
 	private MenuItem favouriteMenuItem;
