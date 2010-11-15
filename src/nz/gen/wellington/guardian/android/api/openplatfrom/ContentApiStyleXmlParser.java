@@ -23,11 +23,8 @@ import org.xml.sax.HandlerBase;
 import org.xml.sax.SAXException;
 
 import android.content.Context;
-import android.util.Log;
 
 public class ContentApiStyleXmlParser {
-			
-	private static final String TAG = "ContentApiStyleXmlParser";
 	
 	public static final String ARTICLE_AVAILABLE = "nz.gen.wellington.guardian.android.api.ARTICLE_AVAILABLE";
 
