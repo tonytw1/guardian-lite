@@ -9,7 +9,7 @@ import android.content.Context;
 
 public class FavouriteSectionsAndTagsDAO {
 	
-	private SectionDAO sectionDAO;
+	private SectionDAO sectionDAO;	// Really? this dependenancy should be on the things we're passing it to!
 	private SqlLiteFavouritesDAO sqlLiteDAO;
 	
 	public FavouriteSectionsAndTagsDAO(SectionDAO sectionDAO, Context context) {

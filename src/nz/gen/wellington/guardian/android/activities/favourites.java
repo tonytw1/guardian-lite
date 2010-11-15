@@ -113,7 +113,7 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 		return false;
 	}
 
-	
+	// TODO this code is duplicated in several places.
 	@Override
 	protected ArticleSet getArticleSet() {	
 		FavouriteSectionsAndTagsDAO favouriteSectionAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
