@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,31 +37,35 @@ public class ContentApiStyleUrlBuilder {
 		StringBuilder url = new StringBuilder("/" + SEARCH_QUERY);
 		appendCoreParameters(url);
 		
-		// TODO sections
+		StringBuilder tagsParameter = new StringBuilder();			
 		if (!tags.isEmpty()) {
-			url.append("&tags=");
-			boolean first = true;
 			for (Tag tag : tags) {
-				if (!first) {
-					url.append(OR);
-				}
-				url.append(tag.getId());
-				first = false;
+				tagsParameter.append(tag.getId());
+				tagsParameter.append(OR);		
 			}
+		}
+				
+		if (!sections.isEmpty()) {
+			for (Section section : sections) {
+				tagsParameter.append(section.getId() + "/" + section.getId());
+				tagsParameter.append(OR);
+			}			
+		}
+		
+		if (tagsParameter.length() > 0) {
+			String tags = tagsParameter.substring(0, tagsParameter.length()-1);
+			try {
+				tags = URLEncoder.encode(tags, "UTF8");
+			} catch (UnsupportedEncodingException e) {
+			}
+			url.append("&tag=");
+			url.append(tags);				
 		}
 		
 		// TODO about article sets shouldn't go through the content api classes
 		//if (articleSet instanceof AboutArticleSet) {
 		//	 url = new StringBuilder(apiPrefix + "/about");
 		//}
-		
-		
-		if (showAll) {
-			url.append("&show-fields=all");
-		}		
-		if (showRefinements) {
-			url.append("&show-refinements=all");
-		}
 		
 		return url.toString();
 	}

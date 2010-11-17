@@ -27,8 +27,7 @@ public class ImageDAO {
 	public boolean isAvailableLocally(String url) {
 		return FileService.isLocallyCached(context, url);
 	}
-	
-	
+		
 	public Bitmap getImage(String url) {
 		try {
 			InputStream fis = FileService.getFileInputStream(context, url);

@@ -27,17 +27,17 @@ public class ContentApiStyleApi implements ContentSource {
 	private ContentApiStyleJSONParser contentJsonParser;
 	PreferencesDAO preferencesDAO;
 	private HttpFetcher httpFetcher;
-	private ContentApiUrlService articleSetContentApiUrlService;
+	private ContentApiUrlService contentApiUrlService;
 
 	private Context context;
-
 	
 	public ContentApiStyleApi(Context context) {
 		this.context = context;
 		httpFetcher = new HttpFetcher(context);
 		contentXmlParser = new ContentApiStyleXmlParser(context);
 		contentJsonParser = new ContentApiStyleJSONParser();		
-		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(context);
+		contentApiUrlService = new ContentApiUrlService(context);		
+		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(context);		
 	}
 
 	
@@ -45,7 +45,7 @@ public class ContentApiStyleApi implements ContentSource {
 	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback, int pageSize) {
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
 		
-		final String contentApiUrl = articleSetContentApiUrlService.getContentApiUrlForArticleSet(articleSet, pageSize);
+		final String contentApiUrl = contentApiUrlService.getContentApiUrlForArticleSet(articleSet, pageSize);
 		
 		announceDownloadStarted(articleSet.getName() + " article set");
 		InputStream input = getHttpInputStream(contentApiUrl);
@@ -63,7 +63,7 @@ public class ContentApiStyleApi implements ContentSource {
 	public String getRemoteChecksum(ArticleSet articleSet, int pageSize) {		
 		Log.i(TAG, "Fetching article set checksum for article set: " + articleSet.getName());
 		
-		String contentApiUrl = articleSetContentApiUrlService.getContentApiUrlForArticleSetChecksum(articleSet, pageSize);
+		String contentApiUrl = contentApiUrlService.getContentApiUrlForArticleSetChecksum(articleSet, pageSize);
 		
 		announceDownloadStarted(articleSet.getName() + " article set checksum");		
 		InputStream input = getHttpInputStream(contentApiUrl);		
@@ -78,7 +78,7 @@ public class ContentApiStyleApi implements ContentSource {
 	@Override
 	public List<Section> getSections() {
 		Log.i(TAG, "Fetching section list from live api");
-		String contentApiUrl = articleSetContentApiUrlService.getSectionsQueryUrl();
+		String contentApiUrl = contentApiUrlService.getSectionsQueryUrl();
 		InputStream input = getHttpInputStream(contentApiUrl);
 		if (input != null) {
 			return contentJsonParser.parseSectionsJSON(input);
@@ -91,7 +91,7 @@ public class ContentApiStyleApi implements ContentSource {
 	public List<Tag> searchTags(String searchTerm, Map<String, Section> sections) {
 		Log.i(TAG, "Fetching tag list from live api: " + searchTerm);
 		announceDownloadStarted("tag results");
-		InputStream input = getHttpInputStream(articleSetContentApiUrlService.getTagSearchQueryUrl(searchTerm));
+		InputStream input = getHttpInputStream(contentApiUrlService.getTagSearchQueryUrl(searchTerm));
 		if (input != null) {
 			return contentJsonParser.parseTagsJSON(input, sections);
 		}

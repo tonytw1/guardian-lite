@@ -18,37 +18,6 @@ public class FavouriteStoriesArticleSet implements Serializable, ArticleSet {
 		this.sections = sections;
 		this.tags = tags;
 	}
-
-	@Override
-	public String getApiUrl() {
-		StringBuilder query = new StringBuilder("");
-		
-		if (!sections.isEmpty()) {
-			query.append("&sections=");
-			boolean first = true;
-			for (Section section : sections) {
-				if (!first) {
-					query.append(",");
-				}	
-				query.append(section.getId());
-				first = false;
-			}
-		}
-		
-		if (!tags.isEmpty()) {
-			query.append("&tags=");
-			boolean first = true;
-			for (Tag tag : tags) {
-				if (!first) {
-					query.append(",");
-				}
-				query.append(tag.getId());
-				first = false;
-			}
-		}
-		return query.toString();
-	}
-
 	
 	@Override
 	public String getName() {

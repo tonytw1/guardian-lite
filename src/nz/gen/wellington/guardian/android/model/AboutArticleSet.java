@@ -9,13 +9,7 @@ public class AboutArticleSet implements Serializable, ArticleSet {
 	private static final long serialVersionUID = 1L;
 	
 	protected String[] permittedRefinements = {};
-
-
-	@Override
-	public String getApiUrl() {
-		return "about";
-	}
-
+	
 	@Override
 	public String getName() {
 		return "About";

@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
+import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
@@ -7,6 +8,7 @@ import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
+import android.content.Context;
 
 public class ContentApiUrlService {
 	
@@ -14,14 +16,18 @@ public class ContentApiUrlService {
 	public static final String CONTENT_API_URL = "http://content.guardianapis.com";
 	
 	private PreferencesDAO preferencesDAO;
-
+	
+	public ContentApiUrlService(Context context) {
+		this.preferencesDAO = ArticleDAOFactory.getPreferencesDAO(context);
+	}
+	
 	// TODO page size should be on article set
 	public String getContentApiUrlForArticleSet(ArticleSet articleSet, int pageSize) {
 		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
 		populateContentApiUrlBuilderForArticleSet(contentApiUrlBuilder, articleSet);		
 		contentApiUrlBuilder.setShowAll(true);
 		contentApiUrlBuilder.setShowRefinements(true);	
-		return contentApiUrlBuilder.toSearchQueryUrl();
+		return CONTENT_API_URL + contentApiUrlBuilder.toSearchQueryUrl();
 	}
 	
 	// TODO page size should be on article set
@@ -30,13 +36,13 @@ public class ContentApiUrlService {
 		populateContentApiUrlBuilderForArticleSet(contentApiUrlBuilder, articleSet);		
 		contentApiUrlBuilder.setShowAll(false);
 		contentApiUrlBuilder.setShowRefinements(false);	
-		return contentApiUrlBuilder.toSearchQueryUrl();
+		return CONTENT_API_URL + contentApiUrlBuilder.toSearchQueryUrl();
 	}
 	
 	public String getSectionsQueryUrl() {
 		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
 		contentApiUrlBuilder.setFormat("json");
-		return contentApiUrlBuilder.toSectionsQueryUrl();
+		return CONTENT_API_URL + contentApiUrlBuilder.toSectionsQueryUrl();
 	}
 	
 	public String getTagSearchQueryUrl(String searchTerm) {
@@ -44,7 +50,7 @@ public class ContentApiUrlService {
 		contentApiUrlBuilder.setPageSize(20);
 		contentApiUrlBuilder.setFormat("json");
 		contentApiUrlBuilder.setSearchTerm(searchTerm);
-		return contentApiUrlBuilder.toTagSearchQueryUrl();
+		return CONTENT_API_URL + contentApiUrlBuilder.toTagSearchQueryUrl();
 	}
 	
 	private ContentApiStyleUrlBuilder getContentApiUrlBuilder() {	

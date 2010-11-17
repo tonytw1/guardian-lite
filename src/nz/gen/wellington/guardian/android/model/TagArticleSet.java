@@ -13,11 +13,6 @@ public class TagArticleSet implements ArticleSet {
 	public TagArticleSet(Tag tag) {
 		this.tag = tag;
 	}
-
-	@Override
-	public String getApiUrl() {
-		return tag.getId();
-	}
 	
 	@Override
 	public String getName() {

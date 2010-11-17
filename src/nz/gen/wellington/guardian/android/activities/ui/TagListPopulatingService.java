@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.api.caching.FileService;
+import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+// TODO why is this static?
 public class TagListPopulatingService {
 
 	
@@ -46,7 +47,8 @@ public class TagListPopulatingService {
 			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
 	    	titleText.setText(section.getName());
 	    	
-	    	boolean isLocallyCached = FileService.isLocallyCached(context, new SectionArticleSet(section).getApiUrl());	    	
+	    	FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
+	    	boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(new SectionArticleSet(section));   	
 	    	boolean contentIsAvailable = isLocallyCached || isConnectionAvailable;
 	    	
     		TagListPopulatingService.populateSectionClicker(section, tagView, contentIsAvailable);	    	
@@ -58,14 +60,16 @@ public class TagListPopulatingService {
 	public static void populateClicker(Tag tag, View tagView, Context context) {
 		NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO push out NSS and context
 		final boolean isConnectionAvailable = networkStatusService.isConnectionAvailable();
-		
+
+		FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
+
 		if (tag.isSectionTag()) {
-			boolean isLocallyCached = FileService.isLocallyCached(context, new SectionArticleSet(tag.getSection()).getApiUrl());	    	
+			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(new SectionArticleSet(tag.getSection()));	    	
 	    	boolean contentIsAvailable = isLocallyCached || isConnectionAvailable;
 			populateSectionClicker(tag.getSection(), tagView, contentIsAvailable);	    		
 		
 		} else {
-			boolean isLocallyCached = FileService.isLocallyCached(context, new TagArticleSet(tag).getApiUrl());
+			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(new TagArticleSet(tag));
 			boolean contentIsAvailable = isLocallyCached || isConnectionAvailable;
 	    	if (contentIsAvailable) {
 	    		ListKeywordClicker clicker = new ListKeywordClicker(tag);

@@ -8,15 +8,16 @@ import java.io.ObjectOutputStream;
 import java.util.Date;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
+import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiUrlService;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import android.content.Context;
+import android.util.Log;
 
 public class FileBasedArticleCache {
 	
-	//private static final String TAG = "FileBasedArticleCache";
+	private static final String TAG = "FileBasedArticleCache";
 
 	private Context context;
 	
@@ -39,25 +40,25 @@ public class FileBasedArticleCache {
 	 
 	 
 	 public void touchArticleSet(ArticleSet articleSet, Date modTime) {
-		 FileService.touchFile(context, articleSet.getApiUrl(), modTime);
+		 FileService.touchFile(context, getLocalFileKeyForArticleSet(articleSet), modTime);
 	 }
-
-
-	private String getLocalFileKeyForArticleSet(ArticleSet articleSet) {
-		String localFileKey = articleSet.getApiUrl();
-		 if (articleSet instanceof FavouriteStoriesArticleSet) {
-			 localFileKey = "favourites";
+	 
+	 
+	 public boolean isLocallyCached(ArticleSet articleSet) {		 
+		 String localFileKeyForArticleSet = getLocalFileKeyForArticleSet(articleSet);
+		 boolean locallyCached = FileService.isLocallyCached(context, localFileKeyForArticleSet);
+		 if (locallyCached) {
+			 Log.i(TAG, "Article set '" + articleSet.getName() + "' is locally cached at: " + localFileKeyForArticleSet);
 		 }
-		return localFileKey;
-	}
-
-
-	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
-		String localFileKey = getLocalFileKeyForArticleSet(articleSet);
-		if (!FileService.isLocallyCached(context, localFileKey)) {
+		return locallyCached;
+	 }
+	 
+	 public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
+		if (!FileService.isLocallyCached(context, getLocalFileKeyForArticleSet(articleSet))) {
 			return null;
 		}
 		
+		String localFileKey = getLocalFileKeyForArticleSet(articleSet);
 		try {
 			FileInputStream fis = FileService.getFileInputStream(context, localFileKey);
 
@@ -96,8 +97,8 @@ public class FileBasedArticleCache {
 		
 	public void clear(ArticleSet articleSet) {
 		//Log.i(TAG, "Clearing article set: " + articleSet.getName());
-		if (FileService.isLocallyCached(context, articleSet.getApiUrl())) {
-			FileService.clear(context, articleSet.getApiUrl());
+		if (FileService.isLocallyCached(context, getLocalFileKeyForArticleSet(articleSet))) {
+			FileService.clear(context, getLocalFileKeyForArticleSet(articleSet));
 		} else {
 			//Log.i(TAG, "No local copy to clear:" + articleSet.getApiUrl());
 		}
@@ -105,7 +106,13 @@ public class FileBasedArticleCache {
 
 
 	public Date getModificationTime(ArticleSet articleSet) {
-		return FileService.getModificationTime(context, articleSet.getApiUrl());
+		return FileService.getModificationTime(context, getLocalFileKeyForArticleSet(articleSet));
 	}
-		
+	
+	
+	
+	private String getLocalFileKeyForArticleSet(ArticleSet articleSet) {
+		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(context);
+		return contentApiUrlService.getContentApiUrlForArticleSet(articleSet, 0);	// TODO
+	}
 }

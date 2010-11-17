@@ -9,13 +9,7 @@ public class TopStoriesArticleSet implements Serializable, ArticleSet {
 	private static final long serialVersionUID = 1L;
 	
 	protected String[] permittedRefinements = {};
-
-
-	@Override
-	public String getApiUrl() {
-		return "topstories";
-	}
-
+	
 	@Override
 	public String getName() {
 		return "Top stories";

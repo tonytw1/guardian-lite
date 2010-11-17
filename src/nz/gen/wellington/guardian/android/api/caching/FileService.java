@@ -35,6 +35,7 @@ public class FileService {
 		return new FileInputStream(file);
 	}
 
+	// TODO should only be accessed by the File system caches.
 	public static boolean isLocallyCached(Context context, String apiUrl) {
 		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
 		//Log.i(TAG, "Checking for local cache file at: " + localFile.getAbsolutePath());
@@ -58,6 +59,7 @@ public class FileService {
 		}
 	}
 	
+	// TODO this should move up to the file cache - this service should only deal with file ops - no domain knowledge
 	public static String getLocalFilename(String url) {
 		return url.replaceAll("/", "").replaceAll(":", "") + VERSION_SUFFIX;
 	}

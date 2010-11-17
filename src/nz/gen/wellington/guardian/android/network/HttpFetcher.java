@@ -30,17 +30,15 @@ public class HttpFetcher {
 	private static final String TAG = "HttpFetcher";
 	
 	private static final int HTTP_TIMEOUT = 15000;
-
     public static final String DOWNLOAD_PROGRESS = "nz.gen.wellington.guardian.android.network.DOWNLOAD_PROGRESS";
     
-	HttpClient client;
-	Context context;
+	private HttpClient client;
+	private Context context;
 		
 	public static final int DOWNLOAD_STARTED = 1;
 	public static final int DOWNLOAD_UPDATE = 2;
 	public static final int DOWNLOAD_COMPLETED = 3;
 	public static final int DOWNLOAD_FAILED = 4;
-
 
 	
 	public HttpFetcher(Context context) {

@@ -13,7 +13,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
-import nz.gen.wellington.guardian.android.api.caching.FileService;
+import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
@@ -219,7 +219,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					}
 					
 					// TODO should base this decision on the articles set's tags
-					boolean isContributorArticleSet = articleSet.getApiUrl().startsWith("profile");
+					boolean isContributorArticleSet = false; // TODO articleSet.getApiUrl().startsWith("profile");
 					boolean shouldUseFeatureTrail = showMainImage && first && !isContributorArticleSet && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
 					View articleTrailView = chooseTrailView(mInflater, shouldUseFeatureTrail);
 					populateArticleListView(article, articleTrailView, shouldUseFeatureTrail);
@@ -330,9 +330,12 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			heading.setText(section.getName());
 	
 			NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO content is available decision is quite duplicated now.
-	    	boolean isLocallyCached = FileService.isLocallyCached(context, new SectionArticleSet(section).getApiUrl());	    	
+
+			// TODO We shouldn't be talking to the low level fileservice directly - the article DAO of FBSC should answer this?
+			FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
+			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(new SectionArticleSet(section));	    	
 	    	boolean contentIsAvailable = isLocallyCached || networkStatusService.isConnectionAvailable();
-	    				
+	    	
 			TagListPopulatingService.populateSectionClicker(section, seperator, contentIsAvailable);
 			mainpane.addView(seperator);
 		}
