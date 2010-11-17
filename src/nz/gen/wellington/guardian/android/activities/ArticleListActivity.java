@@ -218,6 +218,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 						}
 					}
 					
+					// TODO should base this decision on the articles set's tags
 					boolean isContributorArticleSet = articleSet.getApiUrl().startsWith("profile");
 					boolean shouldUseFeatureTrail = showMainImage && first && !isContributorArticleSet && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
 					View articleTrailView = chooseTrailView(mInflater, shouldUseFeatureTrail);

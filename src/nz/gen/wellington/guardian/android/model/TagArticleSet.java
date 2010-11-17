@@ -6,27 +6,31 @@ import java.util.List;
 public class TagArticleSet implements ArticleSet {
 	
 	private static final long serialVersionUID = 1L;
-	private Tag keyword;
+	private Tag tag;
 	
 	protected String[] permittedRefinements = {"keyword"};
 
-	public TagArticleSet(Tag keyword) {
-		this.keyword = keyword;
+	public TagArticleSet(Tag tag) {
+		this.tag = tag;
 	}
 
 	@Override
-	public String getName() {
-		return keyword.getName();
+	public String getApiUrl() {
+		return tag.getId();
 	}
 	
 	@Override
-	public String getApiUrl() {
-		return keyword.getId();
+	public String getName() {
+		return tag.getName();
 	}
-
+	
 	@Override
 	public List<String> getPermittedRefinements() {
 		return Arrays.asList(permittedRefinements);
+	}
+
+	public Tag getTag() {
+		return tag;
 	}
 
 }

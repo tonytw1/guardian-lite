@@ -6,7 +6,10 @@ import java.util.List;
 public interface ArticleSet extends Serializable {
 	
 	public String getName();
+	
+	@Deprecated
 	public String getApiUrl();
+	
 	public List<String> getPermittedRefinements();
 	
 }

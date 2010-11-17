@@ -59,4 +59,13 @@ public class FavouriteStoriesArticleSet implements Serializable, ArticleSet {
 	public List<String> getPermittedRefinements() {
 		return Arrays.asList(permittedRefinements);
 	}
+
+	public List<Section> getSections() {
+		return sections;
+	}
+
+	public List<Tag> getTags() {
+		return tags;
+	}
+	
 }

@@ -20,6 +20,7 @@ public class SectionArticleSet implements ArticleSet, Serializable {
 		return section.getName();
 	}
 	
+	@Deprecated
 	@Override
 	public String getApiUrl() {
 		return section.getId();
@@ -29,4 +30,9 @@ public class SectionArticleSet implements ArticleSet, Serializable {
 	public List<String> getPermittedRefinements() {
 		return Arrays.asList(permittedRefinements);
 	}
+	
+	public Section getSection() {
+		return section;
+	}
+
 }

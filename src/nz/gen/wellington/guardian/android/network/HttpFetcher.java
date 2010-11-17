@@ -44,7 +44,7 @@ public class HttpFetcher {
 
 	
 	public HttpFetcher(Context context) {
-		this.context =context;
+		this.context = context;
 		
 		client = new DefaultHttpClient();
 		((AbstractHttpClient) client)
