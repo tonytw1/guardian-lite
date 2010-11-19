@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
@@ -152,7 +153,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		LinearLayout resultsPane = (LinearLayout) findViewById(R.id.TagList);
 		resultsPane.removeAllViews();
 		LayoutInflater inflater = LayoutInflater.from(this);
-		TagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), resultsPane, searchResults, this.getApplicationContext());		
+		TagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), resultsPane, ArticleSetFactory.getArticleSetsForTags(searchResults), this.getApplicationContext());		
 	}
 	
 }

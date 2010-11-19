@@ -12,9 +12,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 
@@ -57,11 +59,11 @@ public class ContentApiStyleXmlParser {
 		return null;
 	}
 	
-	public Map<String, List<Tag>> getRefinements() {
+	public Map<String, List<ArticleSet>> getRefinements() {
 		if (hb != null) {
 			return hb.getRefinements();
 		}
-		return new HashMap<String, List<Tag>>();
+		return new HashMap<String, List<ArticleSet>>();
 	}
 
 	
@@ -84,7 +86,7 @@ public class ContentApiStyleXmlParser {
 	 class ResultsHandler extends HandlerBase {
          
 		 List<Article> articles;
-		 Map<String, List<Tag>> refinements;
+		 Map<String, List<ArticleSet>> refinements;
          Article article;
          String checksum;
          String description;
@@ -100,7 +102,7 @@ public class ContentApiStyleXmlParser {
         	 this.sections = sections;
          }
                   
-         public Map<String, List<Tag>> getRefinements() {
+         public Map<String, List<ArticleSet>> getRefinements() {
 			return refinements;
          }
          
@@ -134,7 +136,7 @@ public class ContentApiStyleXmlParser {
 		public void startDocument() throws SAXException {
 			super.startDocument();
 			articles = new LinkedList<Article>();
-			refinements = new HashMap<String, List<Tag>>();
+			refinements = new HashMap<String, List<ArticleSet>>();
 		}
 
          @Override
@@ -196,18 +198,21 @@ public class ContentApiStyleXmlParser {
         	 
         	 if (name.equals("refinement")) {
         		 if (currentRefinementGroupType != null) {
-        			 final String tagId = attributes.getValue("id");
-        			 final String sectionId = tagId.split("/")[0];
-        			 
-        			 Section section = getSectionById(sectionId);
-        			 
-        			 List<Tag> refinementGroup = refinements.get(currentRefinementGroupType);
+        			 List<ArticleSet> refinementGroup = refinements.get(currentRefinementGroupType);
         			 if (refinementGroup == null) {
-        				 refinementGroup = new ArrayList<Tag>();
+        				 refinementGroup = new ArrayList<ArticleSet>();
         				 refinements.put(currentRefinementGroupType, refinementGroup);
-        			 }       			 
-        			 refinementGroup.add(new Tag(attributes.getValue("display-name"), tagId, section));        			 
-        		 }    		 
+        			 }
+        			 
+        			 boolean isTagRefinement = true;	// TODO limit to tag typed - ie not date
+        			 if (isTagRefinement) {
+        				 final String tagId = attributes.getValue("id");        			 
+        				 final String sectionId = tagId.split("/")[0];        			 
+        				 Section section = getSectionById(sectionId);        			 
+        				 final Tag refinementTag = new Tag(attributes.getValue("display-name"), tagId, section);        			 
+        				 refinementGroup.add(ArticleSetFactory.getArticleSetForTag(refinementTag));
+        			 }
+        		 }
         	 }
         	         	 
         	 if (name.equals("asset")) {

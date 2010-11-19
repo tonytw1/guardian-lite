@@ -3,6 +3,7 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.HashMap;
 import java.util.Map;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
@@ -140,16 +141,14 @@ public class article extends MenuedActivity implements FontResizingActivity {
         standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
         description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
 	}
-
 	
 	private void populateTags(Article article, final boolean connectionAvailable) {
 		LayoutInflater inflater = LayoutInflater.from(this);
 		findViewById(R.id.TagLabel).setVisibility(View.VISIBLE);
-		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), article.getAuthors(), this.getApplicationContext());
-		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.TagList), article.getKeywords(), this.getApplicationContext());
+		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), ArticleSetFactory.getArticleSetsForTags(article.getAuthors()), this.getApplicationContext());
+		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.TagList), ArticleSetFactory.getArticleSetsForTags(article.getKeywords()), this.getApplicationContext());
 	}
 
-	
 	private void populateMainImage(String mainImageUrl) {
 		if (article != null && article.getMainImageUrl() != null && article.getMainImageUrl().equals(mainImageUrl)) {		
 			if (images.containsKey(mainImageUrl)) {		

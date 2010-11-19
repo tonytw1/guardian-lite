@@ -72,14 +72,15 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 		}
 		
 		boolean hasFavourites = !favouriteSections.isEmpty() || !favouriteTags.isEmpty();
-		if (hasFavourites) {		
+		if (hasFavourites) {
 			LayoutInflater inflater = LayoutInflater.from(this);
 			LinearLayout authorList = (LinearLayout) findViewById(R.id.FavouritesPane);
 		
 			boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();
-			TagListPopulatingService.populateSections(inflater, connectionIsAvailable, authorList, favouriteSections, this.getApplicationContext());
-			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, favouriteTags, this.getApplicationContext());
-		
+			
+			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, ArticleSetFactory.getArticleSetsForSections(favouriteSections), this.getApplicationContext());
+			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, ArticleSetFactory.getArticleSetsForTags(favouriteTags), this.getApplicationContext());
+			
 			description.setText("The following sections and tags have been marked as favourites.");			
 			
 		} else {

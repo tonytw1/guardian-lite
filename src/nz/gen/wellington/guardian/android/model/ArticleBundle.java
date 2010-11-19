@@ -7,15 +7,15 @@ import java.util.Map;
 
 public class ArticleBundle implements Serializable {
 	
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 	
 	List<Article> articles;
-	Map<String, List<Tag>> refinements;
+	Map<String, List<ArticleSet>> refinements;
 	String checksum;
 	@Deprecated Date timestamp;
 	private String description;
 	
-	public ArticleBundle(List<Article> articles, Map<String, List<Tag>> refinements, String checksum, Date timestamp, String description) {
+	public ArticleBundle(List<Article> articles, Map<String, List<ArticleSet>> refinements, String checksum, Date timestamp, String description) {
 		this.articles = articles;
 		this.refinements = refinements;
 		this.checksum = checksum;
@@ -27,7 +27,7 @@ public class ArticleBundle implements Serializable {
 		return articles;
 	}
 
-	public Map<String, List<Tag>> getRefinements() {
+	public Map<String, List<ArticleSet>> getRefinements() {
 		return refinements;
 	}
 

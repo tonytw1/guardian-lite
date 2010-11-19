@@ -7,6 +7,7 @@ import java.util.Set;
 import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
+import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
@@ -24,19 +25,19 @@ public class TagListPopulatingService {
 	//private static final String TAG = "TagListPopulatingService";
 
 
-	public static void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<Tag> tags, Context context) {		
-		Set<String> duplicatedTagNames = getDuplicatedTagNames(tags);		
-		for (Tag tag : tags) {
+	public static void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets, Context context) {		
+		//Set<String> duplicatedTagNames = getDuplicatedTagNames(tags);		
+		for (ArticleSet articleSet : articleSets) {
 			View tagView = inflater.inflate(R.layout.authorslist, null);						
 			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
-			titleText.setText(getDeduplicatedTagName(tag, duplicatedTagNames.contains(tag.getName())));			
-			populateClicker(tag, tagView, context);
-	    	tagList.addView(tagView);
+			titleText.setText(articleSet.getName());			
+			populateClicker(articleSet, tagView, context);
+			tagList.addView(tagView);
 		}
 	}
 
 
-	
+	@Deprecated
 	public static void populateSections(LayoutInflater inflater, boolean connectionIsAvailable,  ViewGroup tagList, List<Section> sections, Context context) {
 		NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO push out NSS and context
 		
@@ -56,12 +57,17 @@ public class TagListPopulatingService {
 	}
 
 	
-	public static void populateClicker(Tag tag, View tagView, Context context) {
+	public static void populateClicker(ArticleSet articleSet, View tagView, Context context) {
 		NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO push out NSS and context
 		final boolean isConnectionAvailable = networkStatusService.isConnectionAvailable();
 
 		FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
-
+		boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(articleSet);
+    	boolean contentIsAvailable = isConnectionAvailable || isLocallyCached;
+		populateClicker(articleSet, tagView, contentIsAvailable);
+		
+		
+		/*
 		if (tag.isSectionTag()) {
 			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForSection(tag.getSection()));
 	    	boolean contentIsAvailable = isConnectionAvailable || isLocallyCached;
@@ -76,11 +82,24 @@ public class TagListPopulatingService {
 	    	} else {
 				TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
 	    		titleText.setTextColor(Color.DKGRAY);
-	    	}
-			
-		}
+	    	}			
+		*/
 	}
 
+	
+	
+	
+	private static void populateClicker(ArticleSet articleSet, View tagView, boolean contentIsAvailable) {
+		//if (contentIsAvailable) {
+    	//	SectionClicker clicker = new SectionClicker(section);
+    	//	tagView.setOnClickListener(clicker);
+    	//	
+    	//} else {
+			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
+    	//	titleText.setTextColor(Color.DKGRAY);
+    	//}		
+	}
+	
 	
 	public static void populateSectionClicker(Section section, View tagView, boolean contentIsAvailable) {
     	if (contentIsAvailable) {
@@ -92,7 +111,7 @@ public class TagListPopulatingService {
     	}		
 	}
 	
-
+	// TODO make this work for article sets
 	private static Set<String> getDuplicatedTagNames(List<Tag> tags) {
 		Set<String> duplicatedTagNames = new HashSet<String>();		
 		Set<String> allTagNames = new HashSet<String>();
@@ -105,7 +124,7 @@ public class TagListPopulatingService {
 		return duplicatedTagNames;
 	}
 	
-	
+	// TODO make this work for article sets
 	private static String getDeduplicatedTagName(Tag tag, boolean tagNameIsDuplicated) {
 		if (tagNameIsDuplicated && tag.getSection() != null) {
 			return tag.getSection().getName() + " - " + tag.getName();

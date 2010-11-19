@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
@@ -31,6 +32,22 @@ public class ArticleSetFactory {
 
 	public static ArticleSet getArticleSetForTag(Tag tag) {
 		return new TagArticleSet(tag, getPreferedPageSize());
+	}
+	
+	public static List<ArticleSet> getArticleSetsForSections(List<Section> favouriteSections) {
+		List<ArticleSet> favouriteSectionsArticleSets = new ArrayList<ArticleSet>();			
+		for (Section section : favouriteSections) {
+			favouriteSectionsArticleSets.add(ArticleSetFactory.getArticleSetForSection(section));
+		}
+		return favouriteSectionsArticleSets;
+	}
+
+	public static List<ArticleSet> getArticleSetsForTags(List<Tag> favouriteTags) {
+		List<ArticleSet> favouriteTagsArticleSets = new ArrayList<ArticleSet>();
+		for (Tag tag : favouriteTags) {
+			favouriteTagsArticleSets.add(ArticleSetFactory.getArticleSetForTag(tag));
+		}
+		return favouriteTagsArticleSets;
 	}
 	
 	private static int getPreferedPageSize() {

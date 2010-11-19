@@ -21,7 +21,6 @@ import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
-import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
@@ -254,7 +253,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	
 			    case DRAW_REFINEMENTS:			    	
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
-			    	Map<String, List<Tag>> refinements = bundle.getRefinements();
+			    	Map<String, List<ArticleSet>> refinements = bundle.getRefinements();
 			    	
 			    	if (refinements != null && !refinements.isEmpty()) {
 			    		LayoutInflater inflater = LayoutInflater.from(context);
@@ -307,7 +306,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		}
 
 		
-		private void populateRefinementType(LinearLayout mainpane, LayoutInflater inflater, String description, List<Tag> typedRefinements) {
+		private void populateRefinementType(LinearLayout mainpane, LayoutInflater inflater, String description, List<ArticleSet> typedRefinements) {
 			View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);
 			TextView descriptionView = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);			    		
 			descriptionView.setText(description);

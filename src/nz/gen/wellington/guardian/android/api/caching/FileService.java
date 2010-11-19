@@ -18,7 +18,7 @@ public class FileService {
 	public static final int INTERNAL_CACHE = 1;
 	public static final int SDCARD = 2;
 	public static final int EXTERNAL_SDCARD_SAMSUNG_I7500 = 3;
-	private static final String VERSION_SUFFIX = "v2";
+	private static final String VERSION_SUFFIX = "v3";
 	
 	
 	public static FileOutputStream getFileOutputStream(Context context, String url) throws FileNotFoundException {
