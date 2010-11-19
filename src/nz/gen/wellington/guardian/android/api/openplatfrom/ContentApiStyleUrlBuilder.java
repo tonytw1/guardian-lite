@@ -124,6 +124,10 @@ public class ContentApiStyleUrlBuilder {
 		if (apiKey != null && !apiKey.trim().equals("")) {
 			url.append("&api-key=" + apiKey);
 		}
+		
+		if (showRefinements) {
+			url.append("&show-refinements=all");
+		}
 	}
 
 	public void setSearchTerm(String searchTerm) {

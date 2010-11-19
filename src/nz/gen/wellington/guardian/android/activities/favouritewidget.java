@@ -2,9 +2,9 @@ package nz.gen.wellington.guardian.android.activities;
 
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
@@ -19,7 +19,7 @@ public class favouritewidget extends WidgetClickthroughActivity {
 		List<Tag> favouriteTags = favouriteSectionAndTagsDAO.getFavouriteTags();
 		
 		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
-			return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);			
+			return ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags);
 		}
 		return null;
 	}

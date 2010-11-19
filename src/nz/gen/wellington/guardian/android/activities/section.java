@@ -3,10 +3,10 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.Arrays;
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +32,7 @@ public class section extends ArticleListActivity {
 
 	
 	protected ArticleSet getArticleSet() {
-		return new SectionArticleSet(section);
+		return ArticleSetFactory.getArticleSetForSection(section);
 	}
 	
 	protected List<String> getPermittedRefinements() {

@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
@@ -19,7 +20,6 @@ import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
@@ -333,7 +333,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 			// TODO We shouldn't be talking to the low level fileservice directly - the article DAO of FBSC should answer this?
 			FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
-			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(new SectionArticleSet(section));	    	
+			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForSection(section));	    	
 	    	boolean contentIsAvailable = isLocallyCached || networkStatusService.isConnectionAvailable();
 	    	
 			TagListPopulatingService.populateSectionClicker(section, seperator, contentIsAvailable);

@@ -4,9 +4,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
-import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
@@ -57,9 +57,9 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 	
 	@Override
 	protected ArticleSet getArticleSet() {
-		return new AboutArticleSet();
+		return ArticleSetFactory.getAboutArticleSet();
 	}
-
+	
 	@Override
 	protected String getRefinementDescription(String refinementType) {
 		return null;

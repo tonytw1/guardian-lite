@@ -38,8 +38,9 @@ public class FileService {
 	// TODO should only be accessed by the File system caches.
 	public static boolean isLocallyCached(Context context, String apiUrl) {
 		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
-		//Log.i(TAG, "Checking for local cache file at: " + localFile.getAbsolutePath());
-		return localFile.exists() && localFile.canRead();
+		boolean result = localFile.exists() && localFile.canRead();
+		Log.i(TAG, "Checking for local cache file at '" + localFile.getAbsolutePath() + "': " + result);
+		return result;
 	}
 	
 	public static Date getModificationTime(Context context, String apiUrl) {

@@ -21,28 +21,26 @@ public class ContentApiUrlService {
 		this.preferencesDAO = ArticleDAOFactory.getPreferencesDAO(context);
 	}
 	
-	// TODO page size should be on article set
-	public String getContentApiUrlForArticleSet(ArticleSet articleSet, int pageSize) {
+	public String getContentApiUrlForArticleSet(ArticleSet articleSet) {
 		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
 		populateContentApiUrlBuilderForArticleSet(contentApiUrlBuilder, articleSet);		
 		contentApiUrlBuilder.setShowAll(true);
 		contentApiUrlBuilder.setShowRefinements(true);	
-		return CONTENT_API_URL + contentApiUrlBuilder.toSearchQueryUrl();
+		return getPreferedApiHost() + contentApiUrlBuilder.toSearchQueryUrl();
 	}
 	
-	// TODO page size should be on article set
-	public String getContentApiUrlForArticleSetChecksum(ArticleSet articleSet, int pageSize) {
+	public String getContentApiUrlForArticleSetChecksum(ArticleSet articleSet) {
 		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
 		populateContentApiUrlBuilderForArticleSet(contentApiUrlBuilder, articleSet);		
 		contentApiUrlBuilder.setShowAll(false);
 		contentApiUrlBuilder.setShowRefinements(false);	
-		return CONTENT_API_URL + contentApiUrlBuilder.toSearchQueryUrl();
+		return getPreferedApiHost() + contentApiUrlBuilder.toSearchQueryUrl();
 	}
 	
 	public String getSectionsQueryUrl() {
 		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
 		contentApiUrlBuilder.setFormat("json");
-		return CONTENT_API_URL + contentApiUrlBuilder.toSectionsQueryUrl();
+		return getPreferedApiHost() + contentApiUrlBuilder.toSectionsQueryUrl();
 	}
 	
 	public String getTagSearchQueryUrl(String searchTerm) {
@@ -50,13 +48,12 @@ public class ContentApiUrlService {
 		contentApiUrlBuilder.setPageSize(20);
 		contentApiUrlBuilder.setFormat("json");
 		contentApiUrlBuilder.setSearchTerm(searchTerm);
-		return CONTENT_API_URL + contentApiUrlBuilder.toTagSearchQueryUrl();
+		return getPreferedApiHost() + contentApiUrlBuilder.toTagSearchQueryUrl();
 	}
 	
 	private ContentApiStyleUrlBuilder getContentApiUrlBuilder() {	
 		return new ContentApiStyleUrlBuilder(preferencesDAO.getApiKey());
-	}
-	
+	}	
 	
 	private void populateContentApiUrlBuilderForArticleSet(ContentApiStyleUrlBuilder contentApiUrlBuilder, ArticleSet articleSet) {
 		if (articleSet instanceof SectionArticleSet) {
@@ -75,8 +72,16 @@ public class ContentApiUrlService {
 			for (Tag tag : favouriteStoriesArticleSet.getTags()) {
 				contentApiUrlBuilder.addTag(tag);
 			}
-		}		
+		}
+		contentApiUrlBuilder.setPageSize(articleSet.getPageSize());		
 		contentApiUrlBuilder.setFormat("xml");
+	}
+	
+	private String getPreferedApiHost() {
+		if (preferencesDAO.useContentApi()) {
+			return CONTENT_API_URL;
+		}
+		return GUARDIAN_LITE_PROXY_API_PREFIX;
 	}
 	
 }

@@ -4,12 +4,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
-import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.content.Context;
 import android.graphics.Color;
@@ -48,7 +47,7 @@ public class TagListPopulatingService {
 	    	titleText.setText(section.getName());
 	    	
 	    	FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
-	    	boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(new SectionArticleSet(section));   	
+	    	boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForSection(section));   	
 	    	boolean contentIsAvailable = isLocallyCached || isConnectionAvailable;
 	    	
     		TagListPopulatingService.populateSectionClicker(section, tagView, contentIsAvailable);	    	
@@ -64,12 +63,12 @@ public class TagListPopulatingService {
 		FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
 
 		if (tag.isSectionTag()) {
-			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(new SectionArticleSet(tag.getSection()));	    	
+			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForSection(tag.getSection()));
 	    	boolean contentIsAvailable = isLocallyCached || isConnectionAvailable;
 			populateSectionClicker(tag.getSection(), tagView, contentIsAvailable);	    		
 		
 		} else {
-			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(new TagArticleSet(tag));
+			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForTag(tag));
 			boolean contentIsAvailable = isLocallyCached || isConnectionAvailable;
 	    	if (contentIsAvailable) {
 	    		ListKeywordClicker clicker = new ListKeywordClicker(tag);

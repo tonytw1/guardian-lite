@@ -1,8 +1,8 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +24,7 @@ public class main extends ArticleListActivity {
 	
 	@Override
 	protected ArticleSet getArticleSet() {
-		return new TopStoriesArticleSet();		
+		return ArticleSetFactory.getTopStoriesArticleSet();
 	}
 	
 	

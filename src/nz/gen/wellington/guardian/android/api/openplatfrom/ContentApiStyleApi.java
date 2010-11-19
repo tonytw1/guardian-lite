@@ -45,7 +45,7 @@ public class ContentApiStyleApi implements ContentSource {
 	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback, int pageSize) {
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
 		
-		final String contentApiUrl = contentApiUrlService.getContentApiUrlForArticleSet(articleSet, pageSize);
+		final String contentApiUrl = contentApiUrlService.getContentApiUrlForArticleSet(articleSet);
 		
 		announceDownloadStarted(articleSet.getName() + " article set");
 		InputStream input = getHttpInputStream(contentApiUrl);
@@ -63,7 +63,7 @@ public class ContentApiStyleApi implements ContentSource {
 	public String getRemoteChecksum(ArticleSet articleSet, int pageSize) {		
 		Log.i(TAG, "Fetching article set checksum for article set: " + articleSet.getName());
 		
-		String contentApiUrl = contentApiUrlService.getContentApiUrlForArticleSetChecksum(articleSet, pageSize);
+		String contentApiUrl = contentApiUrlService.getContentApiUrlForArticleSetChecksum(articleSet);
 		
 		announceDownloadStarted(articleSet.getName() + " article set checksum");		
 		InputStream input = getHttpInputStream(contentApiUrl);		

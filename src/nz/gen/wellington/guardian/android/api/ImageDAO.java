@@ -24,6 +24,7 @@ public class ImageDAO {
 		this.context = context;
 	}
 
+	// TODO shouuld be a seperate cache, so that only caches talk to the file system directly.
 	public boolean isAvailableLocally(String url) {
 		return FileService.isLocallyCached(context, url);
 	}

@@ -2,11 +2,11 @@ package nz.gen.wellington.guardian.android.activities;
 
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
@@ -121,7 +121,7 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 		List<Tag> favouriteTags = favouriteSectionAndTagsDAO.getFavouriteTags();
 		
 		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
-			return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags);			
+			return ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags);
 		}
 		return null;	// TODO this needs to be null safed upstream
 	}

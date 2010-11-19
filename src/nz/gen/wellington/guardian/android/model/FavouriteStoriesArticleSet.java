@@ -4,17 +4,17 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public class FavouriteStoriesArticleSet implements Serializable, ArticleSet {
+public class FavouriteStoriesArticleSet extends AbstractArticleSet implements Serializable, ArticleSet {
 
 	private static final long serialVersionUID = 1L;
 	
 	private List<Section> sections;
 	private List<Tag> tags;
 	
-	protected String[] permittedRefinements = {};
-
+	private String[] permittedRefinements = {};
 	
-	public FavouriteStoriesArticleSet(List<Section> sections, List<Tag> tags) {
+	public FavouriteStoriesArticleSet(List<Section> sections, List<Tag> tags, int pageSize) {
+		super(pageSize);
 		this.sections = sections;
 		this.tags = tags;
 	}

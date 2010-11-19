@@ -113,6 +113,6 @@ public class FileBasedArticleCache {
 	
 	private String getLocalFileKeyForArticleSet(ArticleSet articleSet) {
 		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(context);
-		return contentApiUrlService.getContentApiUrlForArticleSet(articleSet, 0);	// TODO
+		return contentApiUrlService.getContentApiUrlForArticleSet(articleSet);
 	}
 }

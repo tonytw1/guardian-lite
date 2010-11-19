@@ -4,12 +4,16 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public class TopStoriesArticleSet implements Serializable, ArticleSet {
+public class TopStoriesArticleSet extends AbstractArticleSet implements Serializable, ArticleSet {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected String[] permittedRefinements = {};
+	private String[] permittedRefinements = {};
 	
+	public TopStoriesArticleSet(int pageSize) {
+		super(pageSize);
+	}
+
 	@Override
 	public String getName() {
 		return "Top stories";

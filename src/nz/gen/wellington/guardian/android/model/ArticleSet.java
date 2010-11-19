@@ -9,4 +9,6 @@ public interface ArticleSet extends Serializable {
 	
 	public List<String> getPermittedRefinements();
 	
+	public int getPageSize();
+	
 }

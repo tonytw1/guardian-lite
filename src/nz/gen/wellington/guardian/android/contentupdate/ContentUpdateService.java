@@ -2,14 +2,11 @@ package nz.gen.wellington.guardian.android.contentupdate;
 
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.contentupdate.tasks.UpdateArticleSetTask;
-import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
-import nz.gen.wellington.guardian.android.model.TagArticleSet;
-import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -94,14 +91,14 @@ public class ContentUpdateService extends Service {
 		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
 		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		
-		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new TopStoriesArticleSet()));
+		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getTopStoriesArticleSet()));
 		
 		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections(); 
 		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
 		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
 			queueSections(taskQueue, favouriteSections);
 			queueTags(taskQueue, favouriteTags);
-			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), new FavouriteStoriesArticleSet(favouriteSections, favouriteTags)));
+			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags)));
 		}
 	}
 	
@@ -110,7 +107,7 @@ public class ContentUpdateService extends Service {
 		if (tags != null) {
 			for (Tag tag : tags) {
 				taskQueue.addArticleTask(new UpdateArticleSetTask(this
-						.getApplicationContext(), new TagArticleSet(tag)));
+						.getApplicationContext(), ArticleSetFactory.getArticleSetForTag(tag)));
 			}
 		}
 	}
@@ -119,7 +116,7 @@ public class ContentUpdateService extends Service {
 	private void queueSections(TaskQueue taskQueue, List<Section> sections) {
 		if (sections != null) {
 			for (Section section : sections) {
-				UpdateArticleSetTask articleTask = new UpdateArticleSetTask(this.getApplicationContext(), new SectionArticleSet(section));
+				UpdateArticleSetTask articleTask = new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getArticleSetForSection(section));
 				taskQueue.addArticleTask(articleTask);
 			}
 		}

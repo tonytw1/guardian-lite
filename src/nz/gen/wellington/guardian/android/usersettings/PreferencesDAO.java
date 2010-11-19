@@ -32,7 +32,7 @@ public class PreferencesDAO {
 		return baseSize;
 	}
 	
-	public boolean getApiPrefix() {
+	public boolean useContentApi() {
 		return prefs.getBoolean("useContentApi", false);		
 	}
 

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.mainwidget;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
@@ -14,7 +15,6 @@ import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -43,7 +43,7 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	}
 	
 	protected ArticleSet getArticleSet(Context context) {
-		return new TopStoriesArticleSet();
+		return ArticleSetFactory.getTopStoriesArticleSet();
 	}
 	
 	
