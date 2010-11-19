@@ -39,8 +39,8 @@ public class TagListPopulatingService {
 	
 	public static void populateSections(LayoutInflater inflater, boolean connectionIsAvailable,  ViewGroup tagList, List<Section> sections, Context context) {
 		NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO push out NSS and context
-		final boolean isConnectionAvailable = networkStatusService.isConnectionAvailable();
 		
+		final boolean isConnectionAvailable = networkStatusService.isConnectionAvailable();		
 		for (Section section: sections) {
 			View tagView = inflater.inflate(R.layout.authorslist, null);			
 			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
@@ -48,7 +48,7 @@ public class TagListPopulatingService {
 	    	
 	    	FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
 	    	boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForSection(section));   	
-	    	boolean contentIsAvailable = isLocallyCached || isConnectionAvailable;
+	    	boolean contentIsAvailable = isConnectionAvailable || isLocallyCached;
 	    	
     		TagListPopulatingService.populateSectionClicker(section, tagView, contentIsAvailable);	    	
 	    	tagList.addView(tagView);
@@ -64,12 +64,12 @@ public class TagListPopulatingService {
 
 		if (tag.isSectionTag()) {
 			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForSection(tag.getSection()));
-	    	boolean contentIsAvailable = isLocallyCached || isConnectionAvailable;
+	    	boolean contentIsAvailable = isConnectionAvailable || isLocallyCached;
 			populateSectionClicker(tag.getSection(), tagView, contentIsAvailable);	    		
 		
 		} else {
 			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForTag(tag));
-			boolean contentIsAvailable = isLocallyCached || isConnectionAvailable;
+			boolean contentIsAvailable = isConnectionAvailable || isLocallyCached;
 	    	if (contentIsAvailable) {
 	    		ListKeywordClicker clicker = new ListKeywordClicker(tag);
 	    		tagView.setOnClickListener(clicker);
