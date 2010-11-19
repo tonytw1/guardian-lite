@@ -105,6 +105,7 @@ public class ArticleDAO {
 	}
 
 	public void clearExpiredCacheFiles(Context context) {
+		Log.i(TAG, "Purging expired content");
 		FileService.clearExpiredCacheFiles(context);
 	}
 	

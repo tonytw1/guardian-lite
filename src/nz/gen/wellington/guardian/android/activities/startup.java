@@ -1,6 +1,9 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import nz.gen.wellington.guardian.android.api.ArticleDAO;
+import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,9 +19,10 @@ public class startup extends Activity {
 		Intent intent = new Intent(this, main.class);
 		this.finish();
 		
-		// TODO To remain in complicance with Guardian API Ts and Cs,
-		// we should preform a cache files flush here, as well as on sync.
-		
+		Context context = this.getApplicationContext();
+		ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
+		articleDAO.clearExpiredCacheFiles(context);
+				
 		this.startActivity(intent);
 		Log.i(TAG, "Finished startup");
 	}
