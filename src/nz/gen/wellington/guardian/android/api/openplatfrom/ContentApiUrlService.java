@@ -13,7 +13,7 @@ import android.content.Context;
 public class ContentApiUrlService {
 	
 	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://guardian-lite.appspot.com";
-	public static final String CONTENT_API_URL = "http://content.guardianapis.com";
+	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
 	
 	private PreferencesDAO preferencesDAO;
 	
