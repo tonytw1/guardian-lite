@@ -9,7 +9,9 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.content.Context;
 import android.graphics.Color;
@@ -90,14 +92,21 @@ public class TagListPopulatingService {
 	
 	
 	private static void populateClicker(ArticleSet articleSet, View tagView, boolean contentIsAvailable) {
-		//if (contentIsAvailable) {
-    	//	SectionClicker clicker = new SectionClicker(section);
-    	//	tagView.setOnClickListener(clicker);
-    	//	
-    	//} else {
-			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
-    	//	titleText.setTextColor(Color.DKGRAY);
-    	//}		
+		TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
+		if (contentIsAvailable) {
+			
+			if (articleSet instanceof SectionArticleSet) {
+				SectionClicker clicker = new SectionClicker(((SectionArticleSet) articleSet).getSection());
+				tagView.setOnClickListener(clicker);
+
+			} else if (contentIsAvailable) {
+				ListKeywordClicker clicker = new ListKeywordClicker(((TagArticleSet) articleSet).getTag());
+				tagView.setOnClickListener(clicker);
+			}
+			
+		} else {
+			titleText.setTextColor(Color.DKGRAY);
+		}		
 	}
 	
 	
