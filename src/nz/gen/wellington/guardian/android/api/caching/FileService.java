@@ -18,63 +18,50 @@ public class FileService {
 	public static final int INTERNAL_CACHE = 1;
 	public static final int SDCARD = 2;
 	public static final int EXTERNAL_SDCARD_SAMSUNG_I7500 = 3;
-	private static final String VERSION_SUFFIX = "v3";
-	
-	
-	public static FileOutputStream getFileOutputStream(Context context, String url) throws FileNotFoundException {
-		final String filepath = FileService.getLocalFilename(url);
-		File file = new File(getCacheDir(context) + "/" + filepath);
+		
+	static FileOutputStream getFileOutputStream(Context context, String filename) throws FileNotFoundException {
+		File file = new File(getCacheDir(context) + "/" + filename);
 		Log.i(TAG, "Opening output stream to: " + file.getAbsolutePath());
 		return new FileOutputStream(file);
 	}
 		
-	public static FileInputStream getFileInputStream(Context context, String url) throws FileNotFoundException {
-		final String filepath = FileService.getLocalFilename(url);
-		File file = new File(getCacheDir(context) + "/" + filepath);
+	static FileInputStream getFileInputStream(Context context, String filename) throws FileNotFoundException {
+		File file = new File(getCacheDir(context) + "/" + filename);
 		Log.i(TAG, "Opening input stream to: " + file.getAbsolutePath());
 		return new FileInputStream(file);
 	}
 
-	// TODO should only be accessed by the File system caches.
-	public static boolean isLocallyCached(Context context, String apiUrl) {
-		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
+	static boolean existsLocally(Context context, String filename) {
+		File localFile = new File(getCacheDir(context), filename);
 		boolean result = localFile.exists() && localFile.canRead();
 		Log.i(TAG, "Checking for local cache file at '" + localFile.getAbsolutePath() + "': " + result);
 		return result;
 	}
 	
-	public static Date getModificationTime(Context context, String apiUrl) {
-		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
-		//Log.i(TAG, "Checking mod time for file at: " + localFile.getAbsolutePath());
+	static Date getModificationTime(Context context, String filename) {
+		File localFile = new File(getCacheDir(context), filename);
+		Log.i(TAG, "Checking mod time for file at: " + localFile.getAbsolutePath());
 		if (localFile.exists()) {
 			return calculateFileModTime(localFile);
 		}
 		return null;
 	}
 	
-	public static void touchFile(Context context, String apiUrl, Date modTime) {
-		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
+	static void touchFile(Context context, String filename, Date modTime) {
+		File localFile = new File(getCacheDir(context), filename);
 		if (localFile.exists()) {
-			//Log.i(TAG, "Touching mod time for file at: " + localFile.getAbsolutePath());
+			Log.i(TAG, "Touching mod time for file at: " + localFile.getAbsolutePath());
 			touchFileModTime(localFile, modTime);
 		}
 	}
 	
-	// TODO this should move up to the file cache - this service should only deal with file ops - no domain knowledge
-	public static String getLocalFilename(String url) {
-		return url.replaceAll("/", "").replaceAll(":", "").replaceAll("\\?", "").
-			replaceAll("\\.", "").replaceAll("=", "").replaceAll("&", "").replace("%", "") + VERSION_SUFFIX;
-	}
-
-	public static void clear(Context context, String apiUrl) {
-		File localFile = new File(getCacheDir(context), getLocalFilename(apiUrl));
-		//Log.i(TAG, "Clearing: " + localFile.getAbsolutePath());
+	static void clear(Context context, String filename) {
+		File localFile = new File(getCacheDir(context), filename);
+		Log.i(TAG, "Clearing: " + localFile.getAbsolutePath());
 		localFile.delete();
 	}
-
 	
-	public static void clearAll(Context context) {		
-		//Log.i(TAG, "Clearing all cache files");				
+	static void clearAll(Context context) {		
 		FileFilter allFilesFilter = new FileFilter() {				
 			@Override
 			public boolean accept(File file) {
@@ -84,11 +71,8 @@ public class FileService {
 		deleteFiles(context, allFilesFilter);
 	}
 	
-	
-	public static void clearAllArticleSets(Context context) {		
-		//Log.i(TAG, "Clearing all article set cache files");
-				
-		FileFilter jsonFilesFilter = new FileFilter() {				
+	static void clearAllArticleSets(Context context) {				
+		FileFilter jsonFilesFilter = new FileFilter() {		
 			@Override
 			public boolean accept(File file) {
 				return file.getPath().endsWith("json") && !file.getPath().endsWith("sections.json");
@@ -97,8 +81,8 @@ public class FileService {
 		deleteFiles(context, jsonFilesFilter);
 	}
 
-	
-	public static void clearExpiredCacheFiles(Context context) {
+	// TODO is this in the right class - should be in a cache?
+	static void clearExpiredCacheFiles(Context context) {
 		Log.i(TAG, "Clearing all article set cache files more than 24 hours old");
 		FileFilter jsonFilesFilter = new FileFilter() {				
 			@Override
@@ -108,8 +92,6 @@ public class FileService {
 		};
 		deleteFiles(context, jsonFilesFilter);
 	}
-	
-	
 	
 	private static void deleteFiles(Context context, FileFilter jsonFilesFilter) {		
 		File cacheDir = getCacheDir(context);
@@ -127,19 +109,16 @@ public class FileService {
 			}		
 		}
 	}
-	
-	
-	protected static File getCacheDir(Context context) {				
+		
+	private static File getCacheDir(Context context) {				
 		return context.getCacheDir();
 	}
-	
-	
+		
 	private static Date calculateFileModTime(File localFile) {
 		Date modTime = new Date(localFile.lastModified());
 		return modTime;
 	}
-	
-	
+		
 	private static void touchFileModTime(File localFile, Date modTime) {
 		localFile.setLastModified(modTime.getTime());
 	}

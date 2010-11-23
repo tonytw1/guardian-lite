@@ -35,7 +35,7 @@ public class FileBasedSectionCache {
 	
 	@SuppressWarnings("unchecked")
 	public List<Section> getSections() {
-		if (!FileService.isLocallyCached(context, SECTIONS_FILE)) {
+		if (!FileService.existsLocally(context, SECTIONS_FILE)) {
 			return null;
 		}
 		Log.i(TAG, "Reading from disk: " + SECTIONS_FILE);
@@ -56,7 +56,7 @@ public class FileBasedSectionCache {
 
 
 	public void clear() {
-		if (FileService.isLocallyCached(context, SECTIONS_FILE)) {			
+		if (FileService.existsLocally(context, SECTIONS_FILE)) {			
 			FileService.clear(context, SECTIONS_FILE);			
 		} else {
 			Log.i(TAG, "No local copy to clear:" + SECTIONS_FILE);

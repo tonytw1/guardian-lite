@@ -26,7 +26,7 @@ public class ImageDAO {
 
 	// TODO shouuld be a seperate cache, so that only caches talk to the file system directly.
 	public boolean isAvailableLocally(String url) {
-		return FileService.isLocallyCached(context, url);
+		return FileService.existsLocally(context, url);
 	}
 		
 	public Bitmap getImage(String url) {
