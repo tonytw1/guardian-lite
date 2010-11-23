@@ -14,6 +14,7 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
+import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
 import android.content.Intent;
@@ -48,11 +49,12 @@ public class ContentApiStyleApi implements ContentSource {
 		final String contentApiUrl = contentApiUrlService.getContentApiUrlForArticleSet(articleSet);
 		
 		announceDownloadStarted(articleSet.getName() + " article set");
-		InputStream input = getHttpInputStream(contentApiUrl);
+		LoggingBufferedInputStream input = getHttpInputStream(contentApiUrl);
 		if (input != null) {
 			List<Article> articles = contentXmlParser.parseArticlesXml(input, sections, articleCallback);
 			if (articles != null && !articles.isEmpty()) {
-				return new ArticleBundle(articles, contentXmlParser.getRefinements(), contentXmlParser.getChecksum(), DateTimeHelper.now(), contentXmlParser.getDescription());
+				String checksum = input.getEtag();
+				return new ArticleBundle(articles, contentXmlParser.getRefinements(), checksum, DateTimeHelper.now(), contentXmlParser.getDescription());
 			}
 		}
 		return null;
@@ -112,7 +114,7 @@ public class ContentApiStyleApi implements ContentSource {
 		context.sendBroadcast(intent);
 	}
 	
-	private InputStream getHttpInputStream(String url) {
+	private LoggingBufferedInputStream getHttpInputStream(String url) {
 		return httpFetcher.httpFetch(url);		
 	}
 		

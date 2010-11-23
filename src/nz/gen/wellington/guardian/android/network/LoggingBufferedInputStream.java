@@ -12,6 +12,7 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 	Context context;
 	int totalRead;
 	long contentLength;
+	String etag;
 	
 	public LoggingBufferedInputStream(InputStream in, Context context) {
 		super(in);
@@ -19,11 +20,12 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 		totalRead = 0;
 	}
 
-	public LoggingBufferedInputStream(InputStream in, int size, Context context, long contentLength) {
+	public LoggingBufferedInputStream(InputStream in, int size, Context context, long contentLength, String etag) {
 		super(in, size);
 		this.context = context;
 		totalRead = 0;
 		this.contentLength = contentLength;
+		this.etag = etag;
 	}
 
 	@Override
@@ -46,6 +48,10 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 	public synchronized void close() throws IOException {
 		super.close();
 		announceDownloadCompleted("");
+	}
+	
+	public String getEtag() {
+		return etag;
 	}
 	
 	private void announceProgress(String url, int totalRead) {

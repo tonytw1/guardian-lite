@@ -24,14 +24,14 @@ public class FileService {
 	public static FileOutputStream getFileOutputStream(Context context, String url) throws FileNotFoundException {
 		final String filepath = FileService.getLocalFilename(url);
 		File file = new File(getCacheDir(context) + "/" + filepath);
-		//Log.i(TAG, "Opening output stream to: " + file.getAbsolutePath());
+		Log.i(TAG, "Opening output stream to: " + file.getAbsolutePath());
 		return new FileOutputStream(file);
 	}
 		
 	public static FileInputStream getFileInputStream(Context context, String url) throws FileNotFoundException {
 		final String filepath = FileService.getLocalFilename(url);
 		File file = new File(getCacheDir(context) + "/" + filepath);
-		//Log.i(TAG, "Opening input stream to: " + file.getAbsolutePath());
+		Log.i(TAG, "Opening input stream to: " + file.getAbsolutePath());
 		return new FileInputStream(file);
 	}
 
@@ -62,7 +62,8 @@ public class FileService {
 	
 	// TODO this should move up to the file cache - this service should only deal with file ops - no domain knowledge
 	public static String getLocalFilename(String url) {
-		return url.replaceAll("/", "").replaceAll(":", "") + VERSION_SUFFIX;
+		return url.replaceAll("/", "").replaceAll(":", "").replaceAll("\\?", "").
+			replaceAll("\\.", "").replaceAll("=", "").replaceAll("&", "").replace("%", "") + VERSION_SUFFIX;
 	}
 
 	public static void clear(Context context, String apiUrl) {

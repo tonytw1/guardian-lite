@@ -81,7 +81,7 @@ public class HttpFetcher {
 	}
 
 
-	public InputStream httpFetch(String uri) {
+	public LoggingBufferedInputStream httpFetch(String uri) {
 		try {
 			Log.i(TAG, "Making http fetch of: " + uri);						
 			HttpGet get = new HttpGet(uri);	
@@ -92,8 +92,16 @@ public class HttpFetcher {
 			HttpResponse execute = client.execute(get);
 			final int statusCode = execute.getStatusLine().getStatusCode();
 			if (statusCode == 200) {
+				
+				String etag = null;
+				Header[] etagHeader = execute.getHeaders("Etag");
+				if (etagHeader != null && etagHeader.length == 1) {
+					etag = etagHeader[0].getValue();
+					Log.i(TAG, "Etag: " + etag);
+				}
+				
 				long contentLength = execute.getEntity().getContentLength();				
-				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context, contentLength);				
+				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context, contentLength, etag);				
 				return is;
 			}
 			
