@@ -1,7 +1,10 @@
 package nz.gen.wellington.guardian.android.model;
 
-public abstract class AbstractArticleSet {
+import java.io.Serializable;
+
+public abstract class AbstractArticleSet implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private int pageSize;
 
 	public AbstractArticleSet(int pageSize) {

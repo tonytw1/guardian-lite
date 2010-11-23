@@ -30,12 +30,14 @@ public class FileBasedArticleCache {
 	public void putArticleSetArticles(ArticleSet articleSet, ArticleBundle bundle) {
 		 Log.i(TAG, "Writing to disk '" + articleSet.getName() + "' with checksum: " + bundle.getChecksum());
 		 try {
-			 FileOutputStream fos = FileService.getFileOutputStream(context, getApiUrlFor(articleSet));
+			 FileOutputStream fos = FileService.getFileOutputStream(context, getLocalFilename(getApiUrlFor(articleSet)));
 			 ObjectOutputStream out = new ObjectOutputStream(fos);
 			 out.writeObject(bundle);
 			 out.close();
+			 
 		 } catch (IOException ex) {
-			 Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName() + ex.getMessage());
+			 Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName());
+			 Log.e(TAG, ex.getMessage());
 		 }
 	 }
 	 
@@ -120,7 +122,7 @@ public class FileBasedArticleCache {
 	
 	private static String getLocalFilename(String url) {
 		return url.replaceAll("/", "").replaceAll(":", "").replaceAll("\\?", "").
-			replaceAll("\\.", "").replaceAll("=", "").replaceAll("&", "").replace("%", "") + VERSION_SUFFIX;
+			replaceAll("\\.", "").replaceAll("=", "").replaceAll("&", "").replace("%", "").replace("-", "") + VERSION_SUFFIX;
 	}
 	
 }

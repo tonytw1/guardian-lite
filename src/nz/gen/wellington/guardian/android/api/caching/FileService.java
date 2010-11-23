@@ -20,8 +20,8 @@ public class FileService {
 	public static final int EXTERNAL_SDCARD_SAMSUNG_I7500 = 3;
 		
 	static FileOutputStream getFileOutputStream(Context context, String filename) throws FileNotFoundException {
+		Log.i(TAG, "Opening output stream to: " + filename);
 		File file = new File(getCacheDir(context) + "/" + filename);
-		Log.i(TAG, "Opening output stream to: " + file.getAbsolutePath());
 		return new FileOutputStream(file);
 	}
 		
@@ -39,8 +39,8 @@ public class FileService {
 	}
 	
 	static Date getModificationTime(Context context, String filename) {
+		Log.i(TAG, "Checking mod time for file at: " + filename);
 		File localFile = new File(getCacheDir(context), filename);
-		Log.i(TAG, "Checking mod time for file at: " + localFile.getAbsolutePath());
 		if (localFile.exists()) {
 			return calculateFileModTime(localFile);
 		}
