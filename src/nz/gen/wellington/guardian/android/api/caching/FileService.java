@@ -61,16 +61,6 @@ public class FileService {
 		localFile.delete();
 	}
 	
-	static void clearAll(Context context) {		
-		FileFilter allFilesFilter = new FileFilter() {				
-			@Override
-			public boolean accept(File file) {
-				return true;
-			}
-		};
-		deleteFiles(context, allFilesFilter);
-	}
-	
 	static void clearAllArticleSets(Context context) {				
 		FileFilter jsonFilesFilter = new FileFilter() {		
 			@Override

@@ -5,7 +5,6 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
-import nz.gen.wellington.guardian.android.api.caching.FileService;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -106,13 +105,8 @@ public class ArticleDAO {
 
 	public void clearExpiredCacheFiles(Context context) {
 		Log.i(TAG, "Purging expired content");
-		FileService.clearExpiredCacheFiles(context);
+		fileBasedArticleCache.clearExpiredFiles(context);
 	}
-	
-	public void evictAll() {
-		fileBasedArticleCache.clear();
-	}
-	
 	
 	public void evictArticleSet(ArticleSet articleSet) {
 		fileBasedArticleCache.clear(articleSet);

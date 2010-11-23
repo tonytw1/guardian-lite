@@ -90,11 +90,11 @@ public class FileBasedArticleCache {
 		}
 		return null;
 	}
-		
-	public void clear() {
-		FileService.clearAll(context);
+	
+	public void clearExpiredFiles(Context context) {
+		FileService.clearExpiredCacheFiles(context);
 	}
-			
+	
 	public void clear(ArticleSet articleSet) {
 		Log.i(TAG, "Clearing article set: " + articleSet.getName());
 		final String localFilenameForArticleSet = getLocalFilenameForArticleSet(articleSet);
