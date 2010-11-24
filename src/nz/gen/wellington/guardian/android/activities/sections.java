@@ -2,6 +2,7 @@ package nz.gen.wellington.guardian.android.activities;
 
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
@@ -18,11 +19,13 @@ import android.widget.Toast;
 public class sections extends DownloadProgressAwareActivity {
 		
 	private SectionDAO sectionDAO;
+	private NetworkStatusService networkStatusService;
 		
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		sectionDAO = ArticleDAOFactory.getSectionDAO(this.getApplicationContext());
+		networkStatusService = new NetworkStatusService(this.getApplicationContext());
 		
 		setContentView(R.layout.sections);		
 		setHeading("Sections");
@@ -43,11 +46,9 @@ public class sections extends DownloadProgressAwareActivity {
 		List<Section> sections = sectionDAO.getSections();		
 		if (sections != null) {
 			LayoutInflater inflater = LayoutInflater.from(this);		
-			LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);
+			LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);			
+			TagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), authorList, ArticleSetFactory.getArticleSetsForSections(sections), this.getApplicationContext());
 			
-			boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();
-			TagListPopulatingService.populateSections(inflater, connectionIsAvailable, authorList, sections, this.getApplicationContext());
-
 		} else {
         	Toast.makeText(this, "Could not load sections", Toast.LENGTH_SHORT).show();
 		}

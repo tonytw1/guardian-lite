@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -22,10 +21,8 @@ import android.widget.TextView;
 
 // TODO why is this static?
 public class TagListPopulatingService {
-
 	
 	//private static final String TAG = "TagListPopulatingService";
-
 
 	public static void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets, Context context) {		
 		//Set<String> duplicatedTagNames = getDuplicatedTagNames(tags);		
@@ -37,27 +34,7 @@ public class TagListPopulatingService {
 			tagList.addView(tagView);
 		}
 	}
-
-
-	@Deprecated
-	public static void populateSections(LayoutInflater inflater, boolean connectionIsAvailable,  ViewGroup tagList, List<Section> sections, Context context) {
-		NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO push out NSS and context
-		
-		final boolean isConnectionAvailable = networkStatusService.isConnectionAvailable();		
-		for (Section section: sections) {
-			View tagView = inflater.inflate(R.layout.authorslist, null);			
-			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
-	    	titleText.setText(section.getName());
-	    	
-	    	FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
-	    	boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForSection(section));   	
-	    	boolean contentIsAvailable = isConnectionAvailable || isLocallyCached;
-	    	
-    		TagListPopulatingService.populateSectionClicker(section, tagView, contentIsAvailable);	    	
-	    	tagList.addView(tagView);
-		}		
-	}
-
+	
 	
 	public static void populateClicker(ArticleSet articleSet, View tagView, Context context) {
 		NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO push out NSS and context
