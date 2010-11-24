@@ -193,29 +193,25 @@ public class article extends MenuedActivity implements FontResizingActivity {
 
 		private ImageDAO imageDAO;
 		private String mainImageUrl;
-		private boolean isWifiConnectionAvailable;
+		private boolean shouldDownloadMainImage;
 		
 		public MainImageLoader(ImageDAO imageDAO, String mainImageUrl, boolean isWifiConnectionAvailable) {
 			this.imageDAO = imageDAO;
 			this.mainImageUrl = mainImageUrl;
-			this.isWifiConnectionAvailable = isWifiConnectionAvailable;
+			this.shouldDownloadMainImage = isWifiConnectionAvailable;
 		}
 
 		@Override
 		public void run() {
 			Bitmap image = null;
-			if (imageDAO.isAvailableLocally(mainImageUrl)) {
+			if (imageDAO.isAvailableLocally(mainImageUrl) || shouldDownloadMainImage) {
 				image = imageDAO.getImage(mainImageUrl);
-				
-			} else if (isWifiConnectionAvailable) {
-				image = imageDAO.fetchLiveImage(mainImageUrl);
 			}
 			
 			if (image != null) {
 				images.put(mainImageUrl, image);
 				sendMainImageAvailableMessage(mainImageUrl);
-			}
-			
+			}			
 			return;
 		}
 

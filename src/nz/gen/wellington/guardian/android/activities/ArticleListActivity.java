@@ -485,7 +485,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			
 			if (running) {
 				for (Article article : downloadTrailImages) {
-					imageDAO.fetchLiveImage(article.getThumbnailUrl());
+					imageDAO.getImage(article.getThumbnailUrl());
 					m = new Message();
 					m.what = UpdateArticlesHandler.TRAIL_IMAGE_IS_AVAILABLE_FOR_ARTICLE;
 					Bundle bundle = new Bundle();

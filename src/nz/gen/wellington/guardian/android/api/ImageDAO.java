@@ -5,10 +5,11 @@ import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 public class ImageDAO {
 
-	//private static final String TAG = "ImageDAO";
+	private static final String TAG = "ImageDAO";
 	
 	private HttpFetcher httpFetcher;
 	private FileBasedImageCache imageCache;
@@ -29,19 +30,17 @@ public class ImageDAO {
 				return decodeImage(cachedImage);
 			}
 		}
-		return null;
+		return fetchLiveImage(url);
 	}
 	
-	// TODO this method needs to fall in behind getImage.
-	// There is probably caching code in the frontend classes which can be pulled into this DAO.
-	public Bitmap fetchLiveImage(String url) {
+	private Bitmap fetchLiveImage(String url) {
 		byte[] image = httpFetcher.httpFetchStream(url);		
 		if (image == null) {
-			//Log.i(TAG, "Could not fetch image: " + url);
+			Log.i(TAG, "Could not fetch image: " + url);
 			return null;
 		}
 
-		//Log.i(TAG, "Writing image to disk: " + url);
+		Log.i(TAG, "Writing image to disk: " + url);
 		imageCache.saveImageToFile(url, image);				
 		return decodeImage(image);
 	}

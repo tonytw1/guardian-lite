@@ -19,7 +19,7 @@ public class ImageFetchTask implements ContentUpdateTaskRunnable {
 	@Override
 	public void run() {
 		if (!imageDao.isAvailableLocally(url)) {
-			imageDao.fetchLiveImage(url);
+			imageDao.getImage(url);
 			report.setImageCount(report.getImageCount()+1);
 		}
 	}
