@@ -2,10 +2,10 @@ package nz.gen.wellington.guardian.android.activities;
 
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -28,7 +28,7 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		
-        preferencesDAO = ArticleDAOFactory.getPreferencesDAO(this.getApplicationContext());
+        preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
         
         setContentView(R.layout.favourites);        
         setHeading("Favourites");
@@ -57,7 +57,7 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 
 
 	private void populateFavourites() {
-		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
+		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
 
 		TextView description = (TextView) findViewById(R.id.Description);
 		
@@ -117,7 +117,7 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 	// TODO this code is duplicated in several places.
 	@Override
 	protected ArticleSet getArticleSet() {	
-		FavouriteSectionsAndTagsDAO favouriteSectionAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
+		FavouriteSectionsAndTagsDAO favouriteSectionAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
 		List<Section> favouriteSections = favouriteSectionAndTagsDAO.getFavouriteSections();
 		List<Tag> favouriteTags = favouriteSectionAndTagsDAO.getFavouriteTags();
 		

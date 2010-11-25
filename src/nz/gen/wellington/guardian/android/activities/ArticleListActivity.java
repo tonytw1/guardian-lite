@@ -6,16 +6,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -65,10 +65,10 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		viewsWaitingForTrailImages = new HashMap<String, View>();
-		articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
-		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());		
+		articleDAO = SingletonFactory.getDao(this.getApplicationContext());
+		imageDAO = SingletonFactory.getImageDao(this.getApplicationContext());		
 		networkStatusService = new NetworkStatusService(this);
-		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(this.getApplicationContext());
+		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 	}
 	
 	
@@ -141,7 +141,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		if (loaded == null || mainPane.getChildCount() == 0) {
 			return true;
 		}
-		Date modtime = ArticleDAOFactory.getDao(this.getApplicationContext()).getModificationTime(getArticleSet());
+		Date modtime = SingletonFactory.getDao(this.getApplicationContext()).getModificationTime(getArticleSet());
 		return modtime != null && modtime.after(loaded);
 	}
 	

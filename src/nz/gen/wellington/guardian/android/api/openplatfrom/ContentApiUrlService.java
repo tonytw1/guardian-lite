@@ -1,6 +1,6 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
@@ -18,7 +18,7 @@ public class ContentApiUrlService {
 	private PreferencesDAO preferencesDAO;
 	
 	public ContentApiUrlService(Context context) {
-		this.preferencesDAO = ArticleDAOFactory.getPreferencesDAO(context);
+		this.preferencesDAO = SingletonFactory.getPreferencesDAO(context);
 	}
 	
 	public String getContentApiUrlForArticleSet(ArticleSet articleSet) {

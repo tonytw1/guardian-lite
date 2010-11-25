@@ -1,4 +1,4 @@
-package nz.gen.wellington.guardian.android;
+package nz.gen.wellington.guardian.android.factories;
 
 import java.util.ArrayList;
 import java.util.List;

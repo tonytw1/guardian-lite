@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
@@ -45,9 +45,9 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tagsearch);
 		
-		api = ArticleDAOFactory.getOpenPlatformApi(this.getApplicationContext());
+		api = SingletonFactory.getOpenPlatformApi(this.getApplicationContext());
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
-		sectionDAO = ArticleDAOFactory.getSectionDAO(this.getApplicationContext());
+		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
 		sections = sectionDAO.getSectionsMap();
 		
 		search = (Button) findViewById(R.id.Search);        

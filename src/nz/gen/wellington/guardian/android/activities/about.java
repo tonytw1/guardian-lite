@@ -4,9 +4,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(this.getApplicationContext());
+		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		
 		setContentView(R.layout.about);
 		setHeading("Guardian Lite - About");

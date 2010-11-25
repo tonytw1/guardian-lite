@@ -1,12 +1,16 @@
-package nz.gen.wellington.guardian.android.api;
+package nz.gen.wellington.guardian.android.factories;
 
+import nz.gen.wellington.guardian.android.api.ArticleDAO;
+import nz.gen.wellington.guardian.android.api.ContentSource;
+import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiStyleApi;
 import nz.gen.wellington.guardian.android.contentupdate.TaskQueue;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
 
-public class ArticleDAOFactory {
+public class SingletonFactory {
 
 	private static TaskQueue taskQueue;
 	private static ImageDAO imageDAO;

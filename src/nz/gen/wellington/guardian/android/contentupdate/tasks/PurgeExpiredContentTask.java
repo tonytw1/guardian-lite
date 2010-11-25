@@ -1,7 +1,7 @@
 package nz.gen.wellington.guardian.android.contentupdate.tasks;
 
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import android.content.Context;
 
@@ -16,7 +16,7 @@ public class PurgeExpiredContentTask implements ContentUpdateTaskRunnable {
 	
 	@Override
 	public void run() {
-		ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
+		ArticleDAO articleDAO = SingletonFactory.getDao(context);
 		articleDAO.clearExpiredCacheFiles(context);
 	}
 	

@@ -2,9 +2,9 @@ package nz.gen.wellington.guardian.android.contentupdate;
 
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.ArticleSetFactory;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.contentupdate.tasks.UpdateArticleSetTask;
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
@@ -88,8 +88,8 @@ public class ContentUpdateService extends Service {
 	
 	
 	private void queueUpdateTasks() {
-		TaskQueue taskQueue = ArticleDAOFactory.getTaskQueue(this.getApplicationContext());
-		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
+		TaskQueue taskQueue = SingletonFactory.getTaskQueue(this.getApplicationContext());
+		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		
 		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getTopStoriesArticleSet()));
 		

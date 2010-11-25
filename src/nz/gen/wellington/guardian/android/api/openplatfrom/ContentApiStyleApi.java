@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -38,7 +38,7 @@ public class ContentApiStyleApi implements ContentSource {
 		contentXmlParser = new ContentApiStyleXmlParser(context);
 		contentJsonParser = new ContentApiStyleJSONParser();		
 		contentApiUrlService = new ContentApiUrlService(context);		
-		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(context);		
+		preferencesDAO = SingletonFactory.getPreferencesDAO(context);		
 	}
 
 	

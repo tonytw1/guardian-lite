@@ -6,6 +6,7 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
@@ -26,9 +27,9 @@ public class ArticleDAO {
 	
 	public ArticleDAO(Context context) {
 		fileBasedArticleCache = new FileBasedArticleCache(context);		
-		openPlatformApi = ArticleDAOFactory.getOpenPlatformApi(context);
-		sectionsDAO = ArticleDAOFactory.getSectionDAO(context);
-		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(context);
+		openPlatformApi = SingletonFactory.getOpenPlatformApi(context);
+		sectionsDAO = SingletonFactory.getSectionDAO(context);
+		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
 	}
 	
 	

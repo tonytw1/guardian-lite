@@ -3,8 +3,8 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.Arrays;
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.ArticleSetFactory;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
@@ -24,7 +24,7 @@ public class section extends ArticleListActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.favouriteSectionsAndTagsDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
+        this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
         section = (Section) this.getIntent().getExtras().get("section");
     	setHeading(section.getName());
     	setHeadingColour(section.getColour());

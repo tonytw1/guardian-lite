@@ -1,8 +1,8 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -41,7 +41,7 @@ public abstract class WidgetClickthroughActivity extends Activity {
 		
 	private Article getArticleById(final String articleId) {
 		ArticleSet articleSet = getArticleSet();
-		ArticleDAO articleDAO = ArticleDAOFactory.getDao(this.getApplicationContext());
+		ArticleDAO articleDAO = SingletonFactory.getDao(this.getApplicationContext());
 		ArticleBundle bundle = articleDAO.getArticleSetArticles(articleSet, ContentFetchType.LOCAL_ONLY);
 		if (bundle != null) {
 			for (Article article : bundle.getArticles()) {

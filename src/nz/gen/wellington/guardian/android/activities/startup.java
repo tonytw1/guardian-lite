@@ -1,7 +1,7 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +20,7 @@ public class startup extends Activity {
 		this.finish();
 		
 		Context context = this.getApplicationContext();
-		ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
+		ArticleDAO articleDAO = SingletonFactory.getDao(context);
 		articleDAO.clearExpiredCacheFiles(context);
 				
 		this.startActivity(intent);

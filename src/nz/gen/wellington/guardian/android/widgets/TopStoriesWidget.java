@@ -5,13 +5,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.mainwidget;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -50,7 +50,7 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	private void refresh(Context context, int[] appWidgetIds) {
 		ArticleBundle stories = getArticles(context);
 		
-		ImageDAO imageDAO = ArticleDAOFactory.getImageDao(context);
+		ImageDAO imageDAO = SingletonFactory.getImageDao(context);
 		RemoteViews widgetView = new RemoteViews(context.getPackageName(), R.layout.widget);
 		if (stories != null && stories.getArticles() != null) {
 			
@@ -95,7 +95,7 @@ public class TopStoriesWidget extends AppWidgetProvider {
 		if (articleSet == null) {
 			return null;
 		}
-		ArticleDAO articleDAO = ArticleDAOFactory.getDao(context);
+		ArticleDAO articleDAO = SingletonFactory.getDao(context);
 		return articleDAO.getArticleSetArticles(articleSet, ContentFetchType.LOCAL_ONLY);
 	}
 	

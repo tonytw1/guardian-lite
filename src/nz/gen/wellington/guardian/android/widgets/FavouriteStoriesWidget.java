@@ -2,9 +2,9 @@ package nz.gen.wellington.guardian.android.widgets;
 
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.activities.favouritewidget;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
@@ -19,7 +19,7 @@ public class FavouriteStoriesWidget extends TopStoriesWidget {
 
 	@Override
 	protected ArticleSet getArticleSet(Context context) {
-		FavouriteSectionsAndTagsDAO favouritesDAO = ArticleDAOFactory.getFavouriteSectionsAndTagsDAO(context);
+		FavouriteSectionsAndTagsDAO favouritesDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(context);
 		
 		List<Section> favouriteSections = favouritesDAO.getFavouriteSections();
 		List<Tag> favouriteTags = favouritesDAO.getFavouriteTags();

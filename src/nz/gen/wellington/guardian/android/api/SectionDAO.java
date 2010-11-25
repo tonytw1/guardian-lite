@@ -8,6 +8,7 @@ import android.content.Context;
 
 import nz.gen.wellington.guardian.android.api.caching.FileBasedSectionCache;
 import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 
 public class SectionDAO {
@@ -19,7 +20,7 @@ public class SectionDAO {
 	public SectionDAO(Context context) {
 		this.inMemorySectionCache = CacheFactory.getSectionCache();
 		this.fileBasedSectionCache = new FileBasedSectionCache(context);
-		api = ArticleDAOFactory.getOpenPlatformApi(context);
+		api = SingletonFactory.getOpenPlatformApi(context);
 	}
 
 	

@@ -3,10 +3,10 @@ package nz.gen.wellington.guardian.android.contentupdate.tasks;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.contentupdate.TaskQueue;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -28,12 +28,12 @@ public class UpdateArticleSetTask implements ContentUpdateTaskRunnable {
 	private ArticleSet articleSet;
 		
 	public UpdateArticleSetTask(Context context, ArticleSet articleSet) {
-		articleDAO = ArticleDAOFactory.getDao(context);
-		imageDAO = ArticleDAOFactory.getImageDao(context);
-		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(context);
+		articleDAO = SingletonFactory.getDao(context);
+		imageDAO = SingletonFactory.getImageDao(context);
+		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
 		
 		networkStatusService = new NetworkStatusService(context);
-		taskQueue = ArticleDAOFactory.getTaskQueue(context);
+		taskQueue = SingletonFactory.getTaskQueue(context);
 		
 		this.articleSet = articleSet;
 	}

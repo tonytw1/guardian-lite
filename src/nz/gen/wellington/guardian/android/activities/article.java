@@ -3,11 +3,11 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.HashMap;
 import java.util.Map;
 
-import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
@@ -44,8 +44,8 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		imageDAO = ArticleDAOFactory.getImageDao(this.getApplicationContext());
-		preferencesDAO = ArticleDAOFactory.getPreferencesDAO(this.getApplicationContext());
+		imageDAO = SingletonFactory.getImageDao(this.getApplicationContext());
+		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
 		
 		images = new HashMap<String, Bitmap>();

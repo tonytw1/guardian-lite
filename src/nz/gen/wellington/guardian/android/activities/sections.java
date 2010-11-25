@@ -2,11 +2,11 @@ package nz.gen.wellington.guardian.android.activities;
 
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
-import nz.gen.wellington.guardian.android.api.ArticleDAOFactory;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ public class sections extends DownloadProgressAwareActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		sectionDAO = ArticleDAOFactory.getSectionDAO(this.getApplicationContext());
+		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
 		
 		setContentView(R.layout.sections);		
