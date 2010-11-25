@@ -12,32 +12,32 @@ import nz.gen.wellington.guardian.android.model.Section;
 
 public class SectionDAO {
 
-	InMemorySectionCache sectionCache;
-	FileBasedSectionCache fileBasedSectionCache;
-	ContentSource api;
+	private InMemorySectionCache inMemorySectionCache;
+	private FileBasedSectionCache fileBasedSectionCache;
+	private ContentSource api;
 	
 	public SectionDAO(Context context) {
-		this.sectionCache = CacheFactory.getSectionCache();
+		this.inMemorySectionCache = CacheFactory.getSectionCache();
 		this.fileBasedSectionCache = new FileBasedSectionCache(context);
 		api = ArticleDAOFactory.getOpenPlatformApi(context);
 	}
 
 	
 	public List<Section> getSections() {
-		List<Section> sections = sectionCache.getAll();
+		List<Section> sections = inMemorySectionCache.getAll();
 		if (sections != null && !sections.isEmpty()) {
 			return sections;
 		}
 		
 		sections = fileBasedSectionCache.getSections();
 		if (sections != null) {
-			sectionCache.addAll(sections);
+			inMemorySectionCache.addAll(sections);
 			return sections;
 		}
 		
 		sections = api.getSections();
 		if (sections != null) {
-			sectionCache.addAll(sections);
+			inMemorySectionCache.addAll(sections);
 			fileBasedSectionCache.putSections(sections);
 		}
 		return sections;
@@ -55,7 +55,7 @@ public class SectionDAO {
 	}
 	
 	public void evictSections() {
-		sectionCache.clear();
+		inMemorySectionCache.clear();
 		fileBasedSectionCache.clear();
 	}
 	
