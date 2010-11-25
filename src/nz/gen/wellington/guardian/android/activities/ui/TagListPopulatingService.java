@@ -24,48 +24,27 @@ public class TagListPopulatingService {
 	
 	//private static final String TAG = "TagListPopulatingService";
 
-	public static void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets, Context context) {		
+	public static void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets, Context context) {
+		NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO push out NSS and context
+		final boolean isConnectionAvailable = networkStatusService.isConnectionAvailable();
+		
 		//Set<String> duplicatedTagNames = getDuplicatedTagNames(tags);		
 		for (ArticleSet articleSet : articleSets) {
 			View tagView = inflater.inflate(R.layout.authorslist, null);						
 			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
 			titleText.setText(articleSet.getName());			
-			populateClicker(articleSet, tagView, context);
+			populateClicker(articleSet, tagView, context, isConnectionAvailable);
 			tagList.addView(tagView);
 		}
 	}
 	
 	
-	public static void populateClicker(ArticleSet articleSet, View tagView, Context context) {
-		NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO push out NSS and context
-		final boolean isConnectionAvailable = networkStatusService.isConnectionAvailable();
-
+	public static void populateClicker(ArticleSet articleSet, View tagView, Context context, boolean isConnectionAvailable) {
 		FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
 		boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(articleSet);
     	boolean contentIsAvailable = isConnectionAvailable || isLocallyCached;
 		populateClicker(articleSet, tagView, contentIsAvailable);
-		
-		
-		/*
-		if (tag.isSectionTag()) {
-			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForSection(tag.getSection()));
-	    	boolean contentIsAvailable = isConnectionAvailable || isLocallyCached;
-			populateSectionClicker(tag.getSection(), tagView, contentIsAvailable);	    		
-		
-		} else {
-			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForTag(tag));
-			boolean contentIsAvailable = isConnectionAvailable || isLocallyCached;
-	    	if (contentIsAvailable) {
-	    		ListKeywordClicker clicker = new ListKeywordClicker(tag);
-	    		tagView.setOnClickListener(clicker);
-	    	} else {
-				TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
-	    		titleText.setTextColor(Color.DKGRAY);
-	    	}			
-		*/
 	}
-
-	
 	
 	
 	private static void populateClicker(ArticleSet articleSet, View tagView, boolean contentIsAvailable) {
