@@ -1,4 +1,4 @@
-package nz.gen.wellington.guardian.android.dates;
+package nz.gen.wellington.guardian.android.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -6,8 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.util.Log;
-
-import nz.gen.wellington.guardian.android.activities.ui.Plurals;
 
 public class DateTimeHelper {
 
@@ -72,6 +70,5 @@ public class DateTimeHelper {
 		int seconds = new Long(mills / 1000).intValue();
 		return seconds;
 	}
-
 	
 }

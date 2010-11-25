@@ -1,4 +1,4 @@
-package nz.gen.wellington.guardian.android.activities.ui;
+package nz.gen.wellington.guardian.android.utils;
 
 public class Plurals {
 

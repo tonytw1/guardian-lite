@@ -4,13 +4,13 @@ import java.util.Date;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.notification;
-import nz.gen.wellington.guardian.android.activities.ui.Plurals;
 import nz.gen.wellington.guardian.android.contentupdate.tasks.ContentUpdateTaskRunnable;
 import nz.gen.wellington.guardian.android.contentupdate.tasks.PurgeExpiredContentTask;
-import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
+import nz.gen.wellington.guardian.android.utils.Plurals;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

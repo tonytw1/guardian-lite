@@ -2,7 +2,7 @@ package nz.gen.wellington.guardian.android.model;
 
 import java.util.Date;
 
-import nz.gen.wellington.guardian.android.dates.DateTimeHelper;
+import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 
 
 public class ContentUpdateReport {
