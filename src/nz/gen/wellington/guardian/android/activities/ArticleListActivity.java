@@ -336,7 +336,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForSection(section));	    	
 	    	boolean contentIsAvailable = isLocallyCached || networkStatusService.isConnectionAvailable();
 	    	
-	    	TagListPopulatingService.populateClicker(articleSet, seperator, context, contentIsAvailable);
+	    	TagListPopulatingService.populateClicker(articleSet, seperator, contentIsAvailable);
 			mainpane.addView(seperator);
 		}
 		

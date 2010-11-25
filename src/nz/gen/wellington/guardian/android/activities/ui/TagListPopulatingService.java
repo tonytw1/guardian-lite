@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
@@ -33,18 +31,13 @@ public class TagListPopulatingService {
 			View tagView = inflater.inflate(R.layout.authorslist, null);						
 			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
 			titleText.setText(articleSet.getName());			
-			populateClicker(articleSet, tagView, context, isConnectionAvailable);
+			populateClicker(articleSet, tagView, isConnectionAvailable);
 			tagList.addView(tagView);
 		}
 	}
 	
 	
-	public static void populateClicker(ArticleSet articleSet, View tagView, Context context, boolean isConnectionAvailable) {
-		populateClicker(articleSet, tagView, isConnectionAvailable);
-	}
-	
-	
-	private static void populateClicker(ArticleSet articleSet, View tagView, boolean contentIsAvailable) {
+	public static void populateClicker(ArticleSet articleSet, View tagView, boolean contentIsAvailable) {
 		TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
 		if (contentIsAvailable) {
 			
