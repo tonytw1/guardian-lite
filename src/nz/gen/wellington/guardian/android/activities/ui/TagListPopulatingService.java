@@ -40,10 +40,7 @@ public class TagListPopulatingService {
 	
 	
 	public static void populateClicker(ArticleSet articleSet, View tagView, Context context, boolean isConnectionAvailable) {
-		FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
-		boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(articleSet);
-    	boolean contentIsAvailable = isConnectionAvailable || isLocallyCached;
-		populateClicker(articleSet, tagView, contentIsAvailable);
+		populateClicker(articleSet, tagView, isConnectionAvailable);
 	}
 	
 	
@@ -66,15 +63,6 @@ public class TagListPopulatingService {
 	}
 	
 	
-	public static void populateSectionClicker(Section section, View tagView, boolean contentIsAvailable) {
-    	if (contentIsAvailable) {
-    		SectionClicker clicker = new SectionClicker(section);
-    		tagView.setOnClickListener(clicker);
-    	} else {
-			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
-    		titleText.setTextColor(Color.DKGRAY);
-    	}		
-	}
 	
 	// TODO make this work for article sets
 	private static Set<String> getDuplicatedTagNames(List<Tag> tags) {

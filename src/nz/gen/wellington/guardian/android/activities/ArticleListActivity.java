@@ -330,12 +330,13 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 			NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO content is available decision is quite duplicated now.
 
-			// TODO We shouldn't be talking to the low level fileservice directly - the article DAO of FBSC should answer this?
+			// TODO ArticleDAO should probably be responsible for answering the is available locally question (much like the imageDAO does).
+			// TODO Remove duplication of the availability logic.
 			FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
 			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForSection(section));	    	
 	    	boolean contentIsAvailable = isLocallyCached || networkStatusService.isConnectionAvailable();
 	    	
-			TagListPopulatingService.populateSectionClicker(section, seperator, contentIsAvailable);
+	    	TagListPopulatingService.populateClicker(articleSet, seperator, context, contentIsAvailable);
 			mainpane.addView(seperator);
 		}
 		
