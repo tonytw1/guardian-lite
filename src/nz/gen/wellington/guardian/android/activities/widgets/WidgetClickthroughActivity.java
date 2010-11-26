@@ -1,5 +1,6 @@
-package nz.gen.wellington.guardian.android.activities;
+package nz.gen.wellington.guardian.android.activities.widgets;
 
+import nz.gen.wellington.guardian.android.activities.article;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;

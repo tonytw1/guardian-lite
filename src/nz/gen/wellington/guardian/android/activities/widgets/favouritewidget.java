@@ -1,7 +1,8 @@
-package nz.gen.wellington.guardian.android.activities;
+package nz.gen.wellington.guardian.android.activities.widgets;
 
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.activities.favourites;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;

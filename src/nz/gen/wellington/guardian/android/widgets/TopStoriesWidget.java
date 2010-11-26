@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.activities.mainwidget;
+import nz.gen.wellington.guardian.android.activities.widgets.mainwidget;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
