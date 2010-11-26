@@ -8,11 +8,11 @@ import java.util.Map;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
+import nz.gen.wellington.guardian.android.activities.ui.ClickerPopulatingService;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
-import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
@@ -328,19 +328,12 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			TextView heading = (TextView) seperator.findViewById(R.id.TagName);
 			heading.setText(section.getName());
 	
-			NetworkStatusService networkStatusService = new NetworkStatusService(context);	// TODO content is available decision is quite duplicated now.
-
-			// TODO ArticleDAO should probably be responsible for answering the is available locally question (much like the imageDAO does).
-			// TODO Remove duplication of the availability logic.
-			FileBasedArticleCache fileBasedArticleCache = new FileBasedArticleCache(context);
-			boolean isLocallyCached = fileBasedArticleCache.isLocallyCached(ArticleSetFactory.getArticleSetForSection(section));	    	
-	    	boolean contentIsAvailable = isLocallyCached || networkStatusService.isConnectionAvailable();
-	    	
-	    	TagListPopulatingService.populateClicker(articleSet, seperator, contentIsAvailable);
+			ArticleSet articleSetForSection = ArticleSetFactory.getArticleSetForSection(section);
+			boolean contentIsAvailable = articleDAO.isAvailable(articleSetForSection);	    	
+	    	ClickerPopulatingService.populateClicker(articleSetForSection, seperator, contentIsAvailable);
 			mainpane.addView(seperator);
 		}
 		
-
 		private View chooseTrailView(LayoutInflater mInflater, boolean shouldUseFeatureTrail) {
 			View view;
 			if (shouldUseFeatureTrail) {

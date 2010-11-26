@@ -9,6 +9,7 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import android.content.Context;
@@ -23,15 +24,19 @@ public class ArticleDAO {
 	private ContentSource openPlatformApi;
 	private SectionDAO sectionsDAO;
 	private PreferencesDAO preferencesDAO;
-	
-	
+	private NetworkStatusService networkStatusService;
+		
 	public ArticleDAO(Context context) {
 		fileBasedArticleCache = new FileBasedArticleCache(context);		
 		openPlatformApi = SingletonFactory.getOpenPlatformApi(context);
 		sectionsDAO = SingletonFactory.getSectionDAO(context);
 		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
+		networkStatusService = new NetworkStatusService(context);
 	}
 	
+	public boolean isAvailable(ArticleSet articleSet) {
+		return fileBasedArticleCache.isLocallyCached(articleSet) || networkStatusService.isConnectionAvailable();
+	}
 	
 	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ContentFetchType fetchType) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName() + " (" + fetchType.name() + ")");
