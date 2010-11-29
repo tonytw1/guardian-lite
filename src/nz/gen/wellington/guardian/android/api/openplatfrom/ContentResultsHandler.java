@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
+import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.model.Article;
@@ -30,17 +31,20 @@ public class ContentResultsHandler extends HandlerBase {
 	public String currentField;
 	public String currentRefinementGroupType;
 	public ArticleCallback articleCallback;
-	public List<Section> sections;
 	private HtmlCleaner htmlCleaner;
+	private SectionDAO sectionDAO;
 
 	private boolean running = true;
 
-	public ContentResultsHandler(ArticleCallback articleCallback, List<Section> sections, HtmlCleaner htmlCleaner) {
-		this.articleCallback = articleCallback;
-		this.sections = sections;
+	public ContentResultsHandler(SectionDAO sectionDAO, HtmlCleaner htmlCleaner) {
 		this.htmlCleaner = htmlCleaner;
+		this.sectionDAO = sectionDAO;
 	}
-
+	
+	public void setArticleCallback(ArticleCallback articleCallback) {
+		this.articleCallback = articleCallback;
+	}
+	
 	public Map<String, List<ArticleSet>> getRefinements() {
 		return refinements;
 	}
@@ -77,7 +81,7 @@ public class ContentResultsHandler extends HandlerBase {
 			currentArticle.setId(attributes.getValue("id"));
 
 			final String sectionId = attributes.getValue("section-id");
-			Section section = getSectionById(sectionId);
+			Section section = sectionDAO.getSectionById(sectionId);
 			currentArticle.setSection(section);
 
 			final String dateString = attributes.getValue("web-publication-date");
@@ -102,7 +106,7 @@ public class ContentResultsHandler extends HandlerBase {
 		if (name.equals("tag")) {
 
 			if (attributes.getValue("type").equals("keyword")) {
-				Section tagSection = getSectionById(attributes.getValue("section-id"));
+				Section tagSection = sectionDAO.getSectionById(attributes.getValue("section-id"));
 				Tag tag = new Tag(attributes.getValue("web-title"), attributes.getValue("id"), tagSection);
 				currentArticle.addKeyword(tag);
 			}
@@ -130,7 +134,7 @@ public class ContentResultsHandler extends HandlerBase {
 				if (isTagRefinement) {
 					final String tagId = attributes.getValue("id");
 					final String sectionId = tagId.split("/")[0];
-					Section section = getSectionById(sectionId);
+					Section section = sectionDAO.getSectionById(sectionId);
 					final Tag refinementTag = new Tag(attributes.getValue("display-name"), tagId, section);
 					refinementGroup.add(ArticleSetFactory.getArticleSetForTag(refinementTag));
 				}
@@ -210,18 +214,4 @@ public class ContentResultsHandler extends HandlerBase {
 		this.running = false;
 	}
 
-	// TODO this should be a section dao call
-	private Section getSectionById(String sectionId) {
-		// TODO sections null check should be at a much higher level.
-		if (sections == null || sectionId == null) {
-			return null;
-		}
-		for (Section section : sections) {
-			if (section.getId().equals(sectionId)) {
-				return section;
-			}
-		}
-		return null;
-	}
-	
 }

@@ -51,7 +51,7 @@ public class ContentApiStyleApi implements ContentSource {
 		announceDownloadStarted(articleSet.getName() + " article set");
 		LoggingBufferedInputStream input = getHttpInputStream(contentApiUrl);
 		if (input != null) {
-			List<Article> articles = contentXmlParser.parseArticlesXml(input, sections, articleCallback);
+			List<Article> articles = contentXmlParser.parseArticlesXml(input, articleCallback);
 			if (articles != null && !articles.isEmpty()) {
 				String checksum = input.getEtag();
 				return new ArticleBundle(articles, contentXmlParser.getRefinements(), checksum, DateTimeHelper.now(), contentXmlParser.getDescription());
@@ -70,7 +70,7 @@ public class ContentApiStyleApi implements ContentSource {
 		announceDownloadStarted(articleSet.getName() + " article set checksum");		
 		InputStream input = getHttpInputStream(contentApiUrl);		
 		if (input != null) {
-			contentXmlParser.parseArticlesXml(input, null, null);
+			contentXmlParser.parseArticlesXml(input, null);
 			return contentXmlParser.getChecksum();			
 		}
 		return null;
