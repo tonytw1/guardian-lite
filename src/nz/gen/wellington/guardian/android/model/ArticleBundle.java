@@ -1,25 +1,22 @@
 package nz.gen.wellington.guardian.android.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public class ArticleBundle implements Serializable {
 	
-	private static final long serialVersionUID = 4L;
+	private static final long serialVersionUID = 5L;
 	
 	List<Article> articles;
 	Map<String, List<ArticleSet>> refinements;
 	String checksum;
-	@Deprecated Date timestamp;
 	private String description;
 	
-	public ArticleBundle(List<Article> articles, Map<String, List<ArticleSet>> refinements, String checksum, Date timestamp, String description) {
+	public ArticleBundle(List<Article> articles, Map<String, List<ArticleSet>> refinements, String checksum, String description) {
 		this.articles = articles;
 		this.refinements = refinements;
 		this.checksum = checksum;
-		this.timestamp = timestamp;
 		this.description = description;
 	}
 

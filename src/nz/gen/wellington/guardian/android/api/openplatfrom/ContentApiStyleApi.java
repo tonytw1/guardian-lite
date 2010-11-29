@@ -15,7 +15,6 @@ import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
-import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -54,7 +53,7 @@ public class ContentApiStyleApi implements ContentSource {
 			List<Article> articles = contentXmlParser.parseArticlesXml(input, articleCallback);
 			if (articles != null && !articles.isEmpty()) {
 				String checksum = input.getEtag();
-				return new ArticleBundle(articles, contentXmlParser.getRefinements(), checksum, DateTimeHelper.now(), contentXmlParser.getDescription());
+				return new ArticleBundle(articles, contentXmlParser.getRefinements(), checksum, contentXmlParser.getDescription());
 			}
 		}
 		return null;
