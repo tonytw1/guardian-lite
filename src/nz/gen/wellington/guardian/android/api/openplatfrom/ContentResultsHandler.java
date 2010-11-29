@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
+import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -30,13 +31,14 @@ public class ContentResultsHandler extends HandlerBase {
 	public String currentRefinementGroupType;
 	public ArticleCallback articleCallback;
 	public List<Section> sections;
+	private HtmlCleaner htmlCleaner;
 
 	private boolean running = true;
 
-	public ContentResultsHandler(ArticleCallback articleCallback,
-			List<Section> sections) {
+	public ContentResultsHandler(ArticleCallback articleCallback, List<Section> sections, HtmlCleaner htmlCleaner) {
 		this.articleCallback = articleCallback;
 		this.sections = sections;
+		this.htmlCleaner = htmlCleaner;
 	}
 
 	public Map<String, List<ArticleSet>> getRefinements() {
@@ -50,20 +52,7 @@ public class ContentResultsHandler extends HandlerBase {
 	public String getDescription() {
 		return description;
 	}
-
-	private Section getSectionById(String sectionId) {
-		// TODO sections null check should be at a much higher level.
-		if (sections == null || sectionId == null) {
-			return null;
-		}
-		for (Section section : sections) {
-			if (section.getId().equals(sectionId)) {
-				return section;
-			}
-		}
-		return null;
-	}
-
+	
 	public List<Article> getArticles() {
 		return articles;
 	}
@@ -76,8 +65,7 @@ public class ContentResultsHandler extends HandlerBase {
 	}
 
 	@Override
-	public void startElement(String name, AttributeList attributes)
-			throws SAXException {
+	public void startElement(String name, AttributeList attributes) throws SAXException {
 		super.startElement(name, attributes);
 		if (!running) {
 			throw new SAXException("Parser has been stopped");
@@ -163,29 +151,28 @@ public class ContentResultsHandler extends HandlerBase {
 		if (currentField != null) {
 
 			if (currentField.equals("headline")) {
-				currentArticle.setTitle(currentElementContents.toString());
+				currentArticle.setTitle(htmlCleaner.stripHtml(currentElementContents.toString()));
 			}
 
 			if (currentField.equals("byline")) {
-				currentArticle.setByline(currentElementContents.toString());
+				currentArticle.setByline(htmlCleaner.stripHtml(currentElementContents.toString()));
 			}
 
 			if (currentField.equals("standfirst")) {
-				currentArticle.setStandfirst(currentElementContents.toString());
+				currentArticle.setStandfirst(htmlCleaner.stripHtml(currentElementContents.toString()));
 			}
 
 			if (currentField.equals("thumbnail")) {
-				currentArticle.setThumbnailUrl(currentElementContents
-						.toString());
+				currentArticle.setThumbnailUrl(currentElementContents.toString());
 			}
 
 			if (currentField.equals("body")) {
 				currentArticle
-						.setDescription(currentElementContents.toString());
+						.setDescription(htmlCleaner.stripHtml(currentElementContents.toString()));
 			}
 
 			if (currentField.equals("caption")) {
-				currentArticle.setCaption(currentElementContents.toString());
+				currentArticle.setCaption(htmlCleaner.stripHtml(currentElementContents.toString()));
 			}
 
 			currentField = null;
@@ -223,4 +210,18 @@ public class ContentResultsHandler extends HandlerBase {
 		this.running = false;
 	}
 
+	// TODO this should be a section dao call
+	private Section getSectionById(String sectionId) {
+		// TODO sections null check should be at a much higher level.
+		if (sections == null || sectionId == null) {
+			return null;
+		}
+		for (Section section : sections) {
+			if (section.getId().equals(sectionId)) {
+				return section;
+			}
+		}
+		return null;
+	}
+	
 }

@@ -4,12 +4,11 @@ import java.util.regex.Pattern;
 
 public class HtmlCleaner {
 
-	static Pattern p = Pattern.compile("</p>");
-	static Pattern br = Pattern.compile("<br />");
-
-	static Pattern tags = Pattern.compile("<.*?>");
-
-	public static String stripHtml(String content) {
+	private Pattern p = Pattern.compile("</p>");
+	private Pattern br = Pattern.compile("<br />");
+	private Pattern tags = Pattern.compile("<.*?>");
+	
+	public String stripHtml(String content) {
 		if (content == null) {
 			return null;
 		}

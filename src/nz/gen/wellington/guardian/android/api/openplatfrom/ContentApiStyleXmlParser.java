@@ -11,6 +11,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
+import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
@@ -36,7 +37,7 @@ public class ContentApiStyleXmlParser {
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
-			handler = new ContentResultsHandler(articleCallback, sections);
+			handler = new ContentResultsHandler(articleCallback, sections, new HtmlCleaner());
 			saxParser.parse(inputStream, handler);
 			inputStream.close();
 			return handler.getArticles();
