@@ -46,7 +46,7 @@ public class ArticleDAO {
 		}
 		
 		if (fetchType.equals(ContentFetchType.UNCACHED)) {
-			return fetchFromLive(articleSet);			
+			return fetchFromLive(articleSet);	
 		}
 		
 		if (fetchType.equals(ContentFetchType.CHECKSUM)) {
@@ -67,7 +67,6 @@ public class ArticleDAO {
 				}
 				
 			} else {
-				// TODO Content api sourced article sets do not have a checksum at this point.
 				Log.i(TAG, "No checksumed local copy available - fetching from live");
 				return fetchFromLive(articleSet);
 			}
