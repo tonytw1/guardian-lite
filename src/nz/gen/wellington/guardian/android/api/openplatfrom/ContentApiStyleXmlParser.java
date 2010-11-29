@@ -30,6 +30,7 @@ public class ContentApiStyleXmlParser {
 	private ContentResultsHandler handler;
 	
 	public ContentApiStyleXmlParser(Context context) {
+		// TODO obviously not thread safe - complex return type will allow the handler to be pushed down to method scope
 		this.handler = new ContentResultsHandler(SingletonFactory.getSectionDAO(context), new HtmlCleaner());
 	}
 
