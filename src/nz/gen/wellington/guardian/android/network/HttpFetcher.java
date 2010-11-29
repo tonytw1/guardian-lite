@@ -45,6 +45,7 @@ public class HttpFetcher {
 		this.context = context;
 		
 		client = new DefaultHttpClient();
+		
 		((AbstractHttpClient) client)
 		.addRequestInterceptor(new HttpRequestInterceptor() {
 			public void process(final HttpRequest request,

@@ -10,7 +10,9 @@ import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -19,6 +21,8 @@ import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import org.xml.sax.AttributeList;
 import org.xml.sax.HandlerBase;
 import org.xml.sax.SAXException;
+
+import android.content.Context;
 
 public class ContentResultsHandler extends HandlerBase {
 
@@ -32,35 +36,27 @@ public class ContentResultsHandler extends HandlerBase {
 	public String currentRefinementGroupType;
 	public ArticleCallback articleCallback;
 	private HtmlCleaner htmlCleaner;
-	private SectionDAO sectionDAO;
 
 	private boolean running = true;
+	private Context context;
 
-	public ContentResultsHandler(SectionDAO sectionDAO, HtmlCleaner htmlCleaner) {
+	public ContentResultsHandler(Context context, HtmlCleaner htmlCleaner) {
 		this.htmlCleaner = htmlCleaner;
-		this.sectionDAO = sectionDAO;
+		this.context = context;
 	}
 	
 	public void setArticleCallback(ArticleCallback articleCallback) {
 		this.articleCallback = articleCallback;
 	}
 	
-	public Map<String, List<ArticleSet>> getRefinements() {
-		return refinements;
-	}
-
-	public String getChecksum() {
-		return checksum;
-	}
-
-	public String getDescription() {
-		return description;
+	public ArticleBundle getResult() {
+		if (!articles.isEmpty()) {
+			return new ArticleBundle(articles, refinements, checksum, description);
+		}
+		return null;		
 	}
 	
-	public List<Article> getArticles() {
-		return articles;
-	}
-
+	
 	@Override
 	public void startDocument() throws SAXException {
 		super.startDocument();
@@ -70,6 +66,8 @@ public class ContentResultsHandler extends HandlerBase {
 
 	@Override
 	public void startElement(String name, AttributeList attributes) throws SAXException {
+		SectionDAO sectionDAO = SingletonFactory.getSectionDAO(context);
+		
 		super.startElement(name, attributes);
 		if (!running) {
 			throw new SAXException("Parser has been stopped");

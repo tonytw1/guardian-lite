@@ -32,6 +32,10 @@ public class ArticleBundle implements Serializable {
 		return checksum;
 	}
 	
+	public void setChecksum(String checksum) {
+		this.checksum = checksum;
+	}
+	
 	public String getDescription() {
 		return description;
 	}
