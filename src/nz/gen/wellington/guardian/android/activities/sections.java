@@ -5,6 +5,7 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
+import nz.gen.wellington.guardian.android.api.filtering.SectionSorter;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Section;
@@ -45,6 +46,7 @@ public class sections extends DownloadProgressAwareActivity {
 	private void populateSections() {
 		List<Section> sections = sectionDAO.getSections();		
 		if (sections != null) {
+			sections = SectionSorter.sortByName(sections);	// TODO push this back behind the section dao for performance		
 			LayoutInflater inflater = LayoutInflater.from(this);		
 			LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);			
 			TagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), authorList, ArticleSetFactory.getArticleSetsForSections(sections), this.getApplicationContext());

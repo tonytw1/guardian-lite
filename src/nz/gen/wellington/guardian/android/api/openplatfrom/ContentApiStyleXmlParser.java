@@ -27,6 +27,7 @@ public class ContentApiStyleXmlParser {
 	
 	public ContentApiStyleXmlParser(Context context) {
 		// TODO obviously not thread safe - complex return type will allow the handler to be pushed down to method scope
+		// pushing it down will also resolve circular condition with sectionDAO
 		this.handler = new ContentResultsHandler(context, new HtmlCleaner());
 	}
 
