@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.view.View;
 import android.widget.RemoteViews;
 
+// TODO pull a common abstract class for these two
 public class TopStoriesWidget extends AppWidgetProvider {
 
 	ArticleViews firstArticleViews = new ArticleViews(
