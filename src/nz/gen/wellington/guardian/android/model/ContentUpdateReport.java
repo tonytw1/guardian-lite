@@ -7,11 +7,10 @@ import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 
 public class ContentUpdateReport {
 	
-	int sectionCount;
-	int articleCount;
-	int imageCount;
-	Date startTime;
-	
+	private int sectionCount;
+	private int articleCount;
+	private int imageCount;
+	private Date startTime;
 	
 	public ContentUpdateReport() {
 		sectionCount = 0;

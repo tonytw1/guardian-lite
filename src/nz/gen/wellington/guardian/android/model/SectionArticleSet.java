@@ -6,9 +6,9 @@ import java.util.List;
 
 public class SectionArticleSet extends AbstractArticleSet implements ArticleSet, Serializable {
 	
-	protected String[] permittedRefinements = {"blog", "keyword", "contributor"};
-	
 	private static final long serialVersionUID = 1L;
+
+	protected String[] permittedRefinements = {"blog", "keyword", "contributor"};
 	private Section section;
 
 	public SectionArticleSet(Section section, int pageSize) {

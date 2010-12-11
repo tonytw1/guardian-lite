@@ -6,12 +6,10 @@ public class Section implements Serializable {
 	
 	private static final long serialVersionUID = 2L;
 	
-	String id;
-	String name;
-	String colour;
+	private String id;
+	private String name;
+	private String colour;
 	
-	
-
 	public Section(String id, String name, String colour) {
 		this.id = id;
 		this.name = name;

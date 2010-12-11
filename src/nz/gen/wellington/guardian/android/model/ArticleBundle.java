@@ -8,9 +8,9 @@ public class ArticleBundle implements Serializable {
 	
 	private static final long serialVersionUID = 5L;
 	
-	List<Article> articles;
-	Map<String, List<ArticleSet>> refinements;
-	String checksum;
+	private List<Article> articles;
+	private Map<String, List<ArticleSet>> refinements;
+	private String checksum;
 	private String description;
 	
 	public ArticleBundle(List<Article> articles, Map<String, List<ArticleSet>> refinements, String checksum, String description) {

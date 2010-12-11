@@ -8,8 +8,8 @@ import android.graphics.Bitmap;
 public class ImageDecoratedArticle extends Article {
 	
 	private static final long serialVersionUID = 2L;
-	Article article;
-	Bitmap thumbnail;
+	private Article article;
+	private Bitmap thumbnail;
 
 	public ImageDecoratedArticle(Article article, Bitmap thumbnail) {
 		this.article = article;

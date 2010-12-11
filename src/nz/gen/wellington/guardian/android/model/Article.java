@@ -11,19 +11,19 @@ public class Article implements Serializable {
 
 	private static final long serialVersionUID = 6L;
 	
-	String id;
-	String title;
-	String byline;
-	Date pubDate;
-	String standfirst;
-	String description;
+	private String id;
+	private String title;
+	private String byline;
+	private Date pubDate;
+	private String standfirst;
+	private String description;
 	
-	Section section;
-	List<Tag> authors;
-	List<Tag> keywords;
-	String thumbnailUrl;
-	String mainImageUrl;
-	String caption;
+	private Section section;
+	private List<Tag> authors;
+	private List<Tag> keywords;
+	private String thumbnailUrl;
+	private String mainImageUrl;
+	private String caption;
 	
 	public Article() {
 		authors = new ArrayList<Tag>();
