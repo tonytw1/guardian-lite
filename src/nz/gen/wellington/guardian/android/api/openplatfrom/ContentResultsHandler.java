@@ -23,9 +23,11 @@ import org.xml.sax.HandlerBase;
 import org.xml.sax.SAXException;
 
 import android.content.Context;
+import android.util.Log;
 
 public class ContentResultsHandler extends HandlerBase {
 
+	private static final String TAG = null;
 	public List<Article> articles;
 	public Map<String, List<ArticleSet>> refinements;
 	public String checksum;
@@ -121,21 +123,7 @@ public class ContentResultsHandler extends HandlerBase {
 
 		if (name.equals("refinement")) {
 			if (currentRefinementGroupType != null) {
-				List<ArticleSet> refinementGroup = refinements.get(currentRefinementGroupType);
-				if (refinementGroup == null) {
-					refinementGroup = new ArrayList<ArticleSet>();
-					refinements.put(currentRefinementGroupType, refinementGroup);
-				}
-
-				boolean isTagRefinement = true; // TODO limit to tag typed - ie
-				// not date
-				if (isTagRefinement) {
-					final String tagId = attributes.getValue("id");
-					final String sectionId = tagId.split("/")[0];
-					Section section = sectionDAO.getSectionById(sectionId);
-					final Tag refinementTag = new Tag(attributes.getValue("display-name"), tagId, section);
-					refinementGroup.add(ArticleSetFactory.getArticleSetForTag(refinementTag));
-				}
+				processRefinement(attributes, sectionDAO);
 			}
 		}
 
@@ -211,5 +199,29 @@ public class ContentResultsHandler extends HandlerBase {
 	public void stop() {
 		this.running = false;
 	}
+	
+		
+	private void processRefinement(AttributeList attributes, SectionDAO sectionDAO) {
+		Log.i(TAG, "Processing refinement of type '" + currentRefinementGroupType + "' with attributes: " + attributes);
+		
+		boolean isTagRefinement = true; // TODO limit to tag typed - ie not date
+		if (isTagRefinement) {
+			List<ArticleSet> refinementGroup = getRefinementGroup();		
+			final String tagId = attributes.getValue("id");
+			final String sectionId = tagId.split("/")[0];
+			Section section = sectionDAO.getSectionById(sectionId);
+			final Tag refinementTag = new Tag(attributes.getValue("display-name"), tagId, section);
+			refinementGroup.add(ArticleSetFactory.getArticleSetForTag(refinementTag));
+		}
+	}
 
+	private List<ArticleSet> getRefinementGroup() {
+		List<ArticleSet> refinementGroup = refinements.get(currentRefinementGroupType);
+		if (refinementGroup == null) {
+			refinementGroup = new ArrayList<ArticleSet>();
+			refinements.put(currentRefinementGroupType, refinementGroup);
+		}
+		return refinementGroup;
+	}
+	
 }
