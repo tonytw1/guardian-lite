@@ -9,7 +9,6 @@ import javax.xml.parsers.SAXParserFactory;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
-import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 
 import org.xml.sax.SAXException;
@@ -22,18 +21,18 @@ public class ContentApiStyleXmlParser {
 	public static final String ARTICLE_AVAILABLE = "nz.gen.wellington.guardian.android.api.ARTICLE_AVAILABLE";
 	
 	private static final String TAG = "ContentApiStyleXmlParser";
-	
+
+	private Context context;
 	private ContentResultsHandler handler;
 	
 	public ContentApiStyleXmlParser(Context context) {
-		// TODO obviously not thread safe - complex return type will allow the handler to be pushed down to method scope
-		// pushing it down will also resolve circular condition with sectionDAO
-		this.handler = new ContentResultsHandler(context, new HtmlCleaner());
+		this.context = context;
 	}
-
 	
 	public ArticleBundle parseArticlesXml(InputStream inputStream, ArticleCallback articleCallback) {
 		try {
+			handler = new ContentResultsHandler(context, new HtmlCleaner());	// TODO push to singleton factory
+			
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 			handler.setArticleCallback(articleCallback);
@@ -42,11 +41,11 @@ public class ContentApiStyleXmlParser {
 			return handler.getResult();
 
 		} catch (SAXException e) {
-			Log.e(TAG, "Error while parsing content xml: " + e.getMessage());
+			Log.e(TAG, "SAXException while parsing content xml: " + e.getMessage());			
 		} catch (IOException e) {
-			Log.e(TAG, "Error while parsing content xml: " + e.getMessage());
+			Log.e(TAG, "IOException while parsing content xml: " + e.getMessage());
 		} catch (ParserConfigurationException e) {
-			Log.e(TAG, "Error while parsing content xml: " + e.getMessage());
+			Log.e(TAG, "ParserConfigurationException while parsing content xml: " + e.getMessage());
 		}
 		return null;
 	}
