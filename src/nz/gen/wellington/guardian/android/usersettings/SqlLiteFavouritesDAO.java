@@ -17,6 +17,12 @@ import android.util.Log;
 public class SqlLiteFavouritesDAO {
 	
 	private static final String TAG = "SqlLiteFavouritesDAO";
+
+	private static final String SECTIONID = "sectionid";
+	private static final String NAME = "name";
+	private static final String APIID = "apiid";
+	private static final String TYPE = "type";
+	private static final String NAME_ASC = "name asc";
 	
 	private static final String DATABASE_NAME = "guardian-lite.db";
 	private static final int DATABASE_VERSION = 1;
@@ -24,7 +30,7 @@ public class SqlLiteFavouritesDAO {
 
 	private static final String INSERT = "insert into " + TAG_TABLE + "(type, apiid, name, sectionid) values (?, ?, ?, ?)";
 
-	OpenHelper openHelper;
+	private OpenHelper openHelper;
 
 	public SqlLiteFavouritesDAO(Context context) {
 		openHelper = new OpenHelper(context);
@@ -32,7 +38,7 @@ public class SqlLiteFavouritesDAO {
 	
 	public synchronized boolean hasFavourites() {	// TODO count query rather than select all
 		SQLiteDatabase db = openHelper.getReadableDatabase();		
-		Cursor cursor = db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
+		Cursor cursor = db.query(TAG_TABLE, new String[] { TYPE, APIID, NAME,SECTIONID }, null, null, null, null, NAME_ASC);		
 		int total = cursor.getCount();
 		closeCursor(cursor);
 		db.close();
@@ -61,7 +67,7 @@ public class SqlLiteFavouritesDAO {
 	
 	public synchronized boolean isFavourite(Tag tag) {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
-		Cursor cursor = db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'tag' and apiid = ? ", new String[] { tag.getId() }, null, null, "name asc");
+		Cursor cursor = db.query(TAG_TABLE, new String[] { APIID }, " type = 'tag' and apiid = ? ", new String[] { tag.getId() }, null, null, NAME_ASC);
 		final boolean isFavourite = cursor.getCount() > 0;
 		closeCursor(cursor);
 		final boolean result = isFavourite;	
@@ -72,7 +78,7 @@ public class SqlLiteFavouritesDAO {
 
 	public synchronized boolean isFavourite(Section section) {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
-		Cursor cursor = db.query(TAG_TABLE, new String[] { "apiid" }, " type = 'section' and apiid = ? ", new String[] { section.getId() }, null, null, "name asc");
+		Cursor cursor = db.query(TAG_TABLE, new String[] { APIID }, " type = 'section' and apiid = ? ", new String[] { section.getId() }, null, null, NAME_ASC);
 		final boolean isFavourite = cursor.getCount() > 0;
 		closeCursor(cursor);		
 		db.close();
@@ -97,7 +103,7 @@ public class SqlLiteFavouritesDAO {
 		List<Tag> favouriteTags = new ArrayList<Tag>();
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		if (db != null && db.isOpen()) {
-			Cursor cursor = db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
+			Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME, SECTIONID}, null, null, null, null, NAME_ASC);		
 			if (cursor.moveToFirst()) {
 				do {
 					final String type = cursor.getString(0);
@@ -121,7 +127,7 @@ public class SqlLiteFavouritesDAO {
 
 	public synchronized List<Section> getFavouriteSections(Map<String, Section> sectionsMap) {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
-		Cursor cursor = db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");
+		Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME, SECTIONID}, null, null, null, null, NAME_ASC);
 		
 		List<Section> favouriteSections = new ArrayList<Section>();
 		if (cursor.moveToFirst()) {
@@ -168,7 +174,7 @@ public class SqlLiteFavouritesDAO {
 	
 	
 	private boolean haveRoom(SQLiteDatabase db) {
-		Cursor cursor = db.query(TAG_TABLE, new String[] { "type", "apiid", "name","sectionid" }, null, null, null, null, "name asc");		
+		Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME,SECTIONID}, null, null, null, null, NAME_ASC);		
 		int total = cursor.getCount();
 		closeCursor(cursor);
 		return total < 20;	
