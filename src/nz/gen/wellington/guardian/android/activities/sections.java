@@ -10,6 +10,7 @@ import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,11 +22,13 @@ public class sections extends DownloadProgressAwareActivity {
 		
 	private SectionDAO sectionDAO;
 	private NetworkStatusService networkStatusService;
+	private PreferencesDAO preferencesDAO;
 		
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
+		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
 		
 		setContentView(R.layout.sections);		
@@ -42,6 +45,10 @@ public class sections extends DownloadProgressAwareActivity {
 		populateSections();        
 	}
 
+	
+	private int getPageSize() {
+		return preferencesDAO.getPageSizePreference();
+	}
 			
 	private void populateSections() {
 		List<Section> sections = sectionDAO.getSections();		
@@ -49,7 +56,10 @@ public class sections extends DownloadProgressAwareActivity {
 			sections = SectionSorter.sortByName(sections);	// TODO push this back behind the section dao for performance		
 			LayoutInflater inflater = LayoutInflater.from(this);		
 			LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);			
-			TagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), authorList, ArticleSetFactory.getArticleSetsForSections(sections), this.getApplicationContext());
+			TagListPopulatingService.populateTags(inflater,
+					networkStatusService.isConnectionAvailable(), authorList,
+					ArticleSetFactory.getArticleSetsForSections(sections, getPageSize()), 
+					this.getApplicationContext());
 			
 		} else {
         	Toast.makeText(this, "Could not load sections", Toast.LENGTH_SHORT).show();

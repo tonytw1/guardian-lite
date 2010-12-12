@@ -78,8 +78,8 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 		
 			boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();
 			
-			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, ArticleSetFactory.getArticleSetsForSections(favouriteSections), this.getApplicationContext());
-			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, ArticleSetFactory.getArticleSetsForTags(favouriteTags), this.getApplicationContext());
+			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, ArticleSetFactory.getArticleSetsForSections(favouriteSections, getPageSize()), this.getApplicationContext());
+			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, ArticleSetFactory.getArticleSetsForTags(favouriteTags, getPageSize()), this.getApplicationContext());
 			
 			description.setText("The following sections and tags have been marked as favourites.");			
 			
@@ -122,7 +122,7 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 		List<Tag> favouriteTags = favouriteSectionAndTagsDAO.getFavouriteTags();
 		
 		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
-			return ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags);
+			return ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags, getPageSize());
 		}
 		return null;	// TODO this needs to be null safed upstream
 	}

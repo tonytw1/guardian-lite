@@ -7,6 +7,7 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,10 +17,13 @@ import android.util.Log;
 public abstract class WidgetClickthroughActivity extends Activity {
 
 	private static final String TAG = "WidgetClickthroughActivity";
-
+	
+	private PreferencesDAO preferencesDAO;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 	}
 
 	protected void onResume() {
@@ -56,6 +60,11 @@ public abstract class WidgetClickthroughActivity extends Activity {
 			return path.replaceFirst("/id/", "");	
 		}
 		return null;
+	}
+	
+	
+	protected int getPageSize() {
+		return preferencesDAO.getPageSizePreference();
 	}
 
 	protected abstract Class<? extends Activity> getDefaultActivity();

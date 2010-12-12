@@ -40,7 +40,7 @@ public class tag extends ArticleListActivity {
 	}
 	
 	protected ArticleSet getArticleSet() {
-		return ArticleSetFactory.getArticleSetForTag(tag);
+		return ArticleSetFactory.getArticleSetForTag(tag, getPageSize());
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {

@@ -9,7 +9,7 @@ public class mainwidget extends WidgetClickthroughActivity {
 	
 	@Override
 	protected ArticleSet getArticleSet() {
-		return ArticleSetFactory.getTopStoriesArticleSet();
+		return ArticleSetFactory.getTopStoriesArticleSet(getPageSize());
 	}
 	
 	@Override

@@ -24,7 +24,7 @@ public class main extends ArticleListActivity {
 	
 	@Override
 	protected ArticleSet getArticleSet() {
-		return ArticleSetFactory.getTopStoriesArticleSet();
+		return ArticleSetFactory.getTopStoriesArticleSet(getPageSize());
 	}
 	
 	

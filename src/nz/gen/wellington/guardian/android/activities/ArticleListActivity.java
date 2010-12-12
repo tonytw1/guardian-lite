@@ -44,13 +44,13 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	protected ArticleDAO articleDAO;
 	protected ImageDAO imageDAO;
 	private NetworkStatusService networkStatusService;
+	private PreferencesDAO preferencesDAO;
 	
 	private UpdateArticlesHandler updateArticlesHandler;
 	private UpdateArticlesRunner updateArticlesRunner;
 	
 	private ArticleBundle bundle;
 	private Map<String, View> viewsWaitingForTrailImages;
-	private PreferencesDAO preferencesDAO;
 
 	boolean showSeperators = false;
 	boolean showMainImage = true;
@@ -102,6 +102,11 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 	protected void refresh() {
 		populateArticles(ContentFetchType.CHECKSUM, preferencesDAO.getBaseFontSize());
+	}
+	
+	
+	protected int getPageSize() {
+		return preferencesDAO.getPageSizePreference();
 	}
 	
 	
@@ -328,7 +333,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			TextView heading = (TextView) seperator.findViewById(R.id.TagName);
 			heading.setText(section.getName());
 	
-			ArticleSet articleSetForSection = ArticleSetFactory.getArticleSetForSection(section);
+			ArticleSet articleSetForSection = ArticleSetFactory.getArticleSetForSection(section, preferencesDAO.getPageSizePreference());
 			boolean contentIsAvailable = articleDAO.isAvailable(articleSetForSection);	    	
 	    	ClickerPopulatingService.populateClicker(articleSetForSection, seperator, contentIsAvailable);
 			mainpane.addView(seperator);

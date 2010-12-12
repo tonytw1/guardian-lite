@@ -57,7 +57,7 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 	
 	@Override
 	protected ArticleSet getArticleSet() {
-		return ArticleSetFactory.getAboutArticleSet();
+		return ArticleSetFactory.getAboutArticleSet(preferencesDAO.getPageSizePreference());
 	}
 	
 	@Override

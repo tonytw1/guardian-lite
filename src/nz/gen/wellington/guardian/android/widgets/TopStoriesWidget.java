@@ -27,7 +27,7 @@ import android.widget.RemoteViews;
 
 // TODO pull a common abstract class for these two
 public class TopStoriesWidget extends AppWidgetProvider {
-
+		
 	ArticleViews firstArticleViews = new ArticleViews(
 			R.id.WidgetFirstItem, R.id.WidgetHeadline, R.id.WidgetStandfirst,
 			R.id.WidgetImage);
@@ -43,8 +43,8 @@ public class TopStoriesWidget extends AppWidgetProvider {
 		refresh(context, appWidgetIds);
 	}
 	
-	protected ArticleSet getArticleSet(Context context) {
-		return ArticleSetFactory.getTopStoriesArticleSet();
+	protected ArticleSet getArticleSet(int pageSize, Context context) {
+		return ArticleSetFactory.getTopStoriesArticleSet(pageSize);
 	}
 	
 	
@@ -92,7 +92,7 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	}
 		
 	private ArticleBundle getArticles(Context context) {
-		ArticleSet articleSet = getArticleSet(context);
+		ArticleSet articleSet = getArticleSet(SingletonFactory.getPreferencesDAO(context).getPageSizePreference(), context);
 		if (articleSet == null) {
 			return null;
 		}

@@ -145,8 +145,8 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	private void populateTags(Article article, final boolean connectionAvailable) {
 		LayoutInflater inflater = LayoutInflater.from(this);
 		findViewById(R.id.TagLabel).setVisibility(View.VISIBLE);
-		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), ArticleSetFactory.getArticleSetsForTags(article.getAuthors()), this.getApplicationContext());
-		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.TagList), ArticleSetFactory.getArticleSetsForTags(article.getKeywords()), this.getApplicationContext());
+		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), ArticleSetFactory.getArticleSetsForTags(article.getAuthors(), preferencesDAO.getPageSizePreference()), this.getApplicationContext());
+		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.TagList), ArticleSetFactory.getArticleSetsForTags(article.getKeywords(), preferencesDAO.getPageSizePreference()), this.getApplicationContext());
 	}
 
 	private void populateMainImage(String mainImageUrl) {

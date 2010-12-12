@@ -13,6 +13,7 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +34,8 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	
 	private Button search;
 	private NetworkStatusService networkStatusService;
+	private PreferencesDAO preferencesDAO;
+	
 	private List<Tag> searchResults;
 	private ContentSource api;
 	private Map<String, Section> sections;
@@ -47,6 +50,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		
 		api = SingletonFactory.getOpenPlatformApi(this.getApplicationContext());
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
+		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
 		sections = sectionDAO.getSectionsMap();
 		
@@ -153,7 +157,12 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		LinearLayout resultsPane = (LinearLayout) findViewById(R.id.TagList);
 		resultsPane.removeAllViews();
 		LayoutInflater inflater = LayoutInflater.from(this);
-		TagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), resultsPane, ArticleSetFactory.getArticleSetsForTags(searchResults), this.getApplicationContext());		
+		TagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), resultsPane, ArticleSetFactory.getArticleSetsForTags(searchResults, getPageSize()), this.getApplicationContext());		
+	}
+
+
+	private int getPageSize() {
+		return preferencesDAO.getPageSizePreference();
 	}
 	
 }

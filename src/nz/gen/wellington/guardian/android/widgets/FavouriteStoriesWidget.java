@@ -18,7 +18,7 @@ import android.net.Uri;
 public class FavouriteStoriesWidget extends TopStoriesWidget {
 
 	@Override
-	protected ArticleSet getArticleSet(Context context) {
+	protected ArticleSet getArticleSet(int pagesize, Context context) {
 		FavouriteSectionsAndTagsDAO favouritesDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(context);
 		
 		List<Section> favouriteSections = favouritesDAO.getFavouriteSections();
@@ -26,7 +26,7 @@ public class FavouriteStoriesWidget extends TopStoriesWidget {
 		
 		final boolean hasFavourites = !favouriteSections.isEmpty() || !favouriteTags.isEmpty();
 		if (hasFavourites) {
-			ArticleSet favouriteArticlesSet = ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags);
+			ArticleSet favouriteArticlesSet = ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags, pagesize);
 			return favouriteArticlesSet;
 		}
 		return null;

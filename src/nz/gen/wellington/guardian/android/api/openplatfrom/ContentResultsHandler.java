@@ -216,7 +216,7 @@ public class ContentResultsHandler extends HandlerBase {
 						
 			if (!refinementTag.isSectionTag()) {
 				Log.i(TAG, "Adding refinement for tag: " + refinementTag.getName());
-				refinementGroup.add(ArticleSetFactory.getArticleSetForTag(refinementTag));
+				refinementGroup.add(ArticleSetFactory.getArticleSetForTag(refinementTag, SingletonFactory.getPreferencesDAO(context).getPageSizePreference()));
 			}
 		}
 		
@@ -226,8 +226,10 @@ public class ContentResultsHandler extends HandlerBase {
 			final String tagId = attributes.getValue("id");
 			final String sectionId = tagId.split("/")[0];
 			Section section = sectionDAO.getSectionById(sectionId);
-			Log.i(TAG, "Adding refinement for section: " + section.getName());
-			refinementGroup.add(ArticleSetFactory.getArticleSetForSection(section));
+			if (section != null) {
+				Log.i(TAG, "Adding refinement for section: " + section.getName());
+				refinementGroup.add(ArticleSetFactory.getArticleSetForSection(section, SingletonFactory.getPreferencesDAO(context).getPageSizePreference()));
+			}
 		}
 	}
 	

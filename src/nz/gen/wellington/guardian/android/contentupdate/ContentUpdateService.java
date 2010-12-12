@@ -44,14 +44,15 @@ public class ContentUpdateService extends Service {
 		super.onStart(intent, startId);
 		if (intent != null && intent.getAction() != null && intent.getAction().equals("RUN")) {
 			Log.i(TAG, "Got start command");
-			this.start();
+			int pageSize = SingletonFactory.getPreferencesDAO(this.getApplicationContext()).getPageSizePreference();
+			this.start(pageSize);
 		}
 	}
 
         
-    public void start() {
+    public void start(int pagesize) {
     	Log.i(TAG, "Queuing tasks");
-    	queueUpdateTasks();
+    	queueUpdateTasks(pagesize);
     	internalRunnable = new InternalRunnable(this, (NotificationManager)getSystemService(NOTIFICATION_SERVICE));
     	thread = new Thread(internalRunnable);
     	thread.setDaemon(true);
@@ -87,36 +88,36 @@ public class ContentUpdateService extends Service {
 	}
 	
 	
-	private void queueUpdateTasks() {
+	private void queueUpdateTasks(int pagesize) {
 		TaskQueue taskQueue = SingletonFactory.getTaskQueue(this.getApplicationContext());
 		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		
-		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getTopStoriesArticleSet()));
+		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getTopStoriesArticleSet(pagesize)));
 		
 		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections(); 
 		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
 		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
-			queueSections(taskQueue, favouriteSections);
-			queueTags(taskQueue, favouriteTags);
-			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags)));
+			queueSections(taskQueue, favouriteSections, pagesize);
+			queueTags(taskQueue, favouriteTags, pagesize);
+			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags, pagesize)));
 		}
 	}
 	
 	
-	private void queueTags(TaskQueue taskQueue, List<Tag> tags) {
+	private void queueTags(TaskQueue taskQueue, List<Tag> tags, int pagesize) {
 		if (tags != null) {
 			for (Tag tag : tags) {
 				taskQueue.addArticleTask(new UpdateArticleSetTask(this
-						.getApplicationContext(), ArticleSetFactory.getArticleSetForTag(tag)));
+						.getApplicationContext(), ArticleSetFactory.getArticleSetForTag(tag, pagesize)));
 			}
 		}
 	}
 
 	
-	private void queueSections(TaskQueue taskQueue, List<Section> sections) {
+	private void queueSections(TaskQueue taskQueue, List<Section> sections, int pagesize) {
 		if (sections != null) {
 			for (Section section : sections) {
-				UpdateArticleSetTask articleTask = new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getArticleSetForSection(section));
+				UpdateArticleSetTask articleTask = new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getArticleSetForSection(section, pagesize));
 				taskQueue.addArticleTask(articleTask);
 			}
 		}
