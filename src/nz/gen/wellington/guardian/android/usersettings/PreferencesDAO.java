@@ -14,8 +14,7 @@ public class PreferencesDAO {
 
 	public int getPageSizePreference() {
 		final String pageSizeString = prefs.getString("pageSize", "10");
-		int pageSize = Integer.parseInt(pageSizeString);
-		return pageSize;
+		return Integer.parseInt(pageSizeString);
 	}
 
 	public String getLargePicturesPreference() {
@@ -28,8 +27,7 @@ public class PreferencesDAO {
 
 	public int getBaseFontSize() {
 		final String baseSizeString = prefs.getString("baseFontSize", "7");
-		int baseSize = Integer.parseInt(baseSizeString);
-		return baseSize;
+		return Integer.parseInt(baseSizeString);
 	}
 	
 	public boolean useContentApi() {
