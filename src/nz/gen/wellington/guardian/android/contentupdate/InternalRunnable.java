@@ -23,11 +23,10 @@ public class InternalRunnable implements Runnable {
 
 	private static final String TAG = "InternalRunnable";
 
-	int status;
-	Context context;
-	boolean running;
-	
-	
+	private int status;
+	private Context context;
+	private boolean running;
+		
     private ContentUpdateReport report;
 	private ContentUpdateTaskRunnable currentTask;
     private TaskQueue taskQueue;

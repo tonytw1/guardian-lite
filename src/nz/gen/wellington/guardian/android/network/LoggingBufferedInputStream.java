@@ -9,10 +9,10 @@ import android.content.Intent;
 
 public class LoggingBufferedInputStream extends BufferedInputStream {
 	
-	Context context;
-	int totalRead;
-	long contentLength;
-	String etag;
+	private Context context;
+	private int totalRead;
+	private long contentLength;
+	private String etag;
 	
 	public LoggingBufferedInputStream(InputStream in, Context context) {
 		super(in);

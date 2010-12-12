@@ -7,7 +7,7 @@ import nz.gen.wellington.guardian.android.model.Section;
 
 public class InMemorySectionCache {
 	
-	List<Section> sections;
+	private List<Section> sections;
 	
 	public InMemorySectionCache() {
 		this.sections = new ArrayList<Section>();
