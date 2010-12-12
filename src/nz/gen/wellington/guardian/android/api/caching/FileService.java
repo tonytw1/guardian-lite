@@ -93,10 +93,9 @@ public class FileService {
 		File[] listFiles = cacheDir.listFiles(jsonFilesFilter);
 		for (int i = 0; i < listFiles.length; i++) {
 			File cacheFile = listFiles[i];
-			//Log.i(TAG, "Found cache file: " + cacheFile.getAbsolutePath());
-			if (cacheFile.delete()) {
-				//Log.i(TAG, "Deleted cache file: " + cacheFile.getAbsolutePath());				
-			}		
+			if (!cacheFile.delete()) {
+				Log.w(TAG, "Failed to clear cache file: " + cacheFile.getName());
+			}
 		}
 	}
 		
