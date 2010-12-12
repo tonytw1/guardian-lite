@@ -13,7 +13,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,17 +20,15 @@ import android.widget.TextView;
 
 public class sync extends DownloadProgressAwareActivity implements OnClickListener {
 	
-	private static final String TAG = "sync";
-
-	Button start;
-	Button stop;
-	TextView statusMessage;
+	private Button start;
+	private Button stop;
+	private TextView statusMessage;
 	
 	private ContentUpdateService contentUpdateService;
 	
-	BroadcastReceiver taskStartReceiver;
-	BroadcastReceiver queueChangeReceiver;
-	BroadcastReceiver batchCompletionReceiver;
+	private BroadcastReceiver taskStartReceiver;
+	private BroadcastReceiver queueChangeReceiver;
+	private BroadcastReceiver batchCompletionReceiver;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +73,6 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 
 
 	public void onClick(View src) {
-		Log.d(TAG, "Got click on: " + src.toString());
 		switch (src.getId()) {
 
 		case R.id.buttonStart:
