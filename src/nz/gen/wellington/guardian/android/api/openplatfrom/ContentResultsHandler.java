@@ -1,6 +1,7 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +28,8 @@ import android.util.Log;
 
 public class ContentResultsHandler extends HandlerBase {
 
-	private static final String TAG = null;
+	private static final String TAG = "ContentResultsHandler";
+	
 	public List<Article> articles;
 	public Map<String, List<ArticleSet>> refinements;
 	public String checksum;
@@ -201,20 +203,35 @@ public class ContentResultsHandler extends HandlerBase {
 	}
 	
 		
-	private void processRefinement(AttributeList attributes, SectionDAO sectionDAO) {
-		Log.i(TAG, "Processing refinement of type '" + currentRefinementGroupType + "' with attributes: " + attributes);
+	private void processRefinement(AttributeList attributes, SectionDAO sectionDAO) {		
+		List<String> tagRefinementTypes = Arrays.asList("blog", "contributor", "keyword", "series");
+		boolean isTagRefinement = tagRefinementTypes.contains(currentRefinementGroupType);
 		
-		boolean isTagRefinement = true; // TODO limit to tag typed - ie not date
 		if (isTagRefinement) {
 			List<ArticleSet> refinementGroup = getRefinementGroup();		
 			final String tagId = attributes.getValue("id");
 			final String sectionId = tagId.split("/")[0];
 			Section section = sectionDAO.getSectionById(sectionId);
 			final Tag refinementTag = new Tag(attributes.getValue("display-name"), tagId, section);
-			refinementGroup.add(ArticleSetFactory.getArticleSetForTag(refinementTag));
+						
+			if (!refinementTag.isSectionTag()) {
+				Log.i(TAG, "Adding refinement for tag: " + refinementTag.getName());
+				refinementGroup.add(ArticleSetFactory.getArticleSetForTag(refinementTag));
+			}
+		}
+		
+		boolean isSectionRefinement = currentRefinementGroupType.equals("section");
+		if (isSectionRefinement) {
+			List<ArticleSet> refinementGroup = getRefinementGroup();
+			final String tagId = attributes.getValue("id");
+			final String sectionId = tagId.split("/")[0];
+			Section section = sectionDAO.getSectionById(sectionId);
+			Log.i(TAG, "Adding refinement for section: " + section.getName());
+			refinementGroup.add(ArticleSetFactory.getArticleSetForSection(section));
 		}
 	}
-
+	
+	
 	private List<ArticleSet> getRefinementGroup() {
 		List<ArticleSet> refinementGroup = refinements.get(currentRefinementGroupType);
 		if (refinementGroup == null) {
