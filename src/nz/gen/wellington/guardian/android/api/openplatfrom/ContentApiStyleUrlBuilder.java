@@ -37,7 +37,9 @@ public class ContentApiStyleUrlBuilder {
 		StringBuilder url = new StringBuilder("/" + SEARCH_QUERY);
 		appendCoreParameters(url);
 		
+		StringBuilder sectionsParameter = new StringBuilder();			
 		StringBuilder tagsParameter = new StringBuilder();			
+
 		if (!tags.isEmpty()) {
 			for (Tag tag : tags) {
 				tagsParameter.append(tag.getId());
@@ -47,9 +49,19 @@ public class ContentApiStyleUrlBuilder {
 				
 		if (!sections.isEmpty()) {
 			for (Section section : sections) {
-				tagsParameter.append(section.getId() + "/" + section.getId());
-				tagsParameter.append(OR);
-			}			
+				sectionsParameter.append(section.getId());
+				sectionsParameter.append(OR);
+			}
+		}
+		
+		if (sectionsParameter.length() > 0) {
+			String sections = sectionsParameter.substring(0, sectionsParameter.length()-1);
+			try {
+				sections = URLEncoder.encode(sections, "UTF8");
+			} catch (UnsupportedEncodingException e) {
+			}
+			url.append("&section=");
+			url.append(sections);				
 		}
 		
 		if (tagsParameter.length() > 0) {
@@ -61,11 +73,6 @@ public class ContentApiStyleUrlBuilder {
 			url.append("&tag=");
 			url.append(tags);				
 		}
-		
-		// TODO about article sets shouldn't go through the content api classes
-		//if (articleSet instanceof AboutArticleSet) {
-		//	 url = new StringBuilder(apiPrefix + "/about");
-		//}
 		
 		return url.toString();
 	}
