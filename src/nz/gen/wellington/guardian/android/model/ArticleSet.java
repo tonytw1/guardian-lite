@@ -5,10 +5,8 @@ import java.util.List;
 
 public interface ArticleSet extends Serializable {
 	
-	public String getName();
-	
-	public List<String> getPermittedRefinements();
-	
-	public int getPageSize();
+	String getName();	
+	List<String> getPermittedRefinements();	
+	int getPageSize();
 	
 }
