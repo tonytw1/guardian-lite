@@ -3,9 +3,12 @@ package nz.gen.wellington.guardian.android.api;
 import java.util.Date;
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.about.AboutArticlesDAO;
+import nz.gen.wellington.guardian.android.about.ArticleSource;
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
+import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
@@ -25,6 +28,8 @@ public class ArticleDAO {
 	private SectionDAO sectionsDAO;
 	private PreferencesDAO preferencesDAO;
 	private NetworkStatusService networkStatusService;
+
+	private ArticleSource aboutArticlesDAO;
 		
 	public ArticleDAO(Context context) {
 		fileBasedArticleCache = new FileBasedArticleCache(context);		
@@ -32,6 +37,7 @@ public class ArticleDAO {
 		sectionsDAO = SingletonFactory.getSectionDAO(context);
 		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
 		networkStatusService = new NetworkStatusService(context);
+		aboutArticlesDAO = new AboutArticlesDAO(context);
 	}
 	
 	public boolean isAvailable(ArticleSet articleSet) {
@@ -98,11 +104,19 @@ public class ArticleDAO {
 	private ArticleBundle fetchFromLive(ArticleSet articleSet) {
 		Log.i(TAG, "Fetching from live");
 		List<Section> sections = sectionsDAO.getSections();
-		if (sections != null) {
-			ArticleBundle bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback, preferencesDAO.getPageSizePreference());		
+		if (sections != null) {			
+			// TODO fetch about article bundle from aboutDAO
+
+			ArticleBundle bundle = null;
+			if (articleSet instanceof AboutArticleSet) {
+				bundle = aboutArticlesDAO.getArticles(articleSet, articleCallback);
+			} else {
+				bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback);
+			}
+			
 			if (bundle != null) {
 				fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);
-				return bundle;				
+				return bundle;
 			}
 		}
 		return null;

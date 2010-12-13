@@ -17,7 +17,7 @@ import nz.gen.wellington.guardian.android.model.Tag;
 public interface ContentSource {
 
 	public List<Section> getSections();
-	ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback, int pageSize);
+	ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback);
 	public String getRemoteChecksum(ArticleSet articleSet, int pageSize);
 	public void stopLoading();
 	public List<Tag> searchTags(String searchTerm, Map<String, Section> sections);

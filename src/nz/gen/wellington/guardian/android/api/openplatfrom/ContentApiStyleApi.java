@@ -36,13 +36,13 @@ public class ContentApiStyleApi implements ContentSource {
 	}
 	
 	@Override
-	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback, int pageSize) {
+	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
 		
 		final String contentApiUrl = contentApiUrlService.getContentApiUrlForArticleSet(articleSet);
 		
 		announceDownloadStarted(articleSet.getName() + " article set");
-		LoggingBufferedInputStream input = getHttpInputStream(contentApiUrl);
+		LoggingBufferedInputStream input = httpFetcher.httpFetch(contentApiUrl);
 		if (input != null) {
 			ArticleBundle results = contentXmlParser.parseArticlesXml(input, articleCallback);
 			if (results != null && !results.getArticles().isEmpty()) {
@@ -62,7 +62,7 @@ public class ContentApiStyleApi implements ContentSource {
 		String contentApiUrl = contentApiUrlService.getContentApiUrlForArticleSetChecksum(articleSet);
 		
 		announceDownloadStarted(articleSet.getName() + " article set checksum");		
-		InputStream input = getHttpInputStream(contentApiUrl);		
+		InputStream input = httpFetcher.httpFetch(contentApiUrl);		
 		if (input != null) {
 			contentXmlParser.parseArticlesXml(input, null);
 			
@@ -79,7 +79,7 @@ public class ContentApiStyleApi implements ContentSource {
 	public List<Section> getSections() {
 		Log.i(TAG, "Fetching section list from live api");
 		String contentApiUrl = contentApiUrlService.getSectionsQueryUrl();
-		InputStream input = getHttpInputStream(contentApiUrl);
+		InputStream input = httpFetcher.httpFetch(contentApiUrl);
 		if (input != null) {
 			return contentJsonParser.parseSectionsJSON(input);
 		}
@@ -91,7 +91,7 @@ public class ContentApiStyleApi implements ContentSource {
 	public List<Tag> searchTags(String searchTerm, Map<String, Section> sections) {
 		Log.i(TAG, "Fetching tag list from live api: " + searchTerm);
 		announceDownloadStarted("tag results");
-		InputStream input = getHttpInputStream(contentApiUrlService.getTagSearchQueryUrl(searchTerm));
+		InputStream input = httpFetcher.httpFetch(contentApiUrlService.getTagSearchQueryUrl(searchTerm));
 		if (input != null) {
 			return contentJsonParser.parseTagsJSON(input, sections);
 		}
@@ -110,10 +110,6 @@ public class ContentApiStyleApi implements ContentSource {
 		intent.putExtra("type", HttpFetcher.DOWNLOAD_STARTED);
 		intent.putExtra("url", downloadName);
 		context.sendBroadcast(intent);
-	}
-	
-	private LoggingBufferedInputStream getHttpInputStream(String url) {
-		return httpFetcher.httpFetch(url);		
 	}
 		
 }
