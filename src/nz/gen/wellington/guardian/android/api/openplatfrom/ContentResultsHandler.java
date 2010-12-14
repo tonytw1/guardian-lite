@@ -172,18 +172,17 @@ public class ContentResultsHandler extends HandlerBase {
 		}
 
 		if (name.equals("content")) {
-			// boolean isArticleValid = article.getSection() != null || articles
-			// if (isArticleValid) {
-
-			// TODO article cleaning occurs here.
-
-			articles.add(currentArticle);
-			if (articleCallback != null) {
-				articleCallback.articleReady(currentArticle);
+			boolean isArticleValid = currentArticle.getId() != null;
+			if (isArticleValid) {
+				// TODO article cleaning should occur here.
+				articles.add(currentArticle);
+				if (articleCallback != null) {
+					articleCallback.articleReady(currentArticle);
+				}
+				
+			} else {
+				Log.w(TAG, "Ignoring invalid article: " + currentArticle.getTitle());
 			}
-			// } else {
-			// Log.w(TAG, "Invalid article: " + article.getId());
-			// }
 		}
 	}
 

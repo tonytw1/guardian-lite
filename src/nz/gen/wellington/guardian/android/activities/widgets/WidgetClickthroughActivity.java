@@ -36,12 +36,11 @@ public abstract class WidgetClickthroughActivity extends Activity {
 			
 			Log.d(TAG, "Requested article id was: " + articleId);
 			if (articleId != null) {
-				final Article article = getArticleById(articleId);
-				
+				final Article article = getArticleById(articleId);				
 				if (article != null) {
 					intent = new Intent(this, article.class);
 					intent.putExtra("article", article);
-	
+					
 				} else {
 					Log.d(TAG, "Failed to find article: " + articleId);
 				}
@@ -52,15 +51,6 @@ public abstract class WidgetClickthroughActivity extends Activity {
 		}
 		this.startActivity(intent);
 	}
-
-	private String extractArticleIdFromUri(Uri dataUri) {
-		String path = dataUri.getPath();
-		Log.d(TAG, "Path is: " + path);
-		if (path.startsWith("/id/")) {
-			return path.replaceFirst("/id/", "");	
-		}
-		return null;
-	}
 	
 	
 	protected int getPageSize() {
@@ -70,6 +60,15 @@ public abstract class WidgetClickthroughActivity extends Activity {
 	protected abstract Class<? extends Activity> getDefaultActivity();
 	
 	protected abstract ArticleSet getArticleSet();
+	
+	
+	private String extractArticleIdFromUri(Uri dataUri) {
+		final String path = dataUri.getPath();
+		if (path.startsWith("/id/")) {
+			return path.replaceFirst("/id/", "");	
+		}
+		return null;
+	}
 		
 	private Article getArticleById(final String articleId) {
 		ArticleSet articleSet = getArticleSet();
@@ -77,7 +76,7 @@ public abstract class WidgetClickthroughActivity extends Activity {
 		ArticleBundle bundle = articleDAO.getArticleSetArticles(articleSet, ContentFetchType.LOCAL_ONLY);
 		if (bundle != null) {
 			for (Article article : bundle.getArticles()) {
-				if (article.getId().equals(articleId)) {
+				if (article.getId() !=null && article.getId().equals(articleId)) {
 					return article;
 				}
 			}
