@@ -103,22 +103,21 @@ public class ArticleDAO {
 		
 	private ArticleBundle fetchFromLive(ArticleSet articleSet) {
 		Log.i(TAG, "Fetching from live");
-		List<Section> sections = sectionsDAO.getSections();
-		if (sections != null) {			
-			// TODO fetch about article bundle from aboutDAO
-
-			ArticleBundle bundle = null;
-			if (articleSet instanceof AboutArticleSet) {
-				bundle = aboutArticlesDAO.getArticles(articleSet, articleCallback);
-			} else {
+		
+		ArticleBundle bundle = null;
+		if (articleSet instanceof AboutArticleSet) {
+			bundle = aboutArticlesDAO.getArticles(articleSet, articleCallback);		
+		} else {
+			List<Section> sections = sectionsDAO.getSections();
+			if (sections != null) {			
 				bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback);
 			}
-			
-			if (bundle != null) {
-				fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);
-				return bundle;
-			}
 		}
+		
+		if (bundle != null) {
+			fileBasedArticleCache.putArticleSetArticles(articleSet, bundle);
+			return bundle;
+		}		
 		return null;
 	}
 
