@@ -20,12 +20,8 @@ import android.util.Log;
 
 public class ContentApiStyleJSONParser {
 	
-	private static final String TAG = "ContentApiStyleJSONParser";
-	
-	
-	public ContentApiStyleJSONParser() {
-	}
-	
+	private static final String TAG = "ContentApiStyleJSONParser";	
+	private static final String NEW_LINE = "\n";
 	
 	public List<Section> parseSectionsJSON(InputStream input) {
 		try {
@@ -34,7 +30,7 @@ public class ContentApiStyleJSONParser {
 			String str;
 			while ((str = in.readLine()) != null) {
 				content.append(str);
-				content.append("\n");
+				content.append(NEW_LINE);
 			}
 			in.close();
 
@@ -56,11 +52,9 @@ public class ContentApiStyleJSONParser {
 			return sections;
 
 		} catch (JSONException e) {
-			// Log.e(TAG, "JSONException while parsing articles: " +
-			// e.getMessage());
+			Log.w(TAG, "JSONException while parsing articles: " + e.getMessage());
 		} catch (IOException e) {
-			// Log.e(TAG, "IOException while parsing articles: " +
-			// e.getMessage());
+			Log.e(TAG, "IOException while parsing articles: " + e.getMessage());
 		}
 		return null;
 	}
@@ -73,7 +67,7 @@ public class ContentApiStyleJSONParser {
 			String str;
 			while ((str = in.readLine()) != null) {
 				content.append(str);
-				content.append("\n");
+				content.append(NEW_LINE);
 			}
 			in.close();
 
