@@ -26,7 +26,8 @@ public class FavouriteStoriesWidget extends TopStoriesWidget {
 		
 		final boolean hasFavourites = !favouriteSections.isEmpty() || !favouriteTags.isEmpty();
 		if (hasFavourites) {
-			ArticleSet favouriteArticlesSet = ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags, pagesize);
+			ArticleSetFactory articleSetFactory = SingletonFactory.getArticleSetFactory(context);
+			ArticleSet favouriteArticlesSet = articleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags);
 			return favouriteArticlesSet;
 		}
 		return null;

@@ -8,7 +8,6 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,13 +20,14 @@ public class section extends ArticleListActivity {
 	private Section section;
 	private MenuItem favouriteMenuItem;
 	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
-	private PreferencesDAO preferencesDAO;
+    private ArticleSetFactory articleSetFactory;
+
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
-        this.preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
+        this.articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());        
         section = (Section) this.getIntent().getExtras().get("section");
     	setHeading(section.getName());
     	setHeadingColour(section.getColour());
@@ -35,7 +35,7 @@ public class section extends ArticleListActivity {
 
 	
 	protected ArticleSet getArticleSet() {
-		return ArticleSetFactory.getArticleSetForSection(section, preferencesDAO.getPageSizePreference());
+		return articleSetFactory.getArticleSetForSection(section);
 	}
 	
 	protected List<String> getPermittedRefinements() {

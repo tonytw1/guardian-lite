@@ -8,5 +8,7 @@ public interface ArticleSet extends Serializable {
 	String getName();	
 	List<String> getPermittedRefinements();	
 	int getPageSize();
+	String getSourceUrl();
+	void setSourceUrl(String urlForArticleSet);
 	
 }

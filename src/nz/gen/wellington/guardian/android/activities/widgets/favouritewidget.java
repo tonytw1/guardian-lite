@@ -20,7 +20,8 @@ public class favouritewidget extends WidgetClickthroughActivity {
 		List<Tag> favouriteTags = favouriteSectionAndTagsDAO.getFavouriteTags();
 		
 		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
-			return ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags, getPageSize());
+			ArticleSetFactory articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
+			return articleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags);
 		}
 		return null;
 	}

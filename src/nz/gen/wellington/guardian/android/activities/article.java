@@ -31,6 +31,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	private NetworkStatusService networkStatusService;
     private ImageDAO imageDAO;
     private PreferencesDAO preferencesDAO;
+    private ArticleSetFactory articleSetFactory;
     
     private Article article;
        
@@ -46,6 +47,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		
 		imageDAO = SingletonFactory.getImageDao(this.getApplicationContext());
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
+		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
 		
 		images = new HashMap<String, Bitmap>();
@@ -145,8 +147,8 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	private void populateTags(Article article, final boolean connectionAvailable) {
 		LayoutInflater inflater = LayoutInflater.from(this);
 		findViewById(R.id.TagLabel).setVisibility(View.VISIBLE);
-		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), ArticleSetFactory.getArticleSetsForTags(article.getAuthors(), preferencesDAO.getPageSizePreference()), this.getApplicationContext());
-		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.TagList), ArticleSetFactory.getArticleSetsForTags(article.getKeywords(), preferencesDAO.getPageSizePreference()), this.getApplicationContext());
+		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), articleSetFactory.getArticleSetsForTags(article.getAuthors()), this.getApplicationContext());
+		TagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.TagList), articleSetFactory.getArticleSetsForTags(article.getKeywords()), this.getApplicationContext());
 	}
 
 	private void populateMainImage(String mainImageUrl) {

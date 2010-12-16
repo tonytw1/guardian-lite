@@ -27,7 +27,7 @@ import android.widget.RemoteViews;
 
 // TODO pull a common abstract class for these two
 public class TopStoriesWidget extends AppWidgetProvider {
-		
+			
 	ArticleViews firstArticleViews = new ArticleViews(
 			R.id.WidgetFirstItem, R.id.WidgetHeadline, R.id.WidgetStandfirst,
 			R.id.WidgetImage);
@@ -37,6 +37,8 @@ public class TopStoriesWidget extends AppWidgetProvider {
 			R.id.WidgetSecondStandfirst, R.id.WidgetSecondImage);
 	
 	
+	
+	
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {		
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -44,7 +46,8 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	}
 	
 	protected ArticleSet getArticleSet(int pageSize, Context context) {
-		return ArticleSetFactory.getTopStoriesArticleSet(pageSize);
+		ArticleSetFactory articleSetFactory = SingletonFactory.getArticleSetFactory(context);
+		return articleSetFactory.getTopStoriesArticleSet();
 	}
 	
 	

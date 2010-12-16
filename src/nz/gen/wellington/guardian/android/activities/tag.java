@@ -18,12 +18,15 @@ public class tag extends ArticleListActivity {
 	private Tag tag;
 	private MenuItem favouriteMenuItem;
 	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
+    private ArticleSetFactory articleSetFactory;
+
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
 		this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
-		tag = (Tag) this.getIntent().getExtras().get("keyword");		
+		this.articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
+		tag = (Tag) this.getIntent().getExtras().get("keyword");
 		if (tag.getSection() != null) {
 			setHeading(tag.getSection().getName() + " - " + tag.getName());
 			setHeadingColour(tag.getSection().getColour());
@@ -40,7 +43,7 @@ public class tag extends ArticleListActivity {
 	}
 	
 	protected ArticleSet getArticleSet() {
-		return ArticleSetFactory.getArticleSetForTag(tag, getPageSize());
+		return articleSetFactory.getArticleSetForTag(tag);
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {

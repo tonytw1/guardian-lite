@@ -8,7 +8,6 @@ import java.io.ObjectOutputStream;
 import java.util.Date;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
-import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -108,23 +107,17 @@ public class FileBasedArticleCache {
 	}
 
 	public Date getModificationTime(ArticleSet articleSet) {
-		return FileService.getModificationTime(context, getUrlFor(articleSet));
+		return FileService.getModificationTime(context, getLocalFilenameForArticleSet(articleSet));
 	}
-		
 	
-	private String getUrlFor(ArticleSet articleSet) {
-		ArticleSetUrlService contentUrlService = new ArticleSetUrlService(context);
-		return contentUrlService.getUrlForArticleSet(articleSet);
-		
-		
-	}
-		
 	private String getLocalFilenameForArticleSet(ArticleSet articleSet) {
 		return getLocalFilename(getUrlFor(articleSet));
 	}
 	
-
-
+	private String getUrlFor(ArticleSet articleSet) {
+		return articleSet.getSourceUrl();
+	}
+	
 	private static String getLocalFilename(String url) {
 		return url.replaceAll("/", "").replaceAll(":", "").replaceAll("\\?", "").
 			replaceAll("\\.", "").replaceAll("=", "").replaceAll("&", "").replace("%", "").replace("-", "") + VERSION_SUFFIX;

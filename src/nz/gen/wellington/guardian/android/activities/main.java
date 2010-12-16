@@ -2,6 +2,7 @@ package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,12 +10,16 @@ import android.view.MenuItem;
 
 public class main extends ArticleListActivity {
 		
+	private ArticleSetFactory articleSetFactory;
+
+
 	public main() {
 	}
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
         setContentView(R.layout.main);        
         hideHeading();
         showSeperators = true;
@@ -24,7 +29,7 @@ public class main extends ArticleListActivity {
 	
 	@Override
 	protected ArticleSet getArticleSet() {
-		return ArticleSetFactory.getTopStoriesArticleSet(getPageSize());
+		return articleSetFactory.getTopStoriesArticleSet();
 	}
 	
 	

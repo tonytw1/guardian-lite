@@ -17,6 +17,7 @@ public class SingletonFactory {
 	private static SectionDAO sectionDAO;
 	private static FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
 	private static PreferencesDAO preferencesDAO;
+	private static ArticleSetFactory articleSetFactory;
 	
 	public static ArticleDAO getDao(Context context) {
 		return new ArticleDAO(context);	
@@ -59,6 +60,13 @@ public class SingletonFactory {
 			preferencesDAO = new PreferencesDAO(context);
 		}
 		return preferencesDAO;
+	}
+
+	public static ArticleSetFactory getArticleSetFactory(Context context) {
+		if (articleSetFactory == null) {
+			articleSetFactory = new ArticleSetFactory(context);
+		}
+		return articleSetFactory;
 	}
 	
 }

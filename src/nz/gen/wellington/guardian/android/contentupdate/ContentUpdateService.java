@@ -37,9 +37,17 @@ public class ContentUpdateService extends Service {
  
    
 	private final IBinder mBinder = new ContentUpdateServiceBinder();
-
+	private ArticleSetFactory articleSetFactory;
+	
 	
     @Override
+	public void onCreate() {
+		super.onCreate();
+		this.articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
+	}
+
+
+	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		if (intent != null && intent.getAction() != null && intent.getAction().equals("RUN")) {
@@ -92,14 +100,14 @@ public class ContentUpdateService extends Service {
 		TaskQueue taskQueue = SingletonFactory.getTaskQueue(this.getApplicationContext());
 		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		
-		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getTopStoriesArticleSet(pagesize)));
+		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), articleSetFactory.getTopStoriesArticleSet()));
 		
 		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections(); 
 		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
 		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
 			queueSections(taskQueue, favouriteSections, pagesize);
 			queueTags(taskQueue, favouriteTags, pagesize);
-			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags, pagesize)));
+			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), articleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags)));
 		}
 	}
 	
@@ -108,7 +116,7 @@ public class ContentUpdateService extends Service {
 		if (tags != null) {
 			for (Tag tag : tags) {
 				taskQueue.addArticleTask(new UpdateArticleSetTask(this
-						.getApplicationContext(), ArticleSetFactory.getArticleSetForTag(tag, pagesize)));
+						.getApplicationContext(), articleSetFactory.getArticleSetForTag(tag)));
 			}
 		}
 	}
@@ -117,7 +125,7 @@ public class ContentUpdateService extends Service {
 	private void queueSections(TaskQueue taskQueue, List<Section> sections, int pagesize) {
 		if (sections != null) {
 			for (Section section : sections) {
-				UpdateArticleSetTask articleTask = new UpdateArticleSetTask(this.getApplicationContext(), ArticleSetFactory.getArticleSetForSection(section, pagesize));
+				UpdateArticleSetTask articleTask = new UpdateArticleSetTask(this.getApplicationContext(), articleSetFactory.getArticleSetForSection(section));
 				taskQueue.addArticleTask(articleTask);
 			}
 		}

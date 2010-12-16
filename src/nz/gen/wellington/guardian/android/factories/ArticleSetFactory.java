@@ -3,6 +3,9 @@ package nz.gen.wellington.guardian.android.factories;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+
+import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
@@ -11,43 +14,58 @@ import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 
 public class ArticleSetFactory {
 
-	public static ArticleSet getAboutArticleSet(int pagesize) {
-		return new AboutArticleSet(pagesize);
+	private PreferencesDAO preferencesDAO;
+	private ArticleSetUrlService articleSetUrlService;
+	
+	public ArticleSetFactory(Context context) {
+		this.preferencesDAO = SingletonFactory.getPreferencesDAO(context);
+		this.articleSetUrlService = new ArticleSetUrlService(context);
+	}
+
+	public ArticleSet getAboutArticleSet() {
+		return addUrl(new AboutArticleSet(preferencesDAO.getPageSizePreference()));
 	}
 	
-	public static ArticleSet getArticleSetForSection(Section section, int pagesize) {
-		return new SectionArticleSet(section, pagesize);
+	public ArticleSet getArticleSetForSection(Section section) {
+		return addUrl(new SectionArticleSet(section, preferencesDAO.getPageSizePreference()));
 	}
 
-	public static ArticleSet getFavouritesArticleSetFor(List<Section> favouriteSections, List<Tag> favouriteTags, int pagesize) {
-		return new FavouriteStoriesArticleSet(favouriteSections, favouriteTags, pagesize);
+	public ArticleSet getFavouritesArticleSetFor(List<Section> favouriteSections, List<Tag> favouriteTags) {
+		return addUrl(new FavouriteStoriesArticleSet(favouriteSections, favouriteTags, preferencesDAO.getPageSizePreference()));
 	}
 
-	public static ArticleSet getTopStoriesArticleSet(int pageSize) {
-		return new TopStoriesArticleSet(pageSize);
+	public ArticleSet getTopStoriesArticleSet() {
+		return addUrl(new TopStoriesArticleSet(preferencesDAO.getPageSizePreference()));
 	}
 
-	public static ArticleSet getArticleSetForTag(Tag tag, int pageSize) {
-		return new TagArticleSet(tag, pageSize);
+	public ArticleSet getArticleSetForTag(Tag tag) {
+		return addUrl(new TagArticleSet(tag, preferencesDAO.getPageSizePreference()));
 	}
 	
-	public static List<ArticleSet> getArticleSetsForSections(List<Section> favouriteSections, int pagesize) {
+	public List<ArticleSet> getArticleSetsForSections(List<Section> favouriteSections) {
 		List<ArticleSet> favouriteSectionsArticleSets = new ArrayList<ArticleSet>();			
 		for (Section section : favouriteSections) {
-			favouriteSectionsArticleSets.add(ArticleSetFactory.getArticleSetForSection(section, pagesize));
+			favouriteSectionsArticleSets.add(getArticleSetForSection(section));
 		}
 		return favouriteSectionsArticleSets;
 	}
-
-	public static List<ArticleSet> getArticleSetsForTags(List<Tag> favouriteTags, int pagesize) {
+	
+	public List<ArticleSet> getArticleSetsForTags(List<Tag> favouriteTags) {
 		List<ArticleSet> favouriteTagsArticleSets = new ArrayList<ArticleSet>();
 		for (Tag tag : favouriteTags) {
-			favouriteTagsArticleSets.add(ArticleSetFactory.getArticleSetForTag(tag, pagesize));
+			favouriteTagsArticleSets.add(getArticleSetForTag(tag));
 		}
 		return favouriteTagsArticleSets;
+	}
+	
+	
+	private ArticleSet addUrl(ArticleSet articleSet) {
+		articleSet.setSourceUrl(articleSetUrlService.getUrlForArticleSet(articleSet));
+		return articleSet;
 	}
 	
 }

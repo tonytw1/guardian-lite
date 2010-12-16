@@ -23,12 +23,15 @@ import android.widget.TextView;
 public class favourites extends ArticleListActivity implements FontResizingActivity {
 	
 	private PreferencesDAO preferencesDAO;
+    private ArticleSetFactory articleSetFactory;
+
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		
         preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
+        articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
         
         setContentView(R.layout.favourites);        
         setHeading("Favourites");
@@ -78,8 +81,8 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 		
 			boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();
 			
-			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, ArticleSetFactory.getArticleSetsForSections(favouriteSections, getPageSize()), this.getApplicationContext());
-			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, ArticleSetFactory.getArticleSetsForTags(favouriteTags, getPageSize()), this.getApplicationContext());
+			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, articleSetFactory.getArticleSetsForSections(favouriteSections), this.getApplicationContext());
+			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, articleSetFactory.getArticleSetsForTags(favouriteTags), this.getApplicationContext());
 			
 			description.setText("The following sections and tags have been marked as favourites.");			
 			
@@ -122,7 +125,7 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 		List<Tag> favouriteTags = favouriteSectionAndTagsDAO.getFavouriteTags();
 		
 		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
-			return ArticleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags, getPageSize());
+			return articleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags);
 		}
 		return null;	// TODO this needs to be null safed upstream
 	}

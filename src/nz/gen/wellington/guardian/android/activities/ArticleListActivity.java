@@ -181,9 +181,11 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		private ArticleSet articleSet;
 		private boolean descriptionSet;
 		private int baseFontSize;
+		private ArticleSetFactory articleSetFactory;
 		
 		public UpdateArticlesHandler(Context context, ArticleSet articleSet, int baseFontSize) {
 			super();
+			this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
 			this.context = context;
 			this.articleSet = articleSet;
 			this.descriptionSet = false;
@@ -333,7 +335,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			TextView heading = (TextView) seperator.findViewById(R.id.TagName);
 			heading.setText(section.getName());
 	
-			ArticleSet articleSetForSection = ArticleSetFactory.getArticleSetForSection(section, preferencesDAO.getPageSizePreference());
+			ArticleSet articleSetForSection = articleSetFactory.getArticleSetForSection(section);
 			boolean contentIsAvailable = articleDAO.isAvailable(articleSetForSection);	    	
 	    	ClickerPopulatingService.populateClicker(articleSetForSection, seperator, contentIsAvailable);
 			mainpane.addView(seperator);

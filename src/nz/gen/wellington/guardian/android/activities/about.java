@@ -19,11 +19,13 @@ import android.widget.TextView;
 public class about extends ArticleListActivity implements FontResizingActivity {
 		
 	private PreferencesDAO preferencesDAO;
+	private ArticleSetFactory articleSetFactory;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
+		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		
 		setContentView(R.layout.about);
 		setHeading("Guardian Lite - About");
@@ -57,7 +59,7 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 	
 	@Override
 	protected ArticleSet getArticleSet() {
-		return ArticleSetFactory.getAboutArticleSet(preferencesDAO.getPageSizePreference());
+		return articleSetFactory.getAboutArticleSet();
 	}
 	
 	@Override

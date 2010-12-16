@@ -40,13 +40,16 @@ public class ContentResultsHandler extends HandlerBase {
 	public String currentRefinementGroupType;
 	public ArticleCallback articleCallback;
 	private HtmlCleaner htmlCleaner;
+	private ArticleSetFactory articleSetFactory;
 
 	private boolean running = true;
 	private Context context;
 
+
 	public ContentResultsHandler(Context context, HtmlCleaner htmlCleaner) {
 		this.htmlCleaner = htmlCleaner;
 		this.context = context;
+		this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
 	}
 	
 	public void setArticleCallback(ArticleCallback articleCallback) {
@@ -215,7 +218,7 @@ public class ContentResultsHandler extends HandlerBase {
 						
 			if (!refinementTag.isSectionTag()) {
 				Log.i(TAG, "Adding refinement for tag: " + refinementTag.getName());
-				refinementGroup.add(ArticleSetFactory.getArticleSetForTag(refinementTag, SingletonFactory.getPreferencesDAO(context).getPageSizePreference()));
+				refinementGroup.add(articleSetFactory.getArticleSetForTag(refinementTag));
 			}
 		}
 		
@@ -227,7 +230,7 @@ public class ContentResultsHandler extends HandlerBase {
 			Section section = sectionDAO.getSectionById(sectionId);
 			if (section != null) {
 				Log.i(TAG, "Adding refinement for section: " + section.getName());
-				refinementGroup.add(ArticleSetFactory.getArticleSetForSection(section, SingletonFactory.getPreferencesDAO(context).getPageSizePreference()));
+				refinementGroup.add(articleSetFactory.getArticleSetForSection(section));
 			}
 		}
 	}
