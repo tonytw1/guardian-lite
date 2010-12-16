@@ -3,6 +3,7 @@ package nz.gen.wellington.guardian.android.api;
 import nz.gen.wellington.guardian.android.about.AboutArticlesDAO;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiUrlService;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
+import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
@@ -19,7 +20,7 @@ public class ArticleSetUrlService {
 	}
 	
 	public String getUrlForArticleSet(ArticleSet articleSet) {
-		if (articleSet instanceof ArticleSet) {
+		if (articleSet instanceof AboutArticleSet) {
 			return aboutArticlesDAO.getAboutArticleSetUrl();
 		}
 		return contentApiUrlService.getContentApiUrlForArticleSet(articleSet);

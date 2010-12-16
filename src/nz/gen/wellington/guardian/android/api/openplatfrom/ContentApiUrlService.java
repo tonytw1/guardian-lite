@@ -9,12 +9,13 @@ import nz.gen.wellington.guardian.android.model.TagArticleSet;
 
 public class ContentApiUrlService {
 	
-	private ContentApiStyleUrlBuilder contentApiStyleUrlBuilder;
 	private String apiHost;
+	private String apiKey;
+
 	
 	public ContentApiUrlService(String apiHost, String apiKey) {
-		this.apiHost = apiHost;	// TODO push into url builder
-		this.contentApiStyleUrlBuilder = new ContentApiStyleUrlBuilder(apiKey);
+		this.apiHost = apiHost;
+		this.apiKey = apiKey;
 	}
 
 	public String getContentApiUrlForArticleSet(ArticleSet articleSet) {
@@ -48,7 +49,7 @@ public class ContentApiUrlService {
 	}
 	
 	private ContentApiStyleUrlBuilder getContentApiUrlBuilder() {	
-		return contentApiStyleUrlBuilder;
+		return new ContentApiStyleUrlBuilder(apiHost, apiKey);
 	}	
 	
 	private void populateContentApiUrlBuilderForArticleSet(ContentApiStyleUrlBuilder contentApiUrlBuilder, ArticleSet articleSet) {

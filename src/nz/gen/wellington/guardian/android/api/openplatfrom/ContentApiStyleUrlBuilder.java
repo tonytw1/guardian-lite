@@ -15,6 +15,7 @@ public class ContentApiStyleUrlBuilder {
 	private static final String TAGS = "tags";
 	private static final String OR = "|";
 	
+	private String apiHost;
 	private String apiKey;
 	private String format = "xml";
 
@@ -25,7 +26,8 @@ public class ContentApiStyleUrlBuilder {
 	private Integer pageSize;
 	private String searchTerm;
 	
-	public ContentApiStyleUrlBuilder(String apiKey) {
+	public ContentApiStyleUrlBuilder(String apiHost, String apiKey) {
+		this.apiHost = apiHost;
 		this.apiKey = apiKey;
 		this.sections = new ArrayList<Section>();
 		this.tags = new ArrayList<Tag>();
@@ -34,8 +36,8 @@ public class ContentApiStyleUrlBuilder {
 	}
 	
 	public String toSearchQueryUrl() {
-		StringBuilder url = new StringBuilder("/" + SEARCH_QUERY);
-		appendCoreParameters(url);
+		StringBuilder uri = new StringBuilder("/" + SEARCH_QUERY);
+		appendCoreParameters(uri);
 		
 		StringBuilder sectionsParameter = new StringBuilder();			
 		StringBuilder tagsParameter = new StringBuilder();			
@@ -60,8 +62,8 @@ public class ContentApiStyleUrlBuilder {
 				sections = URLEncoder.encode(sections, "UTF8");
 			} catch (UnsupportedEncodingException e) {
 			}
-			url.append("&section=");
-			url.append(sections);				
+			uri.append("&section=");
+			uri.append(sections);				
 		}
 		
 		if (tagsParameter.length() > 0) {
@@ -70,30 +72,33 @@ public class ContentApiStyleUrlBuilder {
 				tags = URLEncoder.encode(tags, "UTF8");
 			} catch (UnsupportedEncodingException e) {
 			}
-			url.append("&tag=");
-			url.append(tags);				
+			uri.append("&tag=");
+			uri.append(tags);				
 		}
 		
-		return url.toString();
+		return prependHost(uri.toString());
 	}
 	
 	
 	public String toTagSearchQueryUrl() {		
-		StringBuilder url = new StringBuilder("/" + TAGS);	// TODO this call should be proxied by guardian-lite
-		appendCoreParameters(url);
-		url.append("&type=keyword%2Ccontributor%2Cblog");	// TODO push to allowed types constant somewhere
-		url.append("&q=" + URLEncoder.encode(searchTerm));		
-		return url.toString();
+		StringBuilder uri = new StringBuilder("/" + TAGS);	// TODO this call should be proxied by guardian-lite
+		appendCoreParameters(uri);
+		uri.append("&type=keyword%2Ccontributor%2Cblog");	// TODO push to allowed types constant somewhere
+		uri.append("&q=" + URLEncoder.encode(searchTerm));		
+		return prependHost(uri.toString());
 	}
 	
 
 	public String toSectionsQueryUrl() {
-		StringBuilder url = new StringBuilder("/" + SECTIONS_QUERY);
-		appendCoreParameters(url);
-		return url.toString();
+		StringBuilder uri = new StringBuilder("/" + SECTIONS_QUERY);
+		appendCoreParameters(uri);
+		return prependHost(uri.toString());
+	}
+	
+	private String prependHost(String uri) {
+		return apiHost + uri;
 	}
 
-	
 	public void addSection(Section section) {
 		sections.add(section);
 	}
