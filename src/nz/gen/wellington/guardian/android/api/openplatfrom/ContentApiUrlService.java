@@ -1,32 +1,28 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
-import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
-import android.content.Context;
 
 public class ContentApiUrlService {
 	
-	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://guardian-lite.appspot.com";
-	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
+	private ContentApiStyleUrlBuilder contentApiStyleUrlBuilder;
+	private String apiHost;
 	
-	private PreferencesDAO preferencesDAO;
-	
-	public ContentApiUrlService(Context context) {
-		this.preferencesDAO = SingletonFactory.getPreferencesDAO(context);
+	public ContentApiUrlService(String apiHost, String apiKey) {
+		this.apiHost = apiHost;	// TODO push into url builder
+		this.contentApiStyleUrlBuilder = new ContentApiStyleUrlBuilder(apiKey);
 	}
-	
+
 	public String getContentApiUrlForArticleSet(ArticleSet articleSet) {
 		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
 		populateContentApiUrlBuilderForArticleSet(contentApiUrlBuilder, articleSet);		
 		contentApiUrlBuilder.setShowAll(true);
 		contentApiUrlBuilder.setShowRefinements(true);	
-		return getPreferedApiHost() + contentApiUrlBuilder.toSearchQueryUrl();
+		return apiHost + contentApiUrlBuilder.toSearchQueryUrl();
 	}
 	
 	public String getContentApiUrlForArticleSetChecksum(ArticleSet articleSet) {
@@ -34,13 +30,13 @@ public class ContentApiUrlService {
 		populateContentApiUrlBuilderForArticleSet(contentApiUrlBuilder, articleSet);		
 		contentApiUrlBuilder.setShowAll(false);
 		contentApiUrlBuilder.setShowRefinements(false);	
-		return getPreferedApiHost() + contentApiUrlBuilder.toSearchQueryUrl();
+		return apiHost + contentApiUrlBuilder.toSearchQueryUrl();
 	}
 	
 	public String getSectionsQueryUrl() {
 		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
 		contentApiUrlBuilder.setFormat("json");
-		return getPreferedApiHost() + contentApiUrlBuilder.toSectionsQueryUrl();
+		return apiHost + contentApiUrlBuilder.toSectionsQueryUrl();
 	}
 	
 	public String getTagSearchQueryUrl(String searchTerm) {
@@ -48,11 +44,11 @@ public class ContentApiUrlService {
 		contentApiUrlBuilder.setPageSize(20);
 		contentApiUrlBuilder.setFormat("json");
 		contentApiUrlBuilder.setSearchTerm(searchTerm);
-		return getPreferedApiHost() + contentApiUrlBuilder.toTagSearchQueryUrl();
+		return apiHost + contentApiUrlBuilder.toTagSearchQueryUrl();
 	}
 	
 	private ContentApiStyleUrlBuilder getContentApiUrlBuilder() {	
-		return new ContentApiStyleUrlBuilder(preferencesDAO.getApiKey());
+		return contentApiStyleUrlBuilder;
 	}	
 	
 	private void populateContentApiUrlBuilderForArticleSet(ContentApiStyleUrlBuilder contentApiUrlBuilder, ArticleSet articleSet) {
@@ -75,13 +71,6 @@ public class ContentApiUrlService {
 		}
 		contentApiUrlBuilder.setPageSize(articleSet.getPageSize());		
 		contentApiUrlBuilder.setFormat("xml");
-	}
-	
-	private String getPreferedApiHost() {
-		if (preferencesDAO.useContentApi()) {
-			return CONTENT_API_URL;
-		}
-		return GUARDIAN_LITE_PROXY_API_PREFIX;
 	}
 	
 }

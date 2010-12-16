@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.Date;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
-import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiUrlService;
+import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -30,7 +30,7 @@ public class FileBasedArticleCache {
 	public void putArticleSetArticles(ArticleSet articleSet, ArticleBundle bundle) {
 		 Log.i(TAG, "Writing to disk '" + articleSet.getName() + "' with checksum: " + bundle.getChecksum());
 		 try {
-			 FileOutputStream fos = FileService.getFileOutputStream(context, getLocalFilename(getApiUrlFor(articleSet)));
+			 FileOutputStream fos = FileService.getFileOutputStream(context, getLocalFilename(getUrlFor(articleSet)));
 			 ObjectOutputStream out = new ObjectOutputStream(fos);
 			 out.writeObject(bundle);
 			 out.close();
@@ -108,18 +108,23 @@ public class FileBasedArticleCache {
 	}
 
 	public Date getModificationTime(ArticleSet articleSet) {
-		return FileService.getModificationTime(context, getApiUrlFor(articleSet));
+		return FileService.getModificationTime(context, getUrlFor(articleSet));
 	}
 		
-	private String getApiUrlFor(ArticleSet articleSet) {
-		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(context);
-		return contentApiUrlService.getContentApiUrlForArticleSet(articleSet);
-	}
 	
+	private String getUrlFor(ArticleSet articleSet) {
+		ArticleSetUrlService contentUrlService = new ArticleSetUrlService(context);
+		return contentUrlService.getUrlForArticleSet(articleSet);
+		
+		
+	}
+		
 	private String getLocalFilenameForArticleSet(ArticleSet articleSet) {
-		return getLocalFilename(getApiUrlFor(articleSet));
+		return getLocalFilename(getUrlFor(articleSet));
 	}
 	
+
+
 	private static String getLocalFilename(String url) {
 		return url.replaceAll("/", "").replaceAll(":", "").replaceAll("\\?", "").
 			replaceAll("\\.", "").replaceAll("=", "").replaceAll("&", "").replace("%", "").replace("-", "") + VERSION_SUFFIX;
