@@ -23,7 +23,7 @@ public class ContentApiUrlService {
 		populateContentApiUrlBuilderForArticleSet(contentApiUrlBuilder, articleSet);		
 		contentApiUrlBuilder.setShowAll(true);
 		contentApiUrlBuilder.setShowRefinements(true);	
-		return apiHost + contentApiUrlBuilder.toSearchQueryUrl();
+		return contentApiUrlBuilder.toSearchQueryUrl();
 	}
 	
 	public String getContentApiUrlForArticleSetChecksum(ArticleSet articleSet) {
@@ -31,13 +31,13 @@ public class ContentApiUrlService {
 		populateContentApiUrlBuilderForArticleSet(contentApiUrlBuilder, articleSet);		
 		contentApiUrlBuilder.setShowAll(false);
 		contentApiUrlBuilder.setShowRefinements(false);	
-		return apiHost + contentApiUrlBuilder.toSearchQueryUrl();
+		return contentApiUrlBuilder.toSearchQueryUrl();
 	}
 	
 	public String getSectionsQueryUrl() {
 		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
 		contentApiUrlBuilder.setFormat("json");
-		return apiHost + contentApiUrlBuilder.toSectionsQueryUrl();
+		return contentApiUrlBuilder.toSectionsQueryUrl();
 	}
 	
 	public String getTagSearchQueryUrl(String searchTerm) {
@@ -45,7 +45,7 @@ public class ContentApiUrlService {
 		contentApiUrlBuilder.setPageSize(20);
 		contentApiUrlBuilder.setFormat("json");
 		contentApiUrlBuilder.setSearchTerm(searchTerm);
-		return apiHost + contentApiUrlBuilder.toTagSearchQueryUrl();
+		return contentApiUrlBuilder.toTagSearchQueryUrl();
 	}
 	
 	private ContentApiStyleUrlBuilder getContentApiUrlBuilder() {	

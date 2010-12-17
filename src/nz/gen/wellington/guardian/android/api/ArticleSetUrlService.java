@@ -10,16 +10,16 @@ import android.content.Context;
 
 public class ArticleSetUrlService {
 	
-	private ContentApiUrlService contentApiUrlService;
+	private PreferencesDAO preferencesDAO;
 	private AboutArticlesDAO aboutArticlesDAO;
 	
 	public ArticleSetUrlService(Context context) {
-		PreferencesDAO preferencesDAO = SingletonFactory.getPreferencesDAO(context);
-		contentApiUrlService = new ContentApiUrlService(preferencesDAO.getPreferedApiHost(), preferencesDAO.getApiKey());
+		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
 		aboutArticlesDAO = new AboutArticlesDAO(context);
 	}
 	
 	public String getUrlForArticleSet(ArticleSet articleSet) {
+		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(preferencesDAO.getPreferedApiHost(), preferencesDAO.getApiKey());
 		if (articleSet instanceof AboutArticleSet) {
 			return aboutArticlesDAO.getAboutArticleSetUrl();
 		}
