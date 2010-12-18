@@ -26,19 +26,18 @@ public class ContentApiStyleApi implements ContentSource {
 	private ContentApiStyleXmlParser contentXmlParser;
 	private ContentApiStyleJSONParser contentJsonParser;
 	private HttpFetcher httpFetcher;
-	private ContentApiUrlService contentApiUrlService;
 	private ArticleSetUrlService articleSetUrlService;
 
 	private Context context;
+
+	private PreferencesDAO preferencesDAO;
 	
 	public ContentApiStyleApi(Context context) {
 		this.context = context;
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
 		this.contentJsonParser = new ContentApiStyleJSONParser();
-		this.articleSetUrlService = new ArticleSetUrlService(context);
-		
-		final PreferencesDAO preferencesDAO = SingletonFactory.getPreferencesDAO(context);
-		this.contentApiUrlService = new ContentApiUrlService(preferencesDAO.getPreferedApiHost(), preferencesDAO.getApiKey());
+		this.articleSetUrlService = new ArticleSetUrlService(context);		
+		this.preferencesDAO = SingletonFactory.getPreferencesDAO(context);
 		this.httpFetcher = new HttpFetcher(context);
 	}
 	
@@ -84,6 +83,7 @@ public class ContentApiStyleApi implements ContentSource {
 	@Override
 	public List<Section> getSections() {
 		Log.i(TAG, "Fetching section list from live api");
+		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(preferencesDAO.getPreferedApiHost(), preferencesDAO.getApiKey());
 		String contentApiUrl = contentApiUrlService.getSectionsQueryUrl();
 		InputStream input = httpFetcher.httpFetch(contentApiUrl);
 		if (input != null) {
@@ -97,6 +97,7 @@ public class ContentApiStyleApi implements ContentSource {
 	public List<Tag> searchTags(String searchTerm, Map<String, Section> sections) {
 		Log.i(TAG, "Fetching tag list from live api: " + searchTerm);
 		announceDownloadStarted("tag results");
+		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(preferencesDAO.getPreferedApiHost(), preferencesDAO.getApiKey());
 		InputStream input = httpFetcher.httpFetch(contentApiUrlService.getTagSearchQueryUrl(searchTerm));
 		if (input != null) {
 			return contentJsonParser.parseTagsJSON(input, sections);
