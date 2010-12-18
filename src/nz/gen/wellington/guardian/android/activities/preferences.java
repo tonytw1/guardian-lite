@@ -1,7 +1,9 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.contentupdate.alarms.ContentUpdateAlarmSetter;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -11,6 +13,7 @@ import android.util.Log;
 public class preferences extends PreferenceActivity {
 		
 	private ContentUpdateAlarmSetter alarmSetter;
+	private SectionDAO sectionDAO;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,10 +22,14 @@ public class preferences extends PreferenceActivity {
 		
 		Preference autoSyncPref = (Preference) findPreference("syncType");
 		autoSyncPref.setOnPreferenceChangeListener(new ApiKeyPreferenceChangeListener());
-		alarmSetter = new ContentUpdateAlarmSetter(this.getApplicationContext());
-	}
-	
 		
+		Preference useContentApi = (Preference) findPreference("useContentApi");
+		useContentApi.setOnPreferenceChangeListener(new ApiKeyPreferenceChangeListener());
+		
+		alarmSetter = new ContentUpdateAlarmSetter(this.getApplicationContext());
+		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
+	}
+			
 	class ApiKeyPreferenceChangeListener implements OnPreferenceChangeListener {
 
 		@Override
@@ -31,6 +38,9 @@ public class preferences extends PreferenceActivity {
 			if (preference.getKey().equals("syncType")) {
 				alarmSetter.setAlarmFor((String) newValue);
 			}
+			if (preference.getKey().equals("useContentApi")) {
+				sectionDAO.evictSections();
+			}			
 			return true;
 		}
 		

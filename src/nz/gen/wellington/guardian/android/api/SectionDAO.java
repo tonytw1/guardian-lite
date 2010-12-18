@@ -9,9 +9,12 @@ import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import android.content.Context;
+import android.util.Log;
 
 public class SectionDAO {
 
+	private static final String TAG = "SectionDAO";
+	
 	private InMemorySectionCache inMemorySectionCache;
 	private FileBasedSectionCache fileBasedSectionCache;
 	private ContentSource api;
@@ -66,6 +69,7 @@ public class SectionDAO {
 	}
 	
 	public void evictSections() {
+		Log.i(TAG, "Evicting section caches");
 		inMemorySectionCache.clear();
 		fileBasedSectionCache.clear();
 	}
