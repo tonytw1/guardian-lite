@@ -195,7 +195,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				
 		public void init() {
 			first = true;
-			isFirstOfSection = true;
+			isFirstOfSection = false;
 			currentSection = null;
 			descriptionSet = false;
 		}
@@ -331,14 +331,22 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 		private void addSeperator(LayoutInflater mInflater, LinearLayout mainpane, Section section) {
 			View seperator = mInflater.inflate(R.layout.seperator, null);
-			seperator.setBackgroundColor(Color.parseColor(SectionColourMap.getColourForSection(section.getId())));
-			TextView heading = (TextView) seperator.findViewById(R.id.TagName);
-			heading.setText(section.getName());
+			
+			final String colourForSection = SectionColourMap.getColourForSection(section.getId());
+			if (colourForSection != null) {
+				seperator.setBackgroundColor(Color.parseColor(colourForSection));
+			
+				TextView heading = (TextView) seperator.findViewById(R.id.TagName);
+				heading.setText(section.getName());
 	
-			ArticleSet articleSetForSection = articleSetFactory.getArticleSetForSection(section);
-			boolean contentIsAvailable = articleDAO.isAvailable(articleSetForSection);	    	
-	    	ClickerPopulatingService.populateClicker(articleSetForSection, seperator, contentIsAvailable);
-			mainpane.addView(seperator);
+				ArticleSet articleSetForSection = articleSetFactory.getArticleSetForSection(section);
+				boolean contentIsAvailable = articleDAO.isAvailable(articleSetForSection);	    	
+				ClickerPopulatingService.populateClicker(articleSetForSection, seperator, contentIsAvailable);
+				mainpane.addView(seperator);
+				
+			} else {
+				Log.w(TAG, "Could not find section colour for section: " + section.getId());
+			}
 		}
 		
 		private View chooseTrailView(LayoutInflater mInflater, boolean shouldUseFeatureTrail) {
