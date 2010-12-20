@@ -215,7 +215,7 @@ public class ContentResultsHandler extends HandlerBase {
 			Section section = sectionDAO.getSectionById(sectionId);
 			final Tag refinementTag = new Tag(attributes.getValue("display-name"), tagId, section);
 						
-			if (!refinementTag.isSectionTag()) {
+			if (!refinementTag.isSectionKeyword()) {
 				Log.d(TAG, "Adding refinement for tag: " + refinementTag.getName());
 				List<ArticleSet> refinementGroup = getRefinementGroup();		
 				refinementGroup.add(articleSetFactory.getArticleSetForTag(refinementTag));

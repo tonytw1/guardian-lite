@@ -61,7 +61,7 @@ public class ArticleSetFactory {
 		List<ArticleSet> favouriteTagsArticleSets = new ArrayList<ArticleSet>();
 		for (Tag tag : favouriteTags) {
 			
-			boolean isSectionTag = tag.isSectionTag();
+			boolean isSectionTag = tag.isSectionKeyword();
 			if (isSectionTag) {
 				favouriteTagsArticleSets.add(getArticleSetForSection(tag.getSection()));				
 			} else {

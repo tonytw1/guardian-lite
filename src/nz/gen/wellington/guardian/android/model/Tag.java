@@ -36,7 +36,7 @@ public class Tag implements Serializable {
 		this.section = section;
 	}
 
-	public boolean isSectionTag() {
+	public boolean isSectionKeyword() {
 		if (section != null) {
 			final String sectionTagId = section.getId() + "/" + section.getId();
 			return id.equals(sectionTagId);			
