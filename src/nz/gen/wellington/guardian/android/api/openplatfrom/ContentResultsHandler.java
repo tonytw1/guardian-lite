@@ -210,26 +210,25 @@ public class ContentResultsHandler extends HandlerBase {
 		boolean isTagRefinement = tagRefinementTypes.contains(currentRefinementGroupType);
 		
 		if (isTagRefinement) {
-			List<ArticleSet> refinementGroup = getRefinementGroup();		
 			final String tagId = attributes.getValue("id");
 			final String sectionId = tagId.split("/")[0];
 			Section section = sectionDAO.getSectionById(sectionId);
 			final Tag refinementTag = new Tag(attributes.getValue("display-name"), tagId, section);
 						
 			if (!refinementTag.isSectionTag()) {
-				Log.i(TAG, "Adding refinement for tag: " + refinementTag.getName());
+				Log.d(TAG, "Adding refinement for tag: " + refinementTag.getName());
+				List<ArticleSet> refinementGroup = getRefinementGroup();		
 				refinementGroup.add(articleSetFactory.getArticleSetForTag(refinementTag));
 			}
 		}
 		
 		boolean isSectionRefinement = currentRefinementGroupType.equals("section");
 		if (isSectionRefinement) {
-			List<ArticleSet> refinementGroup = getRefinementGroup();
-			final String tagId = attributes.getValue("id");
-			final String sectionId = tagId.split("/")[0];
+			final String sectionId = attributes.getValue("id");
 			Section section = sectionDAO.getSectionById(sectionId);
 			if (section != null) {
-				Log.i(TAG, "Adding refinement for section: " + section.getName());
+				Log.d(TAG, "Adding refinement for section: " + section.getName());
+				List<ArticleSet> refinementGroup = getRefinementGroup();
 				refinementGroup.add(articleSetFactory.getArticleSetForSection(section));
 			}
 		}

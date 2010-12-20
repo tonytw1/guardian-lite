@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 
 import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
@@ -18,6 +19,8 @@ import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 
 public class ArticleSetFactory {
 
+	private static final String TAG = "ArticleSetFactory";
+	
 	private PreferencesDAO preferencesDAO;
 	private ArticleSetUrlService articleSetUrlService;
 	
@@ -57,7 +60,13 @@ public class ArticleSetFactory {
 	public List<ArticleSet> getArticleSetsForTags(List<Tag> favouriteTags) {
 		List<ArticleSet> favouriteTagsArticleSets = new ArrayList<ArticleSet>();
 		for (Tag tag : favouriteTags) {
-			favouriteTagsArticleSets.add(getArticleSetForTag(tag));
+			
+			boolean isSectionTag = tag.isSectionTag();
+			if (isSectionTag) {
+				favouriteTagsArticleSets.add(getArticleSetForSection(tag.getSection()));				
+			} else {
+				favouriteTagsArticleSets.add(getArticleSetForTag(tag));
+			}
 		}
 		return favouriteTagsArticleSets;
 	}
