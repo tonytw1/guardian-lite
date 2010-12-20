@@ -32,6 +32,11 @@ public class AboutArticlesDAO implements ArticleSource {
 	}
 	
 	
+	public String getAboutArticleSetChecksumUrl() {
+		return ABOUT_ENDPOINT_URL;	// TODO Implement checksum url
+	}
+	
+	
 	public ArticleBundle getArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
 		Log.i(TAG, "Fetching about articles");
 		
@@ -55,5 +60,5 @@ public class AboutArticlesDAO implements ArticleSource {
 		intent.putExtra("url", downloadName);
 		context.sendBroadcast(intent);
 	}
-
+	
 }

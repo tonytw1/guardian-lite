@@ -63,9 +63,8 @@ public class ContentApiStyleApi implements ContentSource {
 	
 	@Override
 	public String getRemoteChecksum(ArticleSet articleSet, int pageSize) {		
-		Log.i(TAG, "Fetching article set checksum for article set: " + articleSet.getName());
-		
-		final String contentApiUrl = articleSetUrlService.getUrlForArticleSet(articleSet);		
+		Log.i(TAG, "Fetching article set checksum for article set: " + articleSet.getName());		
+		final String contentApiUrl = articleSetUrlService.getChecksumUrlForArticleSet(articleSet);		
 		announceDownloadStarted(articleSet.getName() + " article set checksum");		
 		InputStream input = httpFetcher.httpFetch(contentApiUrl);		
 		if (input != null) {

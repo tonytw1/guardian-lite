@@ -26,4 +26,13 @@ public class ArticleSetUrlService {
 		return contentApiUrlService.getContentApiUrlForArticleSet(articleSet);
 	}
 	
+	
+	public String getChecksumUrlForArticleSet(ArticleSet articleSet) {
+		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(preferencesDAO.getPreferedApiHost(), preferencesDAO.getApiKey());
+		if (articleSet instanceof AboutArticleSet) {
+			return aboutArticlesDAO.getAboutArticleSetChecksumUrl();
+		}
+		return contentApiUrlService.getContentApiUrlForArticleSetChecksum(articleSet);
+	}
+	
 }
