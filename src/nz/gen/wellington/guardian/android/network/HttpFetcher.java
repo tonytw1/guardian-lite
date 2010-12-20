@@ -100,9 +100,7 @@ public class HttpFetcher {
 				Header[] etagHeader = execute.getHeaders("Etag");
 				if (etagHeader != null && etagHeader.length == 1) {
 					etag = etagHeader[0].getValue();
-					Log.i(TAG, "Etag: " + etag);
-				}
-				
+				}				
 				long contentLength = execute.getEntity().getContentLength();				
 				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context, contentLength, etag);				
 				return is;
