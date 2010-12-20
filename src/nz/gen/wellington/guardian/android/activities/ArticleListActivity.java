@@ -268,13 +268,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    		for (String refinementType : articleSet.getPermittedRefinements()) {
 			    			if (articleSet.getPermittedRefinements().contains(refinementType) && refinements.keySet().contains(refinementType)) {
 			    				String description = getRefinementDescription(refinementType);
-			    				List<ArticleSet> typedRefinements = refinements.get(refinementType);			    				
-			    				if (refinementType.equals("keyword")) {
-			    					if (refinements.get("section") != null) {
-			    						typedRefinements.addAll(refinements.get("section"));
-			    					}
-			    				}
-			    				populateRefinementType(mainpane, inflater, description, typedRefinements);
+			    				populateRefinementType(mainpane, inflater, description, refinements.get(refinementType));
 			    			}
 						}
 			    		
