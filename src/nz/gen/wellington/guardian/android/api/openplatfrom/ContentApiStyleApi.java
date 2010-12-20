@@ -27,9 +27,7 @@ public class ContentApiStyleApi implements ContentSource {
 	private ContentApiStyleJSONParser contentJsonParser;
 	private HttpFetcher httpFetcher;
 	private ArticleSetUrlService articleSetUrlService;
-
 	private Context context;
-
 	private PreferencesDAO preferencesDAO;
 	
 	public ContentApiStyleApi(Context context) {
@@ -64,21 +62,12 @@ public class ContentApiStyleApi implements ContentSource {
 	@Override
 	public String getRemoteChecksum(ArticleSet articleSet, int pageSize) {		
 		Log.i(TAG, "Fetching article set checksum for article set: " + articleSet.getName());		
-		final String contentApiUrl = articleSetUrlService.getChecksumUrlForArticleSet(articleSet);		
+		final String contentApiUrl = articleSetUrlService.getUrlForArticleSet(articleSet);		
 		announceDownloadStarted(articleSet.getName() + " article set checksum");		
-		InputStream input = httpFetcher.httpFetch(contentApiUrl);		
-		if (input != null) {
-			contentXmlParser.parseArticlesXml(input, null);
-			
-			ArticleBundle results = contentXmlParser.parseArticlesXml(input, null);
-			if (results != null) {
-				return results.getChecksum();
-			}
-		}
-		return null;
+		return httpFetcher.httpEtag(contentApiUrl);		
 	}
-
-
+	
+	
 	@Override
 	public List<Section> getSections() {
 		Log.i(TAG, "Fetching section list from live api");
@@ -107,6 +96,7 @@ public class ContentApiStyleApi implements ContentSource {
 
 	@Override
 	public void stopLoading() {
+		Log.i(TAG, "Stopping content api loading");
 		contentXmlParser.stop();
 		httpFetcher.stopLoading();
 	}

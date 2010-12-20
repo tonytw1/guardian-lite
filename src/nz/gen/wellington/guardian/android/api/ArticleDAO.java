@@ -24,16 +24,16 @@ public class ArticleDAO {
 	
 	private FileBasedArticleCache fileBasedArticleCache;
 	private ArticleCallback articleCallback;
-	private ContentSource openPlatformApi;
 	private SectionDAO sectionsDAO;
 	private PreferencesDAO preferencesDAO;
 	private NetworkStatusService networkStatusService;
-
 	private ArticleSource aboutArticlesDAO;
-		
+	private Context context;
+	private ContentSource activeContentSource;
+	
 	public ArticleDAO(Context context) {
+		this.context = context;
 		fileBasedArticleCache = new FileBasedArticleCache(context);		
-		openPlatformApi = SingletonFactory.getOpenPlatformApi(context);
 		sectionsDAO = SingletonFactory.getSectionDAO(context);
 		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
 		networkStatusService = new NetworkStatusService(context);
@@ -57,10 +57,9 @@ public class ArticleDAO {
 		
 		if (fetchType.equals(ContentFetchType.CHECKSUM)) {
 			ArticleBundle localCopy = fileBasedArticleCache.getArticleSetArticles(articleSet, null);
-			if (localCopy != null && localCopy.getChecksum() != null) {
-				
+			if (localCopy != null && localCopy.getChecksum() != null) {				
 				Log.i(TAG, "Checking for checksum sync - local article set has checksum: " + localCopy.getChecksum());
-				final String remoteChecksum = openPlatformApi.getRemoteChecksum(articleSet, preferencesDAO.getPageSizePreference());
+				final String remoteChecksum = getArticleSetRemoteChecksum(articleSet);
 				Log.i(TAG, "Remote checksum is: " + remoteChecksum);
 				boolean checksumsMatch = remoteChecksum != null && remoteChecksum.equals(localCopy.getChecksum());
 				if (checksumsMatch) {
@@ -91,8 +90,9 @@ public class ArticleDAO {
 	}
 
 		
-	public String getArticleSetRemoteChecksum(ArticleSet articleSet) {	
-		return openPlatformApi.getRemoteChecksum(articleSet, preferencesDAO.getPageSizePreference());
+	public String getArticleSetRemoteChecksum(ArticleSet articleSet) {
+		ContentSource openPlatformApi = getContentSource();
+		return openPlatformApi.getRemoteChecksum(articleSet, preferencesDAO.getPageSizePreference());		
 	}
 	
 		
@@ -109,7 +109,8 @@ public class ArticleDAO {
 			bundle = aboutArticlesDAO.getArticles(articleSet, articleCallback);		
 		} else {
 			List<Section> sections = sectionsDAO.getSections();
-			if (sections != null) {			
+			if (sections != null) {
+				ContentSource openPlatformApi = getContentSource();
 				bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback);
 			}
 		}
@@ -119,6 +120,12 @@ public class ArticleDAO {
 			return bundle;
 		}		
 		return null;
+	}
+
+	private ContentSource getContentSource() {
+		ContentSource openPlatformApi = SingletonFactory.getOpenPlatformApi(context);
+		activeContentSource = openPlatformApi;
+		return openPlatformApi;		
 	}
 
 	public void clearExpiredCacheFiles(Context context) {
@@ -137,10 +144,11 @@ public class ArticleDAO {
 
 
 	public void stopLoading() {
-		openPlatformApi.stopLoading();
+		if (activeContentSource != null) {
+			activeContentSource.stopLoading();
+		}
 	}
-
-
+	
 	public void setArticleReadyCallback(ArticleCallback articleCallback) {
 		this.articleCallback = articleCallback;		
 	}

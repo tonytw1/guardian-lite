@@ -26,16 +26,9 @@ public class AboutArticlesDAO implements ArticleSource {
 		this.httpFetcher = new HttpFetcher(context);
 	}
 	
-	
 	public String getAboutArticleSetUrl() {
 		return ABOUT_ENDPOINT_URL;
 	}
-	
-	
-	public String getAboutArticleSetChecksumUrl() {
-		return ABOUT_ENDPOINT_URL;	// TODO Implement checksum url
-	}
-	
 	
 	public ArticleBundle getArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
 		Log.i(TAG, "Fetching about articles");

@@ -17,14 +17,13 @@ public class SectionDAO {
 	
 	private InMemorySectionCache inMemorySectionCache;
 	private FileBasedSectionCache fileBasedSectionCache;
-	private ContentSource api;
+	private Context context;
 	
 	public SectionDAO(Context context) {
+		this.context = context;
 		this.inMemorySectionCache = CacheFactory.getSectionCache();
 		this.fileBasedSectionCache = new FileBasedSectionCache(context);
-		api = SingletonFactory.getOpenPlatformApi(context);
 	}
-
 	
 	public List<Section> getSections() {
 		List<Section> sections = inMemorySectionCache.getAll();
@@ -38,6 +37,7 @@ public class SectionDAO {
 			return sections;
 		}
 		
+		ContentSource api = SingletonFactory.getOpenPlatformApi(context);
 		sections = api.getSections();
 		if (sections != null) {
 			inMemorySectionCache.addAll(sections);

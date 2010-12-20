@@ -35,19 +35,17 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	private NetworkStatusService networkStatusService;
 	
 	private List<Tag> searchResults;
-	private ContentSource api;
 	private Map<String, Section> sections;
 	private TagSearchResultsHandler tagSearchResultsHandler;
 	private SectionDAO sectionDAO;
 	private ArticleSetFactory articleSetFactory;
+	private Context context;
 	
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tagsearch);
-		
-		api = SingletonFactory.getOpenPlatformApi(this.getApplicationContext());
+		setContentView(R.layout.tagsearch);		
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
@@ -58,6 +56,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		
 		searchResults = new ArrayList<Tag>();		
 		tagSearchResultsHandler = new TagSearchResultsHandler(this.getApplicationContext());
+		this.context = this.getApplicationContext();
 	}
 
 	
@@ -139,6 +138,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		}
 			
 		private List<Tag> fetchTagResults(final String searchTerm) {
+			ContentSource api = SingletonFactory.getOpenPlatformApi(context);
 			List<Tag> results = api.searchTags(searchTerm, sections);
 			return results;
 		}

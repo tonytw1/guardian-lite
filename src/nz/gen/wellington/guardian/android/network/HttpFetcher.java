@@ -12,6 +12,7 @@ import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseInterceptor;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.HttpEntityWrapper;
@@ -32,6 +33,7 @@ public class HttpFetcher {
 	private static final int HTTP_TIMEOUT = 15000;
     public static final String DOWNLOAD_PROGRESS = "nz.gen.wellington.guardian.android.network.DOWNLOAD_PROGRESS";
     
+    private HttpGet activeGet;
 	private HttpClient client;
 	private Context context;
 		
@@ -90,7 +92,7 @@ public class HttpFetcher {
 			get.addHeader(new BasicHeader("User-agent", "gzip"));
 			get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
 			
-			HttpResponse execute = client.execute(get);
+			HttpResponse execute = executeGet(get);
 			final int statusCode = execute.getStatusLine().getStatusCode();
 			if (statusCode == 200) {
 				
@@ -117,23 +119,51 @@ public class HttpFetcher {
 		return null;
 	}
 
+
+	private HttpResponse executeGet(HttpGet get) throws IOException, ClientProtocolException {
+		activeGet = get;
+		return client.execute(get);
+	}
+
 	
 	public byte[] httpFetchStream(String uri) {
 		try {
 			Log.i(TAG, "Making http fetch of image: " + uri);
 			HttpGet get = new HttpGet(uri);		
-			return EntityUtils.toByteArray(client.execute(get).getEntity());
+			return EntityUtils.toByteArray(executeGet(get).getEntity());
 									
 		} catch (Exception e) {
 			Log.e(TAG, "Http exception: " + e.getMessage());
 		}
 		return null;
 	}
-
+	
+	
+	public String httpEtag(String url) {
+		try {
+			Log.i(TAG, "Making http etag head fetch of url: " + url);
+			HttpGet get = new HttpGet(url);		
+			HttpResponse execute = executeGet(get);
+			if (execute.getStatusLine().getStatusCode() == 200) {
+				Header[] etags = execute.getHeaders("Etag");
+				if (etags.length == 1) {
+					announceDownloadCompleted(url);
+					return etags[0].getValue();
+				}
+			}									
+		} catch (Exception e) {
+			Log.e(TAG, "Http exception: " + e.getMessage());
+		}
+		announceDownloadCompleted(url);
+		return null;
+	}
 	
 	public void stopLoading() {
-		//Log.d(TAG, "Stopping loading");
-	} 
+		Log.i(TAG, "Stopping loading");
+		if (activeGet != null) {
+			activeGet.abort();
+		}
+	}
 	
 	
 	private void announceDownloadFailed(String url) {
@@ -163,5 +193,15 @@ public class HttpFetcher {
             return this.wrappedEntity.getContentLength();
         }
     }
+	
+	
+	// TODO duplicate
+	private void announceDownloadCompleted(String url) {
+		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
+		intent.putExtra("type", HttpFetcher.DOWNLOAD_COMPLETED);
+		intent.putExtra("url", url);
+		context.sendBroadcast(intent);
+	}
+	
 	
 }
