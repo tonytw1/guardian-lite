@@ -8,7 +8,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
-import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 
 import org.xml.sax.SAXException;
@@ -31,8 +31,7 @@ public class ContentApiStyleXmlParser {
 	
 	public ArticleBundle parseArticlesXml(InputStream inputStream, ArticleCallback articleCallback) {
 		try {
-			handler = new ContentResultsHandler(context, new HtmlCleaner());	// TODO push to singleton factory
-			
+			handler = SingletonFactory.getContentResultsHandler(context);			
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 			handler.setArticleCallback(articleCallback);
