@@ -18,18 +18,23 @@ import android.util.Log;
 public class SqlLiteFavouritesDAO {
 	
 	private static final String TAG = "SqlLiteFavouritesDAO";
+	private static final int MAX_FAVOURITE_TAGS = 20;
+	private static final int MAX_FAVOURITE_ARTICLES = 5;
 
-	private static final String SECTIONID = "sectionid";
-	private static final String NAME = "name";
-	private static final String APIID = "apiid";
-	private static final String TYPE = "type";
-	private static final String NAME_ASC = "name asc";
-	
 	private static final String DATABASE_NAME = "guardian-lite.db";
 	private static final int DATABASE_VERSION = 2;
 	
 	private static final String TAG_TABLE = "favourites";
 	private static final String SAVED_ARTICLES_TABLE = "saved_articles";
+	
+	private static final String SECTIONID = "sectionid";
+	private static final String ARTICLEID = "articleid";
+	private static final String NAME = "name";
+	private static final String APIID = "apiid";
+	private static final String TYPE = "type";
+	
+	private static final String NAME_ASC = "name asc";
+	private static final String ARTICLEID_DESC = "articleid DESC";
 	
 	private static final String INSERT_FAVOURITE_TAG = "insert into " + TAG_TABLE + "(type, apiid, name, sectionid) values (?, ?, ?, ?)";
 	private static final String INSERT_SAVED_ARTICLE = "insert into " + SAVED_ARTICLES_TABLE + "(articleid) values (?)";
@@ -102,7 +107,7 @@ public class SqlLiteFavouritesDAO {
 	
 	public boolean isSavedArticle(Article article) {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
-		Cursor cursor = db.query(SAVED_ARTICLES_TABLE, new String[] { "articleid" }, " articleid = ? ", new String[] { article.getId() }, null, null, "articleid DESC");
+		Cursor cursor = db.query(SAVED_ARTICLES_TABLE, new String[] { ARTICLEID }, " articleid = ? ", new String[] { article.getId() }, null, null, ARTICLEID_DESC);
 		final boolean isSaved = cursor.getCount() > 0;
 		closeCursor(cursor);
 		db.close();
@@ -189,7 +194,7 @@ public class SqlLiteFavouritesDAO {
 	
 	public List<String> getSavedArticleIds() {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
-		Cursor cursor = db.query(SAVED_ARTICLES_TABLE, new String[] {"articleid"}, null, null, null, null, "articleid DESC");
+		Cursor cursor = db.query(SAVED_ARTICLES_TABLE, new String[] {ARTICLEID}, null, null, null, null, ARTICLEID_DESC);
 		
 		List<String> savedArticleIds = new ArrayList<String>();
 		if (cursor.moveToFirst()) {
@@ -239,15 +244,17 @@ public class SqlLiteFavouritesDAO {
 	}
 	
 	private boolean haveRoomForSavedArticle(SQLiteDatabase db) {
-		// TODO Auto-generated method stub
-		return true;
+		Cursor cursor = db.query(SAVED_ARTICLES_TABLE, new String[] {ARTICLEID}, null, null, null, null, ARTICLEID_DESC);		
+		int total = cursor.getCount();
+		closeCursor(cursor);
+		return total < MAX_FAVOURITE_ARTICLES;	
 	}
 
 	private boolean haveRoom(SQLiteDatabase db) {
 		Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME,SECTIONID}, null, null, null, null, NAME_ASC);		
 		int total = cursor.getCount();
 		closeCursor(cursor);
-		return total < 20;	
+		return total < MAX_FAVOURITE_TAGS;	
 	}
 	
 	private void closeCursor(Cursor cursor) {

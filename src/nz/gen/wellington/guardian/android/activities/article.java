@@ -29,6 +29,9 @@ import android.widget.Toast;
 
 public class article extends MenuedActivity implements FontResizingActivity {
 		
+	private static final String REMOVE_SAVED_ARTICLE = "Remove saved article";
+	private static final String SAVE_ARTICLE = "Save article";
+	
 	private NetworkStatusService networkStatusService;
     private ImageDAO imageDAO;
     private PreferencesDAO preferencesDAO;
@@ -175,10 +178,10 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		menu.add(0, 2, 0, "Favourites");
 	    menu.add(0, 3, 0, "Sections");	    
 	    if (favouriteSectionsAndTagsDAO.isSavedArticle(article)) {
-	    	favouriteMenuItem = menu.add(0, 4, 0, "Remove Favourite");
+	    	favouriteMenuItem = menu.add(0, 4, 0, REMOVE_SAVED_ARTICLE);
 		} else {
-			favouriteMenuItem = menu.add(0, 4, 0, "Add to Favourites");
-		}	    	    
+			favouriteMenuItem = menu.add(0, 4, 0, SAVE_ARTICLE);
+		}	    
 	    return true;
 	}
 	
@@ -205,12 +208,15 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	private void processSavedArticle(Article article) {
 		if (!favouriteSectionsAndTagsDAO.isSavedArticle(article)) {
 			if (favouriteSectionsAndTagsDAO.addSavedArticle(article)) {
-				favouriteMenuItem.setTitle("Remove Favourite");
-			}
-			
+				favouriteMenuItem.setTitle(SAVE_ARTICLE);
+			} else {
+				Toast.makeText(this, "Saved articles list is full", Toast.LENGTH_LONG).show();
+			}			
 		} else {
 			if (favouriteSectionsAndTagsDAO.removeSavedArticle(article)) {
-				favouriteMenuItem.setTitle("Add Favourite");
+				favouriteMenuItem.setTitle(REMOVE_SAVED_ARTICLE);
+			} else {
+				Toast.makeText(this, "Saved articles list is full", Toast.LENGTH_LONG).show();
 			}
 		}
 	}
