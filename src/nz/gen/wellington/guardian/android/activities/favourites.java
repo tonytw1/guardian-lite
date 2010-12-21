@@ -95,8 +95,9 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Home");
-		menu.add(0, 5, 0, "Refresh");
 		menu.add(0, 2, 0, "Sections");
+		menu.add(0, 3, 0, "Saved articles");
+		menu.add(0, 4, 0, "Refresh");
 	    return true;
 	}
 	
@@ -108,8 +109,11 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 			return true;
 		case 2:
 			switchToSections();
-			return true;		
-		case 5:
+			return true;
+		case 3:
+		    switchToSavedArticles();
+		    return true;
+		case 4:
 			refresh();
 			return true;
 		}

@@ -10,6 +10,7 @@ import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -32,13 +33,14 @@ public class article extends MenuedActivity implements FontResizingActivity {
     private ImageDAO imageDAO;
     private PreferencesDAO preferencesDAO;
     private ArticleSetFactory articleSetFactory;
-    
+    private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
     private Article article;
        
 	private MainImageUpdateHandler mainImageUpdateHandler;
     private MainImageLoader mainImageLoader;
 
     private Map<String, Bitmap> images;
+	private MenuItem favouriteMenuItem;
     
     
 	@Override
@@ -49,6 +51,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
+		favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		
 		images = new HashMap<String, Bitmap>();
     	mainImageUpdateHandler = new MainImageUpdateHandler();
@@ -170,7 +173,12 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Home");
 		menu.add(0, 2, 0, "Favourites");
-	    menu.add(0, 3, 0, "Sections");
+	    menu.add(0, 3, 0, "Sections");	    
+	    if (favouriteSectionsAndTagsDAO.isSavedArticle(article)) {
+	    	favouriteMenuItem = menu.add(0, 4, 0, "Remove Favourite");
+		} else {
+			favouriteMenuItem = menu.add(0, 4, 0, "Add to Favourites");
+		}	    	    
 	    return true;
 	}
 	
@@ -185,12 +193,29 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	    	return true;	 
 	    case 3:
 	    	switchToSections();
+	    	return true;	    
+		case 4:
+			processSavedArticle(article);			
 	    	return true;
 	    }
 	    return false;
 	}
 	
-	
+
+	private void processSavedArticle(Article article) {
+		if (!favouriteSectionsAndTagsDAO.isSavedArticle(article)) {
+			if (favouriteSectionsAndTagsDAO.addSavedArticle(article)) {
+				favouriteMenuItem.setTitle("Remove Favourite");
+			}
+			
+		} else {
+			if (favouriteSectionsAndTagsDAO.removeSavedArticle(article)) {
+				favouriteMenuItem.setTitle("Add Favourite");
+			}
+		}
+	}
+
+		
 	class MainImageLoader implements Runnable {		
 
 		private ImageDAO imageDAO;
@@ -239,7 +264,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 			    final String mainImageUrl = msg.getData().getString("mainImageUrl");
 			    populateMainImage(mainImageUrl);
 			}
-		}		
+		}
 	}
 			
 }

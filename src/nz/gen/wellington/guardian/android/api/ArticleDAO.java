@@ -5,12 +5,14 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.android.about.AboutArticlesDAO;
 import nz.gen.wellington.guardian.android.about.ArticleSource;
+import nz.gen.wellington.guardian.android.about.SavedArticlesDAO;
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.SavedArticlesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
@@ -28,6 +30,7 @@ public class ArticleDAO {
 	private PreferencesDAO preferencesDAO;
 	private NetworkStatusService networkStatusService;
 	private ArticleSource aboutArticlesDAO;
+	private ArticleSource savedArticlesDAO;
 	private Context context;
 	private ContentSource activeContentSource;
 	
@@ -38,6 +41,7 @@ public class ArticleDAO {
 		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
 		networkStatusService = new NetworkStatusService(context);
 		aboutArticlesDAO = new AboutArticlesDAO(context);
+		savedArticlesDAO = new SavedArticlesDAO(context);
 	}
 	
 	public boolean isAvailable(ArticleSet articleSet) {
@@ -106,7 +110,11 @@ public class ArticleDAO {
 		
 		ArticleBundle bundle = null;
 		if (articleSet instanceof AboutArticleSet) {
-			bundle = aboutArticlesDAO.getArticles(articleSet, articleCallback);		
+			bundle = aboutArticlesDAO.getArticles(articleSet, articleCallback);
+
+		} else if (articleSet instanceof SavedArticlesArticleSet) {
+			bundle = savedArticlesDAO.getArticles(articleSet, articleCallback);
+
 		} else {
 			List<Section> sections = sectionsDAO.getSections();
 			if (sections != null) {

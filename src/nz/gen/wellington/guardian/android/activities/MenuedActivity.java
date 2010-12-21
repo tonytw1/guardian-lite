@@ -36,6 +36,11 @@ public abstract class MenuedActivity extends Activity {
 		this.startActivity(intent);
 	}
 	
+	protected void switchToSavedArticles() {
+		Intent intent = new Intent(this, savedArticles.class);
+		this.startActivity(intent);
+	}
+	
 	protected void switchToMain() {
 		Intent intent = new Intent(this, main.class);
 		this.startActivity(intent);	

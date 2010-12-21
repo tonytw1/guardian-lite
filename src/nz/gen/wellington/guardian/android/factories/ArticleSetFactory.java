@@ -3,19 +3,18 @@ package nz.gen.wellington.guardian.android.factories;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
-import android.util.Log;
-
 import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
+import nz.gen.wellington.guardian.android.model.SavedArticlesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
+import android.content.Context;
 
 public class ArticleSetFactory {
 
@@ -31,6 +30,12 @@ public class ArticleSetFactory {
 
 	public ArticleSet getAboutArticleSet() {
 		return addUrl(new AboutArticleSet(preferencesDAO.getPageSizePreference()));
+	}
+	
+	public ArticleSet getSavedArticlesArticleSet(List<String> articleIds) {
+		SavedArticlesArticleSet savedArticlesArticleSet = new SavedArticlesArticleSet(articleIds);
+		savedArticlesArticleSet.setSourceUrl(articleSetUrlService.getUrlForArticleSet(savedArticlesArticleSet));
+		return savedArticlesArticleSet;
 	}
 	
 	public ArticleSet getArticleSetForSection(Section section) {

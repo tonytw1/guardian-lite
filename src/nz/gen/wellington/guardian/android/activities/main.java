@@ -69,6 +69,7 @@ public class main extends ArticleListActivity {
 			return true;	
 	    case 6:
 	    	switchToAbout();
+	    	return true;
 	    }
 	    return false;
 	}

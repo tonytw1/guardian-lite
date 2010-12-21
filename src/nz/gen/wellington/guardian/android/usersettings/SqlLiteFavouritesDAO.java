@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import android.content.Context;
@@ -25,11 +26,14 @@ public class SqlLiteFavouritesDAO {
 	private static final String NAME_ASC = "name asc";
 	
 	private static final String DATABASE_NAME = "guardian-lite.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
+	
 	private static final String TAG_TABLE = "favourites";
-
-	private static final String INSERT = "insert into " + TAG_TABLE + "(type, apiid, name, sectionid) values (?, ?, ?, ?)";
-
+	private static final String SAVED_ARTICLES_TABLE = "saved_articles";
+	
+	private static final String INSERT_FAVOURITE_TAG = "insert into " + TAG_TABLE + "(type, apiid, name, sectionid) values (?, ?, ?, ?)";
+	private static final String INSERT_SAVED_ARTICLE = "insert into " + SAVED_ARTICLES_TABLE + "(articleid) values (?)";
+	
 	private OpenHelper openHelper;
 
 	public SqlLiteFavouritesDAO(Context context) {
@@ -45,9 +49,9 @@ public class SqlLiteFavouritesDAO {
 		return total > 0;	
 	}
 	
-	public synchronized long insert(String type, String apiid, String name, String sectionid) {
+	public synchronized long insertFavouriteTag(String type, String apiid, String name, String sectionid) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
-		SQLiteStatement insertStmt = db.compileStatement(INSERT);
+		SQLiteStatement insertStmt = db.compileStatement(INSERT_FAVOURITE_TAG);
 		insertStmt.bindString(1, type);
 		insertStmt.bindString(2, apiid);
 		insertStmt.bindString(3, name);
@@ -55,6 +59,17 @@ public class SqlLiteFavouritesDAO {
 		long result = insertStmt.executeInsert();
 		db.close();
 		return result;
+	}
+	
+	
+	private synchronized long insertSavedArticle(String articleId) {
+		SQLiteDatabase db = openHelper.getWritableDatabase();
+		SQLiteStatement insertStmt = db.compileStatement(INSERT_SAVED_ARTICLE);
+		insertStmt.bindString(1, articleId);		
+		long result = insertStmt.executeInsert();
+		db.close();
+		return result;
+		
 	}
 	
 		
@@ -85,6 +100,14 @@ public class SqlLiteFavouritesDAO {
 		return isFavourite;	
 	}
 	
+	public boolean isSavedArticle(Article article) {
+		SQLiteDatabase db = openHelper.getReadableDatabase();
+		Cursor cursor = db.query(SAVED_ARTICLES_TABLE, new String[] { "articleid" }, " articleid = ? ", new String[] { article.getId() }, null, null, "articleid DESC");
+		final boolean isSaved = cursor.getCount() > 0;
+		closeCursor(cursor);
+		db.close();
+		return isSaved;
+	}
 	
 	public synchronized void removeSection(Section section) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
@@ -95,6 +118,21 @@ public class SqlLiteFavouritesDAO {
 	public synchronized void removeTag(Tag tag) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
 		db.delete(TAG_TABLE, " apiid = ? ", new String[] { tag.getId() });
+		db.close();
+	}
+	
+	
+	public synchronized boolean removeSavedArticle(Article article) {
+		SQLiteDatabase db = openHelper.getWritableDatabase();
+		final int deleted = db.delete(SAVED_ARTICLES_TABLE, " articleid = ? ", new String[] { article.getId() });
+		db.close();
+		return deleted > 0;
+	}
+	
+	
+	public void removeAllSavedArticles() {
+		SQLiteDatabase db = openHelper.getWritableDatabase();
+		db.execSQL("DELETE FROM " + SAVED_ARTICLES_TABLE);
 		db.close();
 	}
 	
@@ -149,11 +187,28 @@ public class SqlLiteFavouritesDAO {
 	}
 	
 	
+	public List<String> getSavedArticleIds() {
+		SQLiteDatabase db = openHelper.getReadableDatabase();
+		Cursor cursor = db.query(SAVED_ARTICLES_TABLE, new String[] {"articleid"}, null, null, null, null, "articleid DESC");
+		
+		List<String> savedArticleIds = new ArrayList<String>();
+		if (cursor.moveToFirst()) {
+			do {
+				final String articleId = cursor.getString(0);
+				savedArticleIds.add(articleId);
+			} while (cursor.moveToNext());
+		}
+		closeCursor(cursor);
+		db.close();
+		return savedArticleIds;
+	}
+	
+	
 	public synchronized boolean addTag(Tag keyword) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
 		boolean result = false;
 		if (haveRoom(db)) {
-			this.insert("tag", keyword.getId(), keyword.getName(), (keyword.getSection() != null) ? keyword.getSection().getId(): "global");
+			this.insertFavouriteTag("tag", keyword.getId(), keyword.getName(), (keyword.getSection() != null) ? keyword.getSection().getId(): "global");
 			result = true;
 		}
 		db.close();
@@ -165,14 +220,29 @@ public class SqlLiteFavouritesDAO {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		boolean result = false;
 		if (this.haveRoom(db)) {
-			this.insert("section", section.getId(), section.getName(), section.getId());
+			this.insertFavouriteTag("section", section.getId(), section.getName(), section.getId());
 			result = true;
 		}
 		db.close();
 		return result;
 	}
 	
+	public boolean addSavedArticle(Article article) {
+		SQLiteDatabase db = openHelper.getReadableDatabase();
+		boolean result = false;
+		if (this.haveRoomForSavedArticle(db)) {
+			this.insertSavedArticle(article.getId());
+			result = true;
+		}
+		db.close();
+		return result;
+	}
 	
+	private boolean haveRoomForSavedArticle(SQLiteDatabase db) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 	private boolean haveRoom(SQLiteDatabase db) {
 		Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME,SECTIONID}, null, null, null, null, NAME_ASC);		
 		int total = cursor.getCount();
@@ -187,7 +257,7 @@ public class SqlLiteFavouritesDAO {
 	}	
 		
 	private static class OpenHelper extends SQLiteOpenHelper {
-
+		
 		OpenHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		}
@@ -195,10 +265,13 @@ public class SqlLiteFavouritesDAO {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + TAG_TABLE + "(id INTEGER PRIMARY KEY, type, apiid, name, sectionid TEXT)");
+			db.execSQL("CREATE TABLE " + SAVED_ARTICLES_TABLE + "(id INTEGER PRIMARY KEY, articleid TEXT)");
 		}
 		
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			// TODO can this be made into a loseless upgrade
+			db.execSQL("DROP TABLE IF EXISTS " + SAVED_ARTICLES_TABLE);			
 			db.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE);
 			onCreate(db);
 		}

@@ -26,7 +26,7 @@ public class AboutArticlesDAO implements ArticleSource {
 		this.httpFetcher = new HttpFetcher(context);
 	}
 	
-	public String getAboutArticleSetUrl() {
+	public String getArticleSetUrl() {
 		return ABOUT_ENDPOINT_URL;
 	}
 	

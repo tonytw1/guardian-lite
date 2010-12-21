@@ -3,11 +3,15 @@ package nz.gen.wellington.guardian.android.usersettings;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.SectionDAO;
+import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import android.content.Context;
+import android.util.Log;
 
 public class FavouriteSectionsAndTagsDAO {
+	
+	private static final String TAG = "FavouriteSectionsAndTagsDAO";
 	
 	private SectionDAO sectionDAO;	// Really? this dependenancy should be on the things we're passing it to!
 	private SqlLiteFavouritesDAO sqlLiteDAO;
@@ -25,6 +29,12 @@ public class FavouriteSectionsAndTagsDAO {
 	public List<Tag> getFavouriteTags() {
 		List<Tag> tags = sqlLiteDAO.getFavouriteTags(sectionDAO.getSectionsMap());
 		return tags;
+	}
+	
+	public List<String> getSavedArticleIds() {
+		List<String> savedArticleIds = sqlLiteDAO.getSavedArticleIds();
+		Log.i(TAG, "Saved article ids are: " + savedArticleIds);
+		return savedArticleIds;
 	}
 	
 	public boolean isFavourite(Tag tag) {
@@ -51,4 +61,20 @@ public class FavouriteSectionsAndTagsDAO {
 		sqlLiteDAO.removeSection(section);		
 	}
 	
+	public boolean addSavedArticle(Article article) {
+		return sqlLiteDAO.addSavedArticle(article);	
+	}
+
+	public boolean isSavedArticle(Article article) {
+		return sqlLiteDAO.isSavedArticle(article);
+	}
+
+	public boolean removeSavedArticle(Article article) {
+		return sqlLiteDAO.removeSavedArticle(article);
+	}
+
+	public void removeAllSavedArticles() {
+		sqlLiteDAO.removeAllSavedArticles();		
+	}
+		
 }
