@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.MessageDigest;
 import java.util.Date;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
@@ -119,8 +120,29 @@ public class FileBasedArticleCache {
 	}
 	
 	private static String getLocalFilename(String url) {
-		return url.replaceAll("/", "").replaceAll(":", "").replaceAll("\\?", "").
-			replaceAll("\\.", "").replaceAll("=", "").replaceAll("&", "").replace("%", "").replace("-", "") + VERSION_SUFFIX;
+		final String md5 = md5(url);
+		if (md5 != null) {
+			return md5 + VERSION_SUFFIX;
+		}
+		return null;
+	}
+	
+		
+	public static String md5(String s) {
+		try {
+			MessageDigest digest = java.security.MessageDigest
+					.getInstance("MD5");
+			digest.update(s.getBytes());
+			byte messageDigest[] = digest.digest();
+
+			StringBuffer hexString = new StringBuffer();
+			for (int i = 0; i < messageDigest.length; i++)
+				hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+			return hexString.toString();
+
+		} catch (Exception e) {
+		}
+		return null;
 	}
 	
 }
