@@ -20,7 +20,6 @@ public class main extends ArticleListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
-        setContentView(R.layout.main);        
         hideHeading();
         showSeperators = true;
     	showMainImage = false;
