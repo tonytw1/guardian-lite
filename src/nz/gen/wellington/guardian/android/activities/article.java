@@ -208,13 +208,13 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	private void processSavedArticle(Article article) {
 		if (!favouriteSectionsAndTagsDAO.isSavedArticle(article)) {
 			if (favouriteSectionsAndTagsDAO.addSavedArticle(article)) {
-				favouriteMenuItem.setTitle(SAVE_ARTICLE);
+				favouriteMenuItem.setTitle(REMOVE_SAVED_ARTICLE);
 			} else {
 				Toast.makeText(this, "Saved articles list is full", Toast.LENGTH_LONG).show();
 			}			
 		} else {
 			if (favouriteSectionsAndTagsDAO.removeSavedArticle(article)) {
-				favouriteMenuItem.setTitle(REMOVE_SAVED_ARTICLE);
+				favouriteMenuItem.setTitle(SAVE_ARTICLE);
 			} else {
 				Toast.makeText(this, "Saved articles list is full", Toast.LENGTH_LONG).show();
 			}
