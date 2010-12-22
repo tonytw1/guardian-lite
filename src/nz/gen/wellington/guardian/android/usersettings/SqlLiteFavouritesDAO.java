@@ -272,15 +272,18 @@ public class SqlLiteFavouritesDAO {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + TAG_TABLE + "(id INTEGER PRIMARY KEY, type, apiid, name, sectionid TEXT)");
+			createSavedArticlesTable(db);
+		}
+
+		private void createSavedArticlesTable(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + SAVED_ARTICLES_TABLE + "(id INTEGER PRIMARY KEY, articleid TEXT)");
 		}
 		
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// TODO can this be made into a loseless upgrade
-			db.execSQL("DROP TABLE IF EXISTS " + SAVED_ARTICLES_TABLE);			
-			db.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE);
-			onCreate(db);
+			if (oldVersion == 1 && newVersion == 2) {
+				createSavedArticlesTable(db);
+			}			
 		}
 	}
 	
