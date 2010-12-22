@@ -1,6 +1,5 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -41,7 +40,7 @@ public class main extends ArticleListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Favourites");
 	    menu.add(0, 2, 0, "Sections");
-	    menu.add(0, 6, 0, "Saved articles");
+	    menu.add(0, 6, 0, "About");
 	    menu.add(0, 5, 0, "Refresh");
 	    menu.add(0, 3, 0, "Sync");
 	    menu.add(0, 4, 0, "Settings");
@@ -67,7 +66,7 @@ public class main extends ArticleListActivity {
 			refresh();
 			return true;	
 	    case 6:
-	    	switchToSavedArticles();
+	    	switchToAbout();
 	    	return true;
 	    }
 	    return false;
