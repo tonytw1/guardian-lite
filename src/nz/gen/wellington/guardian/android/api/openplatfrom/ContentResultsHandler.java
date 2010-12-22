@@ -29,6 +29,7 @@ import android.util.Log;
 public class ContentResultsHandler extends HandlerBase {
 
 	private static final String TAG = "ContentResultsHandler";
+	private static final String NO_REDISTRIBUTION_RIGHTS_BODY_TEXT = "<!-- Redistribution rights for this field are unavailable -->";
 	
 	public List<Article> articles;
 	public Map<String, List<ArticleSet>> refinements;
@@ -162,8 +163,9 @@ public class ContentResultsHandler extends HandlerBase {
 			}
 
 			if (currentField.equals("body")) {
-				currentArticle
-						.setDescription(htmlCleaner.stripHtml(currentElementContents.toString()));
+				final String rawBodyText = currentElementContents.toString();
+				currentArticle.setRedistributionAllowed(!NO_REDISTRIBUTION_RIGHTS_BODY_TEXT.equals(rawBodyText));
+				currentArticle.setDescription(htmlCleaner.stripHtml(rawBodyText));
 			}
 
 			if (currentField.equals("caption")) {

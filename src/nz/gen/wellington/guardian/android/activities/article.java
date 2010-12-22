@@ -108,9 +108,13 @@ public class article extends MenuedActivity implements FontResizingActivity {
         }
         byline.setText(article.getByline());
         standfirst.setText(article.getStandfirst());
-        description.setText(article.getDescription());
         
-            	
+        if (article.isRedistributionAllowed()) {
+        	description.setText(article.getDescription());
+        } else {
+        	description.setText("Redistribution rights for this field are unavailable");
+        }
+        
     	final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
     	
     	final String mainImageUrl = article.getMainImageUrl();

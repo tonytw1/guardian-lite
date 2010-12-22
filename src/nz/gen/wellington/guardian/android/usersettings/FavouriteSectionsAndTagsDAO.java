@@ -32,9 +32,7 @@ public class FavouriteSectionsAndTagsDAO {
 	}
 	
 	public List<String> getSavedArticleIds() {
-		List<String> savedArticleIds = sqlLiteDAO.getSavedArticleIds();
-		Log.i(TAG, "Saved article ids are: " + savedArticleIds);
-		return savedArticleIds;
+		return sqlLiteDAO.getSavedArticleIds();
 	}
 	
 	public boolean isFavourite(Tag tag) {

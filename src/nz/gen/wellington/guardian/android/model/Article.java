@@ -9,7 +9,7 @@ import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 
 public class Article implements Serializable {
 
-	private static final long serialVersionUID = 6L;
+	private static final long serialVersionUID = 7L;
 	
 	private String id;
 	private String title;
@@ -24,6 +24,9 @@ public class Article implements Serializable {
 	private String thumbnailUrl;
 	private String mainImageUrl;
 	private String caption;
+	
+	private boolean isRedistributionAllowed;
+	
 	
 	public Article() {
 		authors = new ArrayList<Tag>();
@@ -135,6 +138,14 @@ public class Article implements Serializable {
 
 	public void setSection(Section section) {
 		this.section = section;
+	}
+	
+	public boolean isRedistributionAllowed() {
+		return isRedistributionAllowed;
+	}
+
+	public void setRedistributionAllowed(boolean isRedistributionAllowed) {
+		this.isRedistributionAllowed = isRedistributionAllowed;
 	}
 	
 	@Override
