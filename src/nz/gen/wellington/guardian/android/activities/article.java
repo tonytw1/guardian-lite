@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +13,9 @@ import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -185,7 +188,10 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	    	favouriteMenuItem = menu.add(0, 4, 0, REMOVE_SAVED_ARTICLE);
 		} else {
 			favouriteMenuItem = menu.add(0, 4, 0, SAVE_ARTICLE);
-		}	    
+		}
+	    if (article.getShortUrl() != null) {
+	    	menu.add(0, 5, 0, "Share");
+	    }
 	    return true;
 	}
 	
@@ -203,6 +209,9 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	    	return true;	    
 		case 4:
 			processSavedArticle(article);			
+	    	return true;	    	
+		case 5:
+			shareArticle(article);			
 	    	return true;
 	    }
 	    return false;
@@ -225,6 +234,16 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		}
 	}
 
+	
+	private boolean shareArticle(Article article) {
+		Intent shareIntent = new Intent(Intent.ACTION_SEND);
+		shareIntent.setType("text/plain");
+		shareIntent.putExtra(Intent.EXTRA_SUBJECT, "guardian.co.uk article");
+		shareIntent.putExtra(Intent.EXTRA_TEXT, article.getTitle() + " " + article.getShortUrl());
+		startActivity(Intent.createChooser(shareIntent, "Share"));
+		return true;
+	}
+	
 		
 	class MainImageLoader implements Runnable {		
 

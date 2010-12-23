@@ -85,7 +85,8 @@ public class ContentResultsHandler extends HandlerBase {
 			currentArticle = new Article();
 			currentElementContents = new StringBuilder();
 			currentArticle.setId(attributes.getValue("id"));
-
+			currentArticle.setWebUrl(attributes.getValue("web-url"));
+			
 			final String sectionId = attributes.getValue("section-id");
 			Section section = sectionDAO.getSectionById(sectionId);
 			currentArticle.setSection(section);
@@ -98,7 +99,7 @@ public class ContentResultsHandler extends HandlerBase {
 			String fieldname = attributes.getValue("name");
 			if (!fieldname.equals(currentField)) {
 				currentField = fieldname;
-			}
+			}		
 		}
 
 		if (name.equals("results")) {
@@ -161,7 +162,11 @@ public class ContentResultsHandler extends HandlerBase {
 			if (currentField.equals("thumbnail")) {
 				currentArticle.setThumbnailUrl(currentElementContents.toString());
 			}
-
+			
+			if (currentField.equals("short-url")) {
+				currentArticle.setShortUrl(currentElementContents.toString());
+			}
+			
 			if (currentField.equals("body")) {
 				final String rawBodyText = currentElementContents.toString();
 				currentArticle.setRedistributionAllowed(!NO_REDISTRIBUTION_RIGHTS_BODY_TEXT.equals(rawBodyText));

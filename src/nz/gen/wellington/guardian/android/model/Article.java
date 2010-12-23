@@ -9,7 +9,7 @@ import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 
 public class Article implements Serializable {
 
-	private static final long serialVersionUID = 7L;
+	private static final long serialVersionUID = 8L;
 	
 	private String id;
 	private String title;
@@ -21,6 +21,8 @@ public class Article implements Serializable {
 	private Section section;
 	private List<Tag> authors;
 	private List<Tag> keywords;
+	private String webUrl;
+	private String shortUrl;
 	private String thumbnailUrl;
 	private String mainImageUrl;
 	private String caption;
@@ -148,6 +150,22 @@ public class Article implements Serializable {
 		this.isRedistributionAllowed = isRedistributionAllowed;
 	}
 	
+	public String getWebUrl() {
+		return webUrl;
+	}
+
+	public void setWebUrl(String webUrl) {
+		this.webUrl = webUrl;
+	}
+
+	public String getShortUrl() {
+		return shortUrl;
+	}
+
+	public void setShortUrl(String shortUrl) {
+		this.shortUrl = shortUrl;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
