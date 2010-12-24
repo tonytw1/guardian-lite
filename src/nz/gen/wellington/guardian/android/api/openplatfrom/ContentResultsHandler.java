@@ -109,7 +109,7 @@ public class ContentResultsHandler extends HandlerBase {
 				articleCallback.descriptionReady(description);
 			}
 		}
-
+		
 		if (name.equals("tag")) {
 
 			if (attributes.getValue("type").equals("keyword")) {
@@ -169,7 +169,7 @@ public class ContentResultsHandler extends HandlerBase {
 			
 			if (currentField.equals("body")) {
 				final String rawBodyText = currentElementContents.toString();
-				currentArticle.setRedistributionAllowed(!NO_REDISTRIBUTION_RIGHTS_BODY_TEXT.equals(rawBodyText));
+				currentArticle.setRedistributionAllowed(!NO_REDISTRIBUTION_RIGHTS_BODY_TEXT.equals(rawBodyText));	// TODO this decision should be made by the content handler are expressed on a model field
 				currentArticle.setDescription(htmlCleaner.stripHtml(rawBodyText));
 			}
 

@@ -1,6 +1,5 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,9 +12,9 @@ import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
+import nz.gen.wellington.guardian.android.utils.ShareTextComposingService;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -47,6 +46,8 @@ public class article extends MenuedActivity implements FontResizingActivity {
 
     private Map<String, Bitmap> images;
 	private MenuItem favouriteMenuItem;
+	private String shareText;
+	private MenuItem shareMenuOption;
     
     
 	@Override
@@ -80,7 +81,13 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	protected void onResume() {
 		super.onResume();
 		final int baseSize = preferencesDAO.getBaseFontSize();
-		setFontSize(baseSize);
+		setFontSize(baseSize);		
+		shareText = ShareTextComposingService.composeShareText(article);
+		if (article != null && shareText != null) {
+			shareMenuOption.setEnabled(true);
+		} else {
+			shareMenuOption.setEnabled(false);
+		}
 	}
 	
 	@Override
@@ -189,9 +196,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		} else {
 			favouriteMenuItem = menu.add(0, 4, 0, SAVE_ARTICLE);
 		}
-	    if (article.getShortUrl() != null) {
-	    	menu.add(0, 5, 0, "Share");
-	    }
+	    shareMenuOption = menu.add(0, 5, 0, "Share");    
 	    return true;
 	}
 	
@@ -239,12 +244,11 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");
 		shareIntent.putExtra(Intent.EXTRA_SUBJECT, "guardian.co.uk article");
-		shareIntent.putExtra(Intent.EXTRA_TEXT, article.getTitle() + " " + article.getShortUrl());
+		shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 		startActivity(Intent.createChooser(shareIntent, "Share"));
 		return true;
 	}
 	
-		
 	class MainImageLoader implements Runnable {		
 
 		private ImageDAO imageDAO;
