@@ -13,7 +13,7 @@
 	
 	<PreferenceCategory android:title="Developer options">
 		<CheckBoxPreference android:title="Use Content API" android:key="useContentApi" android:summary="Access the Guardian Content API directly (Developers only)"></CheckBoxPreference>
-		<EditTextPreference android:summary="Your Guardian Content API key" android:title="Content API key" android:key="contentApiKey"></EditTextPreference>
+		<EditTextPreference android:summary="Your Guardian Content API key (Developers only)" android:title="Content API key" android:key="contentApiKey"></EditTextPreference>
 	
 </PreferenceCategory>
 	
