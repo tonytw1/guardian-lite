@@ -15,6 +15,7 @@ import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.ShareTextComposingService;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -181,14 +182,20 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Home");
-		menu.add(0, 2, 0, "Favourites");
-	    menu.add(0, 3, 0, "Sections");	    
 	    if (favouriteSectionsAndTagsDAO.isSavedArticle(article)) {
-	    	favouriteMenuItem = menu.add(0, 4, 0, REMOVE_SAVED_ARTICLE);
+	    	favouriteMenuItem = menu.add(0, 2, 0, REMOVE_SAVED_ARTICLE);
 		} else {
-			favouriteMenuItem = menu.add(0, 4, 0, SAVE_ARTICLE);
+			favouriteMenuItem = menu.add(0, 2, 0, SAVE_ARTICLE);
 		}
-	    MenuItem shareMenuOption = menu.add(0, 5, 0, "Share");
+	    
+	    MenuItem showInBrowserMenuOption = menu.add(0, 3, 0, "Open in browser");
+		if (article != null && article.getWebUrl() != null) {
+			showInBrowserMenuOption.setEnabled(true);
+		} else {
+			showInBrowserMenuOption.setEnabled(false);
+		}
+	    
+	    MenuItem shareMenuOption = menu.add(0, 4, 0, "Share");
 		shareText = ShareTextComposingService.composeShareText(article);
 		if (article != null && shareText != null) {
 			shareMenuOption.setEnabled(true);
@@ -203,17 +210,14 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	    switch (item.getItemId()) {
 	    case 1:
 	    	switchToMain();
-	    	return true;
-	    case 2: 	    	
-	    	switchToFavourites();
-	    	return true;	 
-	    case 3:
-	    	switchToSections();
-	    	return true;	    
-		case 4:
+	    	return true;  
+		case 2:
 			processSavedArticle(article);			
-	    	return true;	    	
-		case 5:
+	    	return true;
+		case 3:
+			showArticleInBrowser(article);
+			return true;
+		case 4:
 			shareArticle(article);			
 	    	return true;
 	    }
@@ -238,14 +242,20 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	}
 
 	
-	private boolean shareArticle(Article article) {
+	private void shareArticle(Article article) {
 		Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");
 		shareIntent.putExtra(Intent.EXTRA_SUBJECT, "guardian.co.uk article");
 		shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 		startActivity(Intent.createChooser(shareIntent, "Share"));
-		return true;
 	}
+	
+	
+	private void showArticleInBrowser(Article article) {
+		Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse(article.getWebUrl()));
+		startActivity(browserIntent);		
+	}
+	
 	
 	class MainImageLoader implements Runnable {		
 
