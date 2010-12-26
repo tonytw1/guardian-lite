@@ -182,12 +182,15 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, "Home");
-	    if (favouriteSectionsAndTagsDAO.isSavedArticle(article)) {
-	    	favouriteMenuItem = menu.add(0, 2, 0, REMOVE_SAVED_ARTICLE);
-		} else {
-			favouriteMenuItem = menu.add(0, 2, 0, SAVE_ARTICLE);
+		
+		if (article != null && article.getId() != null) {
+			if (favouriteSectionsAndTagsDAO.isSavedArticle(article)) {
+				favouriteMenuItem = menu.add(0, 2, 0, REMOVE_SAVED_ARTICLE);
+			} else {
+				favouriteMenuItem = menu.add(0, 2, 0, SAVE_ARTICLE);
+			}
 		}
-	    
+		
 	    MenuItem showInBrowserMenuOption = menu.add(0, 3, 0, "Open in browser");
 		if (article != null && article.getWebUrl() != null) {
 			showInBrowserMenuOption.setEnabled(true);
