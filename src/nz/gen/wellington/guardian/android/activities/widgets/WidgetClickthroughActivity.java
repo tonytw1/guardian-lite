@@ -3,6 +3,7 @@ package nz.gen.wellington.guardian.android.activities.widgets;
 import nz.gen.wellington.guardian.android.activities.article;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
@@ -19,11 +20,13 @@ public abstract class WidgetClickthroughActivity extends Activity {
 	private static final String TAG = "WidgetClickthroughActivity";
 	
 	private PreferencesDAO preferencesDAO;
-	
+	protected ArticleSetFactory articleSetFactory;
+		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
+		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 	}
 
 	protected void onResume() {

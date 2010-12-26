@@ -3,7 +3,6 @@ package nz.gen.wellington.guardian.android.activities.widgets;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.activities.favourites;
-import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
@@ -17,9 +16,7 @@ public class favouritewidget extends WidgetClickthroughActivity {
 	protected ArticleSet getArticleSet() {	
 		FavouriteSectionsAndTagsDAO favouriteSectionAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
 		List<Section> favouriteSections = favouriteSectionAndTagsDAO.getFavouriteSections();
-		List<Tag> favouriteTags = favouriteSectionAndTagsDAO.getFavouriteTags();
-		
-		ArticleSetFactory articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
+		List<Tag> favouriteTags = favouriteSectionAndTagsDAO.getFavouriteTags();		
 		return articleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags);		
 	}
 
