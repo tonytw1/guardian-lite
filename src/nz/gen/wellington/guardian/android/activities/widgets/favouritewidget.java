@@ -19,11 +19,8 @@ public class favouritewidget extends WidgetClickthroughActivity {
 		List<Section> favouriteSections = favouriteSectionAndTagsDAO.getFavouriteSections();
 		List<Tag> favouriteTags = favouriteSectionAndTagsDAO.getFavouriteTags();
 		
-		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
-			ArticleSetFactory articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
-			return articleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags);
-		}
-		return null;
+		ArticleSetFactory articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
+		return articleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags);		
 	}
 
 	@Override

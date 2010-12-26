@@ -17,8 +17,6 @@ import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
 
 public class ArticleSetFactory {
-
-	private static final String TAG = "ArticleSetFactory";
 	
 	private PreferencesDAO preferencesDAO;
 	private ArticleSetUrlService articleSetUrlService;
@@ -75,8 +73,7 @@ public class ArticleSetFactory {
 		}
 		return favouriteTagsArticleSets;
 	}
-	
-	
+		
 	private ArticleSet addUrl(ArticleSet articleSet) {
 		articleSet.setSourceUrl(articleSetUrlService.getUrlForArticleSet(articleSet));
 		return articleSet;
