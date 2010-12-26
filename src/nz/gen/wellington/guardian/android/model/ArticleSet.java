@@ -10,5 +10,6 @@ public interface ArticleSet extends Serializable {
 	int getPageSize();
 	String getSourceUrl();
 	void setSourceUrl(String urlForArticleSet);
+	boolean isEmpty();
 	
 }

@@ -26,6 +26,11 @@ public class SavedArticlesArticleSet extends AbstractArticleSet implements Seria
 	public List<String> getPermittedRefinements() {
 		return Arrays.asList(permittedRefinements);
 	}
+	
+	@Override
+	public boolean isEmpty() {
+		return articlesIds.isEmpty();
+	}
 
 	public List<String> getArticlesIds() {
 		return articlesIds;

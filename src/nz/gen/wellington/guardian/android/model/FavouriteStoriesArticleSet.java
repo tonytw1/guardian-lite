@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+// TODO rename to favouriteTags
 public class FavouriteStoriesArticleSet extends AbstractArticleSet implements Serializable, ArticleSet {
 
 	private static final long serialVersionUID = 1L;
@@ -27,6 +28,11 @@ public class FavouriteStoriesArticleSet extends AbstractArticleSet implements Se
 	@Override
 	public List<String> getPermittedRefinements() {
 		return Arrays.asList(permittedRefinements);
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return sections.isEmpty() && tags.isEmpty();
 	}
 
 	public List<Section> getSections() {

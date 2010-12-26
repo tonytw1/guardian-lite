@@ -51,6 +51,10 @@ public class ArticleDAO {
 	public ArticleBundle getArticleSetArticles(ArticleSet articleSet, ContentFetchType fetchType) {
 		Log.i(TAG, "Retrieving articles for article set: " + articleSet.getName() + " (" + fetchType.name() + ")");
 		
+		if (articleSet.isEmpty()) {
+			return null;
+		}
+		
 		if (fetchType.equals(ContentFetchType.LOCAL_ONLY)) {
 			return getLocalBundle(articleSet);
 		}
