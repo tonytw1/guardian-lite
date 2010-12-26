@@ -47,9 +47,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
     private Map<String, Bitmap> images;
 	private MenuItem favouriteMenuItem;
 	private String shareText;
-	private MenuItem shareMenuOption;
-    
-    
+        
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,13 +79,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	protected void onResume() {
 		super.onResume();
 		final int baseSize = preferencesDAO.getBaseFontSize();
-		setFontSize(baseSize);		
-		shareText = ShareTextComposingService.composeShareText(article);
-		if (article != null && shareText != null) {
-			shareMenuOption.setEnabled(true);
-		} else {
-			shareMenuOption.setEnabled(false);
-		}
+		setFontSize(baseSize);	
 	}
 	
 	@Override
@@ -196,7 +188,13 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		} else {
 			favouriteMenuItem = menu.add(0, 4, 0, SAVE_ARTICLE);
 		}
-	    shareMenuOption = menu.add(0, 5, 0, "Share");    
+	    MenuItem shareMenuOption = menu.add(0, 5, 0, "Share");
+		shareText = ShareTextComposingService.composeShareText(article);
+		if (article != null && shareText != null) {
+			shareMenuOption.setEnabled(true);
+		} else {
+			shareMenuOption.setEnabled(false);
+		}
 	    return true;
 	}
 	
