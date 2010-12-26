@@ -6,7 +6,7 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
+import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.model.SavedArticlesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
@@ -41,7 +41,7 @@ public class ArticleSetFactory {
 	}
 
 	public ArticleSet getFavouritesArticleSetFor(List<Section> favouriteSections, List<Tag> favouriteTags) {
-		return addUrl(new FavouriteStoriesArticleSet(favouriteSections, favouriteTags, preferencesDAO.getPageSizePreference()));
+		return addUrl(new FavouriteTagsArticleSet(favouriteSections, favouriteTags, preferencesDAO.getPageSizePreference()));
 	}
 
 	public ArticleSet getTopStoriesArticleSet() {

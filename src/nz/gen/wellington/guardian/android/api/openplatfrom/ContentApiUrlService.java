@@ -1,7 +1,7 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.FavouriteStoriesArticleSet;
+import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -61,8 +61,8 @@ public class ContentApiUrlService {
 			contentApiUrlBuilder.addTag(((TagArticleSet) articleSet).getTag());
 		}
 		
-		if (articleSet instanceof FavouriteStoriesArticleSet) {
-			FavouriteStoriesArticleSet favouriteStoriesArticleSet = (FavouriteStoriesArticleSet) articleSet;
+		if (articleSet instanceof FavouriteTagsArticleSet) {
+			FavouriteTagsArticleSet favouriteStoriesArticleSet = (FavouriteTagsArticleSet) articleSet;
 			for (Section section : favouriteStoriesArticleSet.getSections()) {
 				contentApiUrlBuilder.addSection(section);
 			}

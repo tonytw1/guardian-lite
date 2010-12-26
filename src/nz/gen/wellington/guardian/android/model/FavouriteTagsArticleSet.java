@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-// TODO rename to favouriteTags
-public class FavouriteStoriesArticleSet extends AbstractArticleSet implements Serializable, ArticleSet {
+public class FavouriteTagsArticleSet extends AbstractArticleSet implements Serializable, ArticleSet {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -14,7 +13,7 @@ public class FavouriteStoriesArticleSet extends AbstractArticleSet implements Se
 	
 	private String[] permittedRefinements = {};
 	
-	public FavouriteStoriesArticleSet(List<Section> sections, List<Tag> tags, int pageSize) {
+	public FavouriteTagsArticleSet(List<Section> sections, List<Tag> tags, int pageSize) {
 		super(pageSize);
 		this.sections = sections;
 		this.tags = tags;
