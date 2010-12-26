@@ -34,7 +34,6 @@ public final class R {
     public static final class id {
         public static final int About=0x7f070008;
         public static final int ArticleImage=0x7f07000f;
-        public static final int ArticleListLayout=0x7f070000;
         public static final int AuthorList=0x7f070015;
         public static final int Byline=0x7f070011;
         public static final int Caption=0x7f070010;
@@ -52,6 +51,7 @@ public final class R {
         public static final int LinearLayout03=0x7f07001d;
         public static final int LinearLayout04=0x7f070031;
         public static final int LinearLayout05=0x7f07002e;
+        public static final int Main=0x7f070000;
         public static final int MainPane=0x7f07000c;
         public static final int Ok=0x7f07001f;
         public static final int Outer=0x7f070018;

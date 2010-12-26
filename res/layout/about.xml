@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:id="@+id/ArticleListLayout">
+<LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:id="@+id/Main">
 	<LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:paddingTop="2px" android:paddingBottom="2px" android:paddingLeft="2px" android:background="#D61D00" android:id="@+id/HeadingLayout">
 		<TextView android:text="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Heading" android:textStyle="bold" android:textColor="#fff" android:textSize="7pt">
 		</TextView>
 	</LinearLayout>
 
-	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/DownloadProgress" android:visibility="gone" android:textSize="7pt"></TextView>
+	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/DownloadProgress" android:visibility="gone" android:textSize="7pt" android:paddingLeft="5px" android:paddingRight="5px"></TextView>
 
 	<ScrollView android:id="@+id/ScrollView01" android:layout_height="wrap_content" android:layout_width="fill_parent">
 		
 	<LinearLayout android:id="@+id/LinearLayout01" android:layout_width="fill_parent" android:orientation="vertical" 
 	android:layout_height="wrap_content"><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/SplashImage" 
-	android:adjustViewBounds="true"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/About" android:paddingTop="10px" android:textSize="7pt" android:lineSpacingMultiplier="1.1">
+	android:adjustViewBounds="true"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/About" android:paddingTop="10px" android:textSize="7pt" android:lineSpacingMultiplier="1.1" android:paddingLeft="5px" android:paddingRight="5px">
 	</TextView><LinearLayout android:id="@+id/LinearLayout02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingTop="0px">
 	<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/PoweredByTheGuardian" 
 	android:background="@drawable/poweredbyguardian"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" 
