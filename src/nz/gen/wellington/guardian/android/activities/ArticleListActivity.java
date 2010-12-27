@@ -57,6 +57,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		
 	private Thread loader;
 	private Date loaded;
+	private int baseSize;
 	
 	protected String[] permittedRefinements = {"keyword"};
 	
@@ -86,7 +87,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		final int baseSize = preferencesDAO.getBaseFontSize();
+		baseSize = preferencesDAO.getBaseFontSize();
 		setFontSize(baseSize);
 	}
 
@@ -364,6 +365,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			titleText.setText(article.getTitle());
 			
 			TextView pubDateText = (TextView) view.findViewById(R.id.Pubdate);
+			titleText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+			pubDateText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize -2);
+			standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, new Float(baseSize - 0.75));
 			if (article.getPubDate() != null) {
 				pubDateText.setText(article.getPubDateString());
 			}
