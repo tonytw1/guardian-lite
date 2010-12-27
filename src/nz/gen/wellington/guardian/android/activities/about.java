@@ -8,11 +8,13 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,9 +30,15 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		
 		setContentView(R.layout.about);
+		final int baseSize = preferencesDAO.getBaseFontSize();
+		setFontSize(baseSize);
+		View view =  findViewById(R.id.Main);
+		view.setBackgroundColor(ColourScheme.BACKGROUND);
+		
+		TextView description = (TextView) findViewById(R.id.About);
+		
 		setHeading("Guardian Lite - About");
-				
-		TextView description = (TextView) findViewById(R.id.About);		
+		
 		description.setText("This unofficial application was developed by Tony McCrae of Eel Pie Consulting Limited.\n\n" +
 				"Articles are retreived from the Guardian's RSS feeds. Tag information is supplied by the Guardian Content API.\n\n" +
 				"For more information see:\nhttp://eelpieconsulting.co.uk/guardianlite\n\n" +
@@ -40,8 +48,6 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 		ImageView poweredByTheGuardian = (ImageView) findViewById(R.id.PoweredByTheGuardian);
 		poweredByTheGuardian.setImageResource(R.drawable.poweredbyguardian);
 		
-		final int baseSize = preferencesDAO.getBaseFontSize();
-		setFontSize(baseSize);
 	}
 	
 	@Override
@@ -107,7 +113,9 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 		TextView contentCredit = (TextView) findViewById(R.id.ContentCredit);
 		
 		about.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
-		contentCredit.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);		
+		about.setTextColor(ColourScheme.BODYTEXT);
+		contentCredit.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+		contentCredit.setTextColor(ColourScheme.BODYTEXT);
 	}
 	
 }

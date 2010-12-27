@@ -7,6 +7,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,10 @@ public class TagListPopulatingService {
 		//Set<String> duplicatedTagNames = getDuplicatedTagNames(tags);		
 		for (ArticleSet articleSet : articleSets) {
 			final boolean isContentAvailable = articleDAO.isAvailable(articleSet);
-			View tagView = inflater.inflate(R.layout.authorslist, null);						
+			View tagView = inflater.inflate(R.layout.authorslist, null);
 			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
 			titleText.setText(articleSet.getName());			
-			ClickerPopulatingService.populateClicker(articleSet, tagView, isContentAvailable);
+			ClickerPopulatingService.populateClicker(articleSet, tagView, isContentAvailable);			
 			tagList.addView(tagView);
 		}
 	}

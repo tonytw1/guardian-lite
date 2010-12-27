@@ -3,18 +3,21 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.Arrays;
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
-public class section extends ArticleListActivity {
+public class section extends ArticleListActivity implements FontResizingActivity {
 	
 	private static final String TAG = "section";	
 	private Section section;
@@ -30,10 +33,18 @@ public class section extends ArticleListActivity {
         this.articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());        
         section = (Section) this.getIntent().getExtras().get("section");
     	setHeading(section.getName());
-    	setHeadingColour(section.getColour());
+    	setHeadingColour(section.getColour());	
+	}
+	
+	
+	@Override
+	public void setFontSize(int baseSize) {
+		super.setFontSize(baseSize);		
+		View view =  findViewById(R.id.Main);
+		view.setBackgroundColor(ColourScheme.BACKGROUND);
 	}
 
-	
+
 	protected ArticleSet getArticleSet() {
 		return articleSetFactory.getArticleSetForSection(section);
 	}

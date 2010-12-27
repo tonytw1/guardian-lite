@@ -2,9 +2,9 @@ package nz.gen.wellington.guardian.android.activities.ui;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
-import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,6 +14,7 @@ public class ClickerPopulatingService {
 		TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
 		if (contentIsAvailable) {
 			
+			titleText.setTextColor(ColourScheme.AVAILABLE_TAG);
 			if (articleSet instanceof SectionArticleSet) {
 				SectionClicker clicker = new SectionClicker(((SectionArticleSet) articleSet).getSection());
 				tagView.setOnClickListener(clicker);
@@ -24,7 +25,7 @@ public class ClickerPopulatingService {
 			}
 			
 		} else {
-			titleText.setTextColor(Color.DKGRAY);
+			titleText.setTextColor(ColourScheme.UNAVAILABLE_TAG);
 		}		
 	}
 	

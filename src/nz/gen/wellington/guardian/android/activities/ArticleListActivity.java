@@ -18,6 +18,7 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
@@ -89,6 +90,11 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		super.onResume();
 		baseSize = preferencesDAO.getBaseFontSize();
 		setFontSize(baseSize);
+		
+		View view =  findViewById(R.id.Main);
+		if (view != null) {
+			view.setBackgroundColor(ColourScheme.BACKGROUND);
+		}
 	}
 
 	
@@ -97,6 +103,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		TextView description = (TextView) findViewById(R.id.Description);
 		if (description != null) {
 			description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+			description.setTextColor(ColourScheme.BODYTEXT);
 		}
 	}
 
@@ -286,6 +293,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 						message.setText("This article set was last downloaded more than 2 hours ago and may be out of date.");
 					}
 					
+					message.setTextColor(ColourScheme.STATUS);
+					message.setPadding(2, 3, 2, 3);
 					mainpane.addView(message, 0);
 					return;
 					
@@ -295,6 +304,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					TextView noArticlesMessage = new TextView(context);
 					noArticlesMessage.setTextSize(baseFontSize + 10, TypedValue.COMPLEX_UNIT_PT);
 					noArticlesMessage.setText("No articles available.");
+					
+					noArticlesMessage.setTextColor(ColourScheme.HEADLINE);
+					noArticlesMessage.setPadding(2, 3, 2, 3);					
 					mainpane.addView(noArticlesMessage, 0);
 			    	return;
 			}
@@ -306,20 +318,32 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			TextView descriptionView = new TextView(context);
 			descriptionView.setId(R.id.Description);
 			descriptionView.setText(descripton);
-			descriptionView.setPadding(3, 3, 3, 15);
+			descriptionView.setPadding(2, 3, 2, 15);
 			mainpane.addView(descriptionView, 0);
 			descriptionView.setTextSize(TypedValue.COMPLEX_UNIT_PT, fontSize);	// TODO duplicated setting code
 			descriptionView.setLineSpacing(new Float(0), new Float(1.1));
+			
+			descriptionView.setTextColor(ColourScheme.BODYTEXT);
+			descriptionView.setPadding(2, 3, 2, 3);	
 			descriptionSet = true;
 		}
 
 		
 		private void populateRefinementType(LinearLayout mainpane, LayoutInflater inflater, String description, List<ArticleSet> typedRefinements) {
-			View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);
-			TextView descriptionView = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);			    		
+			View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);			
+			TextView descriptionView = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);
 			descriptionView.setText(description);
+			descriptionView.setTextColor(ColourScheme.BODYTEXT);
+			descriptionView.setPadding(2, 3, 2, 3);
 			mainpane.addView(refinementsHeadingView);
-			TagListPopulatingService.populateTags(inflater, true, mainpane, typedRefinements, context);
+			
+			// TODO move to a layout
+			LinearLayout tagGroup = new LinearLayout(context);
+			tagGroup.setOrientation(LinearLayout.VERTICAL);
+			tagGroup.setPadding(2, 0, 2, 0);
+			
+			TagListPopulatingService.populateTags(inflater, true, tagGroup, typedRefinements, context);
+			mainpane.addView(tagGroup);
 		}
 
 		private void populateTrailImage(final String url, View view) {
@@ -362,22 +386,30 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 		private void populateArticleListView(Article article, View view, boolean shouldUseFeatureTrail) {
 			TextView titleText = (TextView) view.findViewById(R.id.Headline);
-			titleText.setText(article.getTitle());
-			
 			TextView pubDateText = (TextView) view.findViewById(R.id.Pubdate);
+			TextView standfirst = (TextView) view.findViewById(R.id.Standfirst);
+			TextView caption = (TextView) view.findViewById(R.id.Caption);
+			
+			titleText.setTextColor(ColourScheme.HEADLINE);
+			pubDateText.setTextColor(ColourScheme.BODYTEXT);			
+			standfirst.setTextColor(ColourScheme.BODYTEXT);
+			
 			titleText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
 			pubDateText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize -2);
 			standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, new Float(baseSize - 0.75));
+
+			if (caption != null) {
+				caption.setTextColor(ColourScheme.BODYTEXT);
+			}
+			titleText.setText(article.getTitle());			
 			if (article.getPubDate() != null) {
 				pubDateText.setText(article.getPubDateString());
 			}
 			
-			TextView standfirst = (TextView) view.findViewById(R.id.Standfirst);
 			if (article.getStandfirst() != null) {
 				standfirst.setText(article.getStandfirst());
 			}
 						
-			TextView caption = (TextView) view.findViewById(R.id.Caption);
 			if (caption != null && article.getCaption() != null) {
 				caption.setText(article.getCaption());
 				caption.setVisibility(View.VISIBLE);

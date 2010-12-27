@@ -8,12 +8,14 @@ import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.api.filtering.SectionSorter;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
+import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -30,7 +32,10 @@ public class sections extends DownloadProgressAwareActivity {
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		networkStatusService = new NetworkStatusService(this.getApplicationContext());
 		
-		setContentView(R.layout.sections);		
+		setContentView(R.layout.sections);
+		View view =  findViewById(R.id.Main);
+		view.setBackgroundColor(ColourScheme.BACKGROUND);
+		
 		setHeading("Sections");
 		setHeadingColour("#0061A6");
 	}

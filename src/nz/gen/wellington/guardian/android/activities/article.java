@@ -9,6 +9,7 @@ import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
@@ -65,11 +66,14 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.article);
 		
+		View view =  findViewById(R.id.Main);
+		view.setBackgroundColor(ColourScheme.BACKGROUND);
+		
 		Article article = (Article) this.getIntent().getExtras().get("article");
 		this.article = article;
 		
 		if (article != null) {			
-			populateArticle(article);
+			populateArticle(article, ColourScheme.BODYTEXT, ColourScheme.HEADLINE);
 			
 		} else {
         	Toast.makeText(this, "Could not load article", Toast.LENGTH_SHORT).show();
@@ -90,7 +94,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	}
 
 	
-	private void populateArticle(Article article) {		
+	private void populateArticle(Article article, int bodytextColour, int headlineColour) {		
 		if (article.getSection() != null) {
 			setHeading(article.getSection().getName());
 			setHeadingColour(article.getSection().getColour());
@@ -101,6 +105,13 @@ public class article extends MenuedActivity implements FontResizingActivity {
         TextView byline = (TextView) findViewById(R.id.Byline);
         TextView standfirst = (TextView) findViewById(R.id.Standfirst);
         TextView description = (TextView) findViewById(R.id.Description);
+        
+		headline.setTextColor(headlineColour);
+        pubDate.setTextColor(bodytextColour);
+        byline.setTextColor(bodytextColour);
+        standfirst.setTextColor(bodytextColour);
+        
+        description.setTextColor(bodytextColour);
         
 		final int baseSize = preferencesDAO.getBaseFontSize();
         setFontSize(baseSize);
@@ -124,6 +135,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		if (mainImageUrl != null) {			
 			TextView caption = (TextView) findViewById(R.id.Caption);
 			caption.setText(article.getCaption());
+			caption.setTextColor(bodytextColour);
 			
 			final boolean isWifiConnectionAvailable = networkStatusService.isConnectionAvailable() && networkStatusService.isWifiConnection();
 			final boolean downloadMainImage = isWifiConnectionAvailable || (networkStatusService.isConnectionAvailable() && preferencesDAO.getLargePicturesPreference().equals("ALWAYS"));
@@ -155,6 +167,14 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize - 2);
         standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
         description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+        
+		View view =  findViewById(R.id.Main);
+		view.setBackgroundColor(ColourScheme.BACKGROUND);
+		
+		TextView tagLabel =  (TextView) findViewById(R.id.TagLabel);
+		if (tagLabel != null) {
+			tagLabel.setTextColor(ColourScheme.BODYTEXT);
+		}
 	}
 	
 	private void populateTags(Article article, final boolean connectionAvailable) {

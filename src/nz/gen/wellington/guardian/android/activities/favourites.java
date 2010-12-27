@@ -79,10 +79,16 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 			LayoutInflater inflater = LayoutInflater.from(this);
 			LinearLayout authorList = (LinearLayout) findViewById(R.id.FavouritesPane);
 		
-			boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();
+			// TODO move to a layout
+			LinearLayout tagGroup = new LinearLayout(this.getApplicationContext());
+			tagGroup.setOrientation(LinearLayout.VERTICAL);
+			tagGroup.setPadding(2, 0, 2, 0);
 			
-			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, articleSetFactory.getArticleSetsForSections(favouriteSections), this.getApplicationContext());
-			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, authorList, articleSetFactory.getArticleSetsForTags(favouriteTags), this.getApplicationContext());
+			boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();			
+			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForSections(favouriteSections), this.getApplicationContext());
+			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForTags(favouriteTags), this.getApplicationContext());
+			
+			authorList.addView(tagGroup);
 			
 			description.setText("The following sections and tags have been marked as favourites.");			
 			
