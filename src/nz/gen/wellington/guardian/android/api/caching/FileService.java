@@ -91,6 +91,11 @@ public class FileService {
 		}
 		
 		File[] listFiles = cacheDir.listFiles(jsonFilesFilter);
+		if (listFiles == null) {
+			Log.w(TAG, "listFiles was null - indicates cache dir is a file not a folder?");
+			return;
+		}
+		
 		for (int i = 0; i < listFiles.length; i++) {
 			File cacheFile = listFiles[i];
 			if (!cacheFile.delete()) {
