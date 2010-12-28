@@ -4,7 +4,7 @@
 		</TextView>
 	</LinearLayout>
 
-	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/DownloadProgress" android:visibility="gone" android:textSize="7pt" android:paddingLeft="5px" android:paddingRight="5px"></TextView>
+	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/DownloadProgress" android:visibility="gone" android:textSize="7pt" android:paddingLeft="2px" android:paddingRight="2px"></TextView>
 
 
 	
@@ -12,7 +12,7 @@
 	<ScrollView android:id="@+id/ScrollView01" android:layout_height="wrap_content" android:layout_width="fill_parent">
 		<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/Scroll">
 	
-			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Description" android:textSize="7pt" android:paddingLeft="5px" android:paddingRight="5px"></TextView>
+			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Description" android:textSize="7pt" android:paddingLeft="2px" android:paddingRight="2px"></TextView>
 			<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/FavouritesPane" />			
 			<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/MainPane" android:paddingTop="15px"/>
 		
