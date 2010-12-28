@@ -7,6 +7,7 @@ import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
@@ -151,6 +152,7 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 	public void setFontSize(int baseSize) {
 		TextView description = (TextView) findViewById(R.id.Description);
         description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+        description.setTextColor(ColourScheme.BODYTEXT);
 	}
 	
 }
