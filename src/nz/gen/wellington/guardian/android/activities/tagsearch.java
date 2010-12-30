@@ -10,9 +10,11 @@ import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
+import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,12 +28,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class tagsearch extends DownloadProgressAwareActivity implements OnClickListener {
+// TODO should warn that an active connection is needed to search
+public class tagsearch extends DownloadProgressAwareActivity implements OnClickListener, FontResizingActivity {
 	
 	private static final int RESULTS_LOADED = 1;
 	private static final int ERROR = 2;
 	
 	private Button search;
+	private PreferencesDAO preferencesDAO;
 	private NetworkStatusService networkStatusService;
 	
 	private List<Tag> searchResults;
@@ -46,10 +50,15 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tagsearch);		
-		networkStatusService = new NetworkStatusService(this.getApplicationContext());
+		
+		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
+		networkStatusService = new NetworkStatusService(this.getApplicationContext());	// TODO push to factoryy
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
 		sections = sectionDAO.getSectionsMap();
+
+		final int baseSize = preferencesDAO.getBaseFontSize();
+        setFontSize(baseSize);
 		
 		search = (Button) findViewById(R.id.Search);        
 		search.setOnClickListener(this);
@@ -63,11 +72,21 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	@Override
 	protected void onResume() {
 		super.onResume();
+		final int baseSize = preferencesDAO.getBaseFontSize();
+        setFontSize(baseSize);
+        
 		search.setEnabled(networkStatusService.isConnectionAvailable());
 		// TODO text warning if no connection is available
 		populateSearchResults();
 	}
 
+	
+	@Override
+	public void setFontSize(int baseSize) {
+		View view =  findViewById(R.id.Main);
+		view.setBackgroundColor(ColourScheme.BACKGROUND);		
+	}
+	
 
 	@Override
 	public void onClick(View src) {

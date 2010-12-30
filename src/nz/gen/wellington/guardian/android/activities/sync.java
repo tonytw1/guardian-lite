@@ -3,7 +3,10 @@ package nz.gen.wellington.guardian.android.activities;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.contentupdate.ContentUpdateService;
 import nz.gen.wellington.guardian.android.contentupdate.TaskQueue;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
+import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.Plurals;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -13,13 +16,15 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class sync extends DownloadProgressAwareActivity implements OnClickListener {
+public class sync extends DownloadProgressAwareActivity implements OnClickListener, FontResizingActivity {
 	
+	private PreferencesDAO preferencesDAO;
 	private Button start;
 	private Button stop;
 	private TextView statusMessage;
@@ -33,10 +38,13 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
         startService(new Intent(this, ContentUpdateService.class));
         
         setContentView(R.layout.sync);
+        
+		final int baseSize = preferencesDAO.getBaseFontSize();
+        setFontSize(baseSize);
         		
         start = (Button) findViewById(R.id.buttonStart);        
         start.setOnClickListener(this);
@@ -52,10 +60,25 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
         doBindService();        
 	}
 	
+	
+	@Override
+	public void setFontSize(int baseSize) {
+		View view =  findViewById(R.id.Main);
+		view.setBackgroundColor(ColourScheme.BACKGROUND);
+		
+		TextView statusMessage = (TextView) findViewById(R.id.StatusMessage);
+		statusMessage.setTextColor(ColourScheme.BODYTEXT);
+		statusMessage.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+	}
+
 
 	@Override
 	protected void onResume() {
-		super.onResume();		
+		super.onResume();
+
+		final int baseSize = preferencesDAO.getBaseFontSize();
+        setFontSize(baseSize);
+        
 		registerReceiver(taskStartReceiver, new IntentFilter(ContentUpdateService.TASK_START));		
 		registerReceiver(queueChangeReceiver, new IntentFilter(TaskQueue.QUEUE_CHANGED));
 		registerReceiver(batchCompletionReceiver, new IntentFilter(ContentUpdateService.BATCH_COMPLETION));
