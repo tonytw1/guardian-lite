@@ -36,9 +36,6 @@ public class TopStoriesWidget extends AppWidgetProvider {
 			R.id.WidgetSecondItem, R.id.WidgetSecondHeadline,
 			R.id.WidgetSecondStandfirst, R.id.WidgetSecondImage);
 	
-	
-	
-	
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {		
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -64,7 +61,7 @@ public class TopStoriesWidget extends AppWidgetProvider {
 				if (randomArticles.size() > 1) {
 					populateArticle(widgetView, imageDAO, randomArticles.get(1), context, secondArticleViews);
 				} else {
-					widgetView.setViewVisibility(R.id.WidgetSecondItem, View.GONE);
+					hideSecondArticle(widgetView);
 				}
 				
 			} else {
@@ -82,12 +79,17 @@ public class TopStoriesWidget extends AppWidgetProvider {
 	}
 
 	
-	private void showNoArticlesMessage(Context context, ImageDAO imageDAO,
-			RemoteViews widgetView) {
+	private void showNoArticlesMessage(Context context, ImageDAO imageDAO, RemoteViews widgetView) {
 		Article errorMessage = new Article();
 		errorMessage.setTitle("No articles available");
 		errorMessage.setStandfirst(getNoArticlesExplainationText());
 		populateArticle(widgetView, imageDAO, errorMessage, context, firstArticleViews);
+		
+		hideSecondArticle(widgetView);
+	}
+
+	private void hideSecondArticle(RemoteViews widgetView) {
+		widgetView.setViewVisibility(R.id.WidgetSecondItem, View.GONE);
 	}
 
 	protected String getNoArticlesExplainationText() {
@@ -127,7 +129,6 @@ public class TopStoriesWidget extends AppWidgetProvider {
 		return articleWithTrailImages;
 	}
 	
-	
 	private void populateArticle(RemoteViews widgetView, ImageDAO imageDAO, Article article, Context context, ArticleViews articleViews) {
 		widgetView.setTextViewText(articleViews.headline, article.getTitle());
 		widgetView.setTextViewText(articleViews.standfirst, article.getStandfirst());
@@ -151,7 +152,6 @@ public class TopStoriesWidget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 		return pendingIntent;
 	}
-	
 	
 	private  class ArticleViews {
 		int view;
