@@ -302,9 +302,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	Log.i(TAG, "Displaying no articles available message");			    	
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
 					TextView noArticlesMessage = new TextView(context);
-					noArticlesMessage.setTextSize(baseFontSize + 10, TypedValue.COMPLEX_UNIT_PT);
 					noArticlesMessage.setText("No articles available.");
 					
+					noArticlesMessage.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
 					noArticlesMessage.setTextColor(ColourScheme.HEADLINE);
 					noArticlesMessage.setPadding(2, 3, 2, 3);					
 					mainpane.addView(noArticlesMessage, 0);
