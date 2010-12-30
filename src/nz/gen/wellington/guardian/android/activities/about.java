@@ -32,8 +32,6 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 		setContentView(R.layout.about);
 		final int baseSize = preferencesDAO.getBaseFontSize();
 		setFontSize(baseSize);
-		View view =  findViewById(R.id.Main);
-		view.setBackgroundColor(ColourScheme.BACKGROUND);
 		
 		TextView description = (TextView) findViewById(R.id.About);
 		
@@ -109,6 +107,9 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 	}
 	
 	public void setFontSize(int baseSize) {
+		View view =  findViewById(R.id.Main);
+		view.setBackgroundColor(ColourScheme.BACKGROUND);
+		
 		TextView about = (TextView) findViewById(R.id.About);
 		TextView contentCredit = (TextView) findViewById(R.id.ContentCredit);
 		
