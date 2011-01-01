@@ -2,8 +2,9 @@ package nz.gen.wellington.guardian.android.usersettings;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import nz.gen.wellington.guardian.android.api.SectionDAO;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -40,9 +41,11 @@ public class SqlLiteFavouritesDAO {
 	private static final String INSERT_SAVED_ARTICLE = "insert into " + SAVED_ARTICLES_TABLE + "(articleid) values (?)";
 	
 	private OpenHelper openHelper;
+	private SectionDAO sectionDAO;
 
 	public SqlLiteFavouritesDAO(Context context) {
 		openHelper = new OpenHelper(context);
+		this.sectionDAO = SingletonFactory.getSectionDAO(context);
 	}
 	
 	public synchronized boolean hasFavourites() {	// TODO count query rather than select all
@@ -142,7 +145,7 @@ public class SqlLiteFavouritesDAO {
 	}
 	
 	
-	public synchronized List<Tag> getFavouriteTags(Map<String, Section> sectionsMap) {
+	public synchronized List<Tag> getFavouriteTags() {
 		List<Tag> favouriteTags = new ArrayList<Tag>();
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		if (db != null && db.isOpen()) {
@@ -154,7 +157,13 @@ public class SqlLiteFavouritesDAO {
 					final String name = cursor.getString(2);
 					final String sectionId = cursor.getString(3);
 					if (type.equals("tag")) {
-						favouriteTags.add(new Tag(name, id, sectionsMap.get(sectionId)));
+						
+						Section section = sectionDAO.getSectionById(sectionId);
+						if (section != null) {
+							favouriteTags.add(new Tag(name, id, section));
+						} else {
+							Log.w(TAG, "Favourite tag '" + name + "' has invalid section '" + sectionId + "' - ignoring");
+						}
 					}
 					
 				} while (cursor.moveToNext());
@@ -168,17 +177,17 @@ public class SqlLiteFavouritesDAO {
 	}
 
 
-	public synchronized List<Section> getFavouriteSections(Map<String, Section> sectionsMap) {
+	public synchronized List<Section> getFavouriteSections() {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME, SECTIONID}, null, null, null, null, NAME_ASC);
 		
 		List<Section> favouriteSections = new ArrayList<Section>();
-		if (cursor.moveToFirst()) {
+		if (cursor.moveToFirst()) {			
 			do {
 				final String type = cursor.getString(0);
 				final String sectionId = cursor.getString(3);
 				if (type.equals("section")) {
-					Section section = sectionsMap.get(sectionId);
+					Section section = sectionDAO.getSectionById(sectionId);
 					if (section != null) {
 						favouriteSections.add(section);
 					}
