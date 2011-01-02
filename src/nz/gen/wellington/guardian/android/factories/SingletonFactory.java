@@ -45,7 +45,7 @@ public class SingletonFactory {
 	
 	public static FavouriteSectionsAndTagsDAO getFavouriteSectionsAndTagsDAO(Context context) {
 		if (favouriteSectionsAndTagsDAO == null) {
-			favouriteSectionsAndTagsDAO = new FavouriteSectionsAndTagsDAO(getSectionDAO(context), context);			
+			favouriteSectionsAndTagsDAO = new FavouriteSectionsAndTagsDAO(context);			
 		}
 		return favouriteSectionsAndTagsDAO;
 	}
