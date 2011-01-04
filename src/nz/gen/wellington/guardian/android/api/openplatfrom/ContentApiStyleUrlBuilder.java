@@ -81,7 +81,7 @@ public class ContentApiStyleUrlBuilder {
 	
 	
 	public String toTagSearchQueryUrl() {		
-		StringBuilder uri = new StringBuilder("/" + TAGS);	// TODO this call should be proxied by guardian-lite
+		StringBuilder uri = new StringBuilder("/" + TAGS);
 		appendCoreParameters(uri);
 		uri.append("&type=keyword%2Ccontributor%2Cblog");	// TODO push to allowed types constant somewhere
 		uri.append("&q=" + URLEncoder.encode(searchTerm));		
