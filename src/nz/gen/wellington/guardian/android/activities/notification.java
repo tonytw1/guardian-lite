@@ -15,9 +15,6 @@ import android.widget.TextView;
 public class notification extends Activity implements OnClickListener {
 	
 	private NotificationManager notificationManager;
-
-	Button ok;
-	
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,8 +22,10 @@ public class notification extends Activity implements OnClickListener {
     	requestWindowFeature(Window.FEATURE_NO_TITLE);	
 		setContentView(R.layout.notification);
 		
-        ok = (Button) findViewById(R.id.Ok);        
-        ok.setOnClickListener(this);
+        Button ok = (Button) findViewById(R.id.Ok);
+        if (ok != null) {
+        	ok.setOnClickListener(this);
+        }
         
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		
