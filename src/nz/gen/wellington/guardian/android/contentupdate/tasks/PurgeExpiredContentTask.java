@@ -21,8 +21,7 @@ public class PurgeExpiredContentTask implements ContentUpdateTaskRunnable {
 	}
 	
 	@Override
-	public void stop() {
-		// TODO
+	public void stop() {		
 	}
 	
 	@Override
