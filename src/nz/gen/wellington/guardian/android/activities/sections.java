@@ -30,7 +30,7 @@ public class sections extends DownloadProgressAwareActivity {
 		super.onCreate(savedInstanceState);
 		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
-		networkStatusService = new NetworkStatusService(this.getApplicationContext());
+		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		
 		setContentView(R.layout.sections);
 		View view =  findViewById(R.id.Main);

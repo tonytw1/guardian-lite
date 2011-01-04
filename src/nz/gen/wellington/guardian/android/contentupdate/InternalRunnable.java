@@ -39,7 +39,7 @@ public class InternalRunnable implements Runnable {
 	public InternalRunnable(Context context, NotificationManager notificationManager) {
 		this.context = context;
 		this.notificationManager = notificationManager;
-		this.networkStatusService = new NetworkStatusService(context.getApplicationContext());
+		this.networkStatusService = SingletonFactory.getNetworkStatusService(context);
 		this.status = ContentUpdateService.STOPPED;
 		
 		report = new ContentUpdateReport();

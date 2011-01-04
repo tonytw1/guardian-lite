@@ -8,6 +8,7 @@ import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiStyleApi;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentResultsHandler;
 import nz.gen.wellington.guardian.android.contentupdate.TaskQueue;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
@@ -20,6 +21,7 @@ public class SingletonFactory {
 	private static FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
 	private static PreferencesDAO preferencesDAO;
 	private static ArticleSetFactory articleSetFactory;
+	private static NetworkStatusService networkStatusService;
 	
 	public static ArticleDAO getDao(Context context) {
 		return new ArticleDAO(context);	
@@ -70,9 +72,16 @@ public class SingletonFactory {
 		}
 		return articleSetFactory;
 	}
-
+	
 	public static ContentResultsHandler getContentResultsHandler(Context context) {
 		return new ContentResultsHandler(context, new HtmlCleaner());
+	}
+	
+	public static NetworkStatusService getNetworkStatusService(Context context) {
+		if (networkStatusService == null) {
+			networkStatusService =new NetworkStatusService(context);
+		}
+		return networkStatusService;		
 	}
 	
 }

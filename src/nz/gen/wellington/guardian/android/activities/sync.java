@@ -25,6 +25,8 @@ import android.widget.TextView;
 public class sync extends DownloadProgressAwareActivity implements OnClickListener, FontResizingActivity {
 	
 	private PreferencesDAO preferencesDAO;
+	private NetworkStatusService networkStatusService;
+	
 	private Button start;
 	private Button stop;
 	private TextView statusMessage;
@@ -39,6 +41,8 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
+		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
+		
         startService(new Intent(this, ContentUpdateService.class));
         
         setContentView(R.layout.sync);
@@ -121,9 +125,7 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 		}
 		
 		switch (contentUpdateService.getStatus()) {
-		case ContentUpdateService.STOPPED:
-			
-			NetworkStatusService networkStatusService = new NetworkStatusService(this.getApplicationContext());
+		case ContentUpdateService.STOPPED:			
 			if (networkStatusService.isConnectionAvailable()) {
 				start.setEnabled(true);
 				statusMessage.setText("Download the latest articles from your favourite tags and sections for offline viewing.");

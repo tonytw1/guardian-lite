@@ -52,7 +52,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		setContentView(R.layout.tagsearch);		
 		
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
-		networkStatusService = new NetworkStatusService(this.getApplicationContext());	// TODO push to factoryy
+		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
 		sections = sectionDAO.getSectionsMap();

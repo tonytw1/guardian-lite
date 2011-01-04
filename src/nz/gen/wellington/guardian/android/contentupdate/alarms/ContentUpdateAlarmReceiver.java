@@ -5,6 +5,7 @@ import java.util.Date;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.sync;
 import nz.gen.wellington.guardian.android.contentupdate.ContentUpdateService;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import android.app.Notification;
@@ -20,7 +21,7 @@ public class ContentUpdateAlarmReceiver extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		networkStatusService = new NetworkStatusService(context);
+		networkStatusService = SingletonFactory.getNetworkStatusService(context);
 		if (networkStatusService.isBackgroundDataAvailable()) {
 			Intent serviceIntent = new Intent(context, ContentUpdateService.class);
 			serviceIntent.setAction("RUN");

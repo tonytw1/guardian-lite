@@ -25,7 +25,7 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 	
 	private PreferencesDAO preferencesDAO;
     private ArticleSetFactory articleSetFactory;
-
+    private NetworkStatusService networkStatusService;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,7 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 		
         preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
         articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
+        networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
         
         setContentView(R.layout.favourites);        
         setHeading("Favourites");
@@ -85,7 +86,7 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 			tagGroup.setOrientation(LinearLayout.VERTICAL);
 			tagGroup.setPadding(2, 0, 2, 0);
 			
-			boolean connectionIsAvailable = new NetworkStatusService(this.getApplicationContext()).isConnectionAvailable();			
+			final boolean connectionIsAvailable = networkStatusService.isConnectionAvailable();			
 			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForSections(favouriteSections), this.getApplicationContext());
 			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForTags(favouriteTags), this.getApplicationContext());
 			

@@ -57,7 +57,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		imageDAO = SingletonFactory.getImageDao(this.getApplicationContext());
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
-		networkStatusService = new NetworkStatusService(this.getApplicationContext());
+		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		
 		images = new HashMap<String, Bitmap>();

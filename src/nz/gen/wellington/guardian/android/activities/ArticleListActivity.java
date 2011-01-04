@@ -69,7 +69,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		viewsWaitingForTrailImages = new HashMap<String, View>();
 		articleDAO = SingletonFactory.getDao(this.getApplicationContext());
 		imageDAO = SingletonFactory.getImageDao(this.getApplicationContext());		
-		networkStatusService = new NetworkStatusService(this);
+		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 	}
 	

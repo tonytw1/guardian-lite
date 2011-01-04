@@ -39,7 +39,7 @@ public class ArticleDAO {
 		fileBasedArticleCache = new FileBasedArticleCache(context);		
 		sectionsDAO = SingletonFactory.getSectionDAO(context);
 		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
-		networkStatusService = new NetworkStatusService(context);
+		networkStatusService = SingletonFactory.getNetworkStatusService(context);
 		aboutArticlesDAO = new AboutArticlesDAO(context);
 		savedArticlesDAO = new SavedArticlesDAO(context);
 	}

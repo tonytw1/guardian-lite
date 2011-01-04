@@ -30,9 +30,8 @@ public class UpdateArticleSetTask implements ContentUpdateTaskRunnable {
 	public UpdateArticleSetTask(Context context, ArticleSet articleSet) {
 		articleDAO = SingletonFactory.getDao(context);
 		imageDAO = SingletonFactory.getImageDao(context);
-		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
-		
-		networkStatusService = new NetworkStatusService(context);
+		preferencesDAO = SingletonFactory.getPreferencesDAO(context);		
+		networkStatusService = SingletonFactory.getNetworkStatusService(context);
 		taskQueue = SingletonFactory.getTaskQueue(context);
 		
 		this.articleSet = articleSet;
