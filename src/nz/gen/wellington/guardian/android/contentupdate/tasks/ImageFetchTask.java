@@ -26,7 +26,7 @@ public class ImageFetchTask implements ContentUpdateTaskRunnable {
 	
 	@Override
 	public void stop() {
-		// TODO
+		imageDao.stopLoading();
 	}
 	
 	@Override

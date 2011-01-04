@@ -11,12 +11,12 @@ public class ImageDAO {
 
 	private static final String TAG = "ImageDAO";
 	
-	private HttpFetcher httpFetcher;
+	private HttpFetcher activeHttpFetcher;
 	private FileBasedImageCache imageCache;
-		
+	private Context context;
+	
 	public ImageDAO(Context context) {
 		this.imageCache = new FileBasedImageCache(context);
-		httpFetcher = new HttpFetcher(context);
 	}
 
 	public boolean isAvailableLocally(String url) {
@@ -33,18 +33,27 @@ public class ImageDAO {
 		return fetchLiveImage(url);
 	}
 	
+	public void stopLoading() {
+		if (activeHttpFetcher != null) {
+			activeHttpFetcher.stopLoading();
+		}
+	}
+	
 	private Bitmap fetchLiveImage(String url) {
-		byte[] image = httpFetcher.httpFetchStream(url);		
+		activeHttpFetcher = new HttpFetcher(context);
+		byte[] image = activeHttpFetcher.httpFetchStream(url);
+		activeHttpFetcher = null;
+		
 		if (image == null) {
 			Log.i(TAG, "Could not fetch image: " + url);
 			return null;
 		}
 
 		Log.i(TAG, "Writing image to disk: " + url);
-		imageCache.saveImageToFile(url, image);				
+		imageCache.saveImageToFile(url, image);
 		return decodeImage(image);
 	}
-		
+	
 	private Bitmap decodeImage(byte[] image) {
 		Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
 		return bitmap;
