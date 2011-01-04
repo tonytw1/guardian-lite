@@ -17,12 +17,12 @@ public class FileBasedImageCache {
 	}
 
 	public boolean isAvailableLocally(String url) {
-		return FileService.existsLocally(context, getLocalFilename(url));
+		return FileService.existsLocally(context, FileCacheLocalFilenameService.getLocalFilenameFor(url));
 	}
 	
 	public byte[] getCachedImage(String url) {
 		try {
-			InputStream fis = FileService.getFileInputStream(context, getLocalFilename(url));
+			InputStream fis = FileService.getFileInputStream(context, FileCacheLocalFilenameService.getLocalFilenameFor(url));
 			ObjectInputStream in = new ObjectInputStream(fis);
 			byte[] image = (byte[]) in.readObject();
 			in.close();
@@ -39,7 +39,7 @@ public class FileBasedImageCache {
 	public void saveImageToFile(String url, byte[] image) {
 		ObjectOutputStream out = null;
 		try {		
-			FileOutputStream fos = FileService.getFileOutputStream(context, getLocalFilename(url));
+			FileOutputStream fos = FileService.getFileOutputStream(context, FileCacheLocalFilenameService.getLocalFilenameFor(url));
 			out = new ObjectOutputStream(fos);
 			out.writeObject(image);
 			out.close();
@@ -47,13 +47,6 @@ public class FileBasedImageCache {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-	}
-	
-
-	// TODO duplication
-	private static String getLocalFilename(String url) {
-		return url.replaceAll("/", "").replaceAll(":", "").replaceAll("\\?", "").
-			replaceAll("\\.", "").replaceAll("=", "").replaceAll("&", "").replace("%", "").replace("-", "");
 	}
 	
 }

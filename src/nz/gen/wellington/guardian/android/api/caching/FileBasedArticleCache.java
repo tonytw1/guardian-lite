@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.security.MessageDigest;
 import java.util.Date;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
@@ -19,7 +18,7 @@ public class FileBasedArticleCache {
 	
 	private static final String TAG = "FileBasedArticleCache";
 	private static final String VERSION_SUFFIX = "v5";
-	
+
 	private Context context;
 	
 	public FileBasedArticleCache(Context context) {
@@ -39,9 +38,8 @@ public class FileBasedArticleCache {
 			 Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName());
 			 Log.e(TAG, ex.getMessage());
 		 }
-	 }
-	 
-	 
+	}
+	
 	public void touchArticleSet(ArticleSet articleSet, Date modTime) {
 		FileService.touchFile(context, getLocalFilenameForArticleSet(articleSet), modTime);
 	}	 
@@ -119,30 +117,8 @@ public class FileBasedArticleCache {
 		return articleSet.getSourceUrl();
 	}
 	
-	private static String getLocalFilename(String url) {
-		final String md5 = md5(url);
-		if (md5 != null) {
-			return md5 + VERSION_SUFFIX;
-		}
-		return null;
-	}
-	
-		
-	public static String md5(String s) {
-		try {
-			MessageDigest digest = java.security.MessageDigest
-					.getInstance("MD5");
-			digest.update(s.getBytes());
-			byte messageDigest[] = digest.digest();
-
-			StringBuffer hexString = new StringBuffer();
-			for (int i = 0; i < messageDigest.length; i++)
-				hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-			return hexString.toString();
-
-		} catch (Exception e) {
-		}
-		return null;
+	private String getLocalFilename(String url) {
+		return FileCacheLocalFilenameService.getLocalFilenameFor(url) + VERSION_SUFFIX;
 	}
 	
 }
