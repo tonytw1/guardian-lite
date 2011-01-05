@@ -23,7 +23,6 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 public class HttpFetcher {
@@ -115,12 +114,12 @@ public class HttpFetcher {
 			}
 			
 			Log.w(TAG, "Fetch of '" + uri + "' failed: " + statusCode);
-			announceDownloadFailed(uri);
+			downProgressAnnouncer.announceDownloadFailed(uri);
 			return null;
 			
 		} catch (Exception e) {
 			Log.e(TAG, "Http exception: " + e.getMessage());
-			announceDownloadFailed(uri);
+			downProgressAnnouncer.announceDownloadFailed(uri);
 		}
 		return null;
 	}
@@ -172,7 +171,7 @@ public class HttpFetcher {
 			Log.e(TAG, "Http exception: " + e.getMessage());
 		}
 		
-		announceDownloadFailed(url);
+		downProgressAnnouncer.announceDownloadFailed(url);
 		return null;
 	}
 	
@@ -183,14 +182,7 @@ public class HttpFetcher {
 		}
 	}
 	
-	// TODO push to download progress announcer
-	private void announceDownloadFailed(String url) {
-		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
-		intent.putExtra("type", HttpFetcher.DOWNLOAD_FAILED);
-		intent.putExtra("url", url);
-		context.sendBroadcast(intent);
-	}
-		
+	
 	static class GzipDecompressingEntity extends HttpEntityWrapper {
 
         public GzipDecompressingEntity(final HttpEntity entity) {

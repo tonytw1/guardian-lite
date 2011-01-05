@@ -35,4 +35,11 @@ public class DownProgressAnnouncer {
 		context.sendBroadcast(intent);
 	}
 	
+	public void announceDownloadFailed(String url) {
+		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
+		intent.putExtra("type", HttpFetcher.DOWNLOAD_FAILED);
+		intent.putExtra("url", url);
+		context.sendBroadcast(intent);
+	}
+	
 }
