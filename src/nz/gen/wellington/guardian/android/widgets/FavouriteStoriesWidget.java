@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-public class FavouriteStoriesWidget extends AbstractWidget {
+public class FavouriteStoriesWidget extends AbstractArticleSetWidget {
 
 	@Override
 	protected ArticleSet getArticleSet(int pagesize, Context context) {

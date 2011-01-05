@@ -3,7 +3,7 @@ package nz.gen.wellington.guardian.android.widgets;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import android.content.Context;
 
-public class TopStoriesWidget extends AbstractWidget {
+public class TopStoriesWidget extends AbstractArticleSetWidget {
 
 	@Override
 	protected ArticleSet getArticleSet(int pagesize, Context context) {
