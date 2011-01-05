@@ -4,6 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
+
 import android.content.Context;
 
 public class LoggingBufferedInputStream extends BufferedInputStream {
@@ -15,13 +17,13 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 	
 	public LoggingBufferedInputStream(InputStream in, Context context) {
 		super(in);
-		this.downProgressAnnouncer = new DownProgressAnnouncer(context);
+		this.downProgressAnnouncer = SingletonFactory.getDownloadProgressAnnouncer(context);
 		totalRead = 0;
 	}
 
 	public LoggingBufferedInputStream(InputStream in, int size, Context context, long contentLength, String etag, String label) {
 		super(in, size);
-		this.downProgressAnnouncer = new DownProgressAnnouncer(context);		
+		this.downProgressAnnouncer = SingletonFactory.getDownloadProgressAnnouncer(context);	
 		totalRead = 0;
 		this.contentLength = contentLength;
 		this.etag = etag;

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
+
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
@@ -45,7 +47,7 @@ public class HttpFetcher {
 	
 	public HttpFetcher(Context context) {
 		this.context = context;
-		this.downProgressAnnouncer = new DownProgressAnnouncer(context);	// TODO Singleton factory
+		this.downProgressAnnouncer = SingletonFactory.getDownloadProgressAnnouncer(context);
 		
 		client = new DefaultHttpClient();
 		

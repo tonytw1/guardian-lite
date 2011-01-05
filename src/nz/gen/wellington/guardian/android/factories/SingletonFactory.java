@@ -8,6 +8,7 @@ import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiStyleApi;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentResultsHandler;
 import nz.gen.wellington.guardian.android.contentupdate.TaskQueue;
+import nz.gen.wellington.guardian.android.network.DownProgressAnnouncer;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
@@ -22,6 +23,7 @@ public class SingletonFactory {
 	private static PreferencesDAO preferencesDAO;
 	private static ArticleSetFactory articleSetFactory;
 	private static NetworkStatusService networkStatusService;
+	private static DownProgressAnnouncer downloadProgressAnnouncer;
 	
 	public static ArticleDAO getDao(Context context) {
 		return new ArticleDAO(context);	
@@ -82,6 +84,13 @@ public class SingletonFactory {
 			networkStatusService =new NetworkStatusService(context);
 		}
 		return networkStatusService;		
+	}
+
+	public static DownProgressAnnouncer getDownloadProgressAnnouncer(Context context) {
+		if (downloadProgressAnnouncer == null) {
+			downloadProgressAnnouncer = new DownProgressAnnouncer(context);
+		}
+		return downloadProgressAnnouncer;
 	}
 	
 }

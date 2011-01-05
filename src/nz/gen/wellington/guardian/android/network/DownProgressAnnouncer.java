@@ -8,7 +8,6 @@ public class DownProgressAnnouncer {
 	private Context context;
 	
 	public DownProgressAnnouncer(Context context) {
-		super();
 		this.context = context;
 	}
 
