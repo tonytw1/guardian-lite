@@ -16,7 +16,6 @@ import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 public class ContentApiStyleApi implements ContentSource {
@@ -27,11 +26,9 @@ public class ContentApiStyleApi implements ContentSource {
 	private ContentApiStyleJSONParser contentJsonParser;
 	private HttpFetcher httpFetcher;
 	private ArticleSetUrlService articleSetUrlService;
-	private Context context;
 	private PreferencesDAO preferencesDAO;
 	
 	public ContentApiStyleApi(Context context) {
-		this.context = context;
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
 		this.contentJsonParser = new ContentApiStyleJSONParser();
 		this.articleSetUrlService = new ArticleSetUrlService(context);		
@@ -45,8 +42,7 @@ public class ContentApiStyleApi implements ContentSource {
 		
 		final String contentApiUrl = articleSetUrlService.getUrlForArticleSet(articleSet);
 		
-		announceDownloadStarted(articleSet.getName() + " article set");
-		LoggingBufferedInputStream input = httpFetcher.httpFetch(contentApiUrl);
+		LoggingBufferedInputStream input = httpFetcher.httpFetch(contentApiUrl, articleSet.getName() + " article set");
 		if (input != null) {
 			ArticleBundle results = contentXmlParser.parseArticlesXml(input, articleCallback);
 			if (results != null && !results.getArticles().isEmpty()) {
@@ -63,8 +59,7 @@ public class ContentApiStyleApi implements ContentSource {
 	public String getRemoteChecksum(ArticleSet articleSet, int pageSize) {		
 		Log.i(TAG, "Fetching article set checksum for article set: " + articleSet.getName());		
 		final String contentApiUrl = articleSetUrlService.getUrlForArticleSet(articleSet);		
-		announceDownloadStarted(articleSet.getName() + " article set checksum");		
-		return httpFetcher.httpEtag(contentApiUrl);		
+		return httpFetcher.httpEtag(contentApiUrl, articleSet.getName() + " article set checksum");
 	}
 	
 	
@@ -73,7 +68,7 @@ public class ContentApiStyleApi implements ContentSource {
 		Log.i(TAG, "Fetching section list from live api");
 		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(preferencesDAO.getPreferedApiHost(), preferencesDAO.getApiKey());
 		String contentApiUrl = contentApiUrlService.getSectionsQueryUrl();
-		InputStream input = httpFetcher.httpFetch(contentApiUrl);
+		InputStream input = httpFetcher.httpFetch(contentApiUrl, "sections");
 		if (input != null) {
 			return contentJsonParser.parseSectionsJSON(input);
 		}
@@ -84,9 +79,8 @@ public class ContentApiStyleApi implements ContentSource {
 	@Override
 	public List<Tag> searchTags(String searchTerm, Map<String, Section> sections) {
 		Log.i(TAG, "Fetching tag list from live api: " + searchTerm);
-		announceDownloadStarted("tag results");
 		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(preferencesDAO.getPreferedApiHost(), preferencesDAO.getApiKey());
-		InputStream input = httpFetcher.httpFetch(contentApiUrlService.getTagSearchQueryUrl(searchTerm));
+		InputStream input = httpFetcher.httpFetch(contentApiUrlService.getTagSearchQueryUrl(searchTerm), "tag results");
 		if (input != null) {
 			return contentJsonParser.parseTagsJSON(input, sections);
 		}
@@ -101,11 +95,4 @@ public class ContentApiStyleApi implements ContentSource {
 		httpFetcher.stopLoading();
 	}
 	
-	private void announceDownloadStarted(String downloadName) {
-		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
-		intent.putExtra("type", HttpFetcher.DOWNLOAD_STARTED);
-		intent.putExtra("url", downloadName);
-		context.sendBroadcast(intent);
-	}
-		
 }

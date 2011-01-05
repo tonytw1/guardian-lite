@@ -13,6 +13,7 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 	private int totalRead;
 	private long contentLength;
 	private String etag;
+	private String label;
 	
 	public LoggingBufferedInputStream(InputStream in, Context context) {
 		super(in);
@@ -20,12 +21,16 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 		totalRead = 0;
 	}
 
-	public LoggingBufferedInputStream(InputStream in, int size, Context context, long contentLength, String etag) {
+	public LoggingBufferedInputStream(InputStream in, int size, Context context, long contentLength, String etag, String label) {
 		super(in, size);
 		this.context = context;
 		totalRead = 0;
 		this.contentLength = contentLength;
 		this.etag = etag;
+		this.label = label;
+		if (label != null) {
+			announceDownloadStarted();
+		}
 	}
 
 	@Override
@@ -54,6 +59,14 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 		return etag;
 	}
 	
+	
+	private void announceDownloadStarted() {
+		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
+		intent.putExtra("type", HttpFetcher.DOWNLOAD_STARTED);
+		intent.putExtra("url", label);	// TODO overloading of the url field is bad
+		context.sendBroadcast(intent);	
+	}
+	
 	private void announceProgress(String url, int totalRead) {
 		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
 		intent.putExtra("type", HttpFetcher.DOWNLOAD_UPDATE);
@@ -62,7 +75,6 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 		intent.putExtra("bytes_expected", contentLength);
 		context.sendBroadcast(intent);
 	}
-
 	
 	private void announceDownloadCompleted(String url) {
 		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);

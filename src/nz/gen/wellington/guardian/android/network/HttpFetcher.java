@@ -82,9 +82,15 @@ public class HttpFetcher {
 		client.getParams().setParameter("http.socket.timeout", new Integer(HTTP_TIMEOUT));
 		client.getParams().setParameter("http.connection.timeout", new Integer(HTTP_TIMEOUT));
 	}
-
-
-	public LoggingBufferedInputStream httpFetch(String uri) {
+	
+	
+	@Deprecated
+	public LoggingBufferedInputStream httpFetch(String sourceUrl) {
+		return httpFetch(sourceUrl, null);
+	}
+	
+	
+	public LoggingBufferedInputStream httpFetch(String uri, String label) {
 		try {
 			Log.i(TAG, "Making http fetch of: " + uri);						
 			HttpGet get = new HttpGet(uri);	
@@ -102,7 +108,7 @@ public class HttpFetcher {
 					etag = etagHeader[0].getValue();
 				}				
 				long contentLength = execute.getEntity().getContentLength();				
-				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context, contentLength, etag);				
+				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context, contentLength, etag, label);				
 				return is;
 			}
 			
@@ -137,7 +143,13 @@ public class HttpFetcher {
 	}
 	
 	
-	public String httpEtag(String url) {
+	@Deprecated
+	public String httpEtag(String contentApiUrl) {
+		return httpEtag(contentApiUrl, null);
+	}
+	
+	
+	public String httpEtag(String url, String label) {
 		try {
 			Log.i(TAG, "Making http etag head fetch of url: " + url);
 			HttpGet get = new HttpGet(url);		
@@ -145,14 +157,12 @@ public class HttpFetcher {
 			if (execute.getStatusLine().getStatusCode() == 200) {
 				Header[] etags = execute.getHeaders("Etag");
 				if (etags.length == 1) {
-					announceDownloadCompleted(url);
 					return etags[0].getValue();
 				}
 			}									
 		} catch (Exception e) {
 			Log.e(TAG, "Http exception: " + e.getMessage());
 		}
-		announceDownloadCompleted(url);
 		return null;
 	}
 	
@@ -191,15 +201,5 @@ public class HttpFetcher {
             return this.wrappedEntity.getContentLength();
         }
     }
-	
-	
-	// TODO duplicate
-	private void announceDownloadCompleted(String url) {
-		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
-		intent.putExtra("type", HttpFetcher.DOWNLOAD_COMPLETED);
-		intent.putExtra("url", url);
-		context.sendBroadcast(intent);
-	}
-	
 	
 }

@@ -7,7 +7,6 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 public class AboutArticlesDAO implements ArticleSource {
@@ -15,13 +14,10 @@ public class AboutArticlesDAO implements ArticleSource {
 	static final String TAG = "AboutArticlesDAO";
 	static final String ABOUT_ENDPOINT_URL = "http://guardian-lite.appspot.com/about";
 	
-	private Context context;
-	HttpFetcher httpFetcher;
-	ContentApiStyleXmlParser contentXmlParser;
-	
-	
+	private HttpFetcher httpFetcher;
+	private ContentApiStyleXmlParser contentXmlParser;
+		
 	public AboutArticlesDAO(Context context) {
-		this.context = context;
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
 		this.httpFetcher = new HttpFetcher(context);
 	}
@@ -31,10 +27,8 @@ public class AboutArticlesDAO implements ArticleSource {
 	}
 	
 	public ArticleBundle getArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
-		Log.i(TAG, "Fetching about articles");
-		
-		announceDownloadStarted("About");
-		LoggingBufferedInputStream input = httpFetcher.httpFetch(ABOUT_ENDPOINT_URL);
+		Log.i(TAG, "Fetching about articles");		
+		LoggingBufferedInputStream input = httpFetcher.httpFetch(ABOUT_ENDPOINT_URL, "About");
 		if (input != null) {
 			ArticleBundle results = contentXmlParser.parseArticlesXml(input, articleCallback);
 			if (results != null && !results.getArticles().isEmpty()) {
@@ -44,14 +38,6 @@ public class AboutArticlesDAO implements ArticleSource {
 			}
 		}
 		return null;
-	}
-	
-	// TODO duplication with content api dao
-	void announceDownloadStarted(String downloadName) {
-		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
-		intent.putExtra("type", HttpFetcher.DOWNLOAD_STARTED);
-		intent.putExtra("url", downloadName);
-		context.sendBroadcast(intent);
 	}
 	
 }

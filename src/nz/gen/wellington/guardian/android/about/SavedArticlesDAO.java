@@ -11,7 +11,6 @@ import nz.gen.wellington.guardian.android.model.SavedArticlesArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 public class SavedArticlesDAO implements ArticleSource {
@@ -20,12 +19,10 @@ public class SavedArticlesDAO implements ArticleSource {
 	private static final String ENDPOINT_URL = "http://guardian-lite.appspot.com/saved";
 	private static final String URL_ENCODED_COMMA = URLEncoder.encode(",");	
 	
-	private Context context;
 	HttpFetcher httpFetcher;
 	ContentApiStyleXmlParser contentXmlParser;
 		
 	public SavedArticlesDAO(Context context) {
-		this.context = context;
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
 		this.httpFetcher = new HttpFetcher(context);
 	}
@@ -47,8 +44,7 @@ public class SavedArticlesDAO implements ArticleSource {
 	
 	public ArticleBundle getArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
 		Log.i(TAG, "Fetching saved articles");		
-		announceDownloadStarted("Saved articles");
-		LoggingBufferedInputStream input = httpFetcher.httpFetch(articleSet.getSourceUrl());
+		LoggingBufferedInputStream input = httpFetcher.httpFetch(articleSet.getSourceUrl(), "Saved articles");
 		if (input != null) {
 			ArticleBundle results = contentXmlParser.parseArticlesXml(input, articleCallback);
 			if (results != null && !results.getArticles().isEmpty()) {
@@ -58,14 +54,6 @@ public class SavedArticlesDAO implements ArticleSource {
 			}
 		}
 		return null;
-	}
-	
-	// TODO duplication with content api dao
-	void announceDownloadStarted(String downloadName) {
-		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
-		intent.putExtra("type", HttpFetcher.DOWNLOAD_STARTED);
-		intent.putExtra("url", downloadName);
-		context.sendBroadcast(intent);
 	}
 	
 }

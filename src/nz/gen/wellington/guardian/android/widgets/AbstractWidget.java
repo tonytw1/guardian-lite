@@ -26,11 +26,11 @@ import android.widget.RemoteViews;
 
 public abstract class AbstractWidget extends AppWidgetProvider {
 			
-	ArticleViews firstArticleViews = new ArticleViews(
+	private ArticleViews firstArticleViews = new ArticleViews(
 			R.id.WidgetFirstItem, R.id.WidgetHeadline, R.id.WidgetStandfirst,
 			R.id.WidgetImage);
 	
-	ArticleViews secondArticleViews = new ArticleViews(
+	private ArticleViews secondArticleViews = new ArticleViews(
 			R.id.WidgetSecondItem, R.id.WidgetSecondHeadline,
 			R.id.WidgetSecondStandfirst, R.id.WidgetSecondImage);
 	
