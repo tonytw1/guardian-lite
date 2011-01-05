@@ -21,14 +21,16 @@ public abstract class WidgetClickthroughActivity extends Activity {
 	
 	private PreferencesDAO preferencesDAO;
 	protected ArticleSetFactory articleSetFactory;
+	protected ArticleDAO articleDAO;
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
+		articleDAO = SingletonFactory.getDao(this.getApplicationContext());
 	}
-
+	
 	protected void onResume() {
 		super.onResume();		
 		Intent intent = new Intent(this, getDefaultActivity());
@@ -75,7 +77,6 @@ public abstract class WidgetClickthroughActivity extends Activity {
 		
 	private Article getArticleById(final String articleId) {
 		ArticleSet articleSet = getArticleSet();
-		ArticleDAO articleDAO = SingletonFactory.getDao(this.getApplicationContext());	// TODO wants to be a field
 		ArticleBundle bundle = articleDAO.getArticleSetArticles(articleSet, ContentFetchType.LOCAL_ONLY);
 		if (bundle != null) {
 			for (Article article : bundle.getArticles()) {

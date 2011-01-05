@@ -10,10 +10,12 @@ import nz.gen.wellington.guardian.android.activities.widgets.mainwidget;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -33,10 +35,22 @@ public abstract class AbstractWidget extends AppWidgetProvider {
 	private ArticleViews secondArticleViews = new ArticleViews(
 			R.id.WidgetSecondItem, R.id.WidgetSecondHeadline,
 			R.id.WidgetSecondStandfirst, R.id.WidgetSecondImage);
+
+	protected ArticleSetFactory articleSetFactory;
+	private ImageDAO imageDAO;
+	private PreferencesDAO preferencesDAO;
+	private ArticleDAO articleDAO;
 	
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {		
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
+	
+		// TODO is there a better place todo this - ie. a constructor method?
+		articleSetFactory = SingletonFactory.getArticleSetFactory(context);
+		imageDAO = SingletonFactory.getImageDao(context);
+		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
+		articleDAO = SingletonFactory.getDao(context);
+		
 		refresh(context, appWidgetIds);
 	}
 	
@@ -47,7 +61,6 @@ public abstract class AbstractWidget extends AppWidgetProvider {
 	private void refresh(Context context, int[] appWidgetIds) {
 		ArticleBundle stories = getArticles(context);
 		
-		ImageDAO imageDAO = SingletonFactory.getImageDao(context);
 		RemoteViews widgetView = new RemoteViews(context.getPackageName(), R.layout.widget);
 		if (stories != null && stories.getArticles() != null) {
 			
@@ -90,11 +103,10 @@ public abstract class AbstractWidget extends AppWidgetProvider {
 
 	
 	private ArticleBundle getArticles(Context context) {
-		ArticleSet articleSet = getArticleSet(SingletonFactory.getPreferencesDAO(context).getPageSizePreference(), context);
+		ArticleSet articleSet = getArticleSet(preferencesDAO.getPageSizePreference(), context);
 		if (articleSet.isEmpty()) {
 			return null;
 		}
-		ArticleDAO articleDAO = SingletonFactory.getDao(context);
 		return articleDAO.getArticleSetArticles(articleSet, ContentFetchType.LOCAL_ONLY);
 	}
 	
