@@ -1,11 +1,15 @@
 package nz.gen.wellington.guardian.android.activities.ui;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,43 +19,44 @@ import android.widget.TextView;
 // TODO why is this static?
 public class TagListPopulatingService {
 	
-	//private static final String TAG = "TagListPopulatingService";
-
 	public static void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets, Context context) {		
-		ArticleDAO articleDAO = SingletonFactory.getArticleDao(context);		
-		//Set<String> duplicatedTagNames = getDuplicatedTagNames(tags);		
+		ArticleDAO articleDAO = SingletonFactory.getArticleDao(context);
+	
+		Set<String> duplicatedArticleSetNames = getDuplicatedArticleSetNames(articleSets);		
 		for (ArticleSet articleSet : articleSets) {
 			final boolean isContentAvailable = articleDAO.isAvailable(articleSet);
 			View tagView = inflater.inflate(R.layout.authorslist, null);
 			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
-			titleText.setText(articleSet.getName());			
+			
+			titleText.setText(getDeduplicatedArticleSetName(articleSet, duplicatedArticleSetNames));
+			
 			ClickerPopulatingService.populateClicker(articleSet, tagView, isContentAvailable);			
 			tagList.addView(tagView);
 		}
 	}
 	
+	private static Set<String> getDuplicatedArticleSetNames(List<ArticleSet> articleSets) {
+		Set<String> duplicatedArticleSetNames = new HashSet<String>();
 		
-	// TODO make this work for article sets
-	//private static Set<String> getDuplicatedTagNames(List<Tag> tags) {
-	//	Set<String> duplicatedTagNames = new HashSet<String>();		
-	//	Set<String> allTagNames = new HashSet<String>();
-	//	for (Tag tag : tags) {
-	//		if (allTagNames.contains(tag.getName())) {
-	//			duplicatedTagNames.add(tag.getName());
-	//		}
-	//		allTagNames.add(tag.getName());
-	//	}
-	//	return duplicatedTagNames;
-	//}
+		Set<String> allArticleSetNames = new HashSet<String>();
+		for (ArticleSet articleSet : articleSets) {
+			if (allArticleSetNames.contains(articleSet.getName())) {
+				duplicatedArticleSetNames.add(articleSet.getName());
+			}
+			allArticleSetNames.add(articleSet.getName());
+		}
+		return duplicatedArticleSetNames;
+	}
 	
-	// TODO make this work for article sets
-	//private static String getDeduplicatedTagName(Tag tag, boolean tagNameIsDuplicated) {
-	//	if (tagNameIsDuplicated && tag.getSection() != null) {
-	//		return tag.getSection().getName() + " - " + tag.getName();
-	//	} else {
-	//		return tag.getName();
-	//	}
-	//}
 	
+	private static String getDeduplicatedArticleSetName(ArticleSet articleSet, Set<String> duplicatedArticleSetNames) {
+		boolean articleSetNameIsDuplicated = duplicatedArticleSetNames.contains(articleSet.getName());
+		if (articleSetNameIsDuplicated && articleSet instanceof TagArticleSet) {
+			Tag articleSetTag = ((TagArticleSet) articleSet).getTag();
+			return articleSetTag.getSection().getName() + " - " + articleSetTag.getName();
+		}
+		return articleSet.getName();
+	}
+
 }
 
