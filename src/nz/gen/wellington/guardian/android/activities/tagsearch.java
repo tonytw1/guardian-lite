@@ -43,7 +43,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	private TagSearchResultsHandler tagSearchResultsHandler;
 	private SectionDAO sectionDAO;
 	private ArticleSetFactory articleSetFactory;
-	private Context context;
+	private TagListPopulatingService tagListPopulatingService;
 	
 	
 	@Override
@@ -55,6 +55,8 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
+		tagListPopulatingService = SingletonFactory.getTagListPopulator(this.getApplicationContext());
+		
 		sections = sectionDAO.getSectionsMap();
 
 		final int baseSize = preferencesDAO.getBaseFontSize();
@@ -65,7 +67,6 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		
 		searchResults = new ArrayList<Tag>();		
 		tagSearchResultsHandler = new TagSearchResultsHandler(this.getApplicationContext());
-		this.context = this.getApplicationContext();
 	}
 
 	
@@ -98,7 +99,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 				
 				if (!(searchTerm.trim().equals(""))) {					
 					hideKeyboard(input);
-					Thread loader = new Thread(new TagSearchRunner(searchTerm));
+					Thread loader = new Thread(new TagSearchRunner(searchTerm, this.getApplicationContext()));
 					loader.start();
 				}
 				return;								
@@ -136,8 +137,10 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	class TagSearchRunner implements Runnable {
 		
 		String searchTeam;
+		private ContentSource api;
 		
-		public TagSearchRunner(String searchTerm) {
+		public TagSearchRunner(String searchTerm, Context context) {
+			this.api = SingletonFactory.getOpenPlatformApi(context);
 			this.searchTeam = searchTerm;
 		}
 
@@ -157,7 +160,6 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		}
 			
 		private List<Tag> fetchTagResults(final String searchTerm) {
-			ContentSource api = SingletonFactory.getOpenPlatformApi(context);
 			List<Tag> results = api.searchTags(searchTerm, sections);
 			return results;
 		}
@@ -175,7 +177,6 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		LinearLayout resultsPane = (LinearLayout) findViewById(R.id.TagList);
 		resultsPane.removeAllViews();
 		LayoutInflater inflater = LayoutInflater.from(this);
-		TagListPopulatingService tagListPopulatingService = new TagListPopulatingService(this.getApplicationContext());	// TODO field
 		tagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), resultsPane, articleSetFactory.getArticleSetsForTags(searchResults));
 	}
 	

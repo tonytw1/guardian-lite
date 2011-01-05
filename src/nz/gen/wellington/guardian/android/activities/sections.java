@@ -24,6 +24,7 @@ public class sections extends DownloadProgressAwareActivity {
 	private SectionDAO sectionDAO;
 	private NetworkStatusService networkStatusService;
 	private ArticleSetFactory articleSetFactory;
+	private TagListPopulatingService tagListPopulatingService;
 		
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class sections extends DownloadProgressAwareActivity {
 		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
+		tagListPopulatingService = SingletonFactory.getTagListPopulator(this.getApplicationContext());
 		
 		setContentView(R.layout.sections);
 		View view =  findViewById(R.id.Main);
@@ -57,7 +59,6 @@ public class sections extends DownloadProgressAwareActivity {
 			LayoutInflater inflater = LayoutInflater.from(this);		
 			LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);
 			
-			TagListPopulatingService tagListPopulatingService = new TagListPopulatingService(this.getApplicationContext());	// TODO Field
 			tagListPopulatingService.populateTags(inflater,
 					networkStatusService.isConnectionAvailable(), authorList,
 					articleSetFactory.getArticleSetsForSections(sections));

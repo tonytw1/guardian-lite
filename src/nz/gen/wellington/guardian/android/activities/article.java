@@ -49,6 +49,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
     private Map<String, Bitmap> images;
 	private MenuItem favouriteMenuItem;
 	private String shareText;
+	private TagListPopulatingService tagListPopulatingService;
         
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
+		tagListPopulatingService = SingletonFactory.getTagListPopulator(this.getApplicationContext());
 		
 		images = new HashMap<String, Bitmap>();
     	mainImageUpdateHandler = new MainImageUpdateHandler();
@@ -181,7 +183,6 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		LayoutInflater inflater = LayoutInflater.from(this);
 		findViewById(R.id.TagLabel).setVisibility(View.VISIBLE);
 		
-		TagListPopulatingService tagListPopulatingService = new TagListPopulatingService(this.getApplicationContext());	//  TODO push up to field		
 		tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), articleSetFactory.getArticleSetsForTags(article.getAuthors()));
 		tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.TagList), articleSetFactory.getArticleSetsForTags(article.getKeywords()));
 	}

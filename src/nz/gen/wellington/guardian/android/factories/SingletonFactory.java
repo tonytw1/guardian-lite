@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.factories;
 
+import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
@@ -24,6 +25,7 @@ public class SingletonFactory {
 	private static ArticleSetFactory articleSetFactory;
 	private static NetworkStatusService networkStatusService;
 	private static DownProgressAnnouncer downloadProgressAnnouncer;
+	private static TagListPopulatingService tagListPopulatingService;
 	
 	public static ArticleDAO getArticleDao(Context context) {
 		return new ArticleDAO(context);	
@@ -91,6 +93,13 @@ public class SingletonFactory {
 			downloadProgressAnnouncer = new DownProgressAnnouncer(context);
 		}
 		return downloadProgressAnnouncer;
+	}
+
+	public static TagListPopulatingService getTagListPopulator(Context context) {
+		if (tagListPopulatingService == null) {
+			tagListPopulatingService = new TagListPopulatingService(context);
+		}
+		return tagListPopulatingService;
 	}
 	
 }

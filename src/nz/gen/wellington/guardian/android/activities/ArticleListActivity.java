@@ -190,11 +190,14 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		private boolean descriptionSet;
 		private int baseFontSize;
 		private ArticleSetFactory articleSetFactory;
+		private TagListPopulatingService tagListPopulatingService;
 		
 		public UpdateArticlesHandler(Context context, ArticleSet articleSet, int baseFontSize) {
 			super();
-			this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
 			this.context = context;
+			this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
+			this.tagListPopulatingService = SingletonFactory.getTagListPopulator(context);
+			
 			this.articleSet = articleSet;
 			this.descriptionSet = false;
 			this.baseFontSize = baseFontSize;
@@ -342,7 +345,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			tagGroup.setOrientation(LinearLayout.VERTICAL);
 			tagGroup.setPadding(2, 0, 2, 0);
 			
-			TagListPopulatingService tagListPopulatingService = new TagListPopulatingService(context);	// TODO push up to a field
 			tagListPopulatingService.populateTags(inflater, true, tagGroup, typedRefinements);
 			mainpane.addView(tagGroup);
 		}
