@@ -75,7 +75,7 @@ public abstract class WidgetClickthroughActivity extends Activity {
 		
 	private Article getArticleById(final String articleId) {
 		ArticleSet articleSet = getArticleSet();
-		ArticleDAO articleDAO = SingletonFactory.getDao(this.getApplicationContext());
+		ArticleDAO articleDAO = SingletonFactory.getDao(this.getApplicationContext());	// TODO wants to be a field
 		ArticleBundle bundle = articleDAO.getArticleSetArticles(articleSet, ContentFetchType.LOCAL_ONLY);
 		if (bundle != null) {
 			for (Article article : bundle.getArticles()) {

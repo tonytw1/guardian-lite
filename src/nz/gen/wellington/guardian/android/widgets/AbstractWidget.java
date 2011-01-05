@@ -91,7 +91,7 @@ public abstract class AbstractWidget extends AppWidgetProvider {
 	
 	private ArticleBundle getArticles(Context context) {
 		ArticleSet articleSet = getArticleSet(SingletonFactory.getPreferencesDAO(context).getPageSizePreference(), context);
-		if (articleSet == null) {
+		if (articleSet.isEmpty()) {
 			return null;
 		}
 		ArticleDAO articleDAO = SingletonFactory.getDao(context);

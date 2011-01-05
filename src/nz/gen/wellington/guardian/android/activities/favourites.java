@@ -129,13 +129,9 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 		return false;
 	}
 
-	// TODO this code is duplicated in several places - should the article set factory do the tag and section lookups?
 	@Override
-	protected ArticleSet getArticleSet() {	
-		FavouriteSectionsAndTagsDAO favouriteSectionAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
-		List<Section> favouriteSections = favouriteSectionAndTagsDAO.getFavouriteSections();
-		List<Tag> favouriteTags = favouriteSectionAndTagsDAO.getFavouriteTags();
-		return articleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags);		
+	protected ArticleSet getArticleSet() {
+		return articleSetFactory.getFavouritesArticleSet();
 	}
 	
 	@Override

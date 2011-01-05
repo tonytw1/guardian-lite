@@ -13,6 +13,7 @@ import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
+import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
 
@@ -20,9 +21,11 @@ public class ArticleSetFactory {
 	
 	private PreferencesDAO preferencesDAO;
 	private ArticleSetUrlService articleSetUrlService;
+	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
 	
 	public ArticleSetFactory(Context context) {
 		this.preferencesDAO = SingletonFactory.getPreferencesDAO(context);
+		this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(context);
 		this.articleSetUrlService = new ArticleSetUrlService(context);
 	}
 
@@ -39,11 +42,13 @@ public class ArticleSetFactory {
 	public ArticleSet getArticleSetForSection(Section section) {
 		return addUrl(new SectionArticleSet(section, preferencesDAO.getPageSizePreference()));
 	}
-
-	public ArticleSet getFavouritesArticleSetFor(List<Section> favouriteSections, List<Tag> favouriteTags) {
+	
+	public ArticleSet getFavouritesArticleSet() {
+		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections();
+		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
 		return addUrl(new FavouriteTagsArticleSet(favouriteSections, favouriteTags, preferencesDAO.getPageSizePreference()));
 	}
-
+	
 	public ArticleSet getTopStoriesArticleSet() {
 		return addUrl(new TopStoriesArticleSet(preferencesDAO.getPageSizePreference()));
 	}

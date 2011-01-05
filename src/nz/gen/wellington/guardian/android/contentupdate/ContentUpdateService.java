@@ -5,9 +5,10 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.contentupdate.tasks.UpdateArticleSetTask;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
+import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
-import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
@@ -98,16 +99,14 @@ public class ContentUpdateService extends Service {
 	
 	private void queueUpdateTasks(int pagesize) {
 		TaskQueue taskQueue = SingletonFactory.getTaskQueue(this.getApplicationContext());
-		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		
 		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), articleSetFactory.getTopStoriesArticleSet()));
 		
-		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections(); 
-		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
-		if (!favouriteSections.isEmpty() || !favouriteTags.isEmpty()) {
-			queueSections(taskQueue, favouriteSections, pagesize);
-			queueTags(taskQueue, favouriteTags, pagesize);
-			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), articleSetFactory.getFavouritesArticleSetFor(favouriteSections, favouriteTags)));
+		ArticleSet favouritesArticleSet = articleSetFactory.getFavouritesArticleSet();
+		if (!favouritesArticleSet.isEmpty()) {
+			queueSections(taskQueue, ((FavouriteTagsArticleSet) favouritesArticleSet).getSections(), pagesize);
+			queueTags(taskQueue, ((FavouriteTagsArticleSet) favouritesArticleSet).getTags(), pagesize);
+			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), favouritesArticleSet));
 		}
 	}
 	
