@@ -18,7 +18,7 @@ public class TagListPopulatingService {
 	//private static final String TAG = "TagListPopulatingService";
 
 	public static void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets, Context context) {		
-		ArticleDAO articleDAO = SingletonFactory.getDao(context);		
+		ArticleDAO articleDAO = SingletonFactory.getArticleDao(context);		
 		//Set<String> duplicatedTagNames = getDuplicatedTagNames(tags);		
 		for (ArticleSet articleSet : articleSets) {
 			final boolean isContentAvailable = articleDAO.isAvailable(articleSet);

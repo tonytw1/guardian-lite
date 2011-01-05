@@ -25,7 +25,7 @@ public class SingletonFactory {
 	private static NetworkStatusService networkStatusService;
 	private static DownProgressAnnouncer downloadProgressAnnouncer;
 	
-	public static ArticleDAO getDao(Context context) {	// TODO rename to getArticleDAO
+	public static ArticleDAO getArticleDao(Context context) {
 		return new ArticleDAO(context);	
 	}
 	

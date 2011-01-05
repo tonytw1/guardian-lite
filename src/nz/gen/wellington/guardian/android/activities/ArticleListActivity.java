@@ -67,7 +67,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		viewsWaitingForTrailImages = new HashMap<String, View>();
-		articleDAO = SingletonFactory.getDao(this.getApplicationContext());
+		articleDAO = SingletonFactory.getArticleDao(this.getApplicationContext());
 		imageDAO = SingletonFactory.getImageDao(this.getApplicationContext());		
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
@@ -154,7 +154,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		if (loaded == null || mainPane.getChildCount() == 0) {
 			return true;
 		}
-		Date modtime = SingletonFactory.getDao(this.getApplicationContext()).getModificationTime(getArticleSet());
+		Date modtime = SingletonFactory.getArticleDao(this.getApplicationContext()).getModificationTime(getArticleSet());
 		return modtime != null && modtime.after(loaded);
 	}
 	

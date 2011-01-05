@@ -28,7 +28,7 @@ public class UpdateArticleSetTask implements ContentUpdateTaskRunnable {
 	private ArticleSet articleSet;
 		
 	public UpdateArticleSetTask(Context context, ArticleSet articleSet) {
-		articleDAO = SingletonFactory.getDao(context);
+		articleDAO = SingletonFactory.getArticleDao(context);
 		imageDAO = SingletonFactory.getImageDao(context);
 		preferencesDAO = SingletonFactory.getPreferencesDAO(context);		
 		networkStatusService = SingletonFactory.getNetworkStatusService(context);

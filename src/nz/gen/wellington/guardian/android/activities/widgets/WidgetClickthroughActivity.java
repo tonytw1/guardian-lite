@@ -28,7 +28,7 @@ public abstract class WidgetClickthroughActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
-		articleDAO = SingletonFactory.getDao(this.getApplicationContext());
+		articleDAO = SingletonFactory.getArticleDao(this.getApplicationContext());
 	}
 	
 	protected void onResume() {

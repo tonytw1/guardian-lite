@@ -16,7 +16,7 @@ public class PurgeExpiredContentTask implements ContentUpdateTaskRunnable {
 	
 	@Override
 	public void run() {
-		ArticleDAO articleDAO = SingletonFactory.getDao(context);
+		ArticleDAO articleDAO = SingletonFactory.getArticleDao(context);
 		articleDAO.clearExpiredCacheFiles(context);
 	}
 	

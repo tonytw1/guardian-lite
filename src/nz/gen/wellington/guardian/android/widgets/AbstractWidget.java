@@ -49,7 +49,7 @@ public abstract class AbstractWidget extends AppWidgetProvider {
 		articleSetFactory = SingletonFactory.getArticleSetFactory(context);
 		imageDAO = SingletonFactory.getImageDao(context);
 		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
-		articleDAO = SingletonFactory.getDao(context);
+		articleDAO = SingletonFactory.getArticleDao(context);
 		
 		refresh(context, appWidgetIds);
 	}
