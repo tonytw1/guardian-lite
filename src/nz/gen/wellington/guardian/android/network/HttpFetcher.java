@@ -35,6 +35,7 @@ public class HttpFetcher {
     
     private HttpGet activeGet;
 	private HttpClient client;
+	private DownProgressAnnouncer downProgressAnnouncer;
 	private Context context;
 		
 	public static final int DOWNLOAD_STARTED = 1;
@@ -45,6 +46,7 @@ public class HttpFetcher {
 	
 	public HttpFetcher(Context context) {
 		this.context = context;
+		this.downProgressAnnouncer = new DownProgressAnnouncer(context);	// TODO Singleton factory
 		
 		client = new DefaultHttpClient();
 		
@@ -152,17 +154,25 @@ public class HttpFetcher {
 	public String httpEtag(String url, String label) {
 		try {
 			Log.i(TAG, "Making http etag head fetch of url: " + url);
-			HttpGet get = new HttpGet(url);		
+			HttpGet get = new HttpGet(url);
+			if (label != null) {
+				downProgressAnnouncer.announceDownloadStarted(label);
+			}
 			HttpResponse execute = executeGet(get);
 			if (execute.getStatusLine().getStatusCode() == 200) {
 				Header[] etags = execute.getHeaders("Etag");
 				if (etags.length == 1) {
-					return etags[0].getValue();
+					final String result = etags[0].getValue();
+					downProgressAnnouncer.announceDownloadCompleted(url);
+					return result;
 				}
-			}									
+			}
+			
 		} catch (Exception e) {
 			Log.e(TAG, "Http exception: " + e.getMessage());
 		}
+		
+		announceDownloadFailed(url);
 		return null;
 	}
 	
@@ -173,7 +183,7 @@ public class HttpFetcher {
 		}
 	}
 	
-	
+	// TODO push to download progress announcer
 	private void announceDownloadFailed(String url) {
 		Intent intent = new Intent(HttpFetcher.DOWNLOAD_PROGRESS);
 		intent.putExtra("type", HttpFetcher.DOWNLOAD_FAILED);

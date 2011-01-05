@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,12 @@ public class ContentApiStyleApi implements ContentSource {
 			if (results != null && !results.getArticles().isEmpty()) {
 				String checksum = input.getEtag();
 				results.setChecksum(checksum);
-				return results;			
+				try {
+					input.close();
+				} catch (IOException e) {
+					Log.w(TAG, "Failed to close input stream");
+				}
+				return results;
 			}
 		}
 		return null;
@@ -70,7 +76,13 @@ public class ContentApiStyleApi implements ContentSource {
 		String contentApiUrl = contentApiUrlService.getSectionsQueryUrl();
 		InputStream input = httpFetcher.httpFetch(contentApiUrl, "sections");
 		if (input != null) {
-			return contentJsonParser.parseSectionsJSON(input);
+			List<Section> results = contentJsonParser.parseSectionsJSON(input);
+			try {
+				input.close();
+			} catch (IOException e) {
+				Log.w(TAG, "Failed to close input stream");
+			}
+			return results;
 		}
 		return null;
 	}
@@ -82,7 +94,13 @@ public class ContentApiStyleApi implements ContentSource {
 		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(preferencesDAO.getPreferedApiHost(), preferencesDAO.getApiKey());
 		InputStream input = httpFetcher.httpFetch(contentApiUrlService.getTagSearchQueryUrl(searchTerm), "tag results");
 		if (input != null) {
-			return contentJsonParser.parseTagsJSON(input, sections);
+			List<Tag> results = contentJsonParser.parseTagsJSON(input, sections);
+			try {
+				input.close();
+			} catch (IOException e) {
+				Log.w(TAG, "Failed to close input stream");
+			}
+			return results;
 		}
 		return null;
 	}
