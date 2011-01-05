@@ -70,22 +70,22 @@ public class sections extends DownloadProgressAwareActivity {
 	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 1, 0, "Home");
-		menu.add(0, 2, 0, "Favourites");
-		menu.add(0, 3, 0, "Search tags");
+		menu.add(0, MenuedActivity.HOME, 0, "Home");
+		menu.add(0, MenuedActivity.FAVOURITES, 0, "Favourites");
+		menu.add(0, MenuedActivity.SEARCH_TAGS, 0, "Search tags");
 	    return true;
 	}
 	
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case 1:
+		case MenuedActivity.HOME:
 			switchToMain();
 			return true;
-		case 2:
+		case MenuedActivity.FAVOURITES:
 			switchToFavourites();
 			return true;
-		case 3:
+		case MenuedActivity.SEARCH_TAGS:
 			switchToTagSearch();
 			return true;
 		}

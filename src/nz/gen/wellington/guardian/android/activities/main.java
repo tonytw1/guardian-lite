@@ -38,34 +38,34 @@ public class main extends ArticleListActivity {
 	
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 1, 0, "Favourites");
-	    menu.add(0, 2, 0, "Sections");
-	    menu.add(0, 6, 0, "About");
-	    menu.add(0, 5, 0, "Refresh");
-	    menu.add(0, 3, 0, "Sync");
-	    menu.add(0, 4, 0, "Settings");
+		menu.add(0, MenuedActivity.FAVOURITES, 0, "Favourites");
+	    menu.add(0, MenuedActivity.SECTIONS, 0, "Sections");
+	    menu.add(0, MenuedActivity.ABOUT, 0, "About");
+	    menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
+	    menu.add(0, MenuedActivity.SYNC, 0, "Sync");
+	    menu.add(0, MenuedActivity.SETTING, 0, "Settings");
 	    return true;
 	}
 	
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {	   
-	    case 1: 	    	
+	    case MenuedActivity.FAVOURITES: 	    	
 	    	switchToFavourites();
 	    	return true;	 
-	    case 2:
+	    case MenuedActivity.SECTIONS:
 	    	switchToSections();
 	    	return true;	 
-	    case 3: 	    	
+	    case MenuedActivity.SYNC: 	    	
 	    	swichToSync();
 	        return true;
-	    case 4:
-	    	switchToPreferences();
+	    case MenuedActivity.SETTING:
+	    	switchToSettings();
 	    	return true;
-	    case 5:
+	    case MenuedActivity.REFRESH:
 			refresh();
-			return true;	
-	    case 6:
+			return true;
+	    case MenuedActivity.ABOUT:
 	    	switchToAbout();
 	    	return true;
 	    }

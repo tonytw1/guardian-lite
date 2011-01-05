@@ -204,24 +204,24 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 1, 0, "Home");
+		menu.add(0, MenuedActivity.HOME, 0, "Home");
 		
 		if (article != null && article.getId() != null) {
 			if (favouriteSectionsAndTagsDAO.isSavedArticle(article)) {
-				favouriteMenuItem = menu.add(0, 2, 0, REMOVE_SAVED_ARTICLE);
+				favouriteMenuItem = menu.add(0, MenuedActivity.SAVE_REMOVE_ARTICLE, 0, REMOVE_SAVED_ARTICLE);				
 			} else {
-				favouriteMenuItem = menu.add(0, 2, 0, SAVE_ARTICLE);
+				favouriteMenuItem = menu.add(0, MenuedActivity.SAVE_REMOVE_ARTICLE, 0, SAVE_ARTICLE);
 			}
 		}
 		
-	    MenuItem showInBrowserMenuOption = menu.add(0, 3, 0, "Open in browser");
+	    MenuItem showInBrowserMenuOption = menu.add(0, MenuedActivity.BROWSER, 0, "Open in browser");
 		if (article != null && article.getWebUrl() != null) {
 			showInBrowserMenuOption.setEnabled(true);
 		} else {
 			showInBrowserMenuOption.setEnabled(false);
 		}
 	    
-	    MenuItem shareMenuOption = menu.add(0, 4, 0, "Share");
+	    MenuItem shareMenuOption = menu.add(0, MenuedActivity.SHARE, 0, "Share");
 		shareText = ShareTextComposingService.composeShareText(article);
 		if (article != null && shareText != null) {
 			shareMenuOption.setEnabled(true);
@@ -234,17 +234,17 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	    case 1:
+	    case MenuedActivity.HOME:
 	    	switchToMain();
 	    	return true;  
-		case 2:
+		case MenuedActivity.SAVE_REMOVE_ARTICLE:
 			processSavedArticle(article);			
 	    	return true;
-		case 3:
+		case MenuedActivity.BROWSER:
 			showArticleInBrowser(article);
 			return true;
-		case 4:
-			shareArticle(article);			
+		case MenuedActivity.SHARE:
+			shareArticle(article);
 	    	return true;
 	    }
 	    return false;

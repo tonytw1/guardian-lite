@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class savedArticles extends ArticleListActivity implements FontResizingActivity {
-		
+	
 	private PreferencesDAO preferencesDAO;
 	private ArticleSetFactory articleSetFactory;
 	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
@@ -52,9 +52,9 @@ public class savedArticles extends ArticleListActivity implements FontResizingAc
 	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 1, 0, "Home");
-		menu.add(0, 2, 0, "Refresh");
-		menu.add(0, 3, 0, "Remove all");
+		menu.add(0, MenuedActivity.HOME, 0, "Home");
+		menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
+		menu.add(0, MenuedActivity.REMOVE_ALL_SAVED, 0, "Remove all");
 	    return true;
 	}
 	
@@ -62,13 +62,13 @@ public class savedArticles extends ArticleListActivity implements FontResizingAc
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case 1:
+		case MenuedActivity.HOME:
 			switchToMain();
 			return true;
-		case 2:
+		case MenuedActivity.REFRESH:
 			refresh();
 			return true;
-		case 3:
+		case MenuedActivity.REMOVE_ALL_SAVED:
 			removeAll();
 			return true;
 		}

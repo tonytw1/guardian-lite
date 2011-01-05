@@ -47,13 +47,13 @@ public class tag extends ArticleListActivity {
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 1, 0, "Home");	
-		menu.add(0, 5, 0, "Refresh");
+		menu.add(0, MenuedActivity.HOME, 0, "Home");	
+		menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
 		
 		if (favouriteSectionsAndTagsDAO.isFavourite(tag)) {
-			favouriteMenuItem = menu.add(0, 4, 0, "Remove Favourite");
+			favouriteMenuItem = menu.add(0, MenuedActivity.ADD_REMOVE_FAVOURITE, 0, "Remove Favourite");
 		} else {
-			favouriteMenuItem = menu.add(0, 4, 0, "Add to Favourites");
+			favouriteMenuItem = menu.add(0, MenuedActivity.ADD_REMOVE_FAVOURITE, 0, "Add to Favourites");
 		}
 		
 	    return true;
@@ -63,13 +63,13 @@ public class tag extends ArticleListActivity {
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case 1:
+		case MenuedActivity.HOME:
 			switchToMain();
 			return true;	
-		case 4:
+		case MenuedActivity.FAVOURITES:
 			addToFavourites();
 			return true;
-		case 5:
+		case MenuedActivity.REFRESH:
 			refresh();
 			return true;
 		}

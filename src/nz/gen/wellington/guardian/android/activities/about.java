@@ -73,18 +73,18 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 1, 0, "Home");
-		menu.add(0, 5, 0, "Refresh");
+		menu.add(0, MenuedActivity.HOME, 0, "Home");
+		menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
 	    return true;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case 1:
+		case MenuedActivity.HOME:
 			switchToMain();
 			return true;
-		case 5:
+		case MenuedActivity.REFRESH:
 			refresh();
 			return true;
 		}

@@ -64,13 +64,13 @@ public class section extends ArticleListActivity implements FontResizingActivity
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 1, 0, "Home");
-		menu.add(0, 5, 0, "Refresh");
+		menu.add(0, MenuedActivity.HOME, 0, "Home");
+		menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
 		
 		if (favouriteSectionsAndTagsDAO.isFavourite(section)) {
-			favouriteMenuItem = menu.add(0, 4, 0, "Remove Favourite");
+			favouriteMenuItem = menu.add(0, MenuedActivity.ADD_REMOVE_FAVOURITE, 0, "Remove Favourite");
 		} else {
-			favouriteMenuItem = menu.add(0, 4, 0, "Add to Favourites");
+			favouriteMenuItem = menu.add(0, MenuedActivity.ADD_REMOVE_FAVOURITE, 0, "Add to Favourites");
 		}		
 	    return true;
 	}
@@ -78,19 +78,19 @@ public class section extends ArticleListActivity implements FontResizingActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case 1:
+		case MenuedActivity.HOME:
 			switchToMain();
 			return true;
-		case 2:
+		case MenuedActivity.FAVOURITES:
 			switchToFavourites();
 			return true;
-		case 3:
+		case MenuedActivity.SECTIONS:
 			switchToSections();
 			return true;
-		case 4:
+		case MenuedActivity.ADD_REMOVE_FAVOURITE:
 			addToFavourites();
 			return true;
-		case 5:
+		case MenuedActivity.REFRESH:
 			refresh();
 			return true;
 		}
