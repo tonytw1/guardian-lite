@@ -55,11 +55,12 @@ public class sections extends DownloadProgressAwareActivity {
 		if (sections != null) {
 			sections = SectionSorter.sortByName(sections);	// TODO push this back behind the section dao for performance		
 			LayoutInflater inflater = LayoutInflater.from(this);		
-			LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);			
-			TagListPopulatingService.populateTags(inflater,
+			LinearLayout authorList = (LinearLayout) findViewById(R.id.MainPane);
+			
+			TagListPopulatingService tagListPopulatingService = new TagListPopulatingService(this.getApplicationContext());	// TODO Field
+			tagListPopulatingService.populateTags(inflater,
 					networkStatusService.isConnectionAvailable(), authorList,
-					articleSetFactory.getArticleSetsForSections(sections), 
-					this.getApplicationContext());
+					articleSetFactory.getArticleSetsForSections(sections));
 			
 		} else {
         	Toast.makeText(this, "Could not load sections", Toast.LENGTH_SHORT).show();

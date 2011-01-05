@@ -86,10 +86,11 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 			tagGroup.setOrientation(LinearLayout.VERTICAL);
 			tagGroup.setPadding(2, 0, 2, 0);
 			
-			final boolean connectionIsAvailable = networkStatusService.isConnectionAvailable();			
-			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForSections(favouriteSections), this.getApplicationContext());
-			TagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForTags(favouriteTags), this.getApplicationContext());
+			final boolean connectionIsAvailable = networkStatusService.isConnectionAvailable();
 			
+			TagListPopulatingService tagListPopulatingService = new TagListPopulatingService(this.getApplicationContext());	// TODO move up towards a field.
+			tagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForSections(favouriteSections));
+			tagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForTags(favouriteTags));			
 			authorList.addView(tagGroup);
 			
 			description.setText("The following sections and tags have been marked as favourites.");			

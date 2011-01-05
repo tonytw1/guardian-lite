@@ -16,12 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-// TODO why is this static?
 public class TagListPopulatingService {
 	
-	public static void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets, Context context) {		
-		ArticleDAO articleDAO = SingletonFactory.getArticleDao(context);
+	private ArticleDAO articleDAO;
 	
+	public TagListPopulatingService(Context context) {
+		articleDAO = SingletonFactory.getArticleDao(context);
+	}
+
+	public void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets) {
 		Set<String> duplicatedArticleSetNames = getDuplicatedArticleSetNames(articleSets);		
 		for (ArticleSet articleSet : articleSets) {
 			final boolean isContentAvailable = articleDAO.isAvailable(articleSet);
@@ -35,7 +38,7 @@ public class TagListPopulatingService {
 		}
 	}
 	
-	private static Set<String> getDuplicatedArticleSetNames(List<ArticleSet> articleSets) {
+	private Set<String> getDuplicatedArticleSetNames(List<ArticleSet> articleSets) {
 		Set<String> duplicatedArticleSetNames = new HashSet<String>();
 		
 		Set<String> allArticleSetNames = new HashSet<String>();
@@ -49,7 +52,7 @@ public class TagListPopulatingService {
 	}
 	
 	
-	private static String getDeduplicatedArticleSetName(ArticleSet articleSet, Set<String> duplicatedArticleSetNames) {
+	private String getDeduplicatedArticleSetName(ArticleSet articleSet, Set<String> duplicatedArticleSetNames) {
 		boolean articleSetNameIsDuplicated = duplicatedArticleSetNames.contains(articleSet.getName());
 		if (articleSetNameIsDuplicated && articleSet instanceof TagArticleSet) {
 			Tag articleSetTag = ((TagArticleSet) articleSet).getTag();
