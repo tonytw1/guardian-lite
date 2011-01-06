@@ -56,7 +56,9 @@ public class TagListPopulatingService {
 		boolean articleSetNameIsDuplicated = duplicatedArticleSetNames.contains(articleSet.getName());
 		if (articleSetNameIsDuplicated && articleSet instanceof TagArticleSet) {
 			Tag articleSetTag = ((TagArticleSet) articleSet).getTag();
-			return articleSetTag.getSection().getName() + " - " + articleSetTag.getName();
+			if (articleSetTag.getSection() != null) {
+				return articleSetTag.getSection().getName() + " - " + articleSetTag.getName();
+			}
 		}
 		return articleSet.getName();
 	}
