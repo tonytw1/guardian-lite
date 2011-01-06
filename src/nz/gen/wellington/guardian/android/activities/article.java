@@ -47,7 +47,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
     private MainImageLoader mainImageLoader;
 
     private Map<String, Bitmap> images;
-	private MenuItem favouriteMenuItem;
+	private MenuItem saveArticleMenuItem;
 	private String shareText;
 	private TagListPopulatingService tagListPopulatingService;
         
@@ -208,9 +208,9 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		
 		if (article != null && article.getId() != null) {
 			if (favouriteSectionsAndTagsDAO.isSavedArticle(article)) {
-				favouriteMenuItem = menu.add(0, MenuedActivity.SAVE_REMOVE_ARTICLE, 0, REMOVE_SAVED_ARTICLE);				
+				saveArticleMenuItem = menu.add(0, MenuedActivity.SAVE_REMOVE_ARTICLE, 0, REMOVE_SAVED_ARTICLE);				
 			} else {
-				favouriteMenuItem = menu.add(0, MenuedActivity.SAVE_REMOVE_ARTICLE, 0, SAVE_ARTICLE);
+				saveArticleMenuItem = menu.add(0, MenuedActivity.SAVE_REMOVE_ARTICLE, 0, SAVE_ARTICLE);
 			}
 		}
 		
@@ -253,13 +253,13 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	private void processSavedArticle(Article article) {
 		if (!favouriteSectionsAndTagsDAO.isSavedArticle(article)) {
 			if (favouriteSectionsAndTagsDAO.addSavedArticle(article)) {
-				favouriteMenuItem.setTitle(REMOVE_SAVED_ARTICLE);
+				saveArticleMenuItem.setTitle(REMOVE_SAVED_ARTICLE);
 			} else {
 				Toast.makeText(this, "Saved articles list is full", Toast.LENGTH_LONG).show();
 			}			
 		} else {
 			if (favouriteSectionsAndTagsDAO.removeSavedArticle(article)) {
-				favouriteMenuItem.setTitle(SAVE_ARTICLE);
+				saveArticleMenuItem.setTitle(SAVE_ARTICLE);
 			} else {
 				Toast.makeText(this, "Saved articles list is full", Toast.LENGTH_LONG).show();
 			}
