@@ -67,11 +67,6 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 	}
 	
 	@Override
-	protected String getRefinementDescription(String refinementType) {
-		return null;
-	}
-	
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MenuedActivity.HOME, 0, "Home");
 		MenuItem refreshOption = menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");		

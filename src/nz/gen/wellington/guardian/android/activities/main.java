@@ -32,11 +32,6 @@ public class main extends ArticleListActivity {
 	
 	
 	@Override
-	protected String getRefinementDescription(String refinementType) {
-		return null;
-	}
-	
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MenuedActivity.FAVOURITES, 0, "Favourites");
 	    menu.add(0, MenuedActivity.SECTIONS, 0, "Sections");

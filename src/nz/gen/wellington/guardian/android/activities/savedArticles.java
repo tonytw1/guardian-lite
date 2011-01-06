@@ -44,12 +44,6 @@ public class savedArticles extends ArticleListActivity implements FontResizingAc
 		final int baseSize = preferencesDAO.getBaseFontSize();
 		setFontSize(baseSize);
 	}
-
-	@Override
-	protected String getRefinementDescription(String refinementType) {
-		return null;
-	}
-	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MenuedActivity.HOME, 0, "Home");

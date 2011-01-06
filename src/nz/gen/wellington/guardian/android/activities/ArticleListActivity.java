@@ -184,10 +184,12 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		}
 	    return false;
 	}
-	
-	protected abstract ArticleSet getArticleSet();
-	protected abstract String getRefinementDescription(String refinementType);	
+		
+	protected String getRefinementDescription(String refinementType) {
+		return null;
+	}
 
+	protected abstract ArticleSet getArticleSet();
 	
 	
 	class UpdateArticlesHandler extends Handler {		

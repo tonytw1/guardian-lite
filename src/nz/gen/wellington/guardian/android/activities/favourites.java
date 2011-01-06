@@ -118,12 +118,6 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 	}
 	
 	@Override
-	protected String getRefinementDescription(String refinementType) {
-		return null;
-	}
-
-
-	@Override
 	public void setFontSize(int baseSize) {
 		TextView description = (TextView) findViewById(R.id.Description);
         description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
