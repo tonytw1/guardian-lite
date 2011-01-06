@@ -48,7 +48,8 @@ public class tag extends ArticleListActivity {
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MenuedActivity.HOME, 0, "Home");	
-		menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
+		MenuItem refreshOption = menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
+		enableMenuItemIfConnectionIsAvailable(refreshOption);
 		
 		if (favouriteSectionsAndTagsDAO.isFavourite(tag)) {
 			favouriteMenuItem = menu.add(0, MenuedActivity.ADD_REMOVE_FAVOURITE, 0, "Remove Favourite");

@@ -13,6 +13,7 @@ import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -73,7 +74,8 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MenuedActivity.HOME, 0, "Home");
-		menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
+		MenuItem refreshOption = menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");		
+		enableMenuItemIfConnectionIsAvailable(refreshOption);
 	    return true;
 	}
 	

@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -106,7 +107,8 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 		menu.add(0, MenuedActivity.HOME, 0, "Home");
 		menu.add(0, MenuedActivity.SECTIONS, 0, "Sections");
 		menu.add(0, MenuedActivity.SAVED, 0, "Saved articles");
-		menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
+		MenuItem refreshOption = menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
+		enableMenuItemIfConnectionIsAvailable(refreshOption);
 	    return true;
 	}
 	

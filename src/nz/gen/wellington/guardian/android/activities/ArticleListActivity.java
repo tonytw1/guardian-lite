@@ -166,7 +166,17 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		}
 		return null;
 	}
-		
+	
+	
+	protected void enableMenuItemIfConnectionIsAvailable(MenuItem menuItem) {
+		if (networkStatusService.isConnectionAvailable()) {
+	    	menuItem.setEnabled(true);
+	    } else {
+	    	menuItem.setEnabled(false);
+	    }
+	}
+	
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (!super.onOptionsItemSelected(item)) {			

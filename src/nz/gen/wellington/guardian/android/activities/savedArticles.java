@@ -53,8 +53,9 @@ public class savedArticles extends ArticleListActivity implements FontResizingAc
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MenuedActivity.HOME, 0, "Home");
-		menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
+		MenuItem refreshOption = menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
 		menu.add(0, MenuedActivity.REMOVE_ALL_SAVED, 0, "Remove all");
+		enableMenuItemIfConnectionIsAvailable(refreshOption);
 	    return true;
 	}
 	
