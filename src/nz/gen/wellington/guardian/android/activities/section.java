@@ -1,8 +1,5 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.Arrays;
-import java.util.List;
-
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
@@ -49,10 +46,6 @@ public class section extends ArticleListActivity implements FontResizingActivity
 		return articleSetFactory.getArticleSetForSection(section);
 	}
 	
-	protected List<String> getPermittedRefinements() {
-		return Arrays.asList(permittedRefinements);
-	}
-		
 	@Override
 	protected String getRefinementDescription(String refinementType) {
 		if (refinementType.equals("blog")) {

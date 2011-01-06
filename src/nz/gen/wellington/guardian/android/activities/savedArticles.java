@@ -1,8 +1,5 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.Arrays;
-import java.util.List;
-
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -33,11 +30,7 @@ public class savedArticles extends ArticleListActivity implements FontResizingAc
 	protected ArticleSet getArticleSet() {
 		return articleSetFactory.getSavedArticlesArticleSet(favouriteSectionsAndTagsDAO.getSavedArticleIds());
 	}
-	
-	protected List<String> getPermittedRefinements() {
-		return Arrays.asList(permittedRefinements);
-	}
-	
+		
 	@Override
 	protected void onResume() {
 		super.onResume();

@@ -61,8 +61,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	private Date loaded;
 	private int baseSize;
 	
-	protected String[] permittedRefinements = {"keyword"};
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
