@@ -13,7 +13,6 @@ import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -71,24 +70,11 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 		return null;
 	}
 	
-	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MenuedActivity.HOME, 0, "Home");
 		menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
 	    return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case MenuedActivity.HOME:
-			switchToMain();
-			return true;
-		case MenuedActivity.REFRESH:
-			refresh();
-			return true;
-		}
-		return false;
 	}
 	
 	private void populateSplashImage() {

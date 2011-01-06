@@ -36,7 +36,7 @@ public class main extends ArticleListActivity {
 		return null;
 	}
 	
-
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MenuedActivity.FAVOURITES, 0, "Favourites");
 	    menu.add(0, MenuedActivity.SECTIONS, 0, "Sections");
@@ -47,28 +47,15 @@ public class main extends ArticleListActivity {
 	    return true;
 	}
 	
-	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {	   
-	    case MenuedActivity.FAVOURITES: 	    	
-	    	switchToFavourites();
-	    	return true;	 
-	    case MenuedActivity.SECTIONS:
-	    	switchToSections();
-	    	return true;	 
-	    case MenuedActivity.SYNC: 	    	
-	    	swichToSync();
-	        return true;
-	    case MenuedActivity.SETTING:
-	    	switchToSettings();
-	    	return true;
-	    case MenuedActivity.REFRESH:
-			refresh();
-			return true;
-	    case MenuedActivity.ABOUT:
-	    	switchToAbout();
-	    	return true;
-	    }
+		if (!super.onOptionsItemSelected(item)) {			
+			switch (item.getItemId()) {
+			case MenuedActivity.REFRESH:
+				refresh();
+				return true;
+			}
+		}
 	    return false;
 	}
 	

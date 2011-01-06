@@ -60,18 +60,16 @@ public class tag extends ArticleListActivity {
 	}
 	
 	
-	
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case MenuedActivity.HOME:
-			switchToMain();
-			return true;	
-		case MenuedActivity.FAVOURITES:
-			addToFavourites();
-			return true;
-		case MenuedActivity.REFRESH:
-			refresh();
-			return true;
+		if (!onOptionsItemSelected(item)) {
+			switch (item.getItemId()) {
+			case MenuedActivity.FAVOURITES:
+				addToFavourites();
+				return true;
+			case MenuedActivity.REFRESH:
+				refresh();
+				return true;
+			}
 		}
 		return false;
 	}

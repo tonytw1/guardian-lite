@@ -4,6 +4,7 @@ import nz.gen.wellington.guardian.android.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +26,34 @@ public abstract class MenuedActivity extends Activity {
 	protected static final int ADD_REMOVE_FAVOURITE = 1012;
 	protected static final int SEARCH_TAGS = 1013;
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case MenuedActivity.HOME:
+			switchToMain();
+			return true;
+		case MenuedActivity.FAVOURITES:
+			switchToFavourites();
+			return true;
+		case MenuedActivity.SECTIONS:
+			switchToSections();
+			return true;
+		case MenuedActivity.SYNC:
+			swichToSync();
+			return true;
+		case MenuedActivity.SETTING:
+			switchToSettings();
+			return true;
+		case MenuedActivity.ABOUT:
+			switchToAbout();
+			return true;
+		case MenuedActivity.SEARCH_TAGS:
+			switchToTagSearch();
+			return true;
+		}
+		return false;
+	}
+		
 	protected final void swichToSync() {
 		Intent intent = new Intent(this, sync.class);
 		this.startActivity(intent);	

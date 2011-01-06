@@ -77,26 +77,18 @@ public class section extends ArticleListActivity implements FontResizingActivity
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case MenuedActivity.HOME:
-			switchToMain();
-			return true;
-		case MenuedActivity.FAVOURITES:
-			switchToFavourites();
-			return true;
-		case MenuedActivity.SECTIONS:
-			switchToSections();
-			return true;
-		case MenuedActivity.ADD_REMOVE_FAVOURITE:
-			addToFavourites();
-			return true;
-		case MenuedActivity.REFRESH:
-			refresh();
-			return true;
+		if (!super.onOptionsItemSelected(item)) {
+			switch (item.getItemId()) {
+			case MenuedActivity.ADD_REMOVE_FAVOURITE:
+				addToFavourites();
+				return true;
+			case MenuedActivity.REFRESH:
+				refresh();
+				return true;
+			}
 		}
 		return false;
 	}
-	
 	
 	private void addToFavourites() {		
 		if (!favouriteSectionsAndTagsDAO.isFavourite(section)) {

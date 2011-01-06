@@ -14,7 +14,6 @@ import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -75,21 +74,5 @@ public class sections extends DownloadProgressAwareActivity {
 		menu.add(0, MenuedActivity.SEARCH_TAGS, 0, "Search tags");
 	    return true;
 	}
-	
-	
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case MenuedActivity.HOME:
-			switchToMain();
-			return true;
-		case MenuedActivity.FAVOURITES:
-			switchToFavourites();
-			return true;
-		case MenuedActivity.SEARCH_TAGS:
-			switchToTagSearch();
-			return true;
-		}
-		return false;
-	}
-			
+				
 }

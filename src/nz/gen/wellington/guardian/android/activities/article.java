@@ -233,21 +233,20 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    case MenuedActivity.HOME:
-	    	switchToMain();
-	    	return true;  
-		case MenuedActivity.SAVE_REMOVE_ARTICLE:
-			processSavedArticle(article);			
-	    	return true;
-		case MenuedActivity.BROWSER:
-			showArticleInBrowser(article);
-			return true;
-		case MenuedActivity.SHARE:
-			shareArticle(article);
-	    	return true;
-	    }
-	    return false;
+		if (!super.onOptionsItemSelected(item)) {
+			switch (item.getItemId()) {
+			case MenuedActivity.SAVE_REMOVE_ARTICLE:
+				processSavedArticle(article);
+				return true;
+			case MenuedActivity.BROWSER:
+				showArticleInBrowser(article);
+				return true;
+			case MenuedActivity.SHARE:
+				shareArticle(article);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 

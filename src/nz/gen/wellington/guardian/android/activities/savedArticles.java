@@ -58,23 +58,21 @@ public class savedArticles extends ArticleListActivity implements FontResizingAc
 	    return true;
 	}
 	
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case MenuedActivity.HOME:
-			switchToMain();
-			return true;
-		case MenuedActivity.REFRESH:
-			refresh();
-			return true;
-		case MenuedActivity.REMOVE_ALL_SAVED:
-			removeAll();
-			return true;
+		if (!super.onOptionsItemSelected(item)) {
+			switch (item.getItemId()) {
+			case MenuedActivity.REFRESH:
+				refresh();
+				return true;
+			case MenuedActivity.REMOVE_ALL_SAVED:
+				removeAll();
+				return true;
+			}
 		}
 		return false;
 	}
-
+	
 	private void removeAll() {
 		favouriteSectionsAndTagsDAO.removeAllSavedArticles();
 		refresh();

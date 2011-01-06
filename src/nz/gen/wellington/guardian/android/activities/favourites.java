@@ -111,22 +111,14 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 	    return true;
 	}
 	
-	
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case MenuedActivity.HOME:
-			switchToMain();
-			return true;
-		case MenuedActivity.SECTIONS:
-			switchToSections();
-			return true;
-		case MenuedActivity.SAVED:
-		    switchToSavedArticles();
-		    return true;
-		case MenuedActivity.REFRESH:
-			refresh();
-			return true;
-		}		
+		if (!onOptionsItemSelected(item)) {
+			switch (item.getItemId()) {
+			case MenuedActivity.REFRESH:
+				refresh();
+				return true;
+			}
+		}
 		return false;
 	}
 
