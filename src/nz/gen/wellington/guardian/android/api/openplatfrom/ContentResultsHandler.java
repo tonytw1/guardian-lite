@@ -184,7 +184,6 @@ public class ContentResultsHandler extends HandlerBase {
 		if (name.equals("content")) {
 			boolean isArticleValid = true; // currentArticle.getId() != null; TODO this needs to be higher up - about and content api have different rules
 			if (isArticleValid) {
-				// TODO article cleaning should occur here.
 				articles.add(currentArticle);
 				if (articleCallback != null) {
 					articleCallback.articleReady(currentArticle);
