@@ -76,7 +76,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		final int baseSize = preferencesDAO.getBaseFontSize();
         setFontSize(baseSize);
         
-		search.setEnabled(networkStatusService.isConnectionAvailable());
+        search.setEnabled(networkStatusService.isConnectionAvailable());
 		// TODO text warning if no connection is available
 		populateSearchResults();
 	}
