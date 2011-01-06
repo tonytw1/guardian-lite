@@ -60,7 +60,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	private Thread loader;
 	private Date loaded;
 	private int baseSize;
-	
+		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,8 +201,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 		
 		private Context context;
-		boolean first = true;
-		boolean isFirstOfSection;
+		boolean first = true;		
 		Section currentSection;
 		private ArticleSet articleSet;
 		private boolean descriptionSet;
@@ -224,7 +223,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				
 		public void init() {
 			first = true;
-			isFirstOfSection = false;
 			currentSection = null;
 			descriptionSet = false;
 		}
@@ -239,24 +237,20 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	LayoutInflater mInflater = LayoutInflater.from(context);
 			    	LinearLayout mainpane = (LinearLayout) findViewById(R.id.MainPane);
 			    	
-			    	isFirstOfSection = false;
 			    	if (article.getSection() != null) {
 			    		if (currentSection == null || !currentSection.getId().equals(article.getSection().getId())) {
-			    			isFirstOfSection = true;
+			    			if (showSeperators) {						
+			    				addSeperator(mInflater, mainpane, article.getSection());
+			    				first = true;
+			    			}
 			    		}
 			    	}
 			    	currentSection = article.getSection();
 			    	
-					if (showSeperators) {						
-						if (isFirstOfSection) {
-							addSeperator(mInflater, mainpane, article.getSection());
-						}
-					}
-					
 					// TODO should base this decision on the articles set's tags
 					boolean isContributorArticleSet = false; // TODO articleSet.getApiUrl().startsWith("profile");
 					boolean shouldUseFeatureTrail = showMainImage && first && !isContributorArticleSet && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
-					View articleTrailView = chooseTrailView(mInflater, shouldUseFeatureTrail, isFirstOfSection);
+					View articleTrailView = chooseTrailView(mInflater, shouldUseFeatureTrail, first);
 					
 					populateArticleListView(article, articleTrailView, shouldUseFeatureTrail);
 					mainpane.addView(articleTrailView);
@@ -396,16 +390,16 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			}
 		}
 		
-		private View chooseTrailView(LayoutInflater mInflater, boolean shouldUseFeatureTrail, boolean isFirstInList) {
+		private View chooseTrailView(LayoutInflater mInflater, boolean shouldUseFeatureTrail, boolean hideDivider) {
 			View view;
 			if (shouldUseFeatureTrail) {
 				view = mInflater.inflate(R.layout.featurelist, null);
 			} else {
 				view = mInflater.inflate(R.layout.list, null);
-				if (isFirstInList) {
-					View divider = view.findViewById(R.id.Divider);
-					divider.setVisibility(View.GONE);
-				}
+			}
+			if (hideDivider) {
+				View divider = view.findViewById(R.id.Divider);
+				divider.setVisibility(View.GONE);
 			}
 			return view;
 		}

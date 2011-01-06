@@ -40,7 +40,7 @@ public final class R {
         public static final int ContentCredit=0x7f07000b;
         public static final int CurrentTask=0x7f070026;
         public static final int Description=0x7f070013;
-        public static final int Divider=0x7f07001c;
+        public static final int Divider=0x7f07001a;
         public static final int DownloadProgress=0x7f070004;
         public static final int FavouritesPane=0x7f070019;
         public static final int Heading=0x7f070003;
@@ -57,7 +57,7 @@ public final class R {
         public static final int Ok=0x7f07001f;
         public static final int PoweredByTheGuardian=0x7f07000a;
         public static final int PubDate=0x7f070012;
-        public static final int Pubdate=0x7f07001b;
+        public static final int Pubdate=0x7f07001c;
         public static final int RefinementsDescription=0x7f070020;
         public static final int Report=0x7f07001e;
         public static final int Scroll=0x7f070018;
@@ -73,7 +73,7 @@ public final class R {
         public static final int TagList=0x7f070016;
         public static final int TagName=0x7f070017;
         public static final int TextView01=0x7f070002;
-        public static final int TrailImage=0x7f07001a;
+        public static final int TrailImage=0x7f07001b;
         public static final int WidgetFirstItem=0x7f07002a;
         public static final int WidgetHeadline=0x7f07002c;
         public static final int WidgetImage=0x7f07002b;
