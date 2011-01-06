@@ -50,6 +50,9 @@ public abstract class MenuedActivity extends Activity {
 		case MenuedActivity.SEARCH_TAGS:
 			switchToTagSearch();
 			return true;
+		case MenuedActivity.SAVED:
+			switchToSavedArticles();
+			return true;
 		}
 		return false;
 	}
