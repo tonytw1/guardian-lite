@@ -3,6 +3,8 @@ package nz.gen.wellington.guardian.android.api.openplatfrom;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.model.Section;
@@ -83,7 +85,18 @@ public class ContentApiStyleUrlBuilder {
 	public String toTagSearchQueryUrl() {		
 		StringBuilder uri = new StringBuilder("/" + TAGS);
 		appendCoreParameters(uri);
-		uri.append("&type=keyword%2Ccontributor%2Cblog");	// TODO push to allowed types constant somewhere
+				
+		List<String> allowedTagTypes = Arrays.asList("keyword", "contributor", "blog");		// TODO should be settable using the builder pattern
+		if (!allowedTagTypes.isEmpty()) {
+			uri.append("&type=");
+			for (Iterator<String> iterator = allowedTagTypes.iterator(); iterator.hasNext();) {
+				uri.append(iterator.next());
+				if (iterator.hasNext()) {
+					uri.append(URLEncoder.encode(","));
+				}				
+			}
+		}
+		
 		uri.append("&q=" + URLEncoder.encode(searchTerm));		
 		return prependHost(uri.toString());
 	}
