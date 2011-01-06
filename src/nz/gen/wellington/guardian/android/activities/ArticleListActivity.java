@@ -33,6 +33,7 @@ import android.os.Message;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -107,7 +108,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		}
 	}
 
-
+	
 	protected void refresh() {
 		populateArticles(ContentFetchType.CHECKSUM, preferencesDAO.getBaseFontSize());
 	}
@@ -165,7 +166,18 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		}
 		return null;
 	}
-	
+		
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (!super.onOptionsItemSelected(item)) {			
+			switch (item.getItemId()) {
+			case MenuedActivity.REFRESH:
+				refresh();
+				return true;
+			}
+		}
+	    return false;
+	}
 	
 	protected abstract ArticleSet getArticleSet();
 	protected abstract String getRefinementDescription(String refinementType);	

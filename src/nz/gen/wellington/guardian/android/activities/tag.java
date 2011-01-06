@@ -65,10 +65,7 @@ public class tag extends ArticleListActivity {
 			switch (item.getItemId()) {
 			case MenuedActivity.FAVOURITES:
 				addToFavourites();
-				return true;
-			case MenuedActivity.REFRESH:
-				refresh();
-				return true;
+				return true;			
 			}
 		}
 		return false;

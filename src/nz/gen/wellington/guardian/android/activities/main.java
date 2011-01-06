@@ -5,7 +5,6 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 
 public class main extends ArticleListActivity {
 		
@@ -45,18 +44,6 @@ public class main extends ArticleListActivity {
 	    menu.add(0, MenuedActivity.SYNC, 0, "Sync");
 	    menu.add(0, MenuedActivity.SETTING, 0, "Settings");
 	    return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (!super.onOptionsItemSelected(item)) {			
-			switch (item.getItemId()) {
-			case MenuedActivity.REFRESH:
-				refresh();
-				return true;
-			}
-		}
-	    return false;
 	}
 	
 }

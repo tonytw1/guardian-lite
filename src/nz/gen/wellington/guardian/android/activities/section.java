@@ -81,10 +81,7 @@ public class section extends ArticleListActivity implements FontResizingActivity
 			switch (item.getItemId()) {
 			case MenuedActivity.ADD_REMOVE_FAVOURITE:
 				addToFavourites();
-				return true;
-			case MenuedActivity.REFRESH:
-				refresh();
-				return true;
+				return true;			
 			}
 		}
 		return false;

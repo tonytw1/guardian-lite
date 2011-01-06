@@ -61,10 +61,7 @@ public class savedArticles extends ArticleListActivity implements FontResizingAc
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (!super.onOptionsItemSelected(item)) {
-			switch (item.getItemId()) {
-			case MenuedActivity.REFRESH:
-				refresh();
-				return true;
+			switch (item.getItemId()) {			
 			case MenuedActivity.REMOVE_ALL_SAVED:
 				removeAll();
 				return true;

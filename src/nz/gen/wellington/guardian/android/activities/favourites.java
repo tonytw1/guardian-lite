@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -111,17 +110,6 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 	    return true;
 	}
 	
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (!onOptionsItemSelected(item)) {
-			switch (item.getItemId()) {
-			case MenuedActivity.REFRESH:
-				refresh();
-				return true;
-			}
-		}
-		return false;
-	}
-
 	@Override
 	protected ArticleSet getArticleSet() {
 		return articleSetFactory.getFavouritesArticleSet();
