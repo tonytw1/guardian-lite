@@ -169,11 +169,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	
 	protected void enableMenuItemIfConnectionIsAvailable(MenuItem menuItem) {
-		if (networkStatusService.isConnectionAvailable()) {
-	    	menuItem.setEnabled(true);
-	    } else {
-	    	menuItem.setEnabled(false);
-	    }
+		menuItem.setEnabled(networkStatusService.isConnectionAvailable());		
 	}
 	
 	
