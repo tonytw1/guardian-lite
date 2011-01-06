@@ -62,11 +62,11 @@ public class tag extends ArticleListActivity {
 	
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (!onOptionsItemSelected(item)) {
+		if (!super.onOptionsItemSelected(item)) {
 			switch (item.getItemId()) {
-			case MenuedActivity.FAVOURITES:
+			case MenuedActivity.ADD_REMOVE_FAVOURITE:
 				addToFavourites();
-				return true;			
+				return true;		
 			}
 		}
 		return false;
