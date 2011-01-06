@@ -101,6 +101,9 @@ public class HttpFetcher {
 			get.addHeader(new BasicHeader("User-agent", "gzip"));
 			get.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
 			
+			if (label != null) {
+				downProgressAnnouncer.announceDownloadStarted(label);
+			}
 			HttpResponse execute = executeGet(get);
 			final int statusCode = execute.getStatusLine().getStatusCode();
 			if (statusCode == 200) {
@@ -109,9 +112,9 @@ public class HttpFetcher {
 				Header[] etagHeader = execute.getHeaders("Etag");
 				if (etagHeader != null && etagHeader.length == 1) {
 					etag = etagHeader[0].getValue();
-				}				
-				long contentLength = execute.getEntity().getContentLength();				
-				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context, contentLength, etag, label);				
+				}
+				long contentLength = execute.getEntity().getContentLength();
+				LoggingBufferedInputStream is = new LoggingBufferedInputStream(execute.getEntity().getContent(), 1024, context, contentLength, etag);				
 				return is;
 			}
 			

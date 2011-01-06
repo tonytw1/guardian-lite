@@ -21,15 +21,12 @@ public class LoggingBufferedInputStream extends BufferedInputStream {
 		totalRead = 0;
 	}
 
-	public LoggingBufferedInputStream(InputStream in, int size, Context context, long contentLength, String etag, String label) {
+	public LoggingBufferedInputStream(InputStream in, int size, Context context, long contentLength, String etag) {
 		super(in, size);
 		this.downProgressAnnouncer = SingletonFactory.getDownloadProgressAnnouncer(context);	
 		totalRead = 0;
 		this.contentLength = contentLength;
-		this.etag = etag;
-		if (label != null) {
-			downProgressAnnouncer.announceDownloadStarted(label);
-		}
+		this.etag = etag;		
 	}
 
 	@Override
