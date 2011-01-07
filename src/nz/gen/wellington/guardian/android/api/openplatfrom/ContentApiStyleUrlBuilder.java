@@ -78,6 +78,10 @@ public class ContentApiStyleUrlBuilder {
 			uri.append(tags);				
 		}
 		
+		if (searchTerm != null) {
+			uri.append("&q=" + URLEncoder.encode(searchTerm));
+		}
+		
 		return prependHost(uri.toString());
 	}
 	

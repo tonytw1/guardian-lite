@@ -25,6 +25,7 @@ public abstract class MenuedActivity extends Activity {
 	protected static final int REMOVE_ALL_SAVED = 1011;
 	protected static final int ADD_REMOVE_FAVOURITE = 1012;
 	protected static final int SEARCH_TAGS = 1013;
+	protected static final int SEARCH = 1014;
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -53,10 +54,18 @@ public abstract class MenuedActivity extends Activity {
 		case MenuedActivity.SAVED:
 			switchToSavedArticles();
 			return true;
+		case MenuedActivity.SEARCH:
+			switchToSearch();
+			return true;
 		}
 		return false;
 	}
 		
+	private void switchToSearch() {
+		Intent intent = new Intent(this, search.class);
+		this.startActivity(intent);	
+	}
+
 	protected final void swichToSync() {
 		Intent intent = new Intent(this, sync.class);
 		this.startActivity(intent);	

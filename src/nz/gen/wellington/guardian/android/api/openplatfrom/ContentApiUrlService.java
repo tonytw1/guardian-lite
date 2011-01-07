@@ -2,6 +2,7 @@ package nz.gen.wellington.guardian.android.api.openplatfrom;
 
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
+import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -70,6 +71,11 @@ public class ContentApiUrlService {
 				contentApiUrlBuilder.addTag(tag);
 			}
 		}
+		
+		if (articleSet instanceof SearchResultsArticleSet) {
+			contentApiUrlBuilder.setSearchTerm(((SearchResultsArticleSet) articleSet).getSearchTerm());
+		}
+		
 		contentApiUrlBuilder.setPageSize(articleSet.getPageSize());		
 		contentApiUrlBuilder.setFormat("xml");
 	}

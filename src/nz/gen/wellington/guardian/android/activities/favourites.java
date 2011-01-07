@@ -68,17 +68,18 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 
 		TextView description = (TextView) findViewById(R.id.Description);
 		
-		// TODO - this implies two sqllite queries in a row - needs to be done in one open open and close if possible.
+		// TODO - this implies three sqllite queries in a row - needs to be done in one open open and close if possible.
 		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections();
 		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
+		List<String> favouriteSearchTerms = favouriteSectionsAndTagsDAO.getFavouriteSearchTerms();
 		
-		boolean favouritesLoadedCorrectly = (favouriteSections != null && favouriteTags != null);
+		boolean favouritesLoadedCorrectly = (favouriteSections != null && favouriteTags != null && favouriteSearchTerms != null);
 		if (!favouritesLoadedCorrectly) {
 			description.setText("There was a problem loading your favorite sections and tags.");			
 			return;
 		}
 		
-		boolean hasFavourites = !favouriteSections.isEmpty() || !favouriteTags.isEmpty();
+		boolean hasFavourites = !favouriteSections.isEmpty() || !favouriteTags.isEmpty() || !favouriteSearchTerms.isEmpty();
 		if (hasFavourites) {
 			LayoutInflater inflater = LayoutInflater.from(this);
 			LinearLayout authorList = (LinearLayout) findViewById(R.id.FavouritesPane);
@@ -91,7 +92,9 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
 			final boolean connectionIsAvailable = networkStatusService.isConnectionAvailable();
 			
 			tagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForSections(favouriteSections));
-			tagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForTags(favouriteTags));			
+			tagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForTags(favouriteTags));
+			tagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForSearchTerms(favouriteSearchTerms));
+
 			authorList.addView(tagGroup);
 			
 			description.setText("The following sections and tags have been marked as favourites.");			

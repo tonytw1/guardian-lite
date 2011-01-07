@@ -16,13 +16,15 @@ public class FavouriteSectionsAndTagsDAO {
 	}
 		
 	public List<Section> getFavouriteSections() {
-		List<Section> sections = sqlLiteDAO.getFavouriteSections();
-		return sections;
+		return sqlLiteDAO.getFavouriteSections();
 	}
 		
 	public List<Tag> getFavouriteTags() {
-		List<Tag> tags = sqlLiteDAO.getFavouriteTags();
-		return tags;
+		return sqlLiteDAO.getFavouriteTags();
+	}
+	
+	public List<String> getFavouriteSearchTerms() {
+		return sqlLiteDAO.getFavouriteSearchTerms();
 	}
 	
 	public List<String> getSavedArticleIds() {
@@ -67,6 +69,18 @@ public class FavouriteSectionsAndTagsDAO {
 
 	public void removeAllSavedArticles() {
 		sqlLiteDAO.removeAllSavedArticles();		
+	}
+
+	public boolean isFavouriteSearchTerm(String searchTerm) {
+		return sqlLiteDAO.isFavouriteSearchTerm(searchTerm);
+	}
+
+	public boolean addSearchTerm(String searchTerm) {
+		return sqlLiteDAO.addSearchTerm(searchTerm);
+	}
+
+	public void removeSearchTerm(String searchTerm) {
+		sqlLiteDAO.removeSearchTerm(searchTerm);
 	}
 		
 }

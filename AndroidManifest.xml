@@ -56,6 +56,7 @@
 		<activity android:name=".activities.widgets.favouritewidget" android:noHistory="true" />
 		
 <activity android:name=".activities.savedArticles"></activity>
+<activity android:name=".activities.search"></activity>
 </application>
 	
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>

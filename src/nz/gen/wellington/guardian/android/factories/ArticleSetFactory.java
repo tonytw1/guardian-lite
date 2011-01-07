@@ -8,6 +8,7 @@ import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.model.SavedArticlesArticleSet;
+import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -41,6 +42,10 @@ public class ArticleSetFactory {
 	
 	public ArticleSet getArticleSetForSection(Section section) {
 		return addUrl(new SectionArticleSet(section, preferencesDAO.getPageSizePreference()));
+	}
+	
+	public ArticleSet getArticleSetForSearchTerm(String searchTerm) {
+		return addUrl(new SearchResultsArticleSet(searchTerm, preferencesDAO.getPageSizePreference()));
 	}
 	
 	public ArticleSet getFavouritesArticleSet() {
@@ -78,7 +83,16 @@ public class ArticleSetFactory {
 		}
 		return favouriteTagsArticleSets;
 	}
-		
+	
+	// TODO Three different methods - can they be merged?
+	public List<ArticleSet> getArticleSetsForSearchTerms(List<String> favouriteSearchTerms) {
+		List<ArticleSet> favouriteSearchTermArticleSets = new ArrayList<ArticleSet>();
+		for (String searchTerm : favouriteSearchTerms) {
+			favouriteSearchTermArticleSets.add(getArticleSetForSearchTerm(searchTerm));			
+		}
+		return favouriteSearchTermArticleSets;
+	}
+	
 	private ArticleSet addUrl(ArticleSet articleSet) {
 		articleSet.setSourceUrl(articleSetUrlService.getUrlForArticleSet(articleSet));
 		return articleSet;

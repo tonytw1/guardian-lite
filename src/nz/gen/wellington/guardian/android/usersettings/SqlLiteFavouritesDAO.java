@@ -23,7 +23,7 @@ public class SqlLiteFavouritesDAO {
 	private static final int MAX_FAVOURITE_ARTICLES = 5;
 
 	private static final String DATABASE_NAME = "guardian-lite.db";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	
 	private static final String TAG_TABLE = "favourites";
 	private static final String SAVED_ARTICLES_TABLE = "saved_articles";
@@ -39,6 +39,7 @@ public class SqlLiteFavouritesDAO {
 	
 	private static final String INSERT_FAVOURITE_TAG = "insert into " + TAG_TABLE + "(type, apiid, name, sectionid) values (?, ?, ?, ?)";
 	private static final String INSERT_SAVED_ARTICLE = "insert into " + SAVED_ARTICLES_TABLE + "(articleid) values (?)";
+	private static final String INSERT_FAVOURITE_SEARCH_TERM = "insert into " + TAG_TABLE + "(type, searchTerm) values ('searchterm', ?)";
 	
 	private OpenHelper openHelper;
 	private SectionDAO sectionDAO;
@@ -64,6 +65,16 @@ public class SqlLiteFavouritesDAO {
 		insertStmt.bindString(2, apiid);
 		insertStmt.bindString(3, name);
 		insertStmt.bindString(4, sectionid);
+		long result = insertStmt.executeInsert();
+		db.close();
+		return result;
+	}
+	
+	
+	private synchronized long insertFavouriteSearchTerm(String searchTerm) {
+		SQLiteDatabase db = openHelper.getWritableDatabase();
+		SQLiteStatement insertStmt = db.compileStatement(INSERT_FAVOURITE_SEARCH_TERM);
+		insertStmt.bindString(1, searchTerm);		
 		long result = insertStmt.executeInsert();
 		db.close();
 		return result;
@@ -108,6 +119,15 @@ public class SqlLiteFavouritesDAO {
 		return isFavourite;	
 	}
 	
+	public boolean isFavouriteSearchTerm(String searchTerm) {
+		SQLiteDatabase db = openHelper.getReadableDatabase();
+		Cursor cursor = db.query(TAG_TABLE, new String[] { APIID }, " searchterm = ? ", new String[] { searchTerm }, null, null, NAME_ASC);
+		final boolean isFavourite = cursor.getCount() > 0;
+		closeCursor(cursor);
+		db.close();
+		return isFavourite;
+	}
+	
 	public boolean isSavedArticle(Article article) {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		Cursor cursor = db.query(SAVED_ARTICLES_TABLE, new String[] { ARTICLEID }, " articleid = ? ", new String[] { article.getId() }, null, null, ARTICLEID_DESC);
@@ -129,6 +149,11 @@ public class SqlLiteFavouritesDAO {
 		db.close();
 	}
 	
+	public synchronized void removeSearchTerm(String searchTerm) {
+		SQLiteDatabase db = openHelper.getWritableDatabase();
+		db.delete(TAG_TABLE, " searchterm = ? ", new String[] { searchTerm });
+		db.close();
+	}
 	
 	public synchronized boolean removeSavedArticle(Article article) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
@@ -138,7 +163,7 @@ public class SqlLiteFavouritesDAO {
 	}
 	
 	
-	public void removeAllSavedArticles() {
+	public synchronized void removeAllSavedArticles() {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
 		db.execSQL("DELETE FROM " + SAVED_ARTICLES_TABLE);
 		db.close();
@@ -201,6 +226,24 @@ public class SqlLiteFavouritesDAO {
 	}
 	
 	
+	
+	public synchronized List<String> getFavouriteSearchTerms() {
+		SQLiteDatabase db = openHelper.getReadableDatabase();
+		Cursor cursor = db.query(TAG_TABLE, new String[] {"searchterm"}, null, null, null, null, "searchterm ASC");
+		
+		List<String> favouriteSearchTerms = new ArrayList<String>();
+		if (cursor.moveToFirst()) {
+			do {
+				final String searchTerm = cursor.getString(0);
+				favouriteSearchTerms.add(searchTerm);				
+			} while (cursor.moveToNext());
+		}
+		closeCursor(cursor);
+		db.close();
+		return favouriteSearchTerms;
+	}
+	
+	
 	public List<String> getSavedArticleIds() {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		Cursor cursor = db.query(SAVED_ARTICLES_TABLE, new String[] {ARTICLEID}, null, null, null, null, ARTICLEID_DESC);
@@ -235,6 +278,17 @@ public class SqlLiteFavouritesDAO {
 		boolean result = false;
 		if (this.haveRoom(db)) {
 			this.insertFavouriteTag("section", section.getId(), section.getName(), section.getId());
+			result = true;
+		}
+		db.close();
+		return result;
+	}
+	
+	public boolean addSearchTerm(String searchTerm) {
+		SQLiteDatabase db = openHelper.getReadableDatabase();
+		boolean result = false;
+		if (this.haveRoom(db)) {
+			this.insertFavouriteSearchTerm(searchTerm);	// TODO Meh - assumes success
 			result = true;
 		}
 		db.close();
@@ -281,19 +335,38 @@ public class SqlLiteFavouritesDAO {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + TAG_TABLE + "(id INTEGER PRIMARY KEY, type, apiid, name, sectionid TEXT)");
-			createSavedArticlesTable(db);
-		}
-
-		private void createSavedArticlesTable(SQLiteDatabase db) {
-			db.execSQL("CREATE TABLE " + SAVED_ARTICLES_TABLE + "(id INTEGER PRIMARY KEY, articleid TEXT)");
+			upgradeFromOneToTwo(db);
+			upgradeFromTwoToThree(db);
 		}
 		
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			if (oldVersion == 1 && newVersion == 2) {
-				createSavedArticlesTable(db);
+			if (oldVersion == 2 && newVersion == 3) {
+				upgradeFromTwoToThree(db);
+			}
+			
+			if (oldVersion == 1 && newVersion == 3) {
+				upgradeFromOneToTwo(db);
+				upgradeFromTwoToThree(db);
 			}			
 		}
+		
+		private void upgradeFromTwoToThree(SQLiteDatabase db) {
+			addSearchTerm(db);
+		}
+				
+		private void upgradeFromOneToTwo(SQLiteDatabase db) {
+			createSavedArticlesTable(db);
+		}
+		
+		private void createSavedArticlesTable(SQLiteDatabase db) {
+			db.execSQL("CREATE TABLE " + SAVED_ARTICLES_TABLE + "(id INTEGER PRIMARY KEY, articleid TEXT)");
+		}
+		
+		private void addSearchTerm(SQLiteDatabase db) {
+			db.execSQL("ALTER TABLE " + TAG_TABLE + " ADD COLUMN searchterm TEXT");
+		}
+		
 	}
 	
 }
