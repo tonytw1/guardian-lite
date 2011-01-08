@@ -78,9 +78,20 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		super.onStart();	
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);		
 		boolean mainPaneNeedsPopulating = shouldRefreshView(mainPane);
+
 		if (mainPaneNeedsPopulating) {
-			populateArticles(ContentFetchType.NORMAL, preferencesDAO.getBaseFontSize());
+			mainPane.removeAllViews();
+			
+			final ArticleSet articleSet = getArticleSet();
+			final int baseFontSize = preferencesDAO.getBaseFontSize();
+			
+			if (articleDAO.isAvailable(articleSet)) {
+				populateArticles(ContentFetchType.NORMAL, baseFontSize, articleSet);
+			} else {
+				outputNoArticlesWarning(baseFontSize);
+			}
 		}
+		
 	}
 	
 	
@@ -108,7 +119,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 	
 	protected void refresh() {
-		populateArticles(ContentFetchType.CHECKSUM, preferencesDAO.getBaseFontSize());
+		populateArticles(ContentFetchType.CHECKSUM, preferencesDAO.getBaseFontSize(), getArticleSet());
 	}
 	
 	
@@ -117,21 +128,10 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	}
 	
 	
-	private void populateArticles(ContentFetchType fetchType, int baseFontSize) {
-		Log.i(TAG, "Refresh requested");
-	
-		if (!networkStatusService.isConnectionAvailable() && ContentFetchType.CHECKSUM.equals(fetchType)) {	// TODO knowledge of connections requirements should be on the fetch type.
-			Log.i(TAG, "Not refreshing uncached as no connection is available");
-			return;
-		}
-		
-		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
+	private void populateArticles(ContentFetchType fetchType, int baseFontSize, ArticleSet articleSet) {			
 		if (loader == null || !loader.isAlive()) {
-			mainPane.removeAllViews();
-			
-			final ArticleSet articleSet = getArticleSet();
 			updateArticlesHandler = new UpdateArticlesHandler(this, articleSet, baseFontSize);
-			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, networkStatusService, fetchType, articleSet);
+			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, fetchType, articleSet);
 			updateArticlesHandler.init();
 			
 			loader = new Thread(updateArticlesRunner);
@@ -188,6 +188,20 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	}
 
 	protected abstract ArticleSet getArticleSet();
+	
+	
+	
+	private void outputNoArticlesWarning(float baseFontSize) {
+		LinearLayout mainpane;
+		mainpane = (LinearLayout) findViewById(R.id.MainPane);
+		TextView noArticlesMessage = new TextView(this.getApplicationContext());
+		noArticlesMessage.setText("No articles available.");
+		
+		noArticlesMessage.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
+		noArticlesMessage.setTextColor(ColourScheme.HEADLINE);
+		noArticlesMessage.setPadding(2, 3, 2, 3);					
+		mainpane.addView(noArticlesMessage, 0);
+	}
 	
 	
 	class UpdateArticlesHandler extends Handler {		
@@ -316,19 +330,11 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					
 			    case NO_ARTICLES:
 			    	Log.i(TAG, "Displaying no articles available message");			    	
-			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
-					TextView noArticlesMessage = new TextView(context);
-					noArticlesMessage.setText("No articles available.");
-					
-					noArticlesMessage.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
-					noArticlesMessage.setTextColor(ColourScheme.HEADLINE);
-					noArticlesMessage.setPadding(2, 3, 2, 3);					
-					mainpane.addView(noArticlesMessage, 0);
+			    	outputNoArticlesWarning(baseFontSize);
 			    	return;
 			}
 		}
-
-
+		
 		private void populateTagDescription(LinearLayout mainpane, String descripton, int fontSize) {
 			// TODO move to the layout file
 			TextView descriptionView = new TextView(context);
@@ -477,18 +483,16 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	
 	class UpdateArticlesRunner implements Runnable, ArticleCallback {		
-		boolean running;
-		ArticleDAO articleDAO;
-		ImageDAO imageDAO;
-		NetworkStatusService networkStatusService;
-		ContentFetchType fetchType;
+		private boolean running;
+		private ArticleDAO articleDAO;
+		private ImageDAO imageDAO;
+		private ContentFetchType fetchType;
 		private ArticleSet articleSet;
 		
-		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, NetworkStatusService networkStatusService, ContentFetchType fetchType, ArticleSet articleSet) {
+		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, ContentFetchType fetchType, ArticleSet articleSet) {
 			this.articleDAO = articleDAO;
 			this.imageDAO = imageDAO;
 			this.running = true;
-			this.networkStatusService = networkStatusService;
 			articleDAO.setArticleReadyCallback(this);
 			this.fetchType = fetchType;
 			this.articleSet = articleSet;
