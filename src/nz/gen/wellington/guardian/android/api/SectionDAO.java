@@ -8,6 +8,7 @@ import nz.gen.wellington.guardian.android.api.caching.FileBasedSectionCache;
 import nz.gen.wellington.guardian.android.api.caching.InMemorySectionCache;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.content.Context;
 import android.util.Log;
 
@@ -17,14 +18,21 @@ public class SectionDAO {
 	
 	private InMemorySectionCache inMemorySectionCache;
 	private FileBasedSectionCache fileBasedSectionCache;
-	private Context context;
+	private NetworkStatusService networkStatusService;
+	private ContentSource api;
 	
 	public SectionDAO(Context context) {
-		this.context = context;
 		this.inMemorySectionCache = CacheFactory.getSectionCache();
 		this.fileBasedSectionCache = new FileBasedSectionCache(context);
+		this.networkStatusService = SingletonFactory.getNetworkStatusService(context);
+		this.api = SingletonFactory.getOpenPlatformApi(context);
 	}
 	
+	
+	public boolean areSectionsAvailable() {
+		return !inMemorySectionCache.isEmpty() || fileBasedSectionCache.getSections() != null || networkStatusService.isConnectionAvailable();
+	}
+		
 	public List<Section> getSections() {
 		List<Section> sections = inMemorySectionCache.getAll();
 		if (sections != null && !sections.isEmpty()) {
@@ -37,7 +45,6 @@ public class SectionDAO {
 			return sections;
 		}
 		
-		ContentSource api = SingletonFactory.getOpenPlatformApi(context);
 		sections = api.getSections();
 		if (sections != null) {
 			inMemorySectionCache.addAll(sections);

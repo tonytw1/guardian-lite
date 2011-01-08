@@ -119,6 +119,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 	
 	protected void refresh() {
+		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
+		mainPane.removeAllViews();
 		populateArticles(ContentFetchType.CHECKSUM, preferencesDAO.getBaseFontSize(), getArticleSet());
 	}
 	

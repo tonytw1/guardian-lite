@@ -12,11 +12,12 @@ import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 public class sections extends DownloadProgressAwareActivity {
 		
@@ -47,7 +48,12 @@ public class sections extends DownloadProgressAwareActivity {
 		super.onResume();
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
 		mainPane.removeAllViews();
-		populateSections();        
+		
+		if (sectionDAO.areSectionsAvailable()) {
+			populateSections();
+		} else {
+			outputNoSectionsWarning(7);	// TODO
+		}
 	}
 
 				
@@ -63,8 +69,21 @@ public class sections extends DownloadProgressAwareActivity {
 					articleSetFactory.getArticleSetsForSections(sections));
 			
 		} else {
-        	Toast.makeText(this, "Could not load sections", Toast.LENGTH_SHORT).show();
+        	outputNoSectionsWarning(7);	// TODO
 		}
+	}
+	
+	
+	private void outputNoSectionsWarning(float baseFontSize) {
+		LinearLayout mainpane;
+		mainpane = (LinearLayout) findViewById(R.id.MainPane);
+		TextView noArticlesMessage = new TextView(this.getApplicationContext());
+		noArticlesMessage.setText("No sections available.");
+		
+		noArticlesMessage.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
+		noArticlesMessage.setTextColor(ColourScheme.HEADLINE);
+		noArticlesMessage.setPadding(2, 3, 2, 3);					
+		mainpane.addView(noArticlesMessage, 0);
 	}
 	
 	
