@@ -21,7 +21,7 @@ public class HtmlCleaner {
 		content = content.replaceAll("&amp;", "&");
 		content = content.replaceAll("&nbsp;", " ");
 		
-		content = content.replaceAll("\n{2,}?", "\n\n");
+		content = content.replaceAll("\n{2,}", "\n\n");
 		return content.trim();
 	}
 
