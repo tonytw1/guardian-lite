@@ -122,7 +122,13 @@ public class article extends MenuedActivity implements FontResizingActivity {
         if (article.getPubDate() != null) {
         	pubDate.setText(article.getPubDateString());
         }
-        byline.setText(article.getByline());
+        
+        if (article.getByline() != null && !article.getByline().trim().equals("")) {
+        	byline.setText(article.getByline());
+        } else {
+        	byline.setVisibility(View.GONE);
+        }
+        
         standfirst.setText(article.getStandfirst());
         
         if (article.isRedistributionAllowed()) {
