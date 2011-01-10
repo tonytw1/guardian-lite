@@ -1,8 +1,8 @@
 package nz.gen.wellington.guardian.android.api;
 
-import nz.gen.wellington.guardian.android.about.AboutArticlesDAO;
-import nz.gen.wellington.guardian.android.about.SavedArticlesDAO;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiUrlService;
+import nz.gen.wellington.guardian.android.content.AboutArticlesDAO;
+import nz.gen.wellington.guardian.android.content.SavedArticlesDAO;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;

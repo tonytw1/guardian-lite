@@ -3,11 +3,11 @@ package nz.gen.wellington.guardian.android.api;
 import java.util.Date;
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.about.AboutArticlesDAO;
-import nz.gen.wellington.guardian.android.about.ArticleSource;
-import nz.gen.wellington.guardian.android.about.SavedArticlesDAO;
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
+import nz.gen.wellington.guardian.android.content.AboutArticlesDAO;
+import nz.gen.wellington.guardian.android.content.ArticleSource;
+import nz.gen.wellington.guardian.android.content.SavedArticlesDAO;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;

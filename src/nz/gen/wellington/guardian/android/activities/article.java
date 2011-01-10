@@ -109,7 +109,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
         TextView description = (TextView) findViewById(R.id.Description);
         
 		headline.setTextColor(headlineColour);
-        pubDate.setTextColor(bodytextColour);
+        pubDate.setTextColor(bodytextColour);        
         byline.setTextColor(bodytextColour);
         standfirst.setTextColor(bodytextColour);
         

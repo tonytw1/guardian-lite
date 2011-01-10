@@ -1,4 +1,4 @@
-package nz.gen.wellington.guardian.android.about;
+package nz.gen.wellington.guardian.android.content;
 
 import java.net.URLEncoder;
 import java.util.Iterator;

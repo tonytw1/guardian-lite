@@ -1,4 +1,4 @@
-package nz.gen.wellington.guardian.android.about;
+package nz.gen.wellington.guardian.android.content;
 
 import nz.gen.wellington.guardian.android.activities.ArticleCallback;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
