@@ -372,12 +372,18 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 		private void populateTrailImage(final String url, View view) {
 			ImageView trialImage = (ImageView) view.findViewById(R.id.TrailImage);
-			Bitmap image = imageDAO.getImage(url);
-			trialImage.setImageBitmap(image);
-			trialImage.setVisibility(View.VISIBLE);
+			
+			final boolean isWifiConnectionAvailable = networkStatusService.isConnectionAvailable() && networkStatusService.isWifiConnection();
+			final boolean canDisplayTrailImage = isWifiConnectionAvailable || (networkStatusService.isConnectionAvailable() && preferencesDAO.getTrailPicturesPreference().equals("ALWAYS"));
+			if (canDisplayTrailImage) {
+				Bitmap image = imageDAO.getImage(url);
+				if (image != null) {
+					trialImage.setImageBitmap(image);
+					trialImage.setVisibility(View.VISIBLE);
+				}
+			}
 		}
 		
-
 		private void addSeperator(LayoutInflater mInflater, LinearLayout mainpane, Section section) {
 			View seperator = mInflater.inflate(R.layout.seperator, null);
 			

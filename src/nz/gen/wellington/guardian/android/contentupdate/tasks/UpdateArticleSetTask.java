@@ -63,10 +63,12 @@ public class UpdateArticleSetTask implements ContentUpdateTaskRunnable {
 	
 		
 	private void processArticles(List<Article> articles) {
-		final boolean queueMainImagesForDownload = preferencesDAO.getLargePicturesPreference().equals("ALWAYS") || networkStatusService.isWifiConnection();		
+		final boolean queueMainImagesForDownload = preferencesDAO.getLargePicturesPreference().equals("ALWAYS") || networkStatusService.isWifiConnection();
+		final boolean queueTrailImagesForDownload = preferencesDAO.getTrailPicturesPreference().equals("ALWAYS") || networkStatusService.isWifiConnection();		
+
 		if (articles != null) {
 			for (Article article : articles) {
-				if (article.getThumbnailUrl() != null) {
+				if (queueTrailImagesForDownload && article.getThumbnailUrl() != null) {
 					String description = article.getTitle() + " - trail image";					
 					queueImageDownloadIfNotAvailableLocally(article.getThumbnailUrl(), description);
 				}

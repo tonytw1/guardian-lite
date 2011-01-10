@@ -19,6 +19,11 @@ public class PreferencesDAO {
 		final String pageSizeString = prefs.getString("pageSize", "10");
 		return Integer.parseInt(pageSizeString);
 	}
+	
+
+	public String getTrailPicturesPreference() {
+		return (String) prefs.getString("trailImagesOption", "ALWAYS");
+	}
 
 	public String getLargePicturesPreference() {
 		return (String) prefs.getString("largeImagesOption", "WIFI_ONLY");
