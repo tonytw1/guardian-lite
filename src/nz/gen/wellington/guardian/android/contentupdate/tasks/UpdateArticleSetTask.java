@@ -63,6 +63,7 @@ public class UpdateArticleSetTask implements ContentUpdateTaskRunnable {
 	
 		
 	private void processArticles(List<Article> articles) {
+		// TODO this is duplicated in the article and article list activities and the update tasks - who should be responsible for this decision?
 		final boolean queueMainImagesForDownload = preferencesDAO.getLargePicturesPreference().equals("ALWAYS") || networkStatusService.isWifiConnection();
 		final boolean queueTrailImagesForDownload = preferencesDAO.getTrailPicturesPreference().equals("ALWAYS") || networkStatusService.isWifiConnection();		
 
