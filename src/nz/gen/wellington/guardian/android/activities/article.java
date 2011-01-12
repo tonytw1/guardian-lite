@@ -63,6 +63,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		tagListPopulatingService = SingletonFactory.getTagListPopulator(this.getApplicationContext());
+		imageDownloadDecisionService = SingletonFactory.getImageDownloadDecisionService(this.getApplicationContext());
 		
 		images = new HashMap<String, Bitmap>();
     	mainImageUpdateHandler = new MainImageUpdateHandler();
@@ -73,15 +74,12 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		View view =  findViewById(R.id.Main);
 		view.setBackgroundColor(ColourScheme.BACKGROUND);
 		
-		Article article = (Article) this.getIntent().getExtras().get("article");
-		this.article = article;
-		
-		if (article != null) {			
-			populateArticle(article, ColourScheme.BODYTEXT, ColourScheme.HEADLINE);
-			
+		this.article = (Article) this.getIntent().getExtras().get("article");		
+		if (article != null) {
+			populateArticle(article, ColourScheme.BODYTEXT, ColourScheme.HEADLINE);			
 		} else {
         	Toast.makeText(this, "Could not load article", Toast.LENGTH_SHORT).show();
-		}	
+		}
 	}
 	
 	@Override
@@ -175,7 +173,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		
 		View view =  findViewById(R.id.Main);
 		view.setBackgroundColor(ColourScheme.BACKGROUND);
-		caption.setTextColor(ColourScheme.BACKGROUND);
+		caption.setTextColor(ColourScheme.BODYTEXT);
 		
 		TextView tagLabel =  (TextView) findViewById(R.id.TagLabel);
 		if (tagLabel != null) {
@@ -196,14 +194,24 @@ public class article extends MenuedActivity implements FontResizingActivity {
 			if (images.containsKey(mainImageUrl)) {		
 				Bitmap bitmap = images.get(mainImageUrl);
 				if (bitmap != null) {
-					ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
-					TextView caption = (TextView) findViewById(R.id.Caption);				
-					imageView.setImageBitmap(bitmap);			
-					imageView.setVisibility(View.VISIBLE);
-					caption.setVisibility(View.VISIBLE);
-					caption.setText(article.getCaption());
+					populateMainImage(bitmap);
 				}
 			}
+		}
+	}
+
+	private void populateMainImage(Bitmap bitmap) {
+		ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
+		imageView.setImageBitmap(bitmap);			
+		imageView.setVisibility(View.VISIBLE);					
+		populateCaption(article.getCaption());
+	}
+
+	private void populateCaption(String caption) {
+		if (caption != null && !caption.trim().equals("")) {
+			TextView captionView = (TextView) findViewById(R.id.Caption);
+			captionView.setVisibility(View.VISIBLE);
+			captionView.setText(caption);
 		}
 	}
 	
