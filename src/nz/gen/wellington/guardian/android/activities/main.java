@@ -21,7 +21,6 @@ public class main extends ArticleListActivity {
         this.articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
         hideHeading();
         showSeperators = true;
-    	showMainImage = false;
 	}
 	
 	

@@ -23,4 +23,10 @@ public class TopStoriesArticleSet extends AbstractArticleSet implements Serializ
 	public List<String> getPermittedRefinements() {
 		return Arrays.asList(permittedRefinements);
 	}
+
+	@Override
+	public boolean isFeatureTrailAllowed() {
+		return false;
+	}
+	
 }

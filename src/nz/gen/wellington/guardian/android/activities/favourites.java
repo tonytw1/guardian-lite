@@ -41,7 +41,6 @@ public class favourites extends ArticleListActivity implements FontResizingActiv
         setHeading("Favourites");
         setHeadingColour("#0061A6");
     	showSeperators = true;
-    	showMainImage = false;
 	}
 	
 	

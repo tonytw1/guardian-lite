@@ -42,4 +42,9 @@ public class FavouriteTagsArticleSet extends AbstractArticleSet implements Seria
 		return tags;
 	}
 	
+	@Override
+	public boolean isFeatureTrailAllowed() {
+		return false;
+	}
+	
 }

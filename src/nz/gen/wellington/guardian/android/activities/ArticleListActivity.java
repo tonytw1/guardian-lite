@@ -338,6 +338,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			}
 		}
 		
+		
+		// TODO could be pushed to a populator class
 		private void populateTagDescription(LinearLayout mainpane, String descripton, int fontSize) {
 			// TODO move to the layout file
 			TextView descriptionView = new TextView(context);
@@ -354,6 +356,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		}
 
 		
+		// TODO could be pushed to a populator class
 		private void populateRefinementType(LinearLayout mainpane, LayoutInflater inflater, String description, List<ArticleSet> typedRefinements) {
 			View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);			
 			TextView descriptionView = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);
@@ -371,6 +374,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			mainpane.addView(tagGroup);
 		}
 
+		// TODO could be pushed to a populator class
 		private void populateTrailImage(final String url, View view) {
 			if (imageDAO.isAvailableLocally(url)) {
 				ImageView trialImage = (ImageView) view.findViewById(R.id.TrailImage);			
@@ -416,6 +420,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			return view;
 		}
 
+		// TODO could be pushed to a populator class
 		private void populateArticleListView(Article article, View view, boolean shouldUseFeatureTrail) {
 			TextView titleText = (TextView) view.findViewById(R.id.Headline);
 			TextView pubDateText = (TextView) view.findViewById(R.id.Pubdate);
