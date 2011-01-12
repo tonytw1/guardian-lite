@@ -11,6 +11,7 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -19,12 +20,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class sections extends DownloadProgressAwareActivity {
+public class sections extends DownloadProgressAwareActivity implements FontResizingActivity {
 		
 	private SectionDAO sectionDAO;
 	private NetworkStatusService networkStatusService;
 	private ArticleSetFactory articleSetFactory;
 	private TagListPopulatingService tagListPopulatingService;
+	private PreferencesDAO preferencesDAO;
 		
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,7 @@ public class sections extends DownloadProgressAwareActivity {
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		tagListPopulatingService = SingletonFactory.getTagListPopulator(this.getApplicationContext());
-		
+		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		setContentView(R.layout.sections);
 		View view =  findViewById(R.id.Main);
 		view.setBackgroundColor(ColourScheme.BACKGROUND);
@@ -49,15 +51,18 @@ public class sections extends DownloadProgressAwareActivity {
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
 		mainPane.removeAllViews();
 		
+		final int baseSize = preferencesDAO.getBaseFontSize();
+		setFontSize(baseSize);
+		
 		if (sectionDAO.areSectionsAvailable()) {
-			populateSections();
+			populateSections(baseSize);
 		} else {
-			outputNoSectionsWarning(7);	// TODO
+			outputNoSectionsWarning(baseSize);	// TODO
 		}
 	}
 
 				
-	private void populateSections() {
+	private void populateSections(int baseSize) {
 		List<Section> sections = sectionDAO.getSections();		
 		if (sections != null) {
 			sections = SectionSorter.sortByName(sections);	// TODO push this back behind the section dao for performance		
@@ -69,7 +74,7 @@ public class sections extends DownloadProgressAwareActivity {
 					articleSetFactory.getArticleSetsForSections(sections));
 			
 		} else {
-        	outputNoSectionsWarning(7);	// TODO
+        	outputNoSectionsWarning(baseSize);
 		}
 	}
 	
@@ -92,6 +97,11 @@ public class sections extends DownloadProgressAwareActivity {
 		menu.add(0, MenuedActivity.FAVOURITES, 0, "Favourites");
 		menu.add(0, MenuedActivity.SEARCH_TAGS, 0, "Search tags");
 	    return true;
+	}
+
+
+	@Override
+	public void setFontSize(int baseSize) {
 	}
 				
 }
