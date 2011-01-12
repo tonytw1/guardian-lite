@@ -22,6 +22,8 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
+import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
@@ -267,8 +269,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	}
 			    	currentSection = article.getSection();
 			    	
-					// TODO should base this decision on the articles set's tags
-					boolean isContributorArticleSet = false; // TODO articleSet.getApiUrl().startsWith("profile");
+			    	boolean isContributorArticleSet = isContributorArticleSet(articleSet);
 					boolean shouldUseFeatureTrail = showMainImage && first && !isContributorArticleSet && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
 					View articleTrailView = chooseTrailView(mInflater, shouldUseFeatureTrail, first);
 					
@@ -339,6 +340,15 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	outputNoArticlesWarning(baseFontSize);
 			    	return;
 			}
+		}
+		
+		// TODO this decision about wether or not to use the featured trail should probably be a field on the article set.
+		private boolean isContributorArticleSet(ArticleSet articleSet) {
+			if (articleSet instanceof TagArticleSet) {	
+				Tag tag = ((TagArticleSet) articleSet).getTag();
+				return (tag != null) && tag.getId().startsWith("profile/");
+			}
+			return false;
 		}
 		
 		private void populateTagDescription(LinearLayout mainpane, String descripton, int fontSize) {
