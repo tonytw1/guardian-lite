@@ -38,7 +38,6 @@ public class main extends ArticleListActivity {
 	    MenuItem refreshMenuOption = menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
 	    menu.add(0, MenuedActivity.SYNC, 0, "Sync");
 	    menu.add(0, MenuedActivity.SETTING, 0, "Settings");
-	    menu.add(0, MenuedActivity.SEARCH, 0, "Search");	    
 	    enableMenuItemIfConnectionIsAvailable(refreshMenuOption);
 	    return true;
 	}
