@@ -13,6 +13,7 @@ import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
@@ -47,6 +48,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	protected ImageDAO imageDAO;
 	private NetworkStatusService networkStatusService;
 	private PreferencesDAO preferencesDAO;
+	private ImageDownloadDecisionService imageDownloadDecisionService;
 	
 	private UpdateArticlesHandler updateArticlesHandler;
 	private UpdateArticlesRunner updateArticlesRunner;
@@ -60,6 +62,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	private Thread loader;
 	private Date loaded;
 	private int baseSize;
+
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		imageDAO = SingletonFactory.getImageDao(this.getApplicationContext());		
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
+		imageDownloadDecisionService = SingletonFactory.getImageDownloadDecisionService(this.getApplicationContext());
 	}
 	
 	
@@ -133,7 +137,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	private void populateArticles(ContentFetchType fetchType, int baseFontSize, ArticleSet articleSet) {			
 		if (loader == null || !loader.isAlive()) {
 			updateArticlesHandler = new UpdateArticlesHandler(this, articleSet, baseFontSize);
-			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, fetchType, articleSet);
+			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, imageDownloadDecisionService, fetchType, articleSet);
 			updateArticlesHandler.init();
 			
 			loader = new Thread(updateArticlesRunner);
@@ -371,11 +375,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		}
 
 		private void populateTrailImage(final String url, View view) {
-			ImageView trialImage = (ImageView) view.findViewById(R.id.TrailImage);
-			
-			final boolean isWifiConnectionAvailable = networkStatusService.isConnectionAvailable() && networkStatusService.isWifiConnection();
-			final boolean canDisplayTrailImage = isWifiConnectionAvailable || (networkStatusService.isConnectionAvailable() && preferencesDAO.getTrailPicturesPreference().equals("ALWAYS"));
-			if (canDisplayTrailImage) {
+			if (imageDAO.isAvailableLocally(url)) {
+				ImageView trialImage = (ImageView) view.findViewById(R.id.TrailImage);			
 				Bitmap image = imageDAO.getImage(url);
 				if (image != null) {
 					trialImage.setImageBitmap(image);
@@ -496,10 +497,12 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		private ImageDAO imageDAO;
 		private ContentFetchType fetchType;
 		private ArticleSet articleSet;
+		private ImageDownloadDecisionService imageDownloadDecisionService;
 		
-		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, ContentFetchType fetchType, ArticleSet articleSet) {
+		public UpdateArticlesRunner(ArticleDAO articleDAO, ImageDAO imageDAO, ImageDownloadDecisionService imageDownloadDecisionService, ContentFetchType fetchType, ArticleSet articleSet) {
 			this.articleDAO = articleDAO;
 			this.imageDAO = imageDAO;
+			this.imageDownloadDecisionService = imageDownloadDecisionService;
 			this.running = true;
 			articleDAO.setArticleReadyCallback(this);
 			this.fetchType = fetchType;
@@ -528,6 +531,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			m.what = UpdateArticlesHandler.DRAW_REFINEMENTS;
 			updateArticlesHandler.sendMessage(m);
 					
+			final boolean isOkToDownloadTrailImages = imageDownloadDecisionService.isOkToDownloadTrailImages();
 			List<Article> downloadTrailImages = new LinkedList<Article>();
 			boolean first = true;
 			for (Article article : bundle.getArticles()) {
@@ -552,7 +556,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 						updateArticlesHandler.sendMessage(m);
 						
 					} else {
-						downloadTrailImages.add(article);
+						if (isOkToDownloadTrailImages) {
+							downloadTrailImages.add(article);
+						}
 					}					
 				}
 				

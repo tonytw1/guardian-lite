@@ -6,6 +6,7 @@ import java.util.Map;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
@@ -50,6 +51,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	private MenuItem saveArticleMenuItem;
 	private String shareText;
 	private TagListPopulatingService tagListPopulatingService;
+	private ImageDownloadDecisionService imageDownloadDecisionService;
         
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -137,24 +139,18 @@ public class article extends MenuedActivity implements FontResizingActivity {
         	description.setText("Redistribution rights for this field are unavailable");
         }
         
-    	final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
     	
     	final String mainImageUrl = article.getMainImageUrl();
-		if (mainImageUrl != null) {			
-			TextView caption = (TextView) findViewById(R.id.Caption);
-			caption.setText(article.getCaption());
-			caption.setTextColor(bodytextColour);
-			
-			final boolean isWifiConnectionAvailable = networkStatusService.isConnectionAvailable() && networkStatusService.isWifiConnection();
-			final boolean downloadMainImage = isWifiConnectionAvailable || (networkStatusService.isConnectionAvailable() && preferencesDAO.getLargePicturesPreference().equals("ALWAYS"));
-			
-			mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl(), downloadMainImage);
+		if (mainImageUrl != null && (imageDAO.isAvailableLocally(mainImageUrl) || imageDownloadDecisionService.isOkToDownloadMainImages())) {	
+			mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl());
 			Thread loader = new Thread(mainImageLoader);
-			loader.start();			
+			loader.start();
+			
 		}
 		
 		final boolean isTagged = !article.getAuthors().isEmpty() || !article.getKeywords().isEmpty();
 		if (isTagged) {
+			final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
 			populateTags(article, connectionAvailable);
 		}
 	}
@@ -175,9 +171,11 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize - 2);
         standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
         description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
-        
+
+		
 		View view =  findViewById(R.id.Main);
 		view.setBackgroundColor(ColourScheme.BACKGROUND);
+		caption.setTextColor(ColourScheme.BACKGROUND);
 		
 		TextView tagLabel =  (TextView) findViewById(R.id.TagLabel);
 		if (tagLabel != null) {
@@ -203,6 +201,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 					imageView.setImageBitmap(bitmap);			
 					imageView.setVisibility(View.VISIBLE);
 					caption.setVisibility(View.VISIBLE);
+					caption.setText(article.getCaption());
 				}
 			}
 		}
@@ -292,25 +291,19 @@ public class article extends MenuedActivity implements FontResizingActivity {
 
 		private ImageDAO imageDAO;
 		private String mainImageUrl;
-		private boolean shouldDownloadMainImage;
 		
-		public MainImageLoader(ImageDAO imageDAO, String mainImageUrl, boolean isWifiConnectionAvailable) {
+		public MainImageLoader(ImageDAO imageDAO, String mainImageUrl) {
 			this.imageDAO = imageDAO;
 			this.mainImageUrl = mainImageUrl;
-			this.shouldDownloadMainImage = isWifiConnectionAvailable;
 		}
-
+		
 		@Override
 		public void run() {
-			Bitmap image = null;
-			if (imageDAO.isAvailableLocally(mainImageUrl) || shouldDownloadMainImage) {
-				image = imageDAO.getImage(mainImageUrl);
-			}
-			
+			Bitmap image = imageDAO.getImage(mainImageUrl);
 			if (image != null) {
 				images.put(mainImageUrl, image);
 				sendMainImageAvailableMessage(mainImageUrl);
-			}			
+			}
 			return;
 		}
 

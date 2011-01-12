@@ -4,6 +4,7 @@ import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiStyleApi;
@@ -26,6 +27,7 @@ public class SingletonFactory {
 	private static NetworkStatusService networkStatusService;
 	private static DownProgressAnnouncer downloadProgressAnnouncer;
 	private static TagListPopulatingService tagListPopulatingService;
+	private static ImageDownloadDecisionService imageDownloadDecisionService;
 	
 	public static ArticleDAO getArticleDao(Context context) {
 		return new ArticleDAO(context);	
@@ -100,6 +102,13 @@ public class SingletonFactory {
 			tagListPopulatingService = new TagListPopulatingService(context);
 		}
 		return tagListPopulatingService;
+	}
+
+	public static ImageDownloadDecisionService getImageDownloadDecisionService(Context context) {
+		if (imageDownloadDecisionService == null) {
+			imageDownloadDecisionService = new ImageDownloadDecisionService(context);
+		}
+		return imageDownloadDecisionService;
 	}
 	
 }
