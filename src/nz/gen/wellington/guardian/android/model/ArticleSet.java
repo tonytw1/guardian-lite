@@ -11,5 +11,6 @@ public interface ArticleSet extends Serializable {
 	String getSourceUrl();
 	void setSourceUrl(String urlForArticleSet);
 	boolean isEmpty();
+	boolean isFeatureTrailAllowed();
 	
 }

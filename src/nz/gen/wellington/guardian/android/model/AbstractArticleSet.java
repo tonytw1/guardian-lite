@@ -32,5 +32,10 @@ public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	public boolean isEmpty() {
 		return false;
 	}
+
+	@Override
+	public boolean isFeatureTrailAllowed() {
+		return true;
+	}
 	
 }

@@ -22,8 +22,6 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
-import nz.gen.wellington.guardian.android.model.Tag;
-import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
@@ -59,8 +57,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	private Map<String, View> viewsWaitingForTrailImages;
 
 	boolean showSeperators = false;
-	boolean showMainImage = true;
-		
+	
 	private Thread loader;
 	private Date loaded;
 	private int baseSize;
@@ -269,8 +266,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	}
 			    	currentSection = article.getSection();
 			    	
-			    	boolean isContributorArticleSet = isContributorArticleSet(articleSet);
-					boolean shouldUseFeatureTrail = showMainImage && first && !isContributorArticleSet && article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
+					boolean shouldUseFeatureTrail = article.getMainImageUrl() != null && first && articleSet.isFeatureTrailAllowed() && imageDAO.isAvailableLocally(article.getMainImageUrl());
 					View articleTrailView = chooseTrailView(mInflater, shouldUseFeatureTrail, first);
 					
 					populateArticleListView(article, articleTrailView, shouldUseFeatureTrail);
@@ -340,15 +336,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	outputNoArticlesWarning(baseFontSize);
 			    	return;
 			}
-		}
-		
-		// TODO this decision about wether or not to use the featured trail should probably be a field on the article set.
-		private boolean isContributorArticleSet(ArticleSet articleSet) {
-			if (articleSet instanceof TagArticleSet) {	
-				Tag tag = ((TagArticleSet) articleSet).getTag();
-				return (tag != null) && tag.getId().startsWith("profile/");
-			}
-			return false;
 		}
 		
 		private void populateTagDescription(LinearLayout mainpane, String descripton, int fontSize) {

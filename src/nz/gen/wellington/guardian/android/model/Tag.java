@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Tag implements Serializable {
 	
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 	private String name;
 	private String id;
 	private Section section;
@@ -42,6 +42,10 @@ public class Tag implements Serializable {
 			return id.equals(sectionTagId);			
 		}
 		return false;
+	}
+
+	public boolean isContributorTag() {
+		return id != null && id.startsWith("profile/");
 	}
 	
 }

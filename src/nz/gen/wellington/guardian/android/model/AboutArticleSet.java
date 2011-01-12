@@ -23,6 +23,10 @@ public class AboutArticleSet extends AbstractArticleSet implements Serializable,
 	public List<String> getPermittedRefinements() {
 		return Arrays.asList(permittedRefinements);
 	}
-	
+
+	@Override
+	public boolean isFeatureTrailAllowed() {
+		return false;
+	}
 	
 }

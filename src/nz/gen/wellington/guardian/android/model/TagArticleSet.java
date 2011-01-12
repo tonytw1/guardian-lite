@@ -29,4 +29,9 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 		return tag;
 	}
 
+	@Override
+	public boolean isFeatureTrailAllowed() {
+		return !tag.isContributorTag();
+	}
+	
 }
