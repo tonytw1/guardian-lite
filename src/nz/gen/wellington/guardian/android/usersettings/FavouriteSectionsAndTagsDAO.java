@@ -14,13 +14,16 @@ public class FavouriteSectionsAndTagsDAO {
 	
 	private SqlLiteFavouritesDAO sqlLiteDAO;
 	private ArticleSetFactory articleSetFactory;
+	private Context context;
 	
 	public FavouriteSectionsAndTagsDAO(Context context) {
 		this.sqlLiteDAO = new SqlLiteFavouritesDAO(context);
-		this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
+		this.context = context;
 	}
 	
 	public List<ArticleSet> getFavouriteArticleSets() {
+		// TODO hack to get around circular reference.
+		this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
 		// TODO - this implies three sqllite queries in a row - needs to be done in one open open and close if possible.
 		List<Section> favouriteSections = getFavouriteSections();
 		List<Tag> favouriteTags = getFavouriteTags();
