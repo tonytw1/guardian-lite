@@ -67,9 +67,7 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	
 	@Override
 	public void setFontSize(int baseSize) {
-		View view =  findViewById(R.id.Main);
-		view.setBackgroundColor(ColourScheme.BACKGROUND);
-		
+		super.setFontSize(baseSize);		
 		TextView statusMessage = (TextView) findViewById(R.id.StatusMessage);
 		statusMessage.setTextColor(ColourScheme.BODYTEXT);
 		statusMessage.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);

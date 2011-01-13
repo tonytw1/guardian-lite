@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -90,8 +89,7 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 	}
 	
 	public void setFontSize(int baseSize) {
-		View view =  findViewById(R.id.Main);
-		view.setBackgroundColor(ColourScheme.BACKGROUND);
+		super.setFontSize(baseSize);
 		
 		TextView about = (TextView) findViewById(R.id.About);
 		TextView contentCredit = (TextView) findViewById(R.id.ContentCredit);

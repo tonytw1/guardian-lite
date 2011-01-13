@@ -103,16 +103,12 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		super.onResume();
 		baseSize = preferencesDAO.getBaseFontSize();
 		setFontSize(baseSize);
-		
-		View view =  findViewById(R.id.Main);
-		if (view != null) {
-			view.setBackgroundColor(ColourScheme.BACKGROUND);
-		}
 	}
 
 	
 	@Override
 	public void setFontSize(int baseSize) {
+		super.setFontSize(baseSize);
 		TextView description = (TextView) findViewById(R.id.Description);
 		if (description != null) {
 			description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);

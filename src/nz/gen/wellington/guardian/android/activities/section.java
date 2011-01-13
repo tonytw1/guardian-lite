@@ -1,17 +1,14 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 public class section extends ArticleListActivity implements FontResizingActivity {
@@ -36,9 +33,7 @@ public class section extends ArticleListActivity implements FontResizingActivity
 	
 	@Override
 	public void setFontSize(int baseSize) {
-		super.setFontSize(baseSize);		
-		View view =  findViewById(R.id.Main);
-		view.setBackgroundColor(ColourScheme.BACKGROUND);
+		super.setFontSize(baseSize);
 	}
 
 

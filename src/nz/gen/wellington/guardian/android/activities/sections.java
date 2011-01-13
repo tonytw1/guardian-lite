@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,8 +36,6 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 		tagListPopulatingService = SingletonFactory.getTagListPopulator(this.getApplicationContext());
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		setContentView(R.layout.sections);
-		View view =  findViewById(R.id.Main);
-		view.setBackgroundColor(ColourScheme.BACKGROUND);
 		
 		setHeading("Sections");
 		setHeadingColour("#0061A6");
@@ -102,6 +99,7 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 
 	@Override
 	public void setFontSize(int baseSize) {
+		super.setFontSize(baseSize);
 	}
 				
 }

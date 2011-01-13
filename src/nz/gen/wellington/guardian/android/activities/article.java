@@ -71,9 +71,6 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.article);
 		
-		View view =  findViewById(R.id.Main);
-		view.setBackgroundColor(ColourScheme.BACKGROUND);
-		
 		this.article = (Article) this.getIntent().getExtras().get("article");		
 		if (article != null) {
 			populateArticle(article, ColourScheme.BODYTEXT, ColourScheme.HEADLINE);			
@@ -155,6 +152,8 @@ public class article extends MenuedActivity implements FontResizingActivity {
 
 
 	public void setFontSize(int baseSize) {
+		super.setFontSize(baseSize);
+		
 		TextView headline = (TextView) findViewById(R.id.Headline);
 		TextView caption = (TextView) findViewById(R.id.Caption);
 		TextView pubDate = (TextView) findViewById(R.id.PubDate);
@@ -169,10 +168,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize - 2);
         standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
         description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
-
-		
-		View view =  findViewById(R.id.Main);
-		view.setBackgroundColor(ColourScheme.BACKGROUND);
+        
 		caption.setTextColor(ColourScheme.BODYTEXT);
 		
 		TextView tagLabel =  (TextView) findViewById(R.id.TagLabel);

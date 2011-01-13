@@ -10,7 +10,6 @@ import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
-import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
@@ -84,8 +83,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	
 	@Override
 	public void setFontSize(int baseSize) {
-		View view =  findViewById(R.id.Main);
-		view.setBackgroundColor(ColourScheme.BACKGROUND);		
+		super.setFontSize(baseSize);	
 	}
 	
 
