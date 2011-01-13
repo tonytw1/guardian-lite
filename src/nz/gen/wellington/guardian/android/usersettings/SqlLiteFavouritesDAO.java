@@ -34,12 +34,13 @@ public class SqlLiteFavouritesDAO {
 	private static final String APIID = "apiid";
 	private static final String TYPE = "type";
 	
-	private static final String NAME_ASC = "name asc";
 	private static final String ARTICLEID_DESC = "articleid DESC";
+	private static final String NAME_ASC = "name asc";
+	private static final String SEARCHTERM_ASC = "searchterm ASC";
 	
 	private static final String INSERT_FAVOURITE_TAG = "insert into " + TAG_TABLE + "(type, apiid, name, sectionid) values (?, ?, ?, ?)";
-	private static final String INSERT_SAVED_ARTICLE = "insert into " + SAVED_ARTICLES_TABLE + "(articleid) values (?)";
 	private static final String INSERT_FAVOURITE_SEARCH_TERM = "insert into " + TAG_TABLE + "(type, searchTerm) values ('searchterm', ?)";
+	private static final String INSERT_SAVED_ARTICLE = "insert into " + SAVED_ARTICLES_TABLE + "(articleid) values (?)";
 	
 	private OpenHelper openHelper;
 	private SectionDAO sectionDAO;
@@ -174,7 +175,7 @@ public class SqlLiteFavouritesDAO {
 		List<Tag> favouriteTags = new ArrayList<Tag>();
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		if (db != null && db.isOpen()) {
-			Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME, SECTIONID}, null, null, null, null, NAME_ASC);		
+			Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME, SECTIONID}, null, null, null, null, NAME_ASC);	// TODO type where clause		
 			if (cursor.moveToFirst()) {
 				do {
 					final String type = cursor.getString(0);
@@ -184,11 +185,11 @@ public class SqlLiteFavouritesDAO {
 					if (type.equals("tag")) {
 						
 						Section section = sectionDAO.getSectionById(sectionId);
-						if (section != null) {
+						//if (section != null) {
 							favouriteTags.add(new Tag(name, id, section));
-						} else {
-							Log.w(TAG, "Favourite tag '" + name + "' has invalid section '" + sectionId + "' - ignoring");
-						}
+						//} else {
+						//	Log.w(TAG, "Favourite tag '" + name + "' has invalid section '" + sectionId + "' - ignoring");
+						//}
 					}
 					
 				} while (cursor.moveToNext());
@@ -204,7 +205,7 @@ public class SqlLiteFavouritesDAO {
 
 	public synchronized List<Section> getFavouriteSections() {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
-		Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME, SECTIONID}, null, null, null, null, NAME_ASC);
+		Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME, SECTIONID}, null, null, null, null, NAME_ASC);	// TODO type where clause
 		
 		List<Section> favouriteSections = new ArrayList<Section>();
 		if (cursor.moveToFirst()) {			
@@ -229,7 +230,7 @@ public class SqlLiteFavouritesDAO {
 	
 	public synchronized List<String> getFavouriteSearchTerms() {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
-		Cursor cursor = db.query(TAG_TABLE, new String[] {"searchterm"}, null, null, null, null, "searchterm ASC");
+		Cursor cursor = db.query(TAG_TABLE, new String[] {"searchterm"}, "type='searchterm'", null, null, null, SEARCHTERM_ASC);
 		
 		List<String> favouriteSearchTerms = new ArrayList<String>();
 		if (cursor.moveToFirst()) {
