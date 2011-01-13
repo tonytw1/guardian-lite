@@ -2,7 +2,10 @@ package nz.gen.wellington.guardian.android.usersettings;
 
 import java.util.List;
 
+import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import android.content.Context;
@@ -10,9 +13,28 @@ import android.content.Context;
 public class FavouriteSectionsAndTagsDAO {
 	
 	private SqlLiteFavouritesDAO sqlLiteDAO;
+	private ArticleSetFactory articleSetFactory;
 	
 	public FavouriteSectionsAndTagsDAO(Context context) {
 		this.sqlLiteDAO = new SqlLiteFavouritesDAO(context);
+		this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
+	}
+	
+	public List<ArticleSet> getFavouriteArticleSets() {
+		// TODO - this implies three sqllite queries in a row - needs to be done in one open open and close if possible.
+		List<Section> favouriteSections = getFavouriteSections();
+		List<Tag> favouriteTags = getFavouriteTags();
+		List<String> favouriteSearchTerms = getFavouriteSearchTerms();
+		
+		boolean favouritesLoadedCorrectly = (favouriteSections != null && favouriteTags != null && favouriteSearchTerms != null);
+		if (!favouritesLoadedCorrectly) {
+			return null;
+		}
+		
+		List<ArticleSet> favouriteArticleSets = articleSetFactory.getArticleSetsForSections(favouriteSections);
+		favouriteArticleSets.addAll(articleSetFactory.getArticleSetsForTags(favouriteTags));
+		favouriteArticleSets.addAll(articleSetFactory.getArticleSetsForSearchTerms(favouriteSearchTerms));
+		return favouriteArticleSets;
 	}
 		
 	public List<Section> getFavouriteSections() {

@@ -8,8 +8,6 @@ import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
-import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
@@ -27,6 +25,7 @@ public class favourites extends ArticleListActivity {
     private ArticleSetFactory articleSetFactory;
     private NetworkStatusService networkStatusService;
 	private TagListPopulatingService tagListPopulatingService;
+	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +35,7 @@ public class favourites extends ArticleListActivity {
         articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
         networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
         tagListPopulatingService = SingletonFactory.getTagListPopulator(this.getApplicationContext());
+        favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
         
         setContentView(R.layout.favourites);        
         setHeading("Favourites");
@@ -63,23 +63,15 @@ public class favourites extends ArticleListActivity {
 
 
 	private void populateFavourites() {
-		FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
-
 		TextView description = (TextView) findViewById(R.id.Description);
-		
-		// TODO - this implies three sqllite queries in a row - needs to be done in one open open and close if possible.
-		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections();
-		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
-		List<String> favouriteSearchTerms = favouriteSectionsAndTagsDAO.getFavouriteSearchTerms();
-		
-		boolean favouritesLoadedCorrectly = (favouriteSections != null && favouriteTags != null && favouriteSearchTerms != null);
-		if (!favouritesLoadedCorrectly) {
+
+		List<ArticleSet> favouriteArticleSets = favouriteSectionsAndTagsDAO.getFavouriteArticleSets();		
+		if (favouriteArticleSets == null) {		
 			description.setText("There was a problem loading your favorite sections and tags.");			
 			return;
 		}
 		
-		boolean hasFavourites = !favouriteSections.isEmpty() || !favouriteTags.isEmpty() || !favouriteSearchTerms.isEmpty();
-		if (hasFavourites) {
+		if (!favouriteArticleSets.isEmpty()) {
 			LayoutInflater inflater = LayoutInflater.from(this);
 			LinearLayout authorList = (LinearLayout) findViewById(R.id.FavouritesPane);
 		
@@ -88,14 +80,8 @@ public class favourites extends ArticleListActivity {
 			tagGroup.setOrientation(LinearLayout.VERTICAL);
 			tagGroup.setPadding(2, 0, 2, 0);
 			
-			final boolean connectionIsAvailable = networkStatusService.isConnectionAvailable();
-			
-			tagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForSections(favouriteSections));
-			tagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForTags(favouriteTags));
-			tagListPopulatingService.populateTags(inflater, connectionIsAvailable, tagGroup, articleSetFactory.getArticleSetsForSearchTerms(favouriteSearchTerms));
-
-			authorList.addView(tagGroup);
-			
+			tagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), tagGroup, favouriteArticleSets);
+			authorList.addView(tagGroup);			
 			description.setText("The following sections and tags have been marked as favourites.");			
 			
 		} else {
