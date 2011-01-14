@@ -49,9 +49,8 @@ public class ArticleSetFactory {
 	}
 	
 	public ArticleSet getFavouritesArticleSet() {
-		List<Section> favouriteSections = favouriteSectionsAndTagsDAO.getFavouriteSections();
-		List<Tag> favouriteTags = favouriteSectionsAndTagsDAO.getFavouriteTags();
-		return addUrl(new FavouriteTagsArticleSet(favouriteSections, favouriteTags, preferencesDAO.getPageSizePreference()));
+		List<ArticleSet> favouriteArticleSets = favouriteSectionsAndTagsDAO.getFavouriteArticleSets();
+		return addUrl(new FavouriteTagsArticleSet(favouriteArticleSets, preferencesDAO.getPageSizePreference()));
 	}
 	
 	public ArticleSet getTopStoriesArticleSet() {

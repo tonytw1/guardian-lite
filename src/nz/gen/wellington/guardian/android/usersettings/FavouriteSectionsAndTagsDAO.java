@@ -1,7 +1,10 @@
 package nz.gen.wellington.guardian.android.usersettings;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
@@ -15,41 +18,28 @@ public class FavouriteSectionsAndTagsDAO {
 	private SqlLiteFavouritesDAO sqlLiteDAO;
 	private ArticleSetFactory articleSetFactory;
 	private Context context;
+	private SectionDAO sectionDAO;
 	
 	public FavouriteSectionsAndTagsDAO(Context context) {
 		this.sqlLiteDAO = new SqlLiteFavouritesDAO(context);
+		this.sectionDAO = SingletonFactory.getSectionDAO(context);
 		this.context = context;
 	}
 	
 	public List<ArticleSet> getFavouriteArticleSets() {
 		// TODO hack to get around circular reference.
 		this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
-		// TODO - this implies three sqllite queries in a row - needs to be done in one open open and close if possible.
-		List<Section> favouriteSections = getFavouriteSections();
-		List<Tag> favouriteTags = getFavouriteTags();
-		List<String> favouriteSearchTerms = getFavouriteSearchTerms();
-		
-		boolean favouritesLoadedCorrectly = (favouriteSections != null && favouriteTags != null && favouriteSearchTerms != null);
-		if (!favouritesLoadedCorrectly) {
-			return null;
-		}
-		
-		List<ArticleSet> favouriteArticleSets = articleSetFactory.getArticleSetsForSections(favouriteSections);
-		favouriteArticleSets.addAll(articleSetFactory.getArticleSetsForTags(favouriteTags));
-		favouriteArticleSets.addAll(articleSetFactory.getArticleSetsForSearchTerms(favouriteSearchTerms));
-		return favouriteArticleSets;
-	}
-		
-	public List<Section> getFavouriteSections() {
-		return sqlLiteDAO.getFavouriteSections();
-	}
-		
-	public List<Tag> getFavouriteTags() {
-		return sqlLiteDAO.getFavouriteTags();
-	}
 	
-	public List<String> getFavouriteSearchTerms() {
-		return sqlLiteDAO.getFavouriteSearchTerms();
+		List<ArticleSet> favouriteArticleSets = new ArrayList<ArticleSet>();
+		
+		List<Map<String, String>> favouriteRows = sqlLiteDAO.getFavouriteRows();
+		for (Map<String, String> row : favouriteRows) {
+			ArticleSet articleSet = rowToArticleSet(row);
+			if (articleSet != null) {
+				favouriteArticleSets.add(articleSet);
+			}
+		}
+		return favouriteArticleSets;
 	}
 	
 	public List<String> getSavedArticleIds() {
@@ -107,5 +97,23 @@ public class FavouriteSectionsAndTagsDAO {
 	public void removeSearchTerm(String searchTerm) {
 		sqlLiteDAO.removeSearchTerm(searchTerm);
 	}
-		
+	
+	private ArticleSet rowToArticleSet(Map<String, String> row) {
+		if(row.get(SqlLiteFavouritesDAO.TYPE).equals("tag")) {				
+			Section section = sectionDAO.getSectionById(row.get(SqlLiteFavouritesDAO.SECTIONID));
+			Tag tag = new Tag(row.get(SqlLiteFavouritesDAO.NAME), row.get(SqlLiteFavouritesDAO.APIID), section);
+			return articleSetFactory.getArticleSetForTag(tag);
+			
+		} else if (row.get(SqlLiteFavouritesDAO.TYPE).equals("section")) {				
+			Section section = sectionDAO.getSectionById(row.get(SqlLiteFavouritesDAO.SECTIONID));
+			if (section != null) {
+				return articleSetFactory.getArticleSetForSection(section);
+			}
+			
+		} else if (row.get(SqlLiteFavouritesDAO.TYPE).equals("searchterm")) {
+			return articleSetFactory.getArticleSetForSearchTerm(row.get(SqlLiteFavouritesDAO.SEARCHTERM));
+		}
+		return null;
+	}
+	
 }

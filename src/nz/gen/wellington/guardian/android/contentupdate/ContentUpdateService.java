@@ -1,14 +1,10 @@
 package nz.gen.wellington.guardian.android.contentupdate;
 
-import java.util.List;
-
 import nz.gen.wellington.guardian.android.contentupdate.tasks.UpdateArticleSetTask;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
-import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.Tag;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
@@ -103,30 +99,11 @@ public class ContentUpdateService extends Service {
 		taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), articleSetFactory.getTopStoriesArticleSet()));
 		
 		ArticleSet favouritesArticleSet = articleSetFactory.getFavouritesArticleSet();
-		if (!favouritesArticleSet.isEmpty()) {
-			queueSections(taskQueue, ((FavouriteTagsArticleSet) favouritesArticleSet).getSections(), pagesize);
-			queueTags(taskQueue, ((FavouriteTagsArticleSet) favouritesArticleSet).getTags(), pagesize);
+		if (!favouritesArticleSet.isEmpty()) {			
+			for (ArticleSet articleSet : ((FavouriteTagsArticleSet) favouritesArticleSet).getArticleSets()) {
+				taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(),articleSet));
+			}
 			taskQueue.addArticleTask(new UpdateArticleSetTask(this.getApplicationContext(), favouritesArticleSet));
-		}
-	}
-	
-	
-	private void queueTags(TaskQueue taskQueue, List<Tag> tags, int pagesize) {
-		if (tags != null) {
-			for (Tag tag : tags) {
-				taskQueue.addArticleTask(new UpdateArticleSetTask(this
-						.getApplicationContext(), articleSetFactory.getArticleSetForTag(tag)));
-			}
-		}
-	}
-
-	
-	private void queueSections(TaskQueue taskQueue, List<Section> sections, int pagesize) {
-		if (sections != null) {
-			for (Section section : sections) {
-				UpdateArticleSetTask articleTask = new UpdateArticleSetTask(this.getApplicationContext(), articleSetFactory.getArticleSetForSection(section));
-				taskQueue.addArticleTask(articleTask);
-			}
 		}
 	}
 	

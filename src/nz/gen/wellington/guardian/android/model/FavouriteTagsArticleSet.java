@@ -6,19 +6,17 @@ import java.util.List;
 
 public class FavouriteTagsArticleSet extends AbstractArticleSet implements Serializable, ArticleSet {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
-	private List<Section> sections;
-	private List<Tag> tags;
+	private List<ArticleSet> articleSets;
 	
 	private String[] permittedRefinements = {};
 	
-	public FavouriteTagsArticleSet(List<Section> sections, List<Tag> tags, int pageSize) {
-		super(pageSize);
-		this.sections = sections;
-		this.tags = tags;
+	public FavouriteTagsArticleSet(List<ArticleSet> favouriteArticleSets, int pageSizePreference) {
+		super(pageSizePreference);
+		this.articleSets = favouriteArticleSets;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "Favourites";
@@ -29,17 +27,13 @@ public class FavouriteTagsArticleSet extends AbstractArticleSet implements Seria
 		return Arrays.asList(permittedRefinements);
 	}
 	
+	public List<ArticleSet> getArticleSets() {
+		return articleSets;
+	}
+
 	@Override
 	public boolean isEmpty() {
-		return sections.isEmpty() && tags.isEmpty();
-	}
-
-	public List<Section> getSections() {
-		return sections;
-	}
-
-	public List<Tag> getTags() {
-		return tags;
+		return articleSets.isEmpty();
 	}
 	
 	@Override

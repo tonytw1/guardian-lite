@@ -1,10 +1,10 @@
 package nz.gen.wellington.guardian.android.usersettings;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import nz.gen.wellington.guardian.android.api.SectionDAO;
-import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -28,26 +28,24 @@ public class SqlLiteFavouritesDAO {
 	private static final String TAG_TABLE = "favourites";
 	private static final String SAVED_ARTICLES_TABLE = "saved_articles";
 	
-	private static final String SECTIONID = "sectionid";
-	private static final String ARTICLEID = "articleid";
-	private static final String NAME = "name";
-	private static final String APIID = "apiid";
-	private static final String TYPE = "type";
+	public static final String SECTIONID = "sectionid";
+	public static final String ARTICLEID = "articleid";
+	public static final String NAME = "name";
+	public static final String APIID = "apiid";
+	public static final String TYPE = "type";
+	public static final String SEARCHTERM = "searchterm";
 	
 	private static final String ARTICLEID_DESC = "articleid DESC";
 	private static final String NAME_ASC = "name asc";
-	private static final String SEARCHTERM_ASC = "searchterm ASC";
 	
 	private static final String INSERT_FAVOURITE_TAG = "insert into " + TAG_TABLE + "(type, apiid, name, sectionid) values (?, ?, ?, ?)";
 	private static final String INSERT_FAVOURITE_SEARCH_TERM = "insert into " + TAG_TABLE + "(type, searchTerm) values ('searchterm', ?)";
 	private static final String INSERT_SAVED_ARTICLE = "insert into " + SAVED_ARTICLES_TABLE + "(articleid) values (?)";
 	
 	private OpenHelper openHelper;
-	private SectionDAO sectionDAO;
 
 	public SqlLiteFavouritesDAO(Context context) {
 		openHelper = new OpenHelper(context);
-		this.sectionDAO = SingletonFactory.getSectionDAO(context);
 	}
 	
 	public synchronized boolean hasFavourites() {	// TODO count query rather than select all
@@ -171,26 +169,22 @@ public class SqlLiteFavouritesDAO {
 	}
 	
 	
-	public synchronized List<Tag> getFavouriteTags() {
-		List<Tag> favouriteTags = new ArrayList<Tag>();
+
+	public synchronized List<Map<String, String>> getFavouriteRows() {
+		List<Map<String, String>> rows = new ArrayList<Map<String,String>>();
+
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		if (db != null && db.isOpen()) {
-			Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME, SECTIONID}, null, null, null, null, NAME_ASC);	// TODO type where clause		
+			Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME, SECTIONID, SEARCHTERM}, null, null, null, null, NAME_ASC);
 			if (cursor.moveToFirst()) {
 				do {
-					final String type = cursor.getString(0);
-					final String id = cursor.getString(1);
-					final String name = cursor.getString(2);
-					final String sectionId = cursor.getString(3);
-					if (type.equals("tag")) {
-						
-						Section section = sectionDAO.getSectionById(sectionId);
-						//if (section != null) {
-							favouriteTags.add(new Tag(name, id, section));
-						//} else {
-						//	Log.w(TAG, "Favourite tag '" + name + "' has invalid section '" + sectionId + "' - ignoring");
-						//}
-					}
+					Map<String, String> row = new HashMap<String, String>();
+					row.put(TYPE,  cursor.getString(0));
+					row.put(APIID,  cursor.getString(1));
+					row.put(NAME,  cursor.getString(2));
+					row.put(SECTIONID,  cursor.getString(3));
+					row.put(SEARCHTERM,  cursor.getString(4));
+					rows.add(row);
 					
 				} while (cursor.moveToNext());
 			}
@@ -199,49 +193,7 @@ public class SqlLiteFavouritesDAO {
 		} else {
 			Log.i(TAG, "Could not open readable database connection");
 		}
-		return favouriteTags;
-	}
-
-
-	public synchronized List<Section> getFavouriteSections() {
-		SQLiteDatabase db = openHelper.getReadableDatabase();
-		Cursor cursor = db.query(TAG_TABLE, new String[] {TYPE, APIID, NAME, SECTIONID}, null, null, null, null, NAME_ASC);	// TODO type where clause
-		
-		List<Section> favouriteSections = new ArrayList<Section>();
-		if (cursor.moveToFirst()) {			
-			do {
-				final String type = cursor.getString(0);
-				final String sectionId = cursor.getString(3);
-				if (type.equals("section")) {
-					Section section = sectionDAO.getSectionById(sectionId);
-					if (section != null) {
-						favouriteSections.add(section);
-					}
-				}
-				
-			} while (cursor.moveToNext());
-		}
-		closeCursor(cursor);
-		db.close();
-		return favouriteSections;
-	}
-	
-	
-	
-	public synchronized List<String> getFavouriteSearchTerms() {
-		SQLiteDatabase db = openHelper.getReadableDatabase();
-		Cursor cursor = db.query(TAG_TABLE, new String[] {"searchterm"}, "type='searchterm'", null, null, null, SEARCHTERM_ASC);
-		
-		List<String> favouriteSearchTerms = new ArrayList<String>();
-		if (cursor.moveToFirst()) {
-			do {
-				final String searchTerm = cursor.getString(0);
-				favouriteSearchTerms.add(searchTerm);				
-			} while (cursor.moveToNext());
-		}
-		closeCursor(cursor);
-		db.close();
-		return favouriteSearchTerms;
+		return rows;
 	}
 	
 	

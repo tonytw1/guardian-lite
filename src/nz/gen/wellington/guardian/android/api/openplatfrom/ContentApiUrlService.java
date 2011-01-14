@@ -3,16 +3,13 @@ package nz.gen.wellington.guardian.android.api.openplatfrom;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
-import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
-import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 
 public class ContentApiUrlService {
 	
 	private String apiHost;
 	private String apiKey;
-
 	
 	public ContentApiUrlService(String apiHost, String apiKey) {
 		this.apiHost = apiHost;
@@ -64,12 +61,13 @@ public class ContentApiUrlService {
 		
 		if (articleSet instanceof FavouriteTagsArticleSet) {
 			FavouriteTagsArticleSet favouriteStoriesArticleSet = (FavouriteTagsArticleSet) articleSet;
-			for (Section section : favouriteStoriesArticleSet.getSections()) {
-				contentApiUrlBuilder.addSection(section);
-			}
-			for (Tag tag : favouriteStoriesArticleSet.getTags()) {
-				contentApiUrlBuilder.addTag(tag);
-			}
+			for (ArticleSet favouroteArticleSet : favouriteStoriesArticleSet.getArticleSets()) {
+				if (articleSet instanceof SectionArticleSet) {
+					contentApiUrlBuilder.addSection(((SectionArticleSet) favouroteArticleSet).getSection());					
+				} else if (articleSet instanceof TagArticleSet) {
+					contentApiUrlBuilder.addTag(((TagArticleSet) favouroteArticleSet).getTag());
+				}
+			};
 		}
 		
 		if (articleSet instanceof SearchResultsArticleSet) {
