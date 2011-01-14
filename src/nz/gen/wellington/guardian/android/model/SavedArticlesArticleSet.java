@@ -9,9 +9,7 @@ public class SavedArticlesArticleSet extends AbstractArticleSet implements Seria
 	private static final long serialVersionUID = 1L;
 	
 	private List<String> articlesIds;
-	
-	private String[] permittedRefinements = {};
-	
+		
 	public SavedArticlesArticleSet(List<String> articleIds) {
 		super(0);
 		this.articlesIds = articleIds;
@@ -20,11 +18,6 @@ public class SavedArticlesArticleSet extends AbstractArticleSet implements Seria
 	@Override
 	public String getName() {
 		return "Saved articles";
-	}
-	
-	@Override
-	public List<String> getPermittedRefinements() {
-		return Arrays.asList(permittedRefinements);
 	}
 	
 	@Override

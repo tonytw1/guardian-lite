@@ -1,6 +1,8 @@
 package nz.gen.wellington.guardian.android.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	
@@ -8,6 +10,7 @@ public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	private int pageSize;
 	private String sourceUrl;
 	
+	private String[] permittedRefinements = {};
 
 	public AbstractArticleSet(int pageSize) {
 		this.pageSize = pageSize;
@@ -36,6 +39,11 @@ public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	@Override
 	public boolean isFeatureTrailAllowed() {
 		return true;
+	}
+
+	@Override
+	public List<String> getPermittedRefinements() {
+		return Arrays.asList(permittedRefinements);
 	}
 	
 }

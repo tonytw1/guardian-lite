@@ -9,9 +9,7 @@ public class FavouriteTagsArticleSet extends AbstractArticleSet implements Seria
 	private static final long serialVersionUID = 2L;
 	
 	private List<ArticleSet> articleSets;
-	
-	private String[] permittedRefinements = {};
-	
+		
 	public FavouriteTagsArticleSet(List<ArticleSet> favouriteArticleSets, int pageSizePreference) {
 		super(pageSizePreference);
 		this.articleSets = favouriteArticleSets;
@@ -22,10 +20,6 @@ public class FavouriteTagsArticleSet extends AbstractArticleSet implements Seria
 		return "Favourites";
 	}
 	
-	@Override
-	public List<String> getPermittedRefinements() {
-		return Arrays.asList(permittedRefinements);
-	}
 	
 	public List<ArticleSet> getArticleSets() {
 		return articleSets;
