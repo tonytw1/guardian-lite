@@ -1,7 +1,6 @@
 package nz.gen.wellington.guardian.android.model;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
 public class FavouriteTagsArticleSet extends AbstractArticleSet implements Serializable, ArticleSet {
