@@ -8,7 +8,6 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -95,9 +94,9 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 		TextView contentCredit = (TextView) findViewById(R.id.ContentCredit);
 		
 		about.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
-		about.setTextColor(ColourScheme.BODYTEXT);
+		about.setTextColor(colourScheme.getBodytext());
 		contentCredit.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
-		contentCredit.setTextColor(ColourScheme.BODYTEXT);
+		contentCredit.setTextColor(colourScheme.getBodytext());
 	}
 	
 }

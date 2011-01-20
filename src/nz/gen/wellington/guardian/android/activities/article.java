@@ -10,7 +10,6 @@ import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
-import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
@@ -73,7 +72,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		
 		this.article = (Article) this.getIntent().getExtras().get("article");		
 		if (article != null) {
-			populateArticle(article, ColourScheme.BODYTEXT, ColourScheme.HEADLINE);			
+			populateArticle(article, colourScheme.getBodytext(), colourScheme.getHeadline());			
 		} else {
         	Toast.makeText(this, "Could not load article", Toast.LENGTH_SHORT).show();
 		}
@@ -169,11 +168,11 @@ public class article extends MenuedActivity implements FontResizingActivity {
         standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
         description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
         
-		caption.setTextColor(ColourScheme.BODYTEXT);
+		caption.setTextColor(colourScheme.getBodytext());
 		
 		TextView tagLabel =  (TextView) findViewById(R.id.TagLabel);
 		if (tagLabel != null) {
-			tagLabel.setTextColor(ColourScheme.BODYTEXT);
+			tagLabel.setTextColor(colourScheme.getBodytext());
 		}
 	}
 	

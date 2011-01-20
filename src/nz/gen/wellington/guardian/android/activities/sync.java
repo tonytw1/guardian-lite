@@ -4,7 +4,6 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.contentupdate.ContentUpdateService;
 import nz.gen.wellington.guardian.android.contentupdate.TaskQueue;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
-import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.Plurals;
@@ -69,7 +68,7 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	public void setFontSize(int baseSize) {
 		super.setFontSize(baseSize);		
 		TextView statusMessage = (TextView) findViewById(R.id.StatusMessage);
-		statusMessage.setTextColor(ColourScheme.BODYTEXT);
+		statusMessage.setTextColor(colourScheme.getBodytext());
 		statusMessage.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
 	}
 

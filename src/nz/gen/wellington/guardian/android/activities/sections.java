@@ -8,7 +8,6 @@ import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.api.filtering.SectionSorter;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
-import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
@@ -83,7 +82,7 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 		noArticlesMessage.setText("No sections available.");
 		
 		noArticlesMessage.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
-		noArticlesMessage.setTextColor(ColourScheme.HEADLINE);
+		noArticlesMessage.setTextColor(colourScheme.getHeadline());
 		noArticlesMessage.setPadding(2, 3, 2, 3);					
 		mainpane.addView(noArticlesMessage, 0);
 	}

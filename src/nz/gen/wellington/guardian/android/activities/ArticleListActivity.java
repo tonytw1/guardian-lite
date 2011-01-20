@@ -19,7 +19,6 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
@@ -112,7 +111,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		TextView description = (TextView) findViewById(R.id.Description);
 		if (description != null) {
 			description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
-			description.setTextColor(ColourScheme.BODYTEXT);
+			description.setTextColor(colourScheme.getBodytext());
 		}
 	}
 
@@ -199,7 +198,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		noArticlesMessage.setText("No articles available.");
 		
 		noArticlesMessage.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
-		noArticlesMessage.setTextColor(ColourScheme.HEADLINE);
+		noArticlesMessage.setTextColor(colourScheme.getHeadline());
 		noArticlesMessage.setPadding(2, 3, 2, 3);					
 		mainpane.addView(noArticlesMessage, 0);
 	}
@@ -322,7 +321,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 						message.setText("This article set was last downloaded more than 2 hours ago and may be out of date.");
 					}
 					
-					message.setTextColor(ColourScheme.STATUS);
+					message.setTextColor(colourScheme.STATUS);
 					message.setPadding(2, 3, 2, 3);
 					mainpane.addView(message, 0);
 					return;
@@ -346,7 +345,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			descriptionView.setTextSize(TypedValue.COMPLEX_UNIT_PT, fontSize);	// TODO duplicated setting code
 			descriptionView.setLineSpacing(new Float(0), new Float(1.1));
 			
-			descriptionView.setTextColor(ColourScheme.BODYTEXT);
+			descriptionView.setTextColor(colourScheme.getBodytext());
 			descriptionView.setPadding(2, 3, 2, 3);	
 			descriptionSet = true;
 		}
@@ -357,7 +356,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);			
 			TextView descriptionView = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);
 			descriptionView.setText(description);
-			descriptionView.setTextColor(ColourScheme.BODYTEXT);
+			descriptionView.setTextColor(colourScheme.getBodytext());
 			descriptionView.setPadding(2, 3, 2, 3);
 			mainpane.addView(refinementsHeadingView);
 			
@@ -423,16 +422,16 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			TextView standfirst = (TextView) view.findViewById(R.id.Standfirst);
 			TextView caption = (TextView) view.findViewById(R.id.Caption);
 			
-			titleText.setTextColor(ColourScheme.HEADLINE);
-			pubDateText.setTextColor(ColourScheme.BODYTEXT);			
-			standfirst.setTextColor(ColourScheme.BODYTEXT);
+			titleText.setTextColor(colourScheme.getHeadline());
+			pubDateText.setTextColor(colourScheme.getBodytext());			
+			standfirst.setTextColor(colourScheme.getBodytext());
 			
 			titleText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
 			pubDateText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize -2);
 			standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, new Float(baseSize - 0.75));
 
 			if (caption != null) {
-				caption.setTextColor(ColourScheme.BODYTEXT);
+				caption.setTextColor(colourScheme.getBodytext());
 			}
 			titleText.setText(article.getTitle());			
 			if (article.getPubDate() != null) {

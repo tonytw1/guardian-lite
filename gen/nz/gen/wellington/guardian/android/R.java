@@ -9,10 +9,12 @@ package nz.gen.wellington.guardian.android;
 
 public final class R {
     public static final class array {
-        public static final int apiLocationLabels=0x7f05000a;
-        public static final int apiLocationValues=0x7f05000b;
+        public static final int apiLocationLabels=0x7f05000c;
+        public static final int apiLocationValues=0x7f05000d;
         public static final int cacheLocationOptionLabels=0x7f050000;
         public static final int cacheLocationOptionValues=0x7f050001;
+        public static final int colourSchemeOptionLabels=0x7f05000a;
+        public static final int colourSchemeOptionValues=0x7f05000b;
         public static final int fontBaseSizeOptionLabels=0x7f050004;
         public static final int fontBaseSizeOptionValues=0x7f050005;
         public static final int largeImageOptionLabels=0x7f050008;

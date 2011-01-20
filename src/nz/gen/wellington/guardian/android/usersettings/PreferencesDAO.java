@@ -1,5 +1,8 @@
 package nz.gen.wellington.guardian.android.usersettings;
 
+import nz.gen.wellington.guardian.android.model.BlackOnWhiteColourScheme;
+import nz.gen.wellington.guardian.android.model.ColourScheme;
+import nz.gen.wellington.guardian.android.model.WhiteOnBlackColourScheme;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -51,6 +54,14 @@ public class PreferencesDAO {
 
 	public String getApiKey() {
 		return (String) prefs.getString("contentApiKey", null);
+	}
+	
+	public ColourScheme getColourScheme() {
+		final String colourSchemePreferences = (String) prefs.getString("colourScheme", "WHITE_ON_BLACK");
+		if (colourSchemePreferences.equals("BLACK_ON_WHITE")) {
+			return new BlackOnWhiteColourScheme();
+		}		
+		return new WhiteOnBlackColourScheme();
 	}
 	
 }
