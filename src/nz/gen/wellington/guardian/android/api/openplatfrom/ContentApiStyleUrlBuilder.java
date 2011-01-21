@@ -27,6 +27,8 @@ public class ContentApiStyleUrlBuilder {
 	private boolean showRefinements;
 	private Integer pageSize;
 	private String searchTerm;
+	private String fromDate;
+	private String toDate;
 	
 	public ContentApiStyleUrlBuilder(String apiHost, String apiKey) {
 		this.apiHost = apiHost;
@@ -76,6 +78,14 @@ public class ContentApiStyleUrlBuilder {
 			}
 			uri.append("&tag=");
 			uri.append(tags);				
+		}
+		
+		if (fromDate != null) {
+			uri.append("&from-date=" + fromDate);
+		}
+		
+		if (toDate != null) {
+			uri.append("&to-date=" + toDate);
 		}
 		
 		if (searchTerm != null) {
@@ -161,6 +171,14 @@ public class ContentApiStyleUrlBuilder {
 
 	public void setSearchTerm(String searchTerm) {
 		this.searchTerm = searchTerm;
+	}
+
+	public void setFromDate(String date) {
+		this.fromDate = date;
+	}
+
+	public void setToDate(String date) {
+		this.toDate = date;		
 	}
 	
 }

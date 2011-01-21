@@ -14,7 +14,6 @@ import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
-import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
@@ -32,7 +31,7 @@ public class ContentResultsHandler extends HandlerBase {
 	private static final String NO_REDISTRIBUTION_RIGHTS_BODY_TEXT = "<!-- Redistribution rights for this field are unavailable -->";
 	
 	public List<Article> articles;
-	public Map<String, List<ArticleSet>> refinements;
+	public Map<String, List<Refinement>> refinements;
 	public String checksum;
 	public String description;
 	public StringBuilder currentElementContents;
@@ -69,7 +68,7 @@ public class ContentResultsHandler extends HandlerBase {
 	public void startDocument() throws SAXException {
 		super.startDocument();
 		articles = new LinkedList<Article>();
-		refinements = new HashMap<String, List<ArticleSet>>();
+		refinements = new HashMap<String, List<Refinement>>();
 	}
 
 	@Override
@@ -221,12 +220,12 @@ public class ContentResultsHandler extends HandlerBase {
 			Section section = sectionDAO.getSectionById(sectionId);
 			final Tag refinementTag = new Tag(attributes.getValue("display-name"), tagId, section);
 						
-			List<ArticleSet> refinementGroup = getRefinementGroup();		
+			List<Refinement> refinementGroup = getRefinementGroup();		
 			if (!refinementTag.isSectionKeyword()) {
 				Log.d(TAG, "Adding refinement for tag: " + refinementTag.getName());
-				refinementGroup.add(articleSetFactory.getArticleSetForTag(refinementTag));
+				refinementGroup.add(articleSetFactory.getRefinementForTag(refinementTag));
 			} else {
-				refinementGroup.add(articleSetFactory.getArticleSetForSection(refinementTag.getSection()));
+				refinementGroup.add(articleSetFactory.getRefinementForSection(refinementTag.getSection()));
 			}
 		}
 		
@@ -236,17 +235,26 @@ public class ContentResultsHandler extends HandlerBase {
 			Section section = sectionDAO.getSectionById(sectionId);
 			if (section != null) {
 				Log.d(TAG, "Adding refinement for section: " + section.getName());
-				List<ArticleSet> refinementGroup = getRefinementGroup();
-				refinementGroup.add(articleSetFactory.getArticleSetForSection(section));
+				List<Refinement> refinementGroup = getRefinementGroup();
+				refinementGroup.add(articleSetFactory.getRefinementForSection(section));
 			}
 		}
+		
+		
+		boolean isDateRefinement = currentRefinementGroupType.equals("date");
+		if (isDateRefinement) {
+			Log.d(TAG, "Adding date refinement");
+			List<Refinement> refinementGroup = getRefinementGroup();
+			refinementGroup.add(articleSetFactory.getRefinementForDate("2010-01-01"));
+		}
+		
 	}
 	
 	
-	private List<ArticleSet> getRefinementGroup() {
-		List<ArticleSet> refinementGroup = refinements.get(currentRefinementGroupType);
+	private List<Refinement> getRefinementGroup() {
+		List<Refinement> refinementGroup = refinements.get(currentRefinementGroupType);
 		if (refinementGroup == null) {
-			refinementGroup = new ArrayList<ArticleSet>();
+			refinementGroup = new ArrayList<Refinement>();
 			refinements.put(currentRefinementGroupType, refinementGroup);
 		}
 		return refinementGroup;

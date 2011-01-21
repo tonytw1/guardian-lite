@@ -56,7 +56,13 @@ public class ContentApiUrlService {
 		}
 		
 		if (articleSet instanceof TagArticleSet) {
-			contentApiUrlBuilder.addTag(((TagArticleSet) articleSet).getTag());
+			TagArticleSet tagArticleSet = (TagArticleSet) articleSet;
+			contentApiUrlBuilder.addTag(tagArticleSet.getTag());
+			if (tagArticleSet.getDate() != null) {
+				contentApiUrlBuilder.setFromDate(tagArticleSet.getDate());
+				contentApiUrlBuilder.setToDate(tagArticleSet.getDate());
+
+			}
 		}
 		
 		if (articleSet instanceof FavouriteTagsArticleSet) {

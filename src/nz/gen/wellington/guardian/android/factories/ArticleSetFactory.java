@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
+import nz.gen.wellington.guardian.android.api.openplatfrom.Refinement;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
@@ -61,6 +62,11 @@ public class ArticleSetFactory {
 		return addUrl(new TagArticleSet(tag, preferencesDAO.getPageSizePreference()));
 	}
 	
+	
+	public ArticleSet getArticleSetForTag(Tag tag, String date) {
+		return addUrl(new TagArticleSet(tag, preferencesDAO.getPageSizePreference(), date));
+	}
+	
 	public List<ArticleSet> getArticleSetsForSections(List<Section> favouriteSections) {
 		List<ArticleSet> favouriteSectionsArticleSets = new ArrayList<ArticleSet>();			
 		for (Section section : favouriteSections) {
@@ -92,9 +98,33 @@ public class ArticleSetFactory {
 		return favouriteSearchTermArticleSets;
 	}
 	
+	
 	private ArticleSet addUrl(ArticleSet articleSet) {
 		articleSet.setSourceUrl(articleSetUrlService.getUrlForArticleSet(articleSet));
 		return articleSet;
+	}
+
+	public Refinement getRefinementForTag(Tag tag) {
+		return new Refinement(tag);
+	}
+
+	public Refinement getRefinementForSection(Section section) {
+		return new Refinement(section);
+	}
+
+	public ArticleSet getArticleSetForRefinement(ArticleSet articleSet, Refinement refinement) {		
+		if (refinement.getTag() != null) {
+			return getArticleSetForTag(refinement.getTag());		
+		}
+		
+		if (refinement.getDate() != null && articleSet instanceof TagArticleSet) {
+			return getArticleSetForTag(((TagArticleSet) articleSet).getTag(), refinement.getDate());			
+		}
+		return null;
+	}
+
+	public Refinement getRefinementForDate(String date) {
+		return new Refinement(date);
 	}
 	
 }

@@ -39,6 +39,9 @@ public class tag extends ArticleListActivity {
 		if (refinementType.equals("keyword")) {
 			return "Articles tagged with " + getArticleSet().getName() + " have also been tagged with:";
 		}
+		if (refinementType.equals("date")) {
+			return "Articles tagged with " + getArticleSet().getName() + " on these dates:";
+		}
 		return null;
 	}
 	

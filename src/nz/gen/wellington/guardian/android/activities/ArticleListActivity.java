@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -14,6 +15,7 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
+import nz.gen.wellington.guardian.android.api.openplatfrom.Refinement;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
@@ -296,12 +298,16 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	
 			    case DRAW_REFINEMENTS:			    	
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
-			    	Map<String, List<ArticleSet>> refinements = bundle.getRefinements();
+			    	Map<String, List<Refinement>> refinements = bundle.getRefinements();
 			    	
 			    	if (refinements != null && !refinements.isEmpty()) {
 			    		LayoutInflater inflater = LayoutInflater.from(context);
 			    		
 			    		for (String refinementType : articleSet.getPermittedRefinements()) {
+			    			Log.d(TAG, "Processing refinement type: " + refinementType);
+			    			Log.d(TAG, "Refinements keyset: " + refinements.keySet());
+			    			Log.d(TAG, "Permitted refinements: " + refinements.keySet());
+			    			
 			    			if (articleSet.getPermittedRefinements().contains(refinementType) && refinements.keySet().contains(refinementType)) {
 			    				String description = getRefinementDescription(refinementType);
 			    				populateRefinementType(mainpane, inflater, description, refinements.get(refinementType));
@@ -352,7 +358,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 		
 		// TODO could be pushed to a populator class
-		private void populateRefinementType(LinearLayout mainpane, LayoutInflater inflater, String description, List<ArticleSet> typedRefinements) {
+		private void populateRefinementType(LinearLayout mainpane, LayoutInflater inflater, String description, List<Refinement> typedRefinements) {
 			View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);			
 			TextView descriptionView = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);
 			descriptionView.setText(description);
@@ -364,8 +370,17 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			LinearLayout tagGroup = new LinearLayout(context);
 			tagGroup.setOrientation(LinearLayout.VERTICAL);
 			tagGroup.setPadding(2, 0, 2, 0);
+						
+			Log.d(TAG, "" + typedRefinements.size());
+			List<ArticleSet> refinementArticleSets = new ArrayList<ArticleSet>();
+			for (Refinement refinement : typedRefinements) {
+				ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForRefinement(articleSet, refinement);
+				if (articleSetForRefinement != null) {
+					refinementArticleSets.add(articleSetForRefinement);
+				}
+			}
 			
-			tagListPopulatingService.populateTags(inflater, true, tagGroup, typedRefinements, colourScheme);
+			tagListPopulatingService.populateTags(inflater, true, tagGroup, refinementArticleSets, colourScheme);
 			mainpane.addView(tagGroup);
 		}
 
