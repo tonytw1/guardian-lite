@@ -21,12 +21,12 @@ public class WhiteOnBlackColourScheme extends ColourScheme {
 	
 	@Override
 	public Integer getAvailableTag() {
-		return Color.DKGRAY;
+		return Color.WHITE;
 	}
 
 	@Override
 	public Integer getUnavailableTag() {
-		return Color.WHITE;
+		return Color.DKGRAY;
 	}
 	
 	@Override
