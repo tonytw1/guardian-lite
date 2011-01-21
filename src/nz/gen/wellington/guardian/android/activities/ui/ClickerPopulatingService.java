@@ -2,20 +2,20 @@ package nz.gen.wellington.guardian.android.activities.ui;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
-import nz.gen.wellington.guardian.android.model.WhiteOnBlackColourScheme;
 import android.view.View;
 import android.widget.TextView;
 
 public class ClickerPopulatingService {
 		
-	public static void populateClicker(ArticleSet articleSet, View tagView, boolean contentIsAvailable) {
+	public static void populateClicker(ArticleSet articleSet, View tagView, boolean contentIsAvailable, ColourScheme colourScheme) {
 		TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
 		if (contentIsAvailable) {
 			
-			titleText.setTextColor(new WhiteOnBlackColourScheme().AVAILABLE_TAG);
+			titleText.setTextColor(colourScheme.getAvailableTag());
 			
 			// TODO suggests article sets should have knowledge about which activity renders them?
 			if (articleSet instanceof SectionArticleSet) {
@@ -31,7 +31,7 @@ public class ClickerPopulatingService {
 			}
 			
 		} else {
-			titleText.setTextColor(new WhiteOnBlackColourScheme().UNAVAILABLE_TAG);
+			titleText.setTextColor(colourScheme.getUnavailableTag());
 		}		
 	}
 	

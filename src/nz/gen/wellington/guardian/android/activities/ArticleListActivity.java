@@ -321,7 +321,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 						message.setText("This article set was last downloaded more than 2 hours ago and may be out of date.");
 					}
 					
-					message.setTextColor(colourScheme.STATUS);
+					message.setTextColor(colourScheme.getStatus());
 					message.setPadding(2, 3, 2, 3);
 					mainpane.addView(message, 0);
 					return;
@@ -393,7 +393,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 				ArticleSet articleSetForSection = articleSetFactory.getArticleSetForSection(section);
 				boolean contentIsAvailable = articleDAO.isAvailable(articleSetForSection);	    	
-				ClickerPopulatingService.populateClicker(articleSetForSection, seperator, contentIsAvailable);
+				ClickerPopulatingService.populateClicker(articleSetForSection, seperator, contentIsAvailable, colourScheme);
 				mainpane.addView(seperator);
 				
 			} else {

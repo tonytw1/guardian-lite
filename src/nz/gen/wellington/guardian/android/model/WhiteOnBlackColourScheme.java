@@ -19,4 +19,19 @@ public class WhiteOnBlackColourScheme extends ColourScheme {
 		return Color.WHITE;
 	}
 	
+	@Override
+	public Integer getAvailableTag() {
+		return Color.DKGRAY;
+	}
+
+	@Override
+	public Integer getUnavailableTag() {
+		return Color.WHITE;
+	}
+	
+	@Override
+	public Integer getStatus() {
+		return Color.LTGRAY;
+	}
+	
 }
