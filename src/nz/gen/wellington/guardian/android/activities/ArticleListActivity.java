@@ -529,14 +529,14 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			updateArticlesHandler.sendMessage(m);
 					
 			final boolean isOkToDownloadTrailImages = imageDownloadDecisionService.isOkToDownloadTrailImages();
-			List<Article> downloadTrailImages = new LinkedList<Article>();
+			List<Article> articlesToDownloadTrailImagesFor = new LinkedList<Article>();
 			boolean first = true;
 			for (Article article : bundle.getArticles()) {
 				
 				String imageUrl;
 				boolean mainImageIsAvailableLocally = article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
 				if (first && mainImageIsAvailableLocally) {						
-						imageUrl = article.getMainImageUrl();
+					imageUrl = article.getMainImageUrl();
 				} else {
 					imageUrl = article.getThumbnailUrl();
 				}
@@ -554,7 +554,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 						
 					} else {
 						if (isOkToDownloadTrailImages) {
-							downloadTrailImages.add(article);
+							articlesToDownloadTrailImagesFor.add(article);
 						}
 					}					
 				}
@@ -564,16 +564,23 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			
 			
 			if (running) {
-				for (Article article : downloadTrailImages) {
+				for (Article article : articlesToDownloadTrailImagesFor) {
 					imageDAO.getImage(article.getThumbnailUrl());
-					m = new Message();
-					m.what = UpdateArticlesHandler.TRAIL_IMAGE_IS_AVAILABLE_FOR_ARTICLE;
-					Bundle bundle = new Bundle();
-					bundle.putString("id", article.getId());
-					bundle.putString("url", article.getThumbnailUrl());
 					
-					m.setData(bundle);
-					updateArticlesHandler.sendMessage(m);
+					if (article.getId() != null) {
+						m = new Message();
+						m.what = UpdateArticlesHandler.TRAIL_IMAGE_IS_AVAILABLE_FOR_ARTICLE;
+						Bundle bundle = new Bundle();
+						bundle.putString("id", article.getId());
+						bundle.putString("url", article.getThumbnailUrl());
+					
+						m.setData(bundle);
+						updateArticlesHandler.sendMessage(m);
+					
+					} else {
+						Log.d(TAG, "Could not send thumbnail fetched message for article with no id: " + article.getTitle());
+					}
+											
 				}		
 			}
 			

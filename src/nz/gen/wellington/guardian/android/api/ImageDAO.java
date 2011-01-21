@@ -24,6 +24,7 @@ public class ImageDAO {
 	}
 		
 	public Bitmap getImage(String url) {
+		Log.d(TAG, "Getting image: " + url);
 		if (isAvailableLocally(url)) {						
 			byte[] cachedImage = imageCache.getCachedImage(url);
 			if (cachedImage != null) {
