@@ -41,6 +41,8 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 	@Override
 	public void onResume() {
 		super.onResume();
+		setFontSize();
+		
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
 		mainPane.removeAllViews();
 		
