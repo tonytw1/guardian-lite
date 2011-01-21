@@ -2,7 +2,6 @@ package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.contentupdate.ContentUpdateService;
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class notification extends Activity implements OnClickListener {
+public class notification extends AbstractFontResizingActivity implements OnClickListener, FontResizingActivity {
 	
 	private NotificationManager notificationManager;
 	

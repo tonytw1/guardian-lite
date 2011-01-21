@@ -60,7 +60,7 @@ public class PreferencesDAO {
 		final String colourSchemePreferences = (String) prefs.getString("colourScheme", "WHITE_ON_BLACK");
 		if (colourSchemePreferences.equals("BLACK_ON_WHITE")) {
 			return new BlackOnWhiteColourScheme();
-		}		
+		}
 		return new WhiteOnBlackColourScheme();
 	}
 	

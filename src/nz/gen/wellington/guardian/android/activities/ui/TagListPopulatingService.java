@@ -38,7 +38,7 @@ public class TagListPopulatingService {
 			
 			titleText.setText(getDeduplicatedArticleSetName(articleSet, duplicatedArticleSetNames));
 			
-			ClickerPopulatingService.populateClicker(articleSet, tagView, isContentAvailable, colourScheme);			
+			ClickerPopulatingService.populateTagClicker(articleSet, tagView, isContentAvailable, colourScheme.getAvailableTag(), colourScheme.getUnavailableTag());
 			tagList.addView(tagView);
 		}
 	}

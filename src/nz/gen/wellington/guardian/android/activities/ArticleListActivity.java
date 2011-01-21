@@ -393,7 +393,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 				ArticleSet articleSetForSection = articleSetFactory.getArticleSetForSection(section);
 				boolean contentIsAvailable = articleDAO.isAvailable(articleSetForSection);	    	
-				ClickerPopulatingService.populateClicker(articleSetForSection, seperator, contentIsAvailable, colourScheme);
+				ClickerPopulatingService.populateTagClicker(articleSetForSection, seperator, contentIsAvailable, colourScheme.getAvailableTagOnSeperator(), colourScheme.getUnavailableTagOnSeperator());
 				mainpane.addView(seperator);
 				
 			} else {
