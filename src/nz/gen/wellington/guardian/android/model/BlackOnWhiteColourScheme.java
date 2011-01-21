@@ -26,7 +26,7 @@ public class BlackOnWhiteColourScheme extends ColourScheme {
 
 	@Override
 	public Integer getUnavailableTag() {
-		return Color.WHITE;
+		return Color.LTGRAY;
 	}
 	
 	@Override
