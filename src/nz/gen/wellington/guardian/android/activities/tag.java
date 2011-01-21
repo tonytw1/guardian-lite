@@ -19,6 +19,7 @@ public class tag extends ArticleListActivity {
 	private MenuItem favouriteMenuItem;
 	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
     private ArticleSetFactory articleSetFactory;
+	private ArticleSet articleSet;
 
 	
 	@Override
@@ -26,13 +27,8 @@ public class tag extends ArticleListActivity {
 		super.onCreate(savedInstanceState);	
 		this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		this.articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
-		tag = (Tag) this.getIntent().getExtras().get("keyword");
-		if (tag.getSection() != null) {
-			setHeading(tag.getSection().getName() + " - " + tag.getName());
-			setHeadingColour(tag.getSection().getColour());
-		} else {
-			setHeading(tag.getName());
-		}
+		articleSet = (ArticleSet) this.getIntent().getExtras().get("articleset");		
+		setHeading(articleSet.getName());
 	}
 	
 	protected String getRefinementDescription(String refinementType) {
@@ -46,7 +42,7 @@ public class tag extends ArticleListActivity {
 	}
 	
 	protected ArticleSet getArticleSet() {
-		return articleSetFactory.getArticleSetForTag(tag);
+		return this.articleSet;
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {

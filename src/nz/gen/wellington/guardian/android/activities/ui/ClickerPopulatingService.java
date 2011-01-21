@@ -4,7 +4,6 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
-import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,7 +28,7 @@ public class ClickerPopulatingService {
 				tagView.setOnClickListener(new SearchTermClicker(((SearchResultsArticleSet) articleSet).getSearchTerm()));
 				
 			} else if (contentIsAvailable) {
-				ListKeywordClicker clicker = new ListKeywordClicker(((TagArticleSet) articleSet).getTag());
+				ArticleSetClicker clicker = new ArticleSetClicker(articleSet);
 				tagView.setOnClickListener(clicker);
 			}
 			
