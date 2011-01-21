@@ -31,8 +31,7 @@ public class BlackOnWhiteColourScheme extends ColourScheme {
 	
 	@Override
 	public Integer getStatus() {
-		return Color.LTGRAY;
+		return Color.DKGRAY;
 	}
-
 	
 }
