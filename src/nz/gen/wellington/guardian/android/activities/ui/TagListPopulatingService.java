@@ -11,7 +11,6 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,15 +20,12 @@ import android.widget.TextView;
 public class TagListPopulatingService {
 	
 	private ArticleDAO articleDAO;
-	private ColourScheme colourScheme;
 	
 	public TagListPopulatingService(Context context) {
 		articleDAO = SingletonFactory.getArticleDao(context);
-		PreferencesDAO preferencesDAO = SingletonFactory.getPreferencesDAO(context); // TODO wasteful
-		this.colourScheme = preferencesDAO.getColourScheme();
 	}
 
-	public void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets) {
+	public void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets, ColourScheme colourScheme) {
 		Set<String> duplicatedArticleSetNames = getDuplicatedArticleSetNames(articleSets);		
 		for (ArticleSet articleSet : articleSets) {
 			final boolean isContentAvailable = articleDAO.isAvailable(articleSet);

@@ -67,7 +67,9 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 			
 			tagListPopulatingService.populateTags(inflater,
 					networkStatusService.isConnectionAvailable(), authorList,
-					articleSetFactory.getArticleSetsForSections(sections));
+					articleSetFactory.getArticleSetsForSections(sections),
+					colourScheme
+			);
 			
 		} else {
         	outputNoSectionsWarning(baseSize);

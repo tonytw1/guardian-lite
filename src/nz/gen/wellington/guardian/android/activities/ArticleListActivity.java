@@ -372,7 +372,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			tagGroup.setOrientation(LinearLayout.VERTICAL);
 			tagGroup.setPadding(2, 0, 2, 0);
 			
-			tagListPopulatingService.populateTags(inflater, true, tagGroup, typedRefinements);
+			tagListPopulatingService.populateTags(inflater, true, tagGroup, typedRefinements, colourScheme);
 			mainpane.addView(tagGroup);
 		}
 
