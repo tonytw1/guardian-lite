@@ -245,7 +245,13 @@ public class ContentResultsHandler extends HandlerBase {
 		if (isDateRefinement) {
 			Log.d(TAG, "Adding date refinement");
 			List<Refinement> refinementGroup = getRefinementGroup();
-			refinementGroup.add(articleSetFactory.getRefinementForDate("2010-01-01"));
+			
+			
+			String refinedUrl = attributes.getValue("refined-url");
+			String fromDate = refinedUrl.split("from-date=")[1].substring(0, 10);
+			Log.d(TAG, fromDate);
+						
+			refinementGroup.add(articleSetFactory.getRefinementForDate(fromDate));
 		}
 		
 	}

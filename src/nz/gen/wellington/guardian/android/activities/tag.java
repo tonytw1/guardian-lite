@@ -1,9 +1,9 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,16 +18,15 @@ public class tag extends ArticleListActivity {
 	private Tag tag;
 	private MenuItem favouriteMenuItem;
 	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
-    private ArticleSetFactory articleSetFactory;
-	private ArticleSet articleSet;
+	private TagArticleSet articleSet;
 
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
 		this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
-		this.articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
-		articleSet = (ArticleSet) this.getIntent().getExtras().get("articleset");		
+		articleSet = (TagArticleSet) this.getIntent().getExtras().get("articleset");
+		tag = articleSet.getTag();
 		setHeading(articleSet.getName());
 	}
 	
