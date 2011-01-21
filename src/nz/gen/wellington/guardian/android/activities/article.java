@@ -12,7 +12,6 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.ShareTextComposingService;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -38,7 +37,6 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	
 	private NetworkStatusService networkStatusService;
     private ImageDAO imageDAO;
-    private PreferencesDAO preferencesDAO;
     private ArticleSetFactory articleSetFactory;
     private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
     private Article article;
@@ -57,7 +55,6 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		super.onCreate(savedInstanceState);
 		
 		imageDAO = SingletonFactory.getImageDao(this.getApplicationContext());
-		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
@@ -81,8 +78,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		final int baseSize = preferencesDAO.getBaseFontSize();
-		setFontSize(baseSize);	
+		setFontSize();	
 	}
 	
 	@Override
@@ -111,8 +107,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
         
         description.setTextColor(bodytextColour);
         
-		final int baseSize = preferencesDAO.getBaseFontSize();
-        setFontSize(baseSize);
+        setFontSize();
         
         headline.setText(article.getTitle());
         if (article.getPubDate() != null) {
@@ -150,8 +145,8 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	}
 
 
-	public void setFontSize(int baseSize) {
-		super.setFontSize(baseSize);
+	public void setFontSize() {
+		super.setFontSize();
 		
 		TextView headline = (TextView) findViewById(R.id.Headline);
 		TextView caption = (TextView) findViewById(R.id.Caption);
@@ -160,13 +155,13 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		TextView standfirst = (TextView) findViewById(R.id.Standfirst);
 		TextView description = (TextView) findViewById(R.id.Description);
 		
-		headline.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize + 1);
-		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize - 2);
-		caption.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize -2);
-		byline.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
-		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize - 2);
-        standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
-        description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+		headline.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize + 1);
+		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize - 2);
+		caption.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize -2);
+		byline.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
+		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize - 2);
+        standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
+        description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
         
 		caption.setTextColor(colourScheme.getBodytext());
 		

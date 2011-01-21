@@ -60,13 +60,13 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	private Thread loader;
 	private Date loaded;
-	private int baseSize;
-	protected ColourScheme currentColourScheme;
+	private ColourScheme currentColourScheme;
 
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
 		setContentView(R.layout.main);
 		viewsWaitingForTrailImages = new HashMap<String, View>();
 		articleDAO = SingletonFactory.getArticleDao(this.getApplicationContext());
@@ -78,41 +78,30 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	
 	@Override
-	protected void onStart() {
-		super.onStart();	
+	protected void onResume() {
+		super.onResume();
+		
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);		
-		boolean mainPaneNeedsPopulating = shouldRefreshView(mainPane);
-
-		if (mainPaneNeedsPopulating) {
+		if (shouldRefreshView(mainPane)) {
+			setFontSize();
 			mainPane.removeAllViews();
 			
-			final ArticleSet articleSet = getArticleSet();
-			final int baseFontSize = preferencesDAO.getBaseFontSize();
-			
+			final ArticleSet articleSet = getArticleSet();			
 			if (articleDAO.isAvailable(articleSet)) {
 				populateArticles(ContentFetchType.NORMAL, baseFontSize, articleSet);
 			} else {
 				outputNoArticlesWarning(baseFontSize);
 			}
 		}
-		
-	}
-	
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		baseSize = preferencesDAO.getBaseFontSize();
-		setFontSize(baseSize);
 	}
 
 	
 	@Override
-	public void setFontSize(int baseSize) {
-		super.setFontSize(baseSize);
+	public void setFontSize() {
+		super.setFontSize();
 		TextView description = (TextView) findViewById(R.id.Description);
 		if (description != null) {
-			description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+			description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
 			description.setTextColor(colourScheme.getBodytext());
 		}
 	}
@@ -122,7 +111,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
 		mainPane.removeAllViews();
 		populateArticles(ContentFetchType.CHECKSUM, preferencesDAO.getBaseFontSize(), getArticleSet());
-		currentColourScheme = colourScheme;
 	}
 	
 	
@@ -139,6 +127,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			
 			loader = new Thread(updateArticlesRunner);
 			loader.start();
+
+			currentColourScheme = colourScheme;
 		}
 	}
 	
@@ -152,11 +142,14 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	}
 	
 	
-	private boolean shouldRefreshView(LinearLayout mainPane) {
-		if (colourScheme != currentColourScheme) {
+	private boolean shouldRefreshView(LinearLayout mainPane) {		
+		if (currentColourScheme == null) {
 			return true;
 		}
-		
+		if (colourScheme.getHeadline().intValue() != currentColourScheme.getHeadline().intValue()) {
+			return true;
+		}
+				
 		if (loaded == null || mainPane.getChildCount() == 0) {
 			return true;
 		}
@@ -433,9 +426,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			pubDateText.setTextColor(colourScheme.getBodytext());			
 			standfirst.setTextColor(colourScheme.getBodytext());
 			
-			titleText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
-			pubDateText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize -2);
-			standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, new Float(baseSize - 0.75));
+			titleText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
+			pubDateText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize -2);
+			standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, new Float(baseFontSize - 0.75));
 
 			if (caption != null) {
 				caption.setTextColor(colourScheme.getBodytext());

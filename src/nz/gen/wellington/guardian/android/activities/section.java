@@ -30,13 +30,6 @@ public class section extends ArticleListActivity implements FontResizingActivity
     	setHeadingColour(section.getColour());	
 	}
 	
-	
-	@Override
-	public void setFontSize(int baseSize) {
-		super.setFontSize(baseSize);
-	}
-
-
 	protected ArticleSet getArticleSet() {
 		return articleSetFactory.getArticleSetForSection(section);
 	}

@@ -4,27 +4,23 @@ import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class savedArticles extends ArticleListActivity implements FontResizingActivity {
 	
-	private PreferencesDAO preferencesDAO;
 	private ArticleSetFactory articleSetFactory;
 	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		
     	setHeading("Saved articles");
-    	final int baseSize = preferencesDAO.getBaseFontSize();
-		setFontSize(baseSize);
+		setFontSize();
 	}
 	
 	protected ArticleSet getArticleSet() {
@@ -34,8 +30,7 @@ public class savedArticles extends ArticleListActivity implements FontResizingAc
 	@Override
 	protected void onResume() {
 		super.onResume();
-		final int baseSize = preferencesDAO.getBaseFontSize();
-		setFontSize(baseSize);
+		setFontSize();
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {

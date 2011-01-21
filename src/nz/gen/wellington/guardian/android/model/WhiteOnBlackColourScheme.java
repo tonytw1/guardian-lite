@@ -6,7 +6,7 @@ public class WhiteOnBlackColourScheme extends ColourScheme {
 	
 	@Override
 	public Integer getBackground() {
-		return null;
+		return Color.BLACK;
 	}
 
 	@Override

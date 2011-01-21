@@ -10,7 +10,6 @@ import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -24,7 +23,6 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 	private NetworkStatusService networkStatusService;
 	private ArticleSetFactory articleSetFactory;
 	private TagListPopulatingService tagListPopulatingService;
-	private PreferencesDAO preferencesDAO;
 		
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +31,6 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		tagListPopulatingService = SingletonFactory.getTagListPopulator(this.getApplicationContext());
-		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		setContentView(R.layout.sections);
 		
 		setHeading("Sections");
@@ -47,13 +44,10 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
 		mainPane.removeAllViews();
 		
-		final int baseSize = preferencesDAO.getBaseFontSize();
-		setFontSize(baseSize);
-		
 		if (sectionDAO.areSectionsAvailable()) {
-			populateSections(baseSize);
+			populateSections(baseFontSize);
 		} else {
-			outputNoSectionsWarning(baseSize);	// TODO
+			outputNoSectionsWarning(baseFontSize);	// TODO
 		}
 	}
 
@@ -96,11 +90,5 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 		menu.add(0, MenuedActivity.SEARCH_TAGS, 0, "Search tags");
 	    return true;
 	}
-
-
-	@Override
-	public void setFontSize(int baseSize) {
-		super.setFontSize(baseSize);
-	}
-				
+	
 }

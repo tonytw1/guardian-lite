@@ -9,7 +9,6 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -20,7 +19,6 @@ import android.widget.TextView;
 
 public class favourites extends ArticleListActivity {
 	
-	private PreferencesDAO preferencesDAO;
     private ArticleSetFactory articleSetFactory;
     private NetworkStatusService networkStatusService;
 	private TagListPopulatingService tagListPopulatingService;
@@ -29,8 +27,6 @@ public class favourites extends ArticleListActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		
-        preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
         articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
         networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
         tagListPopulatingService = SingletonFactory.getTagListPopulator(this.getApplicationContext());
@@ -46,8 +42,6 @@ public class favourites extends ArticleListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		final int baseSize = preferencesDAO.getBaseFontSize();
-		setFontSize(baseSize);
 	}
 
 	
@@ -105,10 +99,10 @@ public class favourites extends ArticleListActivity {
 	}
 	
 	@Override
-	public void setFontSize(int baseSize) {
-		super.setFontSize(baseSize);
+	public void setFontSize() {
+		super.setFontSize();
 		TextView description = (TextView) findViewById(R.id.Description);
-        description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+        description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
         description.setTextColor(colourScheme.getBodytext());
 	}
 	

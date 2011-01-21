@@ -29,7 +29,7 @@ public abstract class AbstractFontResizingActivity extends Activity implements F
 	}
 	
 	@Override
-	public void setFontSize(int baseSize) {
+	public void setFontSize() {
 		setBackgroundColour();
 		setStatusColour();
 	}

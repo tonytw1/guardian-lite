@@ -8,7 +8,6 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -18,18 +17,14 @@ import android.widget.TextView;
 
 public class about extends ArticleListActivity implements FontResizingActivity {
 		
-	private PreferencesDAO preferencesDAO;
 	private ArticleSetFactory articleSetFactory;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		
 		setContentView(R.layout.about);
-		final int baseSize = preferencesDAO.getBaseFontSize();
-		setFontSize(baseSize);
 		
 		TextView description = (TextView) findViewById(R.id.About);
 		
@@ -55,8 +50,7 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		final int baseSize = preferencesDAO.getBaseFontSize();
-		setFontSize(baseSize);
+		setFontSize();
 	}
 	
 	@Override
@@ -87,15 +81,15 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 		return londonHour > 6 && londonHour < 21;
 	}
 	
-	public void setFontSize(int baseSize) {
-		super.setFontSize(baseSize);
+	public void setFontSize() {
+		super.setFontSize();
 		
 		TextView about = (TextView) findViewById(R.id.About);
 		TextView contentCredit = (TextView) findViewById(R.id.ContentCredit);
 		
-		about.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+		about.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
 		about.setTextColor(colourScheme.getBodytext());
-		contentCredit.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+		contentCredit.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
 		contentCredit.setTextColor(colourScheme.getBodytext());
 	}
 	

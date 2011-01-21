@@ -5,7 +5,6 @@ import nz.gen.wellington.guardian.android.contentupdate.ContentUpdateService;
 import nz.gen.wellington.guardian.android.contentupdate.TaskQueue;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.Plurals;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -23,7 +22,6 @@ import android.widget.TextView;
 
 public class sync extends DownloadProgressAwareActivity implements OnClickListener, FontResizingActivity {
 	
-	private PreferencesDAO preferencesDAO;
 	private NetworkStatusService networkStatusService;
 	
 	private Button start;
@@ -39,15 +37,13 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		
         startService(new Intent(this, ContentUpdateService.class));
         
         setContentView(R.layout.sync);
         
-		final int baseSize = preferencesDAO.getBaseFontSize();
-        setFontSize(baseSize);
+        setFontSize();
         		
         start = (Button) findViewById(R.id.buttonStart);        
         start.setOnClickListener(this);
@@ -65,11 +61,11 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	
 	
 	@Override
-	public void setFontSize(int baseSize) {
-		super.setFontSize(baseSize);		
+	public void setFontSize() {
+		super.setFontSize();		
 		TextView statusMessage = (TextView) findViewById(R.id.StatusMessage);
 		statusMessage.setTextColor(colourScheme.getBodytext());
-		statusMessage.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseSize);
+		statusMessage.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
 	}
 
 
@@ -77,8 +73,7 @@ public class sync extends DownloadProgressAwareActivity implements OnClickListen
 	protected void onResume() {
 		super.onResume();
 
-		final int baseSize = preferencesDAO.getBaseFontSize();
-        setFontSize(baseSize);
+        setFontSize();
         
 		registerReceiver(taskStartReceiver, new IntentFilter(ContentUpdateService.TASK_START));		
 		registerReceiver(queueChangeReceiver, new IntentFilter(TaskQueue.QUEUE_CHANGED));

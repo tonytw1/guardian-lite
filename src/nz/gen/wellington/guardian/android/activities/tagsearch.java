@@ -13,7 +13,6 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,7 +33,6 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	private static final int ERROR = 2;
 	
 	private Button search;
-	private PreferencesDAO preferencesDAO;
 	private NetworkStatusService networkStatusService;
 	
 	private List<Tag> searchResults;
@@ -50,7 +48,6 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tagsearch);		
 		
-		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
@@ -58,8 +55,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		
 		sections = sectionDAO.getSectionsMap();
 
-		final int baseSize = preferencesDAO.getBaseFontSize();
-        setFontSize(baseSize);
+        setFontSize();
 		
 		search = (Button) findViewById(R.id.Search);        
 		search.setOnClickListener(this);
@@ -72,8 +68,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	@Override
 	protected void onResume() {
 		super.onResume();
-		final int baseSize = preferencesDAO.getBaseFontSize();
-        setFontSize(baseSize);
+        setFontSize();
         
         search.setEnabled(networkStatusService.isConnectionAvailable());
 		// TODO text warning if no connection is available
@@ -82,8 +77,8 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 
 	
 	@Override
-	public void setFontSize(int baseSize) {
-		super.setFontSize(baseSize);	
+	public void setFontSize() {
+		super.setFontSize();	
 	}
 	
 
