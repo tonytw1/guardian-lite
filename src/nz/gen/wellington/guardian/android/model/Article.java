@@ -165,6 +165,10 @@ public class Article implements Serializable {
 	public void setShortUrl(String shortUrl) {
 		this.shortUrl = shortUrl;
 	}
+		
+	public String getTrailImageCallBackLabelForArticle() {
+		return id != null ? id : title;
+	}
 
 	@Override
 	public int hashCode() {

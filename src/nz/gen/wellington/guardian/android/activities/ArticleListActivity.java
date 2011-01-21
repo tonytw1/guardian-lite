@@ -456,7 +456,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				if (imageDAO.isAvailableLocally(trailImageUrl)) {
 					populateTrailImage(trailImageUrl, view);
 				} else {
-					viewsWaitingForTrailImages.put(article.getId(), view);
+					viewsWaitingForTrailImages.put(article.getTrailImageCallBackLabelForArticle(), view);
 				}
 			}
 			
@@ -567,20 +567,14 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				for (Article article : articlesToDownloadTrailImagesFor) {
 					imageDAO.getImage(article.getThumbnailUrl());
 					
-					if (article.getId() != null) {
-						m = new Message();
-						m.what = UpdateArticlesHandler.TRAIL_IMAGE_IS_AVAILABLE_FOR_ARTICLE;
-						Bundle bundle = new Bundle();
-						bundle.putString("id", article.getId());
-						bundle.putString("url", article.getThumbnailUrl());
+					m = new Message();
+					m.what = UpdateArticlesHandler.TRAIL_IMAGE_IS_AVAILABLE_FOR_ARTICLE;
+					Bundle bundle = new Bundle();
+					bundle.putString("id", article.getTrailImageCallBackLabelForArticle());
+					bundle.putString("url", article.getThumbnailUrl());
 					
-						m.setData(bundle);
-						updateArticlesHandler.sendMessage(m);
-					
-					} else {
-						Log.d(TAG, "Could not send thumbnail fetched message for article with no id: " + article.getTitle());
-					}
-											
+					m.setData(bundle);
+					updateArticlesHandler.sendMessage(m);																				
 				}		
 			}
 			
@@ -600,7 +594,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			loaded = DateTimeHelper.now();
 			return;				
 		}
-
+		
 		public void stop() {
 			this.running = false;
 			articleDAO.stopLoading();
