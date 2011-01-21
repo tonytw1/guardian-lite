@@ -19,6 +19,7 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
@@ -60,6 +61,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	private Thread loader;
 	private Date loaded;
 	private int baseSize;
+	protected ColourScheme currentColourScheme;
 
 		
 	@Override
@@ -120,6 +122,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);
 		mainPane.removeAllViews();
 		populateArticles(ContentFetchType.CHECKSUM, preferencesDAO.getBaseFontSize(), getArticleSet());
+		currentColourScheme = colourScheme;
 	}
 	
 	
@@ -150,6 +153,10 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	
 	private boolean shouldRefreshView(LinearLayout mainPane) {
+		if (colourScheme != currentColourScheme) {
+			return true;
+		}
+		
 		if (loaded == null || mainPane.getChildCount() == 0) {
 			return true;
 		}
