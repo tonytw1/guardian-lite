@@ -6,9 +6,13 @@ import java.util.List;
 
 public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 	private int pageSize;
 	private String sourceUrl;
+	
+	protected String fromDate;
+	protected String toDate;
+	protected String dateDisplayName;
 	
 	private String[] permittedRefinements = {};
 
@@ -44,6 +48,14 @@ public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	@Override
 	public List<String> getPermittedRefinements() {
 		return Arrays.asList(permittedRefinements);
+	}
+	
+	public String getFromDate() {
+		return fromDate;
+	}
+	
+	public String getToDate() {
+		return toDate;
 	}
 	
 }

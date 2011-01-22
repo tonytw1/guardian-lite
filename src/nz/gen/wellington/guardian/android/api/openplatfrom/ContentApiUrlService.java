@@ -52,7 +52,12 @@ public class ContentApiUrlService {
 	
 	private void populateContentApiUrlBuilderForArticleSet(ContentApiStyleUrlBuilder contentApiUrlBuilder, ArticleSet articleSet) {
 		if (articleSet instanceof SectionArticleSet) {
+			SectionArticleSet sectionArticleSet = (SectionArticleSet) articleSet;
 			contentApiUrlBuilder.addSection(((SectionArticleSet) articleSet).getSection());
+			if (sectionArticleSet.getFromDate() != null) {
+				contentApiUrlBuilder.setFromDate(sectionArticleSet.getFromDate());
+				contentApiUrlBuilder.setToDate(sectionArticleSet.getToDate());
+			}
 		}
 		
 		if (articleSet instanceof TagArticleSet) {

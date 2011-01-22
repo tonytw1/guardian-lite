@@ -1,9 +1,8 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,25 +12,22 @@ import android.widget.Toast;
 
 public class section extends ArticleListActivity implements FontResizingActivity {
 	
-	private static final String TAG = "section";	
-	private Section section;
+	private static final String TAG = "section";
+	private SectionArticleSet articleSet;
 	private MenuItem favouriteMenuItem;
 	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
-    private ArticleSetFactory articleSetFactory;
 
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
-        this.articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());        
-        section = (Section) this.getIntent().getExtras().get("section");
-    	setHeading(section.getName());
-    	setHeadingColour(section.getColour());	
+        this.articleSet = (SectionArticleSet) this.getIntent().getExtras().get("articleset");
+    	setHeading(articleSet.getName());
 	}
 	
 	protected ArticleSet getArticleSet() {
-		return articleSetFactory.getArticleSetForSection(section);
+		return articleSet;
 	}
 	
 	@Override
@@ -40,6 +36,8 @@ public class section extends ArticleListActivity implements FontResizingActivity
 			return "These blog tags have been used recently in the " + getArticleSet().getName() + " section:";
 		} else if (refinementType.equals("contributor")) { 
 			return "These contributors have appeared recently in the " + getArticleSet().getName() + " section:";
+		} else if (refinementType.equals("date")) {
+			return "Articles tagged with " + getArticleSet().getName() + " on these dates:";
 		}	
 		return "These keywords have been used recently within the " + getArticleSet().getName() + " section:";
 	}
@@ -49,7 +47,7 @@ public class section extends ArticleListActivity implements FontResizingActivity
 		MenuItem refreshOption = menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
 		enableMenuItemIfConnectionIsAvailable(refreshOption);
 		
-		if (favouriteSectionsAndTagsDAO.isFavourite(section)) {
+		if (favouriteSectionsAndTagsDAO.isFavourite(articleSet.getSection())) {
 			favouriteMenuItem = menu.add(0, MenuedActivity.ADD_REMOVE_FAVOURITE, 0, "Remove Favourite");
 		} else {
 			favouriteMenuItem = menu.add(0, MenuedActivity.ADD_REMOVE_FAVOURITE, 0, "Add to Favourites");
@@ -70,17 +68,17 @@ public class section extends ArticleListActivity implements FontResizingActivity
 	}
 	
 	private void addToFavourites() {		
-		if (!favouriteSectionsAndTagsDAO.isFavourite(section)) {
-			Log.i(TAG, "Adding current section to favourites: " + section.getName());			
-			if (favouriteSectionsAndTagsDAO.addSection(section)) {
+		if (!favouriteSectionsAndTagsDAO.isFavourite(articleSet.getSection())) {
+			Log.i(TAG, "Adding current section to favourites: " + articleSet.getSection().getName());			
+			if (favouriteSectionsAndTagsDAO.addSection( articleSet.getSection())) {
 				favouriteMenuItem.setTitle("Remove Favourite");
 			} else {
 	        	Toast.makeText(this, "Favourites list is full", Toast.LENGTH_LONG).show();
 			}
 	
 		} else {
-			Log.i(TAG, "Removing current section from favourites: " + section.getName());			
-			favouriteSectionsAndTagsDAO.removeSection(section);
+			Log.i(TAG, "Removing current section from favourites: " +  articleSet.getSection().getName());			
+			favouriteSectionsAndTagsDAO.removeSection( articleSet.getSection());
 			favouriteMenuItem.setTitle("Add to Favourites");
 		}		
 	}

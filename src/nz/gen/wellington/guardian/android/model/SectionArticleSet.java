@@ -8,7 +8,7 @@ public class SectionArticleSet extends AbstractArticleSet implements ArticleSet,
 	
 	private static final long serialVersionUID = 1L;
 
-	protected String[] permittedRefinements = {"blog", "keyword", "contributor"};
+	protected String[] permittedRefinements = {"blog", "keyword", "contributor", "date"};
 	private Section section;
 
 	public SectionArticleSet(Section section, int pageSize) {
@@ -16,9 +16,21 @@ public class SectionArticleSet extends AbstractArticleSet implements ArticleSet,
 		this.section = section;
 	}
 
+	public SectionArticleSet(Section section, int pageSize, String dateDisplayName, String fromDate, String toDate) {
+		super(pageSize);
+		this.section = section;
+		this.fromDate = fromDate;
+		this.toDate = toDate;
+		this.dateDisplayName = dateDisplayName;
+	}
+
 	@Override
 	public String getName() {
-		return section.getName();
+		String name = section.getName();
+		if (fromDate != null) {
+			name = name + " (" + dateDisplayName + ")";
+		}
+		return name;
 	}
 	
 	@Override

@@ -41,10 +41,6 @@ public class ArticleSetFactory {
 		return savedArticlesArticleSet;
 	}
 	
-	public ArticleSet getArticleSetForSection(Section section) {
-		return addUrl(new SectionArticleSet(section, preferencesDAO.getPageSizePreference()));
-	}
-	
 	public ArticleSet getArticleSetForSearchTerm(String searchTerm) {
 		return addUrl(new SearchResultsArticleSet(searchTerm, preferencesDAO.getPageSizePreference()));
 	}
@@ -66,6 +62,15 @@ public class ArticleSetFactory {
 	public ArticleSet getArticleSetForTag(Tag tag, String dateDisplayName, String fromDate, String toDate) {
 		return addUrl(new TagArticleSet(tag, preferencesDAO.getPageSizePreference(), dateDisplayName, fromDate, toDate));
 	}
+	
+	public ArticleSet getArticleSetForSection(Section section) {
+		return addUrl(new SectionArticleSet(section, preferencesDAO.getPageSizePreference()));
+	}
+	
+	public ArticleSet getArticleSetForSection(Section section, String dateDisplayName, String fromDate, String toDate) {
+		return addUrl(new SectionArticleSet(section, preferencesDAO.getPageSizePreference(), dateDisplayName, fromDate, toDate));
+	}
+	
 	
 	public List<ArticleSet> getArticleSetsForSections(List<Section> favouriteSections) {
 		List<ArticleSet> favouriteSectionsArticleSets = new ArrayList<ArticleSet>();			
@@ -120,6 +125,11 @@ public class ArticleSetFactory {
 		if (refinement.getFromDate() != null && articleSet instanceof TagArticleSet) {
 			return getArticleSetForTag(((TagArticleSet) articleSet).getTag(), refinement.getDisplayName(), refinement.getFromDate(), refinement.getToDate());			
 		}
+		
+		if (refinement.getFromDate() != null && articleSet instanceof SectionArticleSet) {
+			return getArticleSetForSection(((SectionArticleSet) articleSet).getSection(), refinement.getDisplayName(), refinement.getFromDate(), refinement.getToDate());			
+		}
+				
 		return null;
 	}
 
