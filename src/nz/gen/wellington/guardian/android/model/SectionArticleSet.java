@@ -35,6 +35,9 @@ public class SectionArticleSet extends AbstractArticleSet implements ArticleSet,
 	
 	@Override
 	public List<String> getPermittedRefinements() {
+		if (isDateRefinedArticleSet()) {
+			return Arrays.asList("date");
+		}
 		return Arrays.asList(permittedRefinements);
 	}
 	

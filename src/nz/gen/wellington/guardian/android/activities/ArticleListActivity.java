@@ -305,9 +305,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    		
 			    		for (String refinementType : articleSet.getPermittedRefinements()) {
 			    			Log.d(TAG, "Processing refinement type: " + refinementType);
-			    			Log.d(TAG, "Refinements keyset: " + refinements.keySet());
-			    			Log.d(TAG, "Permitted refinements: " + refinements.keySet());
-			    			
 			    			if (articleSet.getPermittedRefinements().contains(refinementType) && refinements.keySet().contains(refinementType)) {
 			    				String description = getRefinementDescription(refinementType);
 			    				populateRefinementType(mainpane, inflater, description, refinements.get(refinementType));
@@ -371,7 +368,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			tagGroup.setOrientation(LinearLayout.VERTICAL);
 			tagGroup.setPadding(2, 0, 2, 0);
 						
-			Log.d(TAG, "" + typedRefinements.size());
 			List<ArticleSet> refinementArticleSets = new ArrayList<ArticleSet>();
 			for (Refinement refinement : typedRefinements) {
 				ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForRefinement(articleSet, refinement);

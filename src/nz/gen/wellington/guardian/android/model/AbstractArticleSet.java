@@ -57,5 +57,9 @@ public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	public String getToDate() {
 		return toDate;
 	}
+
+	protected boolean isDateRefinedArticleSet() {
+		return toDate != null;
+	}
 	
 }
