@@ -45,6 +45,10 @@ public class PreferencesDAO {
 		return prefs.getBoolean("useContentApi", false);		
 	}
 	
+	public boolean showDateRefinements() {
+		return prefs.getBoolean("showDateDefinements", false);
+	}
+	
 	public String getPreferedApiHost() {
 		if (useContentApi()) {
 			return CONTENT_API_URL;

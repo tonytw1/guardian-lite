@@ -300,14 +300,18 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
 			    	Map<String, List<Refinement>> refinements = bundle.getRefinements();
 			    	
+			    	final boolean showDateRefinements = preferencesDAO.showDateRefinements();
+			    	
 			    	if (refinements != null && !refinements.isEmpty()) {
 			    		LayoutInflater inflater = LayoutInflater.from(context);
 			    		
 			    		for (String refinementType : articleSet.getPermittedRefinements()) {
 			    			Log.d(TAG, "Processing refinement type: " + refinementType);
 			    			if (articleSet.getPermittedRefinements().contains(refinementType) && refinements.keySet().contains(refinementType)) {
-			    				String description = getRefinementDescription(refinementType);
-			    				populateRefinementType(mainpane, inflater, description, refinements.get(refinementType));
+			    				if (!refinementType.equals("date") || showDateRefinements) {
+			    					String description = getRefinementDescription(refinementType);
+			    					populateRefinementType(mainpane, inflater, description, refinements.get(refinementType));
+			    				}
 			    			}
 						}
 			    		
