@@ -1,10 +1,14 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
+import java.io.Serializable;
+
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 
-public class Refinement {
+public class Refinement implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private String displayName;
 	private Tag tag;
 	private String fromDate;
