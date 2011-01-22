@@ -214,11 +214,12 @@ public class ContentResultsHandler extends HandlerBase {
 		List<String> tagRefinementTypes = Arrays.asList("blog", "contributor", "keyword", "series");
 		boolean isTagRefinement = tagRefinementTypes.contains(currentRefinementGroupType);
 		
+		final String displayName = attributes.getValue("display-name");
 		if (isTagRefinement) {
 			final String tagId = attributes.getValue("id");
 			final String sectionId = tagId.split("/")[0];
 			Section section = sectionDAO.getSectionById(sectionId);
-			final Tag refinementTag = new Tag(attributes.getValue("display-name"), tagId, section);
+			final Tag refinementTag = new Tag(displayName, tagId, section);
 						
 			List<Refinement> refinementGroup = getRefinementGroup();		
 			if (!refinementTag.isSectionKeyword()) {
@@ -243,15 +244,14 @@ public class ContentResultsHandler extends HandlerBase {
 		
 		boolean isDateRefinement = currentRefinementGroupType.equals("date");
 		if (isDateRefinement) {
-			Log.d(TAG, "Adding date refinement");
-			List<Refinement> refinementGroup = getRefinementGroup();
-			
+			Log.d(TAG, "Adding date refinement: " + displayName);
 			
 			String refinedUrl = attributes.getValue("refined-url");
-			String fromDate = refinedUrl.split("from-date=")[1].substring(0, 10);
-			Log.d(TAG, fromDate);
-						
-			refinementGroup.add(articleSetFactory.getRefinementForDate(fromDate));
+			final String fromDate = refinedUrl.split("from-date=")[1].substring(0, 10);			
+			final String toDate = refinedUrl.split("to-date=")[1].substring(0, 10);
+			
+			List<Refinement> refinementGroup = getRefinementGroup();
+			refinementGroup.add(articleSetFactory.getRefinementForDate(displayName, fromDate, toDate));
 		}
 		
 	}

@@ -5,8 +5,10 @@ import nz.gen.wellington.guardian.android.model.Tag;
 
 public class Refinement {
 
+	private String displayName;
 	private Tag tag;
-	private String date;
+	private String fromDate;
+	private String toDate;
 
 	public Refinement(Tag tag) {
 		this.tag = tag;
@@ -16,8 +18,10 @@ public class Refinement {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Refinement(String date) {
-		this.date = date;
+	public Refinement(String displayName, String fromDate, String toDate) {
+		this.displayName = displayName;
+		this.fromDate = fromDate;
+		this.toDate = toDate;
 	}
 
 	public Tag getTag() {
@@ -27,13 +31,17 @@ public class Refinement {
 	public void setTag(Tag tag) {
 		this.tag = tag;
 	}
-
-	public String getDate() {
-		return date;
+	
+	public String getDisplayName() {
+		return displayName;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public String getFromDate() {
+		return fromDate;
+	}
+
+	public String getToDate() {
+		return toDate;
 	}
 	
 }

@@ -63,8 +63,8 @@ public class ArticleSetFactory {
 	}
 	
 	
-	public ArticleSet getArticleSetForTag(Tag tag, String date) {
-		return addUrl(new TagArticleSet(tag, preferencesDAO.getPageSizePreference(), date));
+	public ArticleSet getArticleSetForTag(Tag tag, String dateDisplayName, String fromDate, String toDate) {
+		return addUrl(new TagArticleSet(tag, preferencesDAO.getPageSizePreference(), dateDisplayName, fromDate, toDate));
 	}
 	
 	public List<ArticleSet> getArticleSetsForSections(List<Section> favouriteSections) {
@@ -117,14 +117,14 @@ public class ArticleSetFactory {
 			return getArticleSetForTag(refinement.getTag());		
 		}
 		
-		if (refinement.getDate() != null && articleSet instanceof TagArticleSet) {
-			return getArticleSetForTag(((TagArticleSet) articleSet).getTag(), refinement.getDate());			
+		if (refinement.getFromDate() != null && articleSet instanceof TagArticleSet) {
+			return getArticleSetForTag(((TagArticleSet) articleSet).getTag(), refinement.getDisplayName(), refinement.getFromDate(), refinement.getToDate());			
 		}
 		return null;
 	}
 
-	public Refinement getRefinementForDate(String date) {
-		return new Refinement(date);
+	public Refinement getRefinementForDate(String displayName, String fromDate, String toDate) {
+		return new Refinement(displayName, fromDate, toDate);
 	}
 	
 }

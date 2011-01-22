@@ -7,7 +7,9 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 	
 	private static final long serialVersionUID = 2L;
 	private Tag tag;
-	private String date;
+	private String fromDate;
+	private String toDate;
+	private String dateDisplayName;
 	
 	private String[] permittedRefinements = {"keyword", "date"};
 
@@ -16,17 +18,19 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 		this.tag = tag;
 	}
 	
-	public TagArticleSet(Tag tag, int pageSize, String date) {
+	public TagArticleSet(Tag tag, int pageSize, String dateDisplayName, String fromDate, String toDate) {
 		super(pageSize);
 		this.tag = tag;
-		this.date = date;
+		this.fromDate = fromDate;
+		this.toDate = toDate;
+		this.dateDisplayName = dateDisplayName;
 	}
 
 	@Override
 	public String getName() {
 		String name = tag.getName();
-		if (date != null) {
-			name = name + " - " + date;
+		if (fromDate != null) {
+			name = name + " (" + dateDisplayName + ")";
 		}
 		return name;
 	}
@@ -40,10 +44,14 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 		return tag;
 	}
 	
-	public String getDate() {
-		return date;
+	public String getFromDate() {
+		return fromDate;
 	}
 	
+	public String getToDate() {
+		return toDate;
+	}
+
 	@Override
 	public boolean isFeatureTrailAllowed() {
 		return !tag.isContributorTag();

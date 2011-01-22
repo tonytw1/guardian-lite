@@ -58,10 +58,9 @@ public class ContentApiUrlService {
 		if (articleSet instanceof TagArticleSet) {
 			TagArticleSet tagArticleSet = (TagArticleSet) articleSet;
 			contentApiUrlBuilder.addTag(tagArticleSet.getTag());
-			if (tagArticleSet.getDate() != null) {
-				contentApiUrlBuilder.setFromDate(tagArticleSet.getDate());
-				contentApiUrlBuilder.setToDate(tagArticleSet.getDate());
-
+			if (tagArticleSet.getFromDate() != null) {
+				contentApiUrlBuilder.setFromDate(tagArticleSet.getFromDate());
+				contentApiUrlBuilder.setToDate(tagArticleSet.getToDate());
 			}
 		}
 		
