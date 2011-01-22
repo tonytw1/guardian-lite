@@ -42,4 +42,8 @@ public class SectionArticleSet extends AbstractArticleSet implements ArticleSet,
 		return section;
 	}
 
+	public String getHeadingColour() {
+		return section.getColour();
+	}
+
 }

@@ -32,6 +32,13 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 		return name;
 	}
 	
+	public String getHeadingColour() {
+		if (tag.getSection() != null) {
+			return tag.getSection().getColour();
+		}
+		return null;
+	}
+	
 	@Override
 	public List<String> getPermittedRefinements() {
 		return Arrays.asList(permittedRefinements);

@@ -117,8 +117,10 @@ public abstract class MenuedActivity extends AbstractFontResizingActivity {
 	}
 	
 	protected final void setHeadingColour(String colour) {
-		LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
-		heading.setBackgroundColor(Color.parseColor(colour));
+		if (colour != null) {
+			LinearLayout heading = (LinearLayout) findViewById(R.id.HeadingLayout);
+			heading.setBackgroundColor(Color.parseColor(colour));
+		}
 	}
-		
+	
 }
