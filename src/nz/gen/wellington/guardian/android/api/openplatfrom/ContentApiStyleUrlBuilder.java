@@ -100,7 +100,7 @@ public class ContentApiStyleUrlBuilder {
 		StringBuilder uri = new StringBuilder("/" + TAGS);
 		appendCoreParameters(uri);
 				
-		List<String> allowedTagTypes = Arrays.asList("keyword", "contributor", "blog");		// TODO should be settable using the builder pattern
+		List<String> allowedTagTypes = Arrays.asList("keyword", "contributor", "blog", "series");		// TODO should be settable using the builder pattern
 		if (!allowedTagTypes.isEmpty()) {
 			uri.append("&type=");
 			for (Iterator<String> iterator = allowedTagTypes.iterator(); iterator.hasNext();) {
