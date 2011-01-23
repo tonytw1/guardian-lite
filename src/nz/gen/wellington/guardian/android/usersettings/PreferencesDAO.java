@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
 
 public class PreferencesDAO {
 	
-	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://guardian-lite.appspot.com";
+	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://2.guardian-lite.appspot.com";
 	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
 
 	private SharedPreferences prefs;
