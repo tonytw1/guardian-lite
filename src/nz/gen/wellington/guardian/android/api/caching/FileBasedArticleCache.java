@@ -17,7 +17,7 @@ import android.util.Log;
 public class FileBasedArticleCache {
 	
 	private static final String TAG = "FileBasedArticleCache";
-	private static final String VERSION_SUFFIX = "v7";
+	private static final String VERSION_SUFFIX = "v8";
 
 	private Context context;
 	

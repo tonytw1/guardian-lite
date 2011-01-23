@@ -68,10 +68,9 @@ public class ArticleSetFactory {
 	}
 	
 	public ArticleSet getArticleSetForSection(Section section, String dateDisplayName, String fromDate, String toDate) {
-		return addUrl(new SectionArticleSet(section, preferencesDAO.getPageSizePreference(), dateDisplayName, fromDate, toDate));
+		return addUrl(new SectionArticleSet(section, 50, dateDisplayName, fromDate, toDate));
 	}
-	
-	
+		
 	public List<ArticleSet> getArticleSetsForSections(List<Section> favouriteSections) {
 		List<ArticleSet> favouriteSectionsArticleSets = new ArrayList<ArticleSet>();			
 		for (Section section : favouriteSections) {
