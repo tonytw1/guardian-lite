@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 // TODO should warn that an active connection is needed to search
+// TODO needs to warn when no matches are found
 public class tagsearch extends DownloadProgressAwareActivity implements OnClickListener, FontResizingActivity {
 	
 	private static final int RESULTS_LOADED = 1;
@@ -118,9 +119,9 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 			case RESULTS_LOADED:
 				populateSearchResults();
 				return;
-
+				
 			case ERROR:
-	        	Toast.makeText(context, "Could not load article", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Could not load tag results", Toast.LENGTH_SHORT).show();	// TODO Remove Toasts
 				return;
 			}
 		}
@@ -128,7 +129,6 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	
 	
 	class TagSearchRunner implements Runnable {
-		
 		String searchTeam;
 		private ContentSource api;
 		
