@@ -5,17 +5,26 @@ import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.WhiteOnBlackColourScheme;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class PreferencesDAO {
 	
-	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://2.guardian-lite.appspot.com";
+	private static final String APP_PACKAGE = "nz.gen.wellington.guardian.android";
+
+	private static final String TAG = "PreferencesDAO";
+	
+	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://guardian-lite.appspot.com";
 	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
 
 	private SharedPreferences prefs;
-
+	private int clientVersion = 0;
+	
 	public PreferencesDAO(Context context) {
 		prefs =  PreferenceManager.getDefaultSharedPreferences(context);
+		setClientVersion(context);
 	}
 
 	public int getPageSizePreference() {
@@ -60,12 +69,25 @@ public class PreferencesDAO {
 		return (String) prefs.getString("contentApiKey", null);
 	}
 	
+	public int getClientVersion() {
+		return clientVersion;
+	}
+
 	public ColourScheme getColourScheme() {
 		final String colourSchemePreferences = (String) prefs.getString("colourScheme", "WHITE_ON_BLACK");
 		if (colourSchemePreferences.equals("BLACK_ON_WHITE")) {
 			return new BlackOnWhiteColourScheme();
 		}
 		return new WhiteOnBlackColourScheme();
+	}
+	
+	private void setClientVersion(Context context) {
+		try {
+			PackageInfo pInfo = context.getPackageManager().getPackageInfo(APP_PACKAGE, PackageManager.GET_META_DATA);
+			this.clientVersion = pInfo.versionCode;
+		} catch (Exception e) {
+			Log.w(TAG, "Failed to get client version: " + e.getMessage());
+		}
 	}
 	
 }

@@ -17,8 +17,6 @@ import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.util.Log;
 
 public class ContentApiStyleApi implements ContentSource {
@@ -30,8 +28,6 @@ public class ContentApiStyleApi implements ContentSource {
 	private HttpFetcher httpFetcher;
 	private ArticleSetUrlService articleSetUrlService;
 	private PreferencesDAO preferencesDAO;
-
-	private int clientVersion = 0;
 	
 	public ContentApiStyleApi(Context context) {
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
@@ -39,7 +35,6 @@ public class ContentApiStyleApi implements ContentSource {
 		this.articleSetUrlService = new ArticleSetUrlService(context);		
 		this.preferencesDAO = SingletonFactory.getPreferencesDAO(context);
 		this.httpFetcher = new HttpFetcher(context);
-		setClientVersion(context);
 	}
 	
 	
@@ -47,10 +42,8 @@ public class ContentApiStyleApi implements ContentSource {
 	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
 		
-		String contentApiUrl = articleSetUrlService.getUrlForArticleSet(articleSet);
-		contentApiUrl = contentApiUrl + "&v=" + clientVersion;
-		
-		LoggingBufferedInputStream input = httpFetcher.httpFetch(contentApiUrl, articleSet.getName() + " article set");
+		final String contentApiUrl = articleSetUrlService.getUrlForArticleSet(articleSet) + "&v=" + preferencesDAO.getClientVersion();		
+		LoggingBufferedInputStream input = httpFetcher.httpFetch(contentApiUrl, articleSet.getName() + " article set");	
 		if (input != null) {
 			ArticleBundle results = contentXmlParser.parseArticlesXml(input, articleCallback);
 			if (results != null && !results.getArticles().isEmpty()) {
@@ -118,18 +111,6 @@ public class ContentApiStyleApi implements ContentSource {
 		Log.i(TAG, "Stopping content api loading");
 		contentXmlParser.stop();
 		httpFetcher.stopLoading();
-	}
-	
-	
-	private void setClientVersion(Context context) {
-		try {
-			PackageInfo pInfo = context.getPackageManager().getPackageInfo(
-					"nz.gen.wellington.guardian.android",
-					PackageManager.GET_META_DATA);
-			this.clientVersion = pInfo.versionCode;
-		} catch (Exception e) {
-			Log.w(TAG, "Failed to get client version: " + e.getMessage());
-		}
 	}
 	
 }
