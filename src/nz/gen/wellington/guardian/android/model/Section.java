@@ -39,5 +39,9 @@ public class Section implements Serializable {
 	public void setColour(String colour) {
 		this.colour = colour;
 	}
+
+	public Tag getTag() {
+		return new Tag(name, id + "/" + id, this);
+	}
 	
 }

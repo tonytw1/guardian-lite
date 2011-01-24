@@ -20,7 +20,6 @@ public class ContentApiStyleUrlBuilder {
 	private String apiKey;
 	private String format = "xml";
 
-	private List<Section> sections;
 	private List<Tag> tags;
 	
 	private List<String> types;
@@ -34,7 +33,6 @@ public class ContentApiStyleUrlBuilder {
 	public ContentApiStyleUrlBuilder(String apiHost, String apiKey) {
 		this.apiHost = apiHost;
 		this.apiKey = apiKey;
-		this.sections = new ArrayList<Section>();
 		this.tags = new ArrayList<Tag>();
 		this.types = new ArrayList<String>();
 		this.showAll = false;
@@ -44,13 +42,6 @@ public class ContentApiStyleUrlBuilder {
 	public String toSearchQueryUrl() {
 		StringBuilder uri = new StringBuilder("/" + SEARCH_QUERY);
 		appendCoreParameters(uri);
-				
-		if (!sections.isEmpty()) {
-			for (Section section : sections) {
-				Tag sectionTag = new Tag(section.getName(), section.getId() + "/" + section.getId(), section);
-				tags.add(sectionTag);
-			}
-		}
 		
 		StringBuilder tagsParameter = new StringBuilder();			
 		if (!tags.isEmpty()) {			
@@ -140,7 +131,7 @@ public class ContentApiStyleUrlBuilder {
 	}
 
 	public void addSection(Section section) {
-		sections.add(section);
+		tags.add(section.getTag());
 	}
 
 	public void addTag(Tag tag) {
