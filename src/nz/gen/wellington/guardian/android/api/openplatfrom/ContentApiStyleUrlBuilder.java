@@ -22,6 +22,7 @@ public class ContentApiStyleUrlBuilder {
 
 	private List<Section> sections;
 	private List<Tag> tags;
+	
 	private List<String> types;
 	private boolean showAll;
 	private boolean showRefinements;
@@ -43,38 +44,47 @@ public class ContentApiStyleUrlBuilder {
 	public String toSearchQueryUrl() {
 		StringBuilder uri = new StringBuilder("/" + SEARCH_QUERY);
 		appendCoreParameters(uri);
-		
-		StringBuilder sectionsParameter = new StringBuilder();			
-		StringBuilder tagsParameter = new StringBuilder();			
-
-		if (!tags.isEmpty()) {
-			for (Tag tag : tags) {
-				tagsParameter.append(tag.getId());
-				tagsParameter.append(OR);		
-			}
-		}
 				
 		if (!sections.isEmpty()) {
 			for (Section section : sections) {
-				sectionsParameter.append(section.getId());
-				sectionsParameter.append(OR);
+				Tag sectionTag = new Tag(section.getName(), section.getId() + "/" + section.getId(), section);
+				tags.add(sectionTag);
 			}
 		}
 		
-		if (sectionsParameter.length() > 0) {
-			String sections = sectionsParameter.substring(0, sectionsParameter.length()-1);
-			try {
-				sections = URLEncoder.encode(sections, "UTF8");
-			} catch (UnsupportedEncodingException e) {
+		StringBuilder tagsParameter = new StringBuilder();			
+		if (!tags.isEmpty()) {			
+			boolean isFirst = true;
+			tagsParameter.append("(");
+			for (Tag tag : tags) {
+				if (!isFirst) {
+					tagsParameter.append(OR);
+				}
+				tagsParameter.append(tag.getId());
+				isFirst = false;
 			}
-			uri.append("&section=");
-			uri.append(sections);				
+			tagsParameter.append(")");
+			
+			// TODO duplication
+			if (!types.isEmpty()) {
+				tagsParameter.append(",");
+				isFirst = true;
+				tagsParameter.append("(");
+				for (String type : types) {
+					if (!isFirst) {
+						tagsParameter.append(OR);
+					}
+					tagsParameter.append("type/" + type);
+					isFirst = false;
+				}
+				tagsParameter.append(")");				
+			}
 		}
 		
 		if (tagsParameter.length() > 0) {
-			String tags = tagsParameter.substring(0, tagsParameter.length()-1);
+			String tags = tagsParameter.toString();
 			try {
-				tags = URLEncoder.encode(tags, "UTF8");
+				tags = URLEncoder.encode(tagsParameter.toString(), "UTF8");
 			} catch (UnsupportedEncodingException e) {
 			}
 			uri.append("&tag=");

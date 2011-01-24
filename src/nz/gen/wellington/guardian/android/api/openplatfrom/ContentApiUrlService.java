@@ -20,7 +20,7 @@ public class ContentApiUrlService {
 
 	public String getContentApiUrlForArticleSet(ArticleSet articleSet) {
 		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
-		populateContentApiUrlBuilderForArticleSet(contentApiUrlBuilder, articleSet);		
+		populateContentApiUrlBuilderForArticleSet(contentApiUrlBuilder, articleSet);
 		contentApiUrlBuilder.setShowAll(true);
 		contentApiUrlBuilder.setShowRefinements(true);	
 		return contentApiUrlBuilder.toSearchQueryUrl();
@@ -84,13 +84,14 @@ public class ContentApiUrlService {
 				} else if (articleSet instanceof TagArticleSet) {
 					contentApiUrlBuilder.addTag(((TagArticleSet) favouroteArticleSet).getTag());
 				}
-			};
+			}
 		}
 		
 		if (articleSet instanceof SearchResultsArticleSet) {
 			contentApiUrlBuilder.setSearchTerm(((SearchResultsArticleSet) articleSet).getSearchTerm());
 		}
 		
+		contentApiUrlBuilder.addType("article");		
 		contentApiUrlBuilder.setPageSize(articleSet.getPageSize());		
 		contentApiUrlBuilder.setFormat("xml");
 	}
