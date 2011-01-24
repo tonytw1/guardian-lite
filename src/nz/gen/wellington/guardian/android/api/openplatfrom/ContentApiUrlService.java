@@ -1,5 +1,7 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
+import java.util.List;
+
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
@@ -38,11 +40,16 @@ public class ContentApiUrlService {
 		return contentApiUrlBuilder.toSectionsQueryUrl();
 	}
 	
-	public String getTagSearchQueryUrl(String searchTerm) {
+	public String getTagSearchQueryUrl(String searchTerm, List<String> allowedTypes) {
 		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
-		contentApiUrlBuilder.setPageSize(20);
+		contentApiUrlBuilder.setPageSize(20);		
 		contentApiUrlBuilder.setFormat("json");
 		contentApiUrlBuilder.setSearchTerm(searchTerm);
+		
+		for (String allowedType : allowedTypes) {
+			contentApiUrlBuilder.addType(allowedType);			
+		}
+				
 		return contentApiUrlBuilder.toTagSearchQueryUrl();
 	}
 	

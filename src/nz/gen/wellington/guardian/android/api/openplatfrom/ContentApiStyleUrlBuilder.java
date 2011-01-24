@@ -3,7 +3,6 @@ package nz.gen.wellington.guardian.android.api.openplatfrom;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,6 +22,7 @@ public class ContentApiStyleUrlBuilder {
 
 	private List<Section> sections;
 	private List<Tag> tags;
+	private List<String> types;
 	private boolean showAll;
 	private boolean showRefinements;
 	private Integer pageSize;
@@ -35,6 +35,7 @@ public class ContentApiStyleUrlBuilder {
 		this.apiKey = apiKey;
 		this.sections = new ArrayList<Section>();
 		this.tags = new ArrayList<Tag>();
+		this.types = new ArrayList<String>();
 		this.showAll = false;
 		this.showRefinements = false;
 	}
@@ -98,21 +99,23 @@ public class ContentApiStyleUrlBuilder {
 	
 	public String toTagSearchQueryUrl() {		
 		StringBuilder uri = new StringBuilder("/" + TAGS);
-		appendCoreParameters(uri);
-				
-		List<String> allowedTagTypes = Arrays.asList("keyword", "contributor", "blog", "series");		// TODO should be settable using the builder pattern
-		if (!allowedTagTypes.isEmpty()) {
+		appendCoreParameters(uri);		
+		appendAllowedTagTypes(uri);		
+		uri.append("&q=" + URLEncoder.encode(searchTerm));		
+		return prependHost(uri.toString());
+	}
+	
+
+	private void appendAllowedTagTypes(StringBuilder uri) {
+		if (!types.isEmpty()) {
 			uri.append("&type=");
-			for (Iterator<String> iterator = allowedTagTypes.iterator(); iterator.hasNext();) {
+			for (Iterator<String> iterator = types.iterator(); iterator.hasNext();) {
 				uri.append(iterator.next());
 				if (iterator.hasNext()) {
 					uri.append(URLEncoder.encode(","));
 				}				
 			}
 		}
-		
-		uri.append("&q=" + URLEncoder.encode(searchTerm));		
-		return prependHost(uri.toString());
 	}
 	
 
@@ -132,6 +135,10 @@ public class ContentApiStyleUrlBuilder {
 
 	public void addTag(Tag tag) {
 		tags.add(tag);
+	}
+	
+	public void addType(String type) {
+		types.add(type);
 	}
 	
 	public void setPageSize(int pageSize) {

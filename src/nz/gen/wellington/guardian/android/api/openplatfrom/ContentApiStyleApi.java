@@ -22,7 +22,7 @@ import android.util.Log;
 public class ContentApiStyleApi implements ContentSource {
 		
 	private static final String TAG = "ContentApiStyleApi";
-	
+		
 	private ContentApiStyleXmlParser contentXmlParser;
 	private ContentApiStyleJSONParser contentJsonParser;
 	private HttpFetcher httpFetcher;
@@ -89,10 +89,11 @@ public class ContentApiStyleApi implements ContentSource {
 	
 	
 	@Override
-	public List<Tag> searchTags(String searchTerm, Map<String, Section> sections) {
+	public List<Tag> searchTags(String searchTerm, List<String> allowedTagSearchTypes, Map<String, Section> sections) {
 		Log.i(TAG, "Fetching tag list from live api: " + searchTerm);
 		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(preferencesDAO.getPreferedApiHost(), preferencesDAO.getApiKey());
-		InputStream input = httpFetcher.httpFetch(contentApiUrlService.getTagSearchQueryUrl(searchTerm), "tag results");
+		
+		InputStream input = httpFetcher.httpFetch(contentApiUrlService.getTagSearchQueryUrl(searchTerm, allowedTagSearchTypes), "tag results");
 		if (input != null) {
 			List<Tag> results = contentJsonParser.parseTagsJSON(input, sections);
 			try {

@@ -1,6 +1,7 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,8 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	
 	private static final int RESULTS_LOADED = 1;
 	private static final int ERROR = 2;
+	
+	private static final List<String> allowedTagSearchTypes = Arrays.asList("keyword", "contributor", "blog", "series");
 	
 	private Button search;
 	private NetworkStatusService networkStatusService;
@@ -153,7 +156,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		}
 			
 		private List<Tag> fetchTagResults(final String searchTerm) {
-			List<Tag> results = api.searchTags(searchTerm, sections);
+			List<Tag> results = api.searchTags(searchTerm, allowedTagSearchTypes, sections);
 			return results;
 		}
 
