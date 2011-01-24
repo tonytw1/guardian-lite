@@ -2,8 +2,6 @@ package nz.gen.wellington.guardian.android.api.openplatfrom;
 
 import java.util.List;
 
-import android.util.Log;
-
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
