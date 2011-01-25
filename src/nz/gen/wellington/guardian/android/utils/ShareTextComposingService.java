@@ -8,9 +8,13 @@ public class ShareTextComposingService {
 	private static final int MAX_LENGTH = 140;
 
 	public static String composeShareText(Article article) {
-		if (article.getTitle() != null && article.getShortUrl() != null) {
-			if (article.getTitle().length() + SPACE.length() + article.getShortUrl().length() <= MAX_LENGTH) {
-				return article.getTitle() + SPACE + article.getShortUrl();
+		String url = article.getShortUrl();
+		if (url == null) {
+			url = article.getWebUrl();
+		}
+		if (article.getTitle() != null && url != null) {
+			if (article.getTitle().length() + SPACE.length() + url.length() <= MAX_LENGTH) {
+				return article.getTitle() + SPACE + url;
 			}
 		}
 		return null;
