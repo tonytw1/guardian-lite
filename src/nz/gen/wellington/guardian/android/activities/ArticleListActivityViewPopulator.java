@@ -3,9 +3,11 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
+import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
 import android.content.Context;
@@ -28,6 +30,49 @@ public class ArticleListActivityViewPopulator {
 		this.imageDAO = SingletonFactory.getImageDao(context);
 		this.tagListPopulatingService = SingletonFactory.getTagListPopulator(context);
 	}
+	
+		
+	public void populateArticleListView(Article article, View view, ColourScheme colourScheme, float baseFontSize, String trailImageUrl) {
+		TextView titleText = (TextView) view.findViewById(R.id.Headline);
+		TextView pubDateText = (TextView) view.findViewById(R.id.Pubdate);
+		TextView standfirst = (TextView) view.findViewById(R.id.Standfirst);
+		TextView caption = (TextView) view.findViewById(R.id.Caption);
+		
+		titleText.setTextColor(colourScheme.getHeadline());
+		pubDateText.setTextColor(colourScheme.getBodytext());			
+		standfirst.setTextColor(colourScheme.getBodytext());
+		
+		titleText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
+		pubDateText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize -2);
+		standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, new Float(baseFontSize - 0.75));
+
+		if (caption != null) {
+			caption.setTextColor(colourScheme.getBodytext());
+		}
+		titleText.setText(article.getTitle());			
+		if (article.getPubDate() != null) {
+			pubDateText.setText(article.getPubDateString());
+		}
+		
+		if (article.getStandfirst() != null) {
+			standfirst.setText(article.getStandfirst());
+		}
+					
+		if (caption != null && article.getCaption() != null) {
+			caption.setText(article.getCaption());
+			caption.setVisibility(View.VISIBLE);
+		}
+				
+		if (trailImageUrl != null && imageDAO.isAvailableLocally(trailImageUrl)) {
+				populateTrailImage(trailImageUrl, view);
+		}
+		
+		view.setOnClickListener(new ArticleClicker(article));
+	}
+	
+	
+	
+	
 
 	public boolean populateTagDescription(LinearLayout mainpane, String descripton, int fontSize, ColourScheme colourScheme) {
 		// TODO move to the layout file

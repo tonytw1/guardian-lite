@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
 import nz.gen.wellington.guardian.android.activities.ui.ClickerPopulatingService;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
@@ -265,7 +264,15 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					boolean shouldUseFeatureTrail = article.getMainImageUrl() != null && first && articleSet.isFeatureTrailAllowed() && imageDAO.isAvailableLocally(article.getMainImageUrl());
 					View articleTrailView = chooseTrailView(mInflater, shouldUseFeatureTrail, first);
 					
-					populateArticleListView(article, articleTrailView, shouldUseFeatureTrail);
+					String trailImageUrl = article.getThumbnailUrl();
+					if (shouldUseFeatureTrail) {
+						trailImageUrl = article.getMainImageUrl();
+					}					
+					if (!imageDAO.isAvailableLocally(trailImageUrl)){
+						viewsWaitingForTrailImages.put(article.getTrailImageCallBackLabelForArticle(), articleTrailView);
+					}
+					
+					articleListActivityViewPopulator.populateArticleListView(article, articleTrailView, colourScheme, baseFontSize, trailImageUrl);
 					mainpane.addView(articleTrailView);
 					first = false;
 					return;
@@ -388,55 +395,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				divider.setVisibility(View.GONE);
 			}
 			return view;
-		}
-
-		// TODO could be pushed to a populator class
-		private void populateArticleListView(Article article, View view, boolean shouldUseFeatureTrail) {
-			TextView titleText = (TextView) view.findViewById(R.id.Headline);
-			TextView pubDateText = (TextView) view.findViewById(R.id.Pubdate);
-			TextView standfirst = (TextView) view.findViewById(R.id.Standfirst);
-			TextView caption = (TextView) view.findViewById(R.id.Caption);
-			
-			titleText.setTextColor(colourScheme.getHeadline());
-			pubDateText.setTextColor(colourScheme.getBodytext());			
-			standfirst.setTextColor(colourScheme.getBodytext());
-			
-			titleText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
-			pubDateText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize -2);
-			standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, new Float(baseFontSize - 0.75));
-
-			if (caption != null) {
-				caption.setTextColor(colourScheme.getBodytext());
-			}
-			titleText.setText(article.getTitle());			
-			if (article.getPubDate() != null) {
-				pubDateText.setText(article.getPubDateString());
-			}
-			
-			if (article.getStandfirst() != null) {
-				standfirst.setText(article.getStandfirst());
-			}
-						
-			if (caption != null && article.getCaption() != null) {
-				caption.setText(article.getCaption());
-				caption.setVisibility(View.VISIBLE);
-			}
-			
-			String trailImageUrl = article.getThumbnailUrl();
-			if (shouldUseFeatureTrail) {
-				trailImageUrl = article.getMainImageUrl();
-			}
-			
-			if (trailImageUrl != null) {
-				if (imageDAO.isAvailableLocally(trailImageUrl)) {
-					articleListActivityViewPopulator.populateTrailImage(trailImageUrl, view);
-				} else {
-					viewsWaitingForTrailImages.put(article.getTrailImageCallBackLabelForArticle(), view);
-				}
-			}
-			
-			ArticleClicker urlListener = new ArticleClicker(article);
-			view.setOnClickListener(urlListener);
 		}
 		
 	}
