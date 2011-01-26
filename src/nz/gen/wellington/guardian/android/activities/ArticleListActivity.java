@@ -9,7 +9,6 @@ import java.util.Map;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ClickerPopulatingService;
-import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
@@ -220,14 +219,12 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		private boolean descriptionSet;
 		private int baseFontSize;
 		private ArticleSetFactory articleSetFactory;
-		private TagListPopulatingService tagListPopulatingService;
 		private ArticleListActivityViewPopulator articleListActivityViewPopulator;
 		
 		public UpdateArticlesHandler(Context context, ArticleSet articleSet, int baseFontSize) {
 			super();
 			this.context = context;
 			this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
-			this.tagListPopulatingService = SingletonFactory.getTagListPopulator(context);
 			this.articleListActivityViewPopulator = new ArticleListActivityViewPopulator(context);
 			this.articleSet = articleSet;
 			this.descriptionSet = false;
@@ -261,18 +258,17 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	}
 			    	currentSection = article.getSection();
 			    	
-					boolean shouldUseFeatureTrail = article.getMainImageUrl() != null && first && articleSet.isFeatureTrailAllowed() && imageDAO.isAvailableLocally(article.getMainImageUrl());
-					View articleTrailView = chooseTrailView(mInflater, shouldUseFeatureTrail, first);
-					
+					boolean shouldUseFeatureTrail = article.getMainImageUrl() != null && first && articleSet.isFeatureTrailAllowed() && imageDAO.isAvailableLocally(article.getMainImageUrl());					
 					String trailImageUrl = article.getThumbnailUrl();
 					if (shouldUseFeatureTrail) {
 						trailImageUrl = article.getMainImageUrl();
 					}					
-					if (!imageDAO.isAvailableLocally(trailImageUrl)){
-						viewsWaitingForTrailImages.put(article.getTrailImageCallBackLabelForArticle(), articleTrailView);
-					}
 					
-					articleListActivityViewPopulator.populateArticleListView(article, articleTrailView, colourScheme, baseFontSize, trailImageUrl);
+					boolean isTrailImageAvailableLocally = trailImageUrl != null && imageDAO.isAvailableLocally(trailImageUrl);
+					View articleTrailView = articleListActivityViewPopulator.populateArticleListView(article, colourScheme, baseFontSize, trailImageUrl, shouldUseFeatureTrail, first, mInflater, isTrailImageAvailableLocally);
+					if (!isTrailImageAvailableLocally){
+						viewsWaitingForTrailImages.put(article.getTrailImageCallBackLabelForArticle(), articleTrailView);
+					}					
 					mainpane.addView(articleTrailView);
 					first = false;
 					return;
@@ -381,20 +377,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			} else {
 				Log.w(TAG, "Could not find section colour for section: " + section.getId());
 			}
-		}
-		
-		private View chooseTrailView(LayoutInflater mInflater, boolean shouldUseFeatureTrail, boolean hideDivider) {
-			View view;
-			if (shouldUseFeatureTrail) {
-				view = mInflater.inflate(R.layout.featurelist, null);
-			} else {
-				view = mInflater.inflate(R.layout.list, null);
-			}
-			if (hideDivider) {
-				View divider = view.findViewById(R.id.Divider);
-				divider.setVisibility(View.GONE);
-			}
-			return view;
 		}
 		
 	}

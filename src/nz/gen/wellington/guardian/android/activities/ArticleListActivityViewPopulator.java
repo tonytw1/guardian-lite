@@ -32,7 +32,9 @@ public class ArticleListActivityViewPopulator {
 	}
 	
 		
-	public void populateArticleListView(Article article, View view, ColourScheme colourScheme, float baseFontSize, String trailImageUrl) {
+	public View populateArticleListView(Article article, ColourScheme colourScheme, float baseFontSize, String trailImageUrl, boolean shouldUseFeatureTrail, boolean first, LayoutInflater mInflater, boolean isTrailImageAvailableLocally) {
+		View view = chooseTrailView(mInflater, shouldUseFeatureTrail, first);
+		
 		TextView titleText = (TextView) view.findViewById(R.id.Headline);
 		TextView pubDateText = (TextView) view.findViewById(R.id.Pubdate);
 		TextView standfirst = (TextView) view.findViewById(R.id.Standfirst);
@@ -62,15 +64,30 @@ public class ArticleListActivityViewPopulator {
 			caption.setText(article.getCaption());
 			caption.setVisibility(View.VISIBLE);
 		}
-				
-		if (trailImageUrl != null && imageDAO.isAvailableLocally(trailImageUrl)) {
+		
+		if (trailImageUrl != null && isTrailImageAvailableLocally) {
 				populateTrailImage(trailImageUrl, view);
 		}
 		
 		view.setOnClickListener(new ArticleClicker(article));
+		return view;
 	}
 	
 	
+	
+	public View chooseTrailView(LayoutInflater mInflater, boolean shouldUseFeatureTrail, boolean hideDivider) {
+		View view;
+		if (shouldUseFeatureTrail) {
+			view = mInflater.inflate(R.layout.featurelist, null);
+		} else {
+			view = mInflater.inflate(R.layout.list, null);
+		}
+		if (hideDivider) {
+			View divider = view.findViewById(R.id.Divider);
+			divider.setVisibility(View.GONE);
+		}
+		return view;
+	}
 	
 	
 
