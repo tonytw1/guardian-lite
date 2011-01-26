@@ -28,7 +28,6 @@ import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,7 +37,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -224,13 +222,14 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		private int baseFontSize;
 		private ArticleSetFactory articleSetFactory;
 		private TagListPopulatingService tagListPopulatingService;
+		private ArticleListActivityViewPopulator articleListActivityViewPopulator;
 		
 		public UpdateArticlesHandler(Context context, ArticleSet articleSet, int baseFontSize) {
 			super();
 			this.context = context;
 			this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
 			this.tagListPopulatingService = SingletonFactory.getTagListPopulator(context);
-			
+			this.articleListActivityViewPopulator = new ArticleListActivityViewPopulator(context);
 			this.articleSet = articleSet;
 			this.descriptionSet = false;
 			this.baseFontSize = baseFontSize;
@@ -279,7 +278,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    		final String url = data.getString("url");
 			    		if( viewsWaitingForTrailImages.containsKey(id)) {
 			    			View view = viewsWaitingForTrailImages.get(id);
-			    			populateTrailImage(url, view);
+			    			articleListActivityViewPopulator.populateTrailImage(url, view);
 			    			viewsWaitingForTrailImages.remove(id);
 			    		}
 			    	}			    
@@ -290,8 +289,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
 			    	Bundle descriptionData = msg.getData();
 			    	String descripton = descriptionData.getString("description");
-			    	if (descripton != null && !descriptionSet) {			    	
-			    		populateTagDescription(mainpane, descripton, baseFontSize);
+			    	if (descripton != null && !descriptionSet) {	    	
+			    		descriptionSet = articleListActivityViewPopulator.populateTagDescription(mainpane, descripton, baseFontSize, currentColourScheme);
 			    	}
 			    	return;
 			    	
@@ -308,9 +307,12 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    		for (String refinementType : articleSet.getPermittedRefinements()) {
 			    			Log.d(TAG, "Processing refinement type: " + refinementType);
 			    			if (articleSet.getPermittedRefinements().contains(refinementType) && refinements.keySet().contains(refinementType)) {
-			    				if (!refinementType.equals("date") || showDateRefinements) {
-			    					String description = getRefinementDescription(refinementType);
-			    					populateRefinementType(mainpane, inflater, description, refinements.get(refinementType));
+			    				if (!refinementType.equals("date") || showDateRefinements) {			    					
+			    					articleListActivityViewPopulator.populateRefinementType(
+												mainpane, inflater,
+												getRefinementDescription(refinementType),
+												getRefinementArticleSets(refinements, refinementType),
+												currentColourScheme);
 			    				}
 			    			}
 						}
@@ -339,62 +341,20 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	return;
 			}
 		}
-		
-		
-		// TODO could be pushed to a populator class
-		private void populateTagDescription(LinearLayout mainpane, String descripton, int fontSize) {
-			// TODO move to the layout file
-			TextView descriptionView = new TextView(context);
-			descriptionView.setId(R.id.Description);
-			descriptionView.setText(descripton);
-			descriptionView.setPadding(2, 3, 2, 15);
-			mainpane.addView(descriptionView, 0);
-			descriptionView.setTextSize(TypedValue.COMPLEX_UNIT_PT, fontSize);	// TODO duplicated setting code
-			descriptionView.setLineSpacing(new Float(0), new Float(1.1));
-			
-			descriptionView.setTextColor(colourScheme.getBodytext());
-			descriptionView.setPadding(2, 3, 2, 3);	
-			descriptionSet = true;
-		}
 
-		
-		// TODO could be pushed to a populator class
-		private void populateRefinementType(LinearLayout mainpane, LayoutInflater inflater, String description, List<Refinement> typedRefinements) {
-			View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);			
-			TextView descriptionView = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);
-			descriptionView.setText(description);
-			descriptionView.setTextColor(colourScheme.getBodytext());
-			descriptionView.setPadding(2, 3, 2, 3);
-			mainpane.addView(refinementsHeadingView);
-			
-			// TODO move to a layout
-			LinearLayout tagGroup = new LinearLayout(context);
-			tagGroup.setOrientation(LinearLayout.VERTICAL);
-			tagGroup.setPadding(2, 0, 2, 0);
-						
+		private List<ArticleSet> getRefinementArticleSets(
+				Map<String, List<Refinement>> refinements, String refinementType) {
+			// TODO this is abit of a mess - could be method on refinement?
 			List<ArticleSet> refinementArticleSets = new ArrayList<ArticleSet>();
-			for (Refinement refinement : typedRefinements) {
+			for (Refinement refinement : refinements.get(refinementType)) {
 				ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForRefinement(articleSet, refinement);
 				if (articleSetForRefinement != null) {
 					refinementArticleSets.add(articleSetForRefinement);
 				}
 			}
-			
-			tagListPopulatingService.populateTags(inflater, true, tagGroup, refinementArticleSets, colourScheme);
-			mainpane.addView(tagGroup);
+			return refinementArticleSets;
 		}
-
-		// TODO could be pushed to a populator class
-		private void populateTrailImage(final String url, View view) {
-			if (imageDAO.isAvailableLocally(url)) {
-				ImageView trialImage = (ImageView) view.findViewById(R.id.TrailImage);			
-				Bitmap image = imageDAO.getImage(url);
-				if (image != null) {
-					trialImage.setImageBitmap(image);
-					trialImage.setVisibility(View.VISIBLE);
-				}
-			}
-		}
+		
 		
 		private void addSeperator(LayoutInflater mInflater, LinearLayout mainpane, Section section) {
 			View seperator = mInflater.inflate(R.layout.seperator, null);
@@ -469,7 +429,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			
 			if (trailImageUrl != null) {
 				if (imageDAO.isAvailableLocally(trailImageUrl)) {
-					populateTrailImage(trailImageUrl, view);
+					articleListActivityViewPopulator.populateTrailImage(trailImageUrl, view);
 				} else {
 					viewsWaitingForTrailImages.put(article.getTrailImageCallBackLabelForArticle(), view);
 				}
