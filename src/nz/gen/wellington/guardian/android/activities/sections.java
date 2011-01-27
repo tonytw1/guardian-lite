@@ -49,7 +49,7 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 		if (sectionDAO.areSectionsAvailable()) {
 			populateSections(baseFontSize);
 		} else {
-			outputNoSectionsWarning(baseFontSize);	// TODO
+			outputNoSectionsWarning(baseFontSize);
 		}
 	}
 
