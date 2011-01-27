@@ -8,15 +8,15 @@ import android.view.View.OnClickListener;
 
 public class ArticleClicker implements OnClickListener {
 
-	private Article newsitem;
+	private Article article;
 
-	public ArticleClicker(Article newsitem) {
-		this.newsitem = newsitem;
+	public ArticleClicker(Article article) {
+		this.article = article;
 	}
 
 	public void onClick(View v) {
 		Intent intent = new Intent(v.getContext(), article.class);
-		intent.putExtra("article", newsitem);
+		intent.putExtra("article", article);
 		v.getContext().startActivity(intent);		
 	}
 
