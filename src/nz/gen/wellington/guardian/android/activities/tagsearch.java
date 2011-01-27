@@ -1,6 +1,5 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,10 +25,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 // TODO should warn that an active connection is needed to search
-// TODO needs to warn when no matches are found
 public class tagsearch extends DownloadProgressAwareActivity implements OnClickListener, FontResizingActivity {
 	
 	private static final int RESULTS_LOADED = 1;
@@ -64,8 +63,8 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		search = (Button) findViewById(R.id.Search);        
 		search.setOnClickListener(this);
 		
-		searchResults = new ArrayList<Tag>();		
-		tagSearchResultsHandler = new TagSearchResultsHandler(this.getApplicationContext());
+		searchResults = null;		
+		tagSearchResultsHandler = new TagSearchResultsHandler();
 	}
 
 	
@@ -76,7 +75,9 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
         
         search.setEnabled(networkStatusService.isConnectionAvailable());
 		// TODO text warning if no connection is available
-		populateSearchResults();
+        if (searchResults != null) {
+        	populateSearchResults(searchResults);
+        }
 	}
 
 	
@@ -107,24 +108,18 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 
 	
 	class TagSearchResultsHandler extends Handler {
-
-		private Context context;
 		
-		public TagSearchResultsHandler(Context context) {
-			this.context = context;
-		}
-
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			
 			switch (msg.what) {
 			case RESULTS_LOADED:
-				populateSearchResults();
+				populateSearchResults(searchResults);
 				return;
 				
 			case ERROR:
-				Toast.makeText(context, "Could not load tag results", Toast.LENGTH_SHORT).show();	// TODO Remove Toasts
+				outputErrorWarning(baseFontSize, "Failed to load tag search results.");
 				return;
 			}
 		}
@@ -169,11 +164,28 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	}
 
 	
-	private void populateSearchResults() {
+	private void populateSearchResults(List<Tag> results) {
+		if (results.isEmpty()) {
+			outputErrorWarning(baseFontSize, "No matching tags were found.");
+		}
 		LinearLayout resultsPane = (LinearLayout) findViewById(R.id.TagList);
 		resultsPane.removeAllViews();
 		LayoutInflater inflater = LayoutInflater.from(this);
-		tagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), resultsPane, articleSetFactory.getArticleSetsForTags(searchResults), colourScheme);
+		tagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), resultsPane, articleSetFactory.getArticleSetsForTags(results), colourScheme);
+	}
+	
+	
+	
+	private void outputErrorWarning(float baseFontSize, String message) {
+		LinearLayout mainpane;
+		mainpane = (LinearLayout) findViewById(R.id.MainPane);
+		TextView noArticlesMessage = new TextView(this.getApplicationContext());
+		noArticlesMessage.setText(message);
+		
+		noArticlesMessage.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
+		noArticlesMessage.setTextColor(colourScheme.getHeadline());
+		noArticlesMessage.setPadding(2, 3, 2, 3);					
+		mainpane.addView(noArticlesMessage, 0);
 	}
 	
 }
