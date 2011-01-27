@@ -117,7 +117,6 @@ public class ArticleListActivityViewPopulator {
 	}
 	
 	
-	// TODO could be pushed to a populator class
 	public void populateRefinementType(LinearLayout mainpane, LayoutInflater inflater, String description, List<ArticleSet> refinementArticleSets, ColourScheme colourScheme) {
 		View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);			
 		TextView descriptionView = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);
