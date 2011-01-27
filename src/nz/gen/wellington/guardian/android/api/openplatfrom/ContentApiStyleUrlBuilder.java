@@ -21,8 +21,9 @@ public class ContentApiStyleUrlBuilder {
 	private String format = "xml";
 
 	private List<Tag> tags;
+	private List<Tag> contentTypes;
+	private List<String> tagTypes;
 	
-	private List<String> types;
 	private boolean showAll;
 	private boolean showRefinements;
 	private Integer pageSize;
@@ -34,7 +35,7 @@ public class ContentApiStyleUrlBuilder {
 		this.apiHost = apiHost;
 		this.apiKey = apiKey;
 		this.tags = new ArrayList<Tag>();
-		this.types = new ArrayList<String>();
+		this.contentTypes = new ArrayList<Tag>();
 		this.showAll = false;
 		this.showRefinements = false;
 	}
@@ -44,31 +45,12 @@ public class ContentApiStyleUrlBuilder {
 		appendCoreParameters(uri);
 		
 		StringBuilder tagsParameter = new StringBuilder();			
-		if (!tags.isEmpty()) {			
-			boolean isFirst = true;
-			tagsParameter.append("(");
-			for (Tag tag : tags) {
-				if (!isFirst) {
-					tagsParameter.append(OR);
-				}
-				tagsParameter.append(tag.getId());
-				isFirst = false;
-			}
-			tagsParameter.append(")");
+		if (!tags.isEmpty()) {
+			appendTagsToBracketedCommaSeperatedList(tagsParameter, tags);
 			
-			// TODO duplication
-			if (!types.isEmpty()) {
+			if (!contentTypes.isEmpty()) {
 				tagsParameter.append(",");
-				isFirst = true;
-				tagsParameter.append("(");
-				for (String type : types) {
-					if (!isFirst) {
-						tagsParameter.append(OR);
-					}
-					tagsParameter.append("type/" + type);
-					isFirst = false;
-				}
-				tagsParameter.append(")");				
+				appendTagsToBracketedCommaSeperatedList(tagsParameter, contentTypes);		
 			}
 		}
 		
@@ -96,6 +78,19 @@ public class ContentApiStyleUrlBuilder {
 		
 		return prependHost(uri.toString());
 	}
+
+	private void appendTagsToBracketedCommaSeperatedList(StringBuilder tagsParameter, List<Tag> tags) {
+		boolean isFirst = true;
+		tagsParameter.append("(");
+		for (Tag tag : tags) {
+			if (!isFirst) {
+				tagsParameter.append(OR);
+			}
+			tagsParameter.append(tag.getId());
+			isFirst = false;
+		}
+		tagsParameter.append(")");
+	}
 	
 	
 	public String toTagSearchQueryUrl() {		
@@ -108,9 +103,9 @@ public class ContentApiStyleUrlBuilder {
 	
 
 	private void appendAllowedTagTypes(StringBuilder uri) {
-		if (!types.isEmpty()) {
+		if (!contentTypes.isEmpty()) {
 			uri.append("&type=");
-			for (Iterator<String> iterator = types.iterator(); iterator.hasNext();) {
+			for (Iterator<String> iterator = tagTypes.iterator(); iterator.hasNext();) {
 				uri.append(iterator.next());
 				if (iterator.hasNext()) {
 					uri.append(URLEncoder.encode(","));
@@ -138,8 +133,12 @@ public class ContentApiStyleUrlBuilder {
 		tags.add(tag);
 	}
 	
-	public void addType(String type) {
-		types.add(type);
+	public void addContentType(Tag contentTypeTag) {
+		contentTypes.add(contentTypeTag);
+	}
+	
+	public void addTagType(String tagType) {
+		tagTypes.add(tagType);
 	}
 	
 	public void setPageSize(int pageSize) {
