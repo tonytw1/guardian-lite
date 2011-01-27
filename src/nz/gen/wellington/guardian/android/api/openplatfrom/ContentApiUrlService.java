@@ -47,7 +47,7 @@ public class ContentApiUrlService {
 		contentApiUrlBuilder.setSearchTerm(searchTerm);
 		
 		for (String allowedType : allowedTypes) {
-			contentApiUrlBuilder.addType(allowedType);			
+			contentApiUrlBuilder.addTagType(allowedType);			
 		}
 				
 		return contentApiUrlBuilder.toTagSearchQueryUrl();
@@ -91,7 +91,7 @@ public class ContentApiUrlService {
 			contentApiUrlBuilder.setSearchTerm(((SearchResultsArticleSet) articleSet).getSearchTerm());
 		}
 		
-		contentApiUrlBuilder.addType("article");		
+		contentApiUrlBuilder.addTagType("article");		
 		contentApiUrlBuilder.setPageSize(articleSet.getPageSize());		
 		contentApiUrlBuilder.setFormat("xml");
 	}
