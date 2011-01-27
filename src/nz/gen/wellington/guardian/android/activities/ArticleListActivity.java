@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
+import nz.gen.wellington.guardian.android.activities.ui.ArticleListActivityViewPopulator;
 import nz.gen.wellington.guardian.android.activities.ui.ClickerPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;

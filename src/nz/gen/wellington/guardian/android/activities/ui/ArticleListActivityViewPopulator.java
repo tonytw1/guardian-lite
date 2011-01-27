@@ -1,10 +1,8 @@
-package nz.gen.wellington.guardian.android.activities;
+package nz.gen.wellington.guardian.android.activities.ui;
 
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.activities.ui.ArticleClicker;
-import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;

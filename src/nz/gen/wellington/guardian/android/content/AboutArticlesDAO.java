@@ -1,6 +1,6 @@
 package nz.gen.wellington.guardian.android.content;
 
-import nz.gen.wellington.guardian.android.activities.ArticleCallback;
+import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiStyleXmlParser;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;

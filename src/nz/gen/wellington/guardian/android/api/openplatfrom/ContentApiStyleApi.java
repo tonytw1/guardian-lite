@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import nz.gen.wellington.guardian.android.activities.ArticleCallback;
+import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;

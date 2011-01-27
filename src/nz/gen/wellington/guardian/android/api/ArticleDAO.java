@@ -3,7 +3,7 @@ package nz.gen.wellington.guardian.android.api;
 import java.util.Date;
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.activities.ArticleCallback;
+import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
 import nz.gen.wellington.guardian.android.content.AboutArticlesDAO;
 import nz.gen.wellington.guardian.android.content.ArticleSource;

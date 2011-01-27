@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import nz.gen.wellington.guardian.android.activities.ArticleCallback;
+import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;

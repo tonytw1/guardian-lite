@@ -1,4 +1,4 @@
-package nz.gen.wellington.guardian.android.activities;
+package nz.gen.wellington.guardian.android.activities.ui;
 
 import nz.gen.wellington.guardian.android.model.Article;
 
