@@ -126,11 +126,9 @@ public class article extends MenuedActivity implements FontResizingActivity {
         	description.setText(article.getDescription());
         } else {
         	description.setText("Redistribution rights for this article are not available. " +
-        			"While the full content cannot be downloaded, " +
-        			"you should still be able to use the open in browser option to view the original article.");
+        		"The full content cannot be downloaded but you should still be able to use the open in browser option to view the original article.");
         }
         
-    	
     	final String mainImageUrl = article.getMainImageUrl();
 		if (mainImageUrl != null && (imageDAO.isAvailableLocally(mainImageUrl) || imageDownloadDecisionService.isOkToDownloadMainImages())) {	
 			mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl());
