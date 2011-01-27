@@ -36,6 +36,7 @@ public class ContentApiStyleUrlBuilder {
 		this.apiKey = apiKey;
 		this.tags = new ArrayList<Tag>();
 		this.contentTypes = new ArrayList<Tag>();
+		this.tagTypes = new ArrayList<String>();
 		this.showAll = false;
 		this.showRefinements = false;
 	}
