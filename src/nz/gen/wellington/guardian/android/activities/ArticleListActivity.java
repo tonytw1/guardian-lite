@@ -74,6 +74,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		imageDownloadDecisionService = SingletonFactory.getImageDownloadDecisionService(this.getApplicationContext());
+		
 	}
 	
 	
@@ -153,7 +154,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		if (loaded == null || mainPane.getChildCount() == 0) {
 			return true;
 		}
-		Date modtime = SingletonFactory.getArticleDao(this.getApplicationContext()).getModificationTime(getArticleSet());
+		Date modtime = articleDAO.getModificationTime(getArticleSet());
 		return modtime != null && modtime.after(loaded);
 	}
 	
