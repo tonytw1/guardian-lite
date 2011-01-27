@@ -20,7 +20,7 @@ public class SqlLiteFavouritesDAO {
 	
 	private static final String TAG = "SqlLiteFavouritesDAO";
 	private static final int MAX_FAVOURITE_TAGS = 20;
-	private static final int MAX_FAVOURITE_ARTICLES = 5;
+	private static final int MAX_FAVOURITE_ARTICLES = 15;
 
 	private static final String DATABASE_NAME = "guardian-lite.db";
 	private static final int DATABASE_VERSION = 3;
