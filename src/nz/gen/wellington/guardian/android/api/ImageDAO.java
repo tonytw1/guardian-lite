@@ -40,7 +40,7 @@ public class ImageDAO {
 		}
 	}
 	
-	private Bitmap fetchLiveImage(String url) {
+	private synchronized Bitmap fetchLiveImage(String url) {
 		activeHttpFetcher = new HttpFetcher(context);
 		byte[] image = activeHttpFetcher.httpFetchStream(url);
 		activeHttpFetcher = null;
