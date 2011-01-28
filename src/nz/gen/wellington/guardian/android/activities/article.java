@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView.ScaleType;
 
 public class article extends MenuedActivity implements FontResizingActivity {
 		
@@ -193,7 +194,11 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	private void populateMainImage(Bitmap bitmap) {
 		ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
 		imageView.setImageBitmap(bitmap);			
-		imageView.setVisibility(View.VISIBLE);					
+		imageView.setVisibility(View.VISIBLE);
+		final boolean isImageLandScaped = bitmap.getWidth() > bitmap.getHeight();
+		if (isImageLandScaped) {
+			imageView.setScaleType(ScaleType.FIT_XY);
+		}
 		populateCaption(article.getCaption());
 	}
 
