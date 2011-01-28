@@ -10,7 +10,6 @@ import java.util.Map;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.activities.ui.ArticleListActivityViewPopulator;
-import nz.gen.wellington.guardian.android.activities.ui.ClickerPopulatingService;
 import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
@@ -23,12 +22,10 @@ import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -254,7 +251,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	if (article.getSection() != null) {
 			    		if (currentSection == null || !currentSection.getId().equals(article.getSection().getId())) {
 			    			if (showSeperators) {						
-			    				addSeperator(mInflater, mainpane, article.getSection());
+			    				ArticleSet articleSetForSection = articleSetFactory.getArticleSetForSection(article.getSection());
+								articleListActivityViewPopulator.addSeperator(mInflater, mainpane, articleSetForSection, 
+			    						articleDAO.isAvailable(articleSet), colourScheme, baseFontSize);
 			    				first = true;
 			    			}
 			    		}
@@ -359,27 +358,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				}
 			}
 			return refinementArticleSets;
-		}
-		
-		
-		private void addSeperator(LayoutInflater mInflater, LinearLayout mainpane, Section section) {
-			View seperator = mInflater.inflate(R.layout.seperator, null);
-			
-			final String colourForSection = SectionColourMap.getColourForSection(section.getId());
-			if (colourForSection != null) {
-				seperator.setBackgroundColor(Color.parseColor(colourForSection));
-			
-				TextView heading = (TextView) seperator.findViewById(R.id.TagName);
-				heading.setText(section.getName());
-	
-				ArticleSet articleSetForSection = articleSetFactory.getArticleSetForSection(section);
-				boolean contentIsAvailable = articleDAO.isAvailable(articleSetForSection);	    	
-				ClickerPopulatingService.populateTagClicker(articleSetForSection, seperator, contentIsAvailable, colourScheme.getAvailableTagOnSeperator(), colourScheme.getUnavailableTagOnSeperator());
-				mainpane.addView(seperator);
-				
-			} else {
-				Log.w(TAG, "Could not find section colour for section: " + section.getId());
-			}
 		}
 		
 	}

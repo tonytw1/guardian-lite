@@ -8,8 +8,12 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
+import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.SectionArticleSet;
+import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,6 +136,22 @@ public class ArticleListActivityViewPopulator {
 		
 		tagListPopulatingService.populateTags(inflater, true, tagGroup, refinementArticleSets, colourScheme);
 		mainpane.addView(tagGroup);
+	}
+	
+	
+	
+	public void addSeperator(LayoutInflater mInflater, LinearLayout mainpane, ArticleSet articleSetForSection, boolean contentIsAvailable, ColourScheme colourScheme, int fontSize) {
+		View seperator = mInflater.inflate(R.layout.seperator, null);
+			
+		final Section section = ((SectionArticleSet) articleSetForSection).getSection();
+		seperator.setBackgroundColor(Color.parseColor(SectionColourMap.getColourForSection(section.getId())));		
+
+		TextView heading = (TextView) seperator.findViewById(R.id.TagName);
+		heading.setText(section.getName());
+		heading.setTextSize(TypedValue.COMPLEX_UNIT_PT, fontSize);
+			
+		ClickerPopulatingService.populateTagClicker(articleSetForSection, seperator, contentIsAvailable, colourScheme.getAvailableTagOnSeperator(), colourScheme.getUnavailableTagOnSeperator());
+		mainpane.addView(seperator);		
 	}
 	
 }
