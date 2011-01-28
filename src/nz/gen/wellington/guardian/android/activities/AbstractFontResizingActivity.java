@@ -14,14 +14,16 @@ public abstract class AbstractFontResizingActivity extends Activity implements F
 
 	protected ColourScheme colourScheme;
 	protected int baseFontSize;
+	protected PreferencesDAO preferencesDAO;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		populatePreferences();
 	}
-
-
+	
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -52,7 +54,6 @@ public abstract class AbstractFontResizingActivity extends Activity implements F
 	}
 
 	private void populatePreferences() {
-		PreferencesDAO preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
 		colourScheme = preferencesDAO.getColourScheme();
 		baseFontSize = preferencesDAO.getBaseFontSize();
 	}
