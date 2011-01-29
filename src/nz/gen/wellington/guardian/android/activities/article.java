@@ -1,6 +1,8 @@
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.R;
@@ -14,18 +16,23 @@ import nz.gen.wellington.guardian.android.model.MediaElement;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.utils.ShareTextComposingService;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,6 +41,8 @@ import android.widget.ImageView.ScaleType;
 
 public class article extends MenuedActivity implements FontResizingActivity {
 		
+	private static final String TAG = "article";
+	
 	private static final String REMOVE_SAVED_ARTICLE = "Remove saved article";
 	private static final String SAVE_ARTICLE = "Save article";
 	
@@ -44,6 +53,7 @@ public class article extends MenuedActivity implements FontResizingActivity {
     private Article article;
        
 	private MainImageUpdateHandler mainImageUpdateHandler;
+	private GalleryImageUpdateHandler galleryImageUpdateHandler;
     private MainImageLoader mainImageLoader;
 
     private Map<String, Bitmap> images;
@@ -51,6 +61,8 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	private String shareText;
 	private TagListPopulatingService tagListPopulatingService;
 	private ImageDownloadDecisionService imageDownloadDecisionService;
+	private ImageAdapter imageAdapter;
+	private GridView thumbnails;
         
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,22 +77,24 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		
 		images = new HashMap<String, Bitmap>();
     	mainImageUpdateHandler = new MainImageUpdateHandler();
-    	
+    	galleryImageUpdateHandler = new GalleryImageUpdateHandler();
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.article);
 		
 		this.article = (Article) this.getIntent().getExtras().get("article");		
 		if (article != null) {
-			populateArticle(article, colourScheme.getBodytext(), colourScheme.getHeadline());			
+			populateContent(article, colourScheme.getBodytext(), colourScheme.getHeadline());			
 		} else {
         	Toast.makeText(this, "Could not load article", Toast.LENGTH_SHORT).show();
-		}
+		}		
 	}
 	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		setFontSize();	
+		//setFontSize();	
 	}
 	
 	@Override
@@ -90,7 +104,17 @@ public class article extends MenuedActivity implements FontResizingActivity {
 	}
 
 	
-	private void populateArticle(Article article, int bodytextColour, int headlineColour) {		
+	private void populateContent(Article article, int bodytextColour, int headlineColour) {
+	    if (article.isGallery()) {        	
+        	populateGalleryView(article);
+        	return;
+        }
+	    
+		populateArticleView(article, bodytextColour, headlineColour);
+	}
+
+
+	private void populateArticleView(Article article, int bodytextColour, int headlineColour) {
 		if (article.getSection() != null) {
 			setHeading(article.getSection().getName());
 			setHeadingColour(article.getSection().getColour());
@@ -128,49 +152,41 @@ public class article extends MenuedActivity implements FontResizingActivity {
         	standfirst.setVisibility(View.GONE);
         }
         
-        if (!article.isGallery()) {
-        	
-        	if (article.isRedistributionAllowed()) {
-        		description.setText(article.getDescription());
-        	} else {
-        		description.setText("Redistribution rights for this article are not available. " +
-        		"The full content cannot be downloaded but you should still be able to use the open in browser option to view the original article.");
-        	}
-        	
-        	final String mainImageUrl = article.getMainImageUrl();
-        	if (mainImageUrl != null && (imageDAO.isAvailableLocally(mainImageUrl) || imageDownloadDecisionService.isOkToDownloadMainImages())) {	
-        		mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl());
-        		Thread loader = new Thread(mainImageLoader);
-        		loader.start();			
-        	}
-        	
-        } else {        	
-			populateGalleryMediaElements(article);
-        }
-		
-		final boolean isTagged = !article.getAuthors().isEmpty() || !article.getKeywords().isEmpty();
+		description.setVisibility(View.VISIBLE);
+		if (article.isRedistributionAllowed()) {
+			description.setText(article.getDescription());
+		} else {
+			description.setText("Redistribution rights for this article are not available. "
+					+ "The full content cannot be downloaded but you should still be able to use the open in browser option to view the original article.");
+		}
+
+		final String mainImageUrl = article.getMainImageUrl();
+		if (mainImageUrl != null && (imageDAO.isAvailableLocally(mainImageUrl) || imageDownloadDecisionService.isOkToDownloadMainImages())) {
+			mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl());
+			Thread loader = new Thread(mainImageLoader);
+			loader.start();
+		}
+
+		final boolean isTagged = !article.getAuthors().isEmpty()
+				|| !article.getKeywords().isEmpty();
 		if (isTagged) {
-			final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
+			final boolean connectionAvailable = networkStatusService
+					.isConnectionAvailable();
 			populateTags(article, connectionAvailable);
 		}
 	}
 
-	private void populateGalleryMediaElements(Article article) {
-		if (!article.getMediaElements().isEmpty()) {
-			for (MediaElement mediaElement : article.getMediaElements()) {
-				
-				if (mediaElement != null && mediaElement.isPicture() && mediaElement.getThumbnail() != null) {
-					ImageView imageView = new ImageView(this.getApplicationContext());
-					Bitmap image = imageDAO.getImage(mediaElement.getThumbnail());
-					imageView.setImageBitmap(image);
-					LinearLayout authorList = (LinearLayout) findViewById(R.id.AuthorList);
-					authorList.addView(imageView);
-					
-					TextView caption = new TextView(this.getApplicationContext());
-					caption.setText(mediaElement.getCaption());
-					authorList.addView(caption);
-				}
-			}
+	private void populateGalleryView(Article article) {
+		setContentView(R.layout.gallery);
+
+		thumbnails = (GridView) findViewById(R.id.GalleryThumbnails);
+		imageAdapter = new ImageAdapter();
+		thumbnails.setAdapter(imageAdapter);
+		
+		if (!article.getMediaElements().isEmpty()) {			
+			GalleryImageLoader galleryImageLoader = new GalleryImageLoader(imageDAO, article.getMediaElements());
+			Thread loader = new Thread(galleryImageLoader);
+			loader.start();
 		}
 	}
 
@@ -344,10 +360,62 @@ public class article extends MenuedActivity implements FontResizingActivity {
 			msg.what = MainImageUpdateHandler.MAIN_IMAGE_AVAILABLE;
 			msg.getData().putString("mainImageUrl", mainImageUrl);
 			mainImageUpdateHandler.sendMessage(msg);
+		}		
+	}
+	
+	class GalleryImageLoader implements Runnable {
+
+		private static final String TAG = "GalleryImageLoader"
+			;
+		private ImageDAO imageDAO;
+		private List<MediaElement> mediaElements;
+		
+		public GalleryImageLoader(ImageDAO imageDAO, List<MediaElement> mediaElements) {
+			this.imageDAO = imageDAO;
+			this.mediaElements = mediaElements;
+		}
+		
+		@Override
+		public void run() {
+			Log.i(TAG, "Running gallery image loader with " + mediaElements + " media elements");
+			for (MediaElement mediaElement : mediaElements) {
+				
+				if (mediaElement != null && mediaElement.isPicture() && mediaElement.getThumbnail() != null) {
+					final String imageUrl = mediaElement.getThumbnail();
+					Bitmap image = imageDAO.getImage(imageUrl);
+					if (image != null) {
+						images.put(imageUrl, image);
+						sendGalleryImageAvailableMessage(imageUrl);
+					}					
+				}
+			}
+		}	
+
+		private void sendGalleryImageAvailableMessage(String imageUrl) {
+			Message msg = new Message();
+			msg.what = GalleryImageUpdateHandler.GALLERY_IMAGE_AVAILABLE;
+			msg.getData().putString("imageUrl", imageUrl);
+			galleryImageUpdateHandler.sendMessage(msg);
 		}
 		
 	}
+	
+	
+	class GalleryImageUpdateHandler extends Handler {
 		
+		public static final int GALLERY_IMAGE_AVAILABLE = 1;
+
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			
+			switch (msg.what) {	   
+			    case GALLERY_IMAGE_AVAILABLE:
+			    final String mainImageUrl = msg.getData().getString("imageUrl");
+			    populateGalleryImage(mainImageUrl);
+			}
+		}
+	}
+	
 	
 	class MainImageUpdateHandler extends Handler {
 		
@@ -361,6 +429,62 @@ public class article extends MenuedActivity implements FontResizingActivity {
 			    final String mainImageUrl = msg.getData().getString("mainImageUrl");
 			    populateMainImage(mainImageUrl);
 			}
+		}
+	}
+
+
+	public void populateGalleryImage(String imageUrl) {
+		ImageView imageView = new ImageView(this.getApplicationContext());
+		Bitmap image = images.get(imageUrl);
+		imageView.setImageBitmap(image);
+		imageView.setPadding(5, 5, 5, 5);
+		//imageView.setLayoutParams(new GridView.LayoutParams(50, 50));
+
+		
+		Log.i(TAG, "Adding view to gridview");
+		imageAdapter.add(imageView);
+		thumbnails.invalidateViews();
+		
+		// TODO
+		//TextView caption = new TextView(this.getApplicationContext());
+		//caption.setText(mediaElement.getCaption());
+		//authorList.addView(caption);		
+	}
+	
+	
+	
+	
+	public class ImageAdapter extends BaseAdapter {
+
+		private List<View> views;
+
+		public ImageAdapter() {
+			views = new ArrayList<View>();
+		}
+
+		public int getCount() {
+			return views.size();
+		}
+
+		public Object getItem(int position) {
+			return null;
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if (convertView == null) {  
+				return views.get(position);
+			} else {
+				convertView = views.get(position);
+				return convertView;
+			}
+		}
+
+		public void add(View view) {
+			views.add(view);
 		}
 	}
 			

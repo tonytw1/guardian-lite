@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.util.Log;
-
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 
 public class Article implements Serializable {

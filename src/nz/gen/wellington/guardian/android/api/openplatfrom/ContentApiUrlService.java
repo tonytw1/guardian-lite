@@ -11,7 +11,7 @@ import nz.gen.wellington.guardian.android.model.TagArticleSet;
 
 public class ContentApiUrlService {
 	
-	private static Tag contentType = new Tag("Article content type", "type/article", null);
+	private static Tag contentType = new Tag("Article content type", "type/gallery", null);
 
 	private String apiHost;
 	private String apiKey;
