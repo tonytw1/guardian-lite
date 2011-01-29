@@ -55,6 +55,9 @@ public class ContentApiStyleUrlBuilder {
 				tagsParameter.append(",");
 				appendTagsToBracketedCommaSeperatedList(tagsParameter, contentTypes);		
 			}
+			
+		} else if (!contentTypes.isEmpty()) {
+			appendTagsToBracketedCommaSeperatedList(tagsParameter, contentTypes);			
 		}
 		
 		if (tagsParameter.length() > 0) {
