@@ -136,10 +136,7 @@ public class ContentResultsHandler extends HandlerBase {
 		}
 
 		if (name.equals("asset")) {
-			currentMediaElement = new MediaElement(attributes.getValue("type"), attributes.getValue("file"));
-			if (currentArticle.getMainImageUrl() == null && currentMediaElement.isPicture()) {
-				currentArticle.setMainImageUrl(currentMediaElement.getFile());
-			}
+			currentMediaElement = new MediaElement(attributes.getValue("type"), attributes.getValue("file"));			
 		}
 	}
 
@@ -174,11 +171,7 @@ public class ContentResultsHandler extends HandlerBase {
 				currentArticle.setRedistributionAllowed(!NO_REDISTRIBUTION_RIGHTS_BODY_TEXT.equals(rawBodyText));
 				currentArticle.setDescription(htmlCleaner.stripHtml(rawBodyText));
 			}
-
-			if (currentField.equals("caption")) {
-				currentArticle.setCaption(htmlCleaner.stripHtml(currentElementContents.toString()));
-			}
-
+			
 			currentField = null;
 			currentElementContents = new StringBuilder();
 		}
@@ -190,6 +183,10 @@ public class ContentResultsHandler extends HandlerBase {
 			
 			if (currentField != null && currentField.equals("caption")) {
 				currentMediaElement.setCaption(currentElementContents.toString());
+			}
+			
+			if (currentField != null && currentField.equals("width")) {
+				currentMediaElement.setWidth(Integer.parseInt(currentElementContents.toString()));
 			}
 			
 			currentField = null;

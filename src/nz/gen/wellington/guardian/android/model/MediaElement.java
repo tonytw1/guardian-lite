@@ -4,12 +4,13 @@ import java.io.Serializable;
 
 public class MediaElement implements Serializable {
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
 	private String type;
 	private String file;
 	private String thumbnail;
 	private String caption;
+	private int width;
 
 	public MediaElement(String type, String file) {
 		this.type = type;
@@ -21,6 +22,7 @@ public class MediaElement implements Serializable {
 		this.file = mediaElement.getFile();
 		this.thumbnail = mediaElement.getThumbnail();
 		this.caption = mediaElement.getCaption();
+		this.width = mediaElement.getWidth();
 	}
 
 	public boolean isPicture() {
@@ -49,6 +51,14 @@ public class MediaElement implements Serializable {
 
 	public void setCaption(String caption) {
 		this.caption = caption;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
 	}
 	
 }

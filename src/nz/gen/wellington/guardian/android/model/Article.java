@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.util.Log;
+
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 
 public class Article implements Serializable {
+
+	private static final int ARTICLE_MAIN_PICTURE_WIDTH = 460;
 
 	private static final long serialVersionUID = 8L;
 	
@@ -17,15 +21,13 @@ public class Article implements Serializable {
 	private Date pubDate;
 	private String standfirst;
 	private String description;
+	private String thumbnail;
 	
 	private Section section;
 	private List<Tag> authors;
 	private List<Tag> keywords;
 	private String webUrl;
 	private String shortUrl;
-	private String thumbnailUrl;
-	private String mainImageUrl;
-	private String caption;
 	
 	private boolean isRedistributionAllowed;
 	
@@ -96,29 +98,19 @@ public class Article implements Serializable {
 	public void addKeyword(Tag keyword) {
 		keywords.add(keyword);
 	}
-
-	public String getThumbnailUrl() {
-		return thumbnailUrl;
-	}
-
-	public void setThumbnailUrl(String thumbnailUrl) {
-		this.thumbnailUrl = thumbnailUrl;
-	}
-
+	
 	public String getMainImageUrl() {
-		return mainImageUrl;
+		if (getMainPictureMediaElement() != null) {
+			return getMainPictureMediaElement().getFile();
+		}
+		return null;
 	}
 	
 	public String getCaption() {
-		return caption;
-	}
-
-	public void setCaption(String caption) {
-		this.caption = caption;
-	}
-
-	public void setMainImageUrl(String mainImageUrl) {
-		this.mainImageUrl = mainImageUrl;
+		if (getMainPictureMediaElement() != null) {
+			return getMainPictureMediaElement().getCaption();
+		}
+		return null;
 	}
 
 	public String getPubDateString() {
@@ -206,7 +198,24 @@ public class Article implements Serializable {
 	}
 
 	public boolean isGallery() {
-		return webUrl.contains("gallery");	// TODO
+		return webUrl != null && webUrl.contains("gallery");	// TODO
+	}
+
+	public String getThumbnailUrl() {	// TODO rename to thumbnail to match content api
+		return thumbnail;
+	}
+
+	public void setThumbnailUrl(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+	
+	private MediaElement getMainPictureMediaElement() {
+		for (MediaElement mediaElement : mediaElements) {
+			if (mediaElement.getType().equals("picture") && mediaElement.getWidth() == ARTICLE_MAIN_PICTURE_WIDTH) {
+				return mediaElement;
+			}
+		}
+		return null;
 	}
 	
 }
