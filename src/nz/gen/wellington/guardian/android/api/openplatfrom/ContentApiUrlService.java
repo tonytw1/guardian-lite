@@ -11,7 +11,8 @@ import nz.gen.wellington.guardian.android.model.TagArticleSet;
 
 public class ContentApiUrlService {
 	
-	private static Tag contentType = new Tag("Article content type", "type/gallery", null);
+	private static Tag articleContentType = new Tag("Article content type", "type/article", null);
+	private static Tag galleryContentType = new Tag("Gallery content type", "type/gallery", null);
 
 	private String apiHost;
 	private String apiKey;
@@ -94,7 +95,9 @@ public class ContentApiUrlService {
 			contentApiUrlBuilder.setSearchTerm(((SearchResultsArticleSet) articleSet).getSearchTerm());
 		}
 		
-		contentApiUrlBuilder.addContentType(contentType);
+		contentApiUrlBuilder.addContentType(articleContentType);
+		contentApiUrlBuilder.addContentType(galleryContentType);
+		
 		contentApiUrlBuilder.setPageSize(articleSet.getPageSize());
 		contentApiUrlBuilder.setShowMedia(true);	// TODO
 		contentApiUrlBuilder.setFormat("xml");
