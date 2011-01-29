@@ -29,10 +29,12 @@ public class Article implements Serializable {
 	
 	private boolean isRedistributionAllowed;
 	
-	
+	private List<MediaElement> mediaElements;
+ 	
 	public Article() {
 		authors = new ArrayList<Tag>();
 		keywords = new ArrayList<Tag>();
+		mediaElements = new ArrayList<MediaElement>();
 	}
 	
 	public String getId() {
@@ -169,6 +171,14 @@ public class Article implements Serializable {
 	public String getTrailImageCallBackLabelForArticle() {
 		return id != null ? id : title;
 	}
+	
+	public void addMediaElement(MediaElement mediaElement) {
+		mediaElements.add(mediaElement);
+	}
+	
+	public List<MediaElement> getMediaElements() {
+		return mediaElements;
+	}
 
 	@Override
 	public int hashCode() {
@@ -193,6 +203,10 @@ public class Article implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public boolean isGallery() {
+		return webUrl.contains("gallery");	// TODO
 	}
 	
 }

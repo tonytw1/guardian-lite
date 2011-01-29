@@ -26,6 +26,7 @@ public class ContentApiStyleUrlBuilder {
 	
 	private boolean showAll;
 	private boolean showRefinements;
+	private boolean showMedia;
 	private Integer pageSize;
 	private String searchTerm;
 	private String fromDate;
@@ -39,6 +40,7 @@ public class ContentApiStyleUrlBuilder {
 		this.tagTypes = new ArrayList<String>();
 		this.showAll = false;
 		this.showRefinements = false;
+		this.showMedia = false;
 	}
 	
 	public String toSearchQueryUrl() {
@@ -154,6 +156,10 @@ public class ContentApiStyleUrlBuilder {
 		this.showRefinements = showRefinements;
 	}
 	
+	public void setShowMedia(boolean showMedia) {
+		this.showMedia = showMedia;
+	}
+	
 	public void setFormat(String format) {
 		this.format = format;
 	}
@@ -174,6 +180,10 @@ public class ContentApiStyleUrlBuilder {
 		
 		if (showRefinements) {
 			url.append("&show-refinements=all");
+		}
+		
+		if (showMedia) {
+			url.append("&show-media=all");
 		}
 	}
 

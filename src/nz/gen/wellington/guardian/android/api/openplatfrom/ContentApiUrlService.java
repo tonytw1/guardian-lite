@@ -6,10 +6,13 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
+import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 
 public class ContentApiUrlService {
 	
+	private static Tag contentType = new Tag("Gallery", "type/gallery", null);
+
 	private String apiHost;
 	private String apiKey;
 	
@@ -91,8 +94,9 @@ public class ContentApiUrlService {
 			contentApiUrlBuilder.setSearchTerm(((SearchResultsArticleSet) articleSet).getSearchTerm());
 		}
 		
-		contentApiUrlBuilder.addTagType("article");		
-		contentApiUrlBuilder.setPageSize(articleSet.getPageSize());		
+		contentApiUrlBuilder.addContentType(contentType);
+		contentApiUrlBuilder.setPageSize(articleSet.getPageSize());
+		contentApiUrlBuilder.setShowMedia(true);	// TODO
 		contentApiUrlBuilder.setFormat("xml");
 	}
 	

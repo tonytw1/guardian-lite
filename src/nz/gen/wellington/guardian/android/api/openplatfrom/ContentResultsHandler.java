@@ -14,6 +14,7 @@ import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
+import nz.gen.wellington.guardian.android.model.MediaElement;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
@@ -35,6 +36,7 @@ public class ContentResultsHandler extends HandlerBase {
 	public String checksum;
 	public String description;
 	public StringBuilder currentElementContents;
+	private MediaElement currentMediaElement;
 	public Article currentArticle;
 	public String currentField;
 	public String currentRefinementGroupType;
@@ -44,7 +46,7 @@ public class ContentResultsHandler extends HandlerBase {
 
 	private boolean running = true;
 	private Context context;
-
+	
 
 	public ContentResultsHandler(Context context, HtmlCleaner htmlCleaner) {
 		this.htmlCleaner = htmlCleaner;
@@ -134,8 +136,9 @@ public class ContentResultsHandler extends HandlerBase {
 		}
 
 		if (name.equals("asset")) {
-			if (currentArticle.getMainImageUrl() == null && attributes.getValue("type").equals("picture")) {
-				currentArticle.setMainImageUrl(attributes.getValue("file"));
+			currentMediaElement = new MediaElement(attributes.getValue("type"), attributes.getValue("file"));
+			if (currentArticle.getMainImageUrl() == null && currentMediaElement.isPicture()) {
+				currentArticle.setMainImageUrl(currentMediaElement.getFile());
 			}
 		}
 	}
@@ -143,8 +146,8 @@ public class ContentResultsHandler extends HandlerBase {
 	@Override
 	public void endElement(String name) throws SAXException {
 		super.endElement(name);
-
-		if (currentField != null) {
+		
+		if (currentField != null && currentMediaElement == null) {
 
 			if (currentField.equals("headline")) {
 				currentArticle.setTitle(htmlCleaner.stripHtml(currentElementContents.toString()));
@@ -162,7 +165,7 @@ public class ContentResultsHandler extends HandlerBase {
 				currentArticle.setThumbnailUrl(currentElementContents.toString());
 			}
 			
-			if (currentField.equals("short-url")) {
+			if (currentField.equals("short-url")) {			
 				currentArticle.setShortUrl(currentElementContents.toString());
 			}
 			
@@ -178,6 +181,24 @@ public class ContentResultsHandler extends HandlerBase {
 
 			currentField = null;
 			currentElementContents = new StringBuilder();
+		}
+		
+		if (currentMediaElement != null) {
+			if (currentField != null && currentField.equals("thumbnail")) {
+				currentMediaElement.setThumbnail(currentElementContents.toString());
+			}
+			
+			if (currentField != null && currentField.equals("caption")) {
+				currentMediaElement.setCaption(currentElementContents.toString());
+			}
+			
+			currentField = null;
+			currentElementContents = new StringBuilder();
+		}
+				
+		if (name.equals("asset")) {
+			currentArticle.addMediaElement(new MediaElement(currentMediaElement));
+			currentMediaElement = null;
 		}
 
 		if (name.equals("content")) {

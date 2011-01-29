@@ -10,6 +10,7 @@ import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.MediaElement;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.utils.ShareTextComposingService;
@@ -123,25 +124,49 @@ public class article extends MenuedActivity implements FontResizingActivity {
         
         standfirst.setText(article.getStandfirst());
         
-        if (article.isRedistributionAllowed()) {
-        	description.setText(article.getDescription());
-        } else {
-        	description.setText("Redistribution rights for this article are not available. " +
+        if (!article.isGallery()) {
+        	
+        	if (article.isRedistributionAllowed()) {
+        		description.setText(article.getDescription());
+        	} else {
+        		description.setText("Redistribution rights for this article are not available. " +
         		"The full content cannot be downloaded but you should still be able to use the open in browser option to view the original article.");
+        	}
+        	
+        	final String mainImageUrl = article.getMainImageUrl();
+        	if (mainImageUrl != null && (imageDAO.isAvailableLocally(mainImageUrl) || imageDownloadDecisionService.isOkToDownloadMainImages())) {	
+        		mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl());
+        		Thread loader = new Thread(mainImageLoader);
+        		loader.start();			
+        	}
+        	
+        } else {        	
+			populateGalleryMediaElements(article);
         }
-        
-    	final String mainImageUrl = article.getMainImageUrl();
-		if (mainImageUrl != null && (imageDAO.isAvailableLocally(mainImageUrl) || imageDownloadDecisionService.isOkToDownloadMainImages())) {	
-			mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl());
-			Thread loader = new Thread(mainImageLoader);
-			loader.start();
-			
-		}
 		
 		final boolean isTagged = !article.getAuthors().isEmpty() || !article.getKeywords().isEmpty();
 		if (isTagged) {
 			final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
 			populateTags(article, connectionAvailable);
+		}
+	}
+
+	private void populateGalleryMediaElements(Article article) {
+		if (!article.getMediaElements().isEmpty()) {
+			for (MediaElement mediaElement : article.getMediaElements()) {
+				
+				if (mediaElement != null && mediaElement.isPicture() && mediaElement.getThumbnail() != null) {
+					ImageView imageView = new ImageView(this.getApplicationContext());
+					Bitmap image = imageDAO.getImage(mediaElement.getThumbnail());
+					imageView.setImageBitmap(image);
+					LinearLayout authorList = (LinearLayout) findViewById(R.id.AuthorList);
+					authorList.addView(imageView);
+					
+					TextView caption = new TextView(this.getApplicationContext());
+					caption.setText(mediaElement.getCaption());
+					authorList.addView(caption);
+				}
+			}
 		}
 	}
 
