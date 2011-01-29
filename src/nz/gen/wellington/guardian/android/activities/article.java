@@ -16,7 +16,6 @@ import nz.gen.wellington.guardian.android.model.MediaElement;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.utils.ShareTextComposingService;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -105,53 +104,64 @@ public class article extends MenuedActivity implements FontResizingActivity {
 
 	
 	private void populateContent(Article article, int bodytextColour, int headlineColour) {
-	    if (article.isGallery()) {        	
-        	populateGalleryView(article);
-        	return;
-        }
-	    
-		populateArticleView(article, bodytextColour, headlineColour);
-	}
-
-
-	private void populateArticleView(Article article, int bodytextColour, int headlineColour) {
+		if (article.isGallery()) {
+			setContentView(R.layout.gallery);
+		}
+		
 		if (article.getSection() != null) {
 			setHeading(article.getSection().getName());
 			setHeadingColour(article.getSection().getColour());
 		}
 		
-        TextView headline = (TextView) findViewById(R.id.Headline);
-        TextView pubDate = (TextView) findViewById(R.id.PubDate);
-        TextView byline = (TextView) findViewById(R.id.Byline);
-        TextView standfirst = (TextView) findViewById(R.id.Standfirst);
-        TextView description = (TextView) findViewById(R.id.Description);
-        
+		TextView headline = (TextView) findViewById(R.id.Headline);
+		TextView pubDate = (TextView) findViewById(R.id.PubDate);
+		TextView byline = (TextView) findViewById(R.id.Byline);
+		TextView standfirst = (TextView) findViewById(R.id.Standfirst);
+		
 		headline.setTextColor(headlineColour);
-        pubDate.setTextColor(bodytextColour);        
-        byline.setTextColor(bodytextColour);
-        standfirst.setTextColor(bodytextColour);
-        
-        description.setTextColor(bodytextColour);
-        
-        setFontSize();
-        
-        headline.setText(article.getTitle());
-        if (article.getPubDate() != null) {
-        	pubDate.setText(article.getPubDateString());
-        }
-        
-        if (article.getByline() != null && !article.getByline().trim().equals("")) {
-        	byline.setText(article.getByline());
+		pubDate.setTextColor(bodytextColour);        
+		byline.setTextColor(bodytextColour);
+		standfirst.setTextColor(bodytextColour);
+				
+		headline.setText(article.getTitle());
+		if (article.getPubDate() != null) {
+			pubDate.setText(article.getPubDateString());
+		}
+		
+		if (article.getByline() != null && !article.getByline().trim().equals("")) {
+			byline.setText(article.getByline());
+		} else {
+			byline.setVisibility(View.GONE);
+		}
+		
+		if (article.getStandfirst() != null && !article.getStandfirst().trim().equals("")) { 	
+			standfirst.setText(article.getStandfirst());
+		} else {
+			standfirst.setVisibility(View.GONE);
+		}
+		
+	    if (article.isGallery()) {        	
+        	populateGalleryView(article);        	
         } else {
-        	byline.setVisibility(View.GONE);
+        	populateArticleView(article, bodytextColour, headlineColour);
         }
-        
-        if (article.getStandfirst() != null && !article.getStandfirst().trim().equals("")) { 	
-        	standfirst.setText(article.getStandfirst());
-        } else {
-        	standfirst.setVisibility(View.GONE);
-        }
-        
+	    
+		final boolean isTagged = !article.getAuthors().isEmpty()
+		|| !article.getKeywords().isEmpty();
+		if (isTagged) {
+			final boolean connectionAvailable = networkStatusService
+			.isConnectionAvailable();
+			populateTags(article, connectionAvailable);
+		}
+	}
+
+
+	private void populateArticleView(Article article, int bodytextColour, int headlineColour) {
+		TextView description = (TextView) findViewById(R.id.Description);
+		        
+		setFontSize();
+
+        description.setTextColor(bodytextColour);        
 		description.setVisibility(View.VISIBLE);
 		if (article.isRedistributionAllowed()) {
 			description.setText(article.getDescription());
@@ -167,21 +177,14 @@ public class article extends MenuedActivity implements FontResizingActivity {
 			loader.start();
 		}
 
-		final boolean isTagged = !article.getAuthors().isEmpty()
-				|| !article.getKeywords().isEmpty();
-		if (isTagged) {
-			final boolean connectionAvailable = networkStatusService
-					.isConnectionAvailable();
-			populateTags(article, connectionAvailable);
-		}
 	}
 
 	private void populateGalleryView(Article article) {
-		setContentView(R.layout.gallery);
-
 		thumbnails = (GridView) findViewById(R.id.GalleryThumbnails);
 		imageAdapter = new ImageAdapter();
 		thumbnails.setAdapter(imageAdapter);
+		
+		setFontSize();
 		
 		if (!article.getMediaElements().isEmpty()) {			
 			GalleryImageLoader galleryImageLoader = new GalleryImageLoader(imageDAO, article.getMediaElements());
@@ -207,7 +210,10 @@ public class article extends MenuedActivity implements FontResizingActivity {
 		byline.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
 		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize - 2);
         standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
-        description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
+        
+        if (description != null) {
+        	description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
+        }
         
 		caption.setTextColor(colourScheme.getBodytext());
 		
