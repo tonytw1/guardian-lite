@@ -122,7 +122,11 @@ public class article extends MenuedActivity implements FontResizingActivity {
         	byline.setVisibility(View.GONE);
         }
         
-        standfirst.setText(article.getStandfirst());
+        if (article.getStandfirst() != null && !article.getStandfirst().trim().equals("")) { 	
+        	standfirst.setText(article.getStandfirst());
+        } else {
+        	standfirst.setVisibility(View.GONE);
+        }
         
         if (!article.isGallery()) {
         	
