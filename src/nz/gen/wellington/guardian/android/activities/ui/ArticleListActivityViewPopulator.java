@@ -71,7 +71,7 @@ public class ArticleListActivityViewPopulator {
 				populateTrailImage(trailImageUrl, view);
 		}
 		
-		view.setOnClickListener(new ArticleClicker(article));
+		view.setOnClickListener(new ContentClicker(article));
 		return view;
 	}
 	
