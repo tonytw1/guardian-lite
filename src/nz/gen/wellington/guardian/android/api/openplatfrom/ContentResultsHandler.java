@@ -229,10 +229,10 @@ public class ContentResultsHandler extends HandlerBase {
 	
 		
 	private void processRefinement(AttributeList attributes, SectionDAO sectionDAO) {		
-		List<String> tagRefinementTypes = Arrays.asList("blog", "contributor", "keyword", "series");
-		boolean isTagRefinement = tagRefinementTypes.contains(currentRefinementGroupType);
-		
 		final String displayName = attributes.getValue("display-name");
+		
+		List<String> tagRefinementTypes = Arrays.asList("blog", "contributor", "keyword", "series");		
+		boolean isTagRefinement = tagRefinementTypes.contains(currentRefinementGroupType);
 		if (isTagRefinement) {
 			final String tagId = attributes.getValue("id");
 			final String sectionId = tagId.split("/")[0];
@@ -246,6 +246,15 @@ public class ContentResultsHandler extends HandlerBase {
 			} else {
 				refinementGroup.add(articleSetFactory.getRefinementForSection(refinementTag.getSection()));
 			}
+		}
+		
+		boolean isContentTypeRefinement = currentRefinementGroupType.equals("type");
+		if (isContentTypeRefinement) {
+			final String tagId = attributes.getValue("id");
+			Log.d(TAG, "Adding content type: " + tagId);
+			List<Refinement> refinementGroup = getRefinementGroup();
+			final Tag refinementTag = new Tag(displayName, tagId, null);
+			refinementGroup.add(articleSetFactory.getRefinementForTag(refinementTag));			
 		}
 		
 		boolean isSectionRefinement = currentRefinementGroupType.equals("section");

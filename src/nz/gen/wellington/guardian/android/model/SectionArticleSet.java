@@ -8,7 +8,7 @@ public class SectionArticleSet extends AbstractArticleSet implements ArticleSet,
 	
 	private static final long serialVersionUID = 1L;
 
-	protected String[] permittedRefinements = {"blog", "keyword", "contributor", "date"};
+	protected String[] permittedRefinements = {"blog", "keyword", "contributor", "date", "type"};
 	private Section section;
 
 	public SectionArticleSet(Section section, int pageSize) {

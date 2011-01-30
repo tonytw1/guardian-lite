@@ -24,8 +24,8 @@ public class gallery extends ContentRenderingActivity {
 
 	private GalleryImageUpdateHandler galleryImageUpdateHandler;
     private ImageAdapter imageAdapter;
-
-
+	private GridView thumbnails;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
