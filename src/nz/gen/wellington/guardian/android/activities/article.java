@@ -83,17 +83,27 @@ public class article extends ContentRenderingActivity {
 		}
 	}
 
+	
 	private void populateMainImage(Bitmap bitmap) {
 		ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
-		imageView.setImageBitmap(bitmap);			
 		imageView.setVisibility(View.VISIBLE);
-		final boolean isImageLandScaped = bitmap.getWidth() > bitmap.getHeight();
-		if (isImageLandScaped) {
-			imageView.setScaleType(ScaleType.FIT_XY);
+		imageView.setScaleType(ScaleType.FIT_START);
+
+		final boolean isImageThinnerThanView = bitmap.getWidth() < imageView.getWidth();
+		if (isImageThinnerThanView) {
+			final boolean isImageLandScaped = bitmap.getWidth() > bitmap.getHeight();
+			if (isImageLandScaped) {
+				int scaledWidth = imageView.getWidth();
+				float aspectRatio = new Float(bitmap.getWidth()) / new Float(bitmap.getHeight());
+				int scaledHeight = Math.round(scaledWidth / aspectRatio);
+				bitmap = Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, true);
+			}
 		}
+		
+		imageView.setImageBitmap(bitmap);					
 		populateCaption(article.getCaption());
 	}
-
+	
 	private void populateCaption(String caption) {
 		if (caption != null && !caption.trim().equals("")) {
 			TextView captionView = (TextView) findViewById(R.id.Caption);
