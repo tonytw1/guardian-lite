@@ -23,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,8 +44,7 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
     private String shareText;
     protected TagListPopulatingService tagListPopulatingService;
     protected ImageDownloadDecisionService imageDownloadDecisionService;
-    protected GridView thumbnails;
-        
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -143,8 +141,7 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 		
 		final boolean isTagged = !article.getAuthors().isEmpty() || !article.getKeywords().isEmpty();
 		if (isTagged) {
-			final boolean connectionAvailable = networkStatusService
-			.isConnectionAvailable();
+			final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
 			populateTags(article, connectionAvailable);
 		}
 	}
@@ -152,10 +149,18 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 	
 	protected void populateTags(Article article, final boolean connectionAvailable) {
 		LayoutInflater inflater = LayoutInflater.from(this);
-		findViewById(R.id.TagLabel).setVisibility(View.VISIBLE);
-		
-		tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.AuthorList), articleSetFactory.getArticleSetsForTags(article.getAuthors()), colourScheme);
-		tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) findViewById(R.id.TagList), articleSetFactory.getArticleSetsForTags(article.getKeywords()), colourScheme);
+		View tagLabel = findViewById(R.id.TagLabel);
+		if (tagLabel != null) {
+			tagLabel.setVisibility(View.VISIBLE);
+		}	
+		View authorList = findViewById(R.id.AuthorList);
+		if (authorList != null) {
+			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) authorList, articleSetFactory.getArticleSetsForTags(article.getAuthors()), colourScheme);
+		}
+		View tagList = findViewById(R.id.TagList);
+		if (tagList != null) {
+			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) tagList, articleSetFactory.getArticleSetsForTags(article.getKeywords()), colourScheme);
+		}
 	}
 	
 	@Override
