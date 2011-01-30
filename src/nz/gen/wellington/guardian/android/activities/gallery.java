@@ -37,6 +37,8 @@ public class gallery extends ContentRenderingActivity {
 	public void populateContent(Article article, int bodytextColour, int headlineColour) {
 		setContentView(R.layout.gallery);
 		setFontSize();
+		
+		populateCommonContentFields(article, bodytextColour, headlineColour);
 
     	thumbnails = (GridView) findViewById(R.id.GalleryThumbnails);
 		imageAdapter = new ImageAdapter();

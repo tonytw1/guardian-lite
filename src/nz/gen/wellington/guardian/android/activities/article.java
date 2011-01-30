@@ -28,52 +28,11 @@ public class article extends ContentRenderingActivity {
 		setContentView(R.layout.article);	// TODO you could probably pull these two lines up
 		setFontSize();
 		
-		// TODO pull up
-		if (article.getSection() != null) {
-			setHeading(article.getSection().getName());
-			setHeadingColour(article.getSection().getColour());
-		}
-		
-		TextView headline = (TextView) findViewById(R.id.Headline);
-		TextView pubDate = (TextView) findViewById(R.id.PubDate);
-		TextView byline = (TextView) findViewById(R.id.Byline);
-		TextView standfirst = (TextView) findViewById(R.id.Standfirst);
-		
-		headline.setTextColor(headlineColour);
-		pubDate.setTextColor(bodytextColour);        
-		byline.setTextColor(bodytextColour);
-		standfirst.setTextColor(bodytextColour);
-				
-		headline.setText(article.getTitle());
-		if (article.getPubDate() != null) {
-			pubDate.setText(article.getPubDateString());
-		}
-		
-		if (article.getByline() != null && !article.getByline().trim().equals("")) {
-			byline.setText(article.getByline());
-		} else {
-			byline.setVisibility(View.GONE);
-		}
-		
-		if (article.getStandfirst() != null && !article.getStandfirst().trim().equals("")) { 	
-			standfirst.setText(article.getStandfirst());
-		} else {
-			standfirst.setVisibility(View.GONE);
-		}
-		
-	   
+		populateCommonContentFields(article, bodytextColour, headlineColour);	   
         populateArticleView(article, bodytextColour, headlineColour);
-        
-	    
-		final boolean isTagged = !article.getAuthors().isEmpty()
-		|| !article.getKeywords().isEmpty();
-		if (isTagged) {
-			final boolean connectionAvailable = networkStatusService
-			.isConnectionAvailable();
-			populateTags(article, connectionAvailable);
-		}
 	}
 
+	
 
 	private void populateArticleView(Article article, int bodytextColour, int headlineColour) {
 		TextView description = (TextView) findViewById(R.id.Description);
