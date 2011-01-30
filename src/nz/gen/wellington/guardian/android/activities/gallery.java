@@ -18,7 +18,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-public class gallery extends ContentRenderingActivity implements FontResizingActivity {
+public class gallery extends ContentRenderingActivity {
 	
 	private static final String TAG = "gallery";
 
@@ -35,24 +35,21 @@ public class gallery extends ContentRenderingActivity implements FontResizingAct
 	
 	@Override
 	public void populateContent(Article article, int bodytextColour, int headlineColour) {
-    	populateGalleryView(article);	
-	}
-	
-	private void populateGalleryView(Article article) {
-		thumbnails = (GridView) findViewById(R.id.GalleryThumbnails);
+		setContentView(R.layout.gallery);
+		setFontSize();
+
+    	thumbnails = (GridView) findViewById(R.id.GalleryThumbnails);
 		imageAdapter = new ImageAdapter();
 		thumbnails.setAdapter(imageAdapter);
-		
-		setFontSize();
 		
 		if (!article.getMediaElements().isEmpty()) {			
 			GalleryImageLoader galleryImageLoader = new GalleryImageLoader(imageDAO, article.getMediaElements());
 			Thread loader = new Thread(galleryImageLoader);
 			loader.start();
-		}
+		}	
 	}
 	
-
+	
 	public void populateGalleryImage(String imageUrl) {
 		ImageView imageView = new ImageView(this.getApplicationContext());
 		Bitmap image = images.get(imageUrl);

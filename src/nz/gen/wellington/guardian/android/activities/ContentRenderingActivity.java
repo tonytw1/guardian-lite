@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,9 +25,10 @@ import android.view.View;
 import android.view.Window;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public abstract class ContentRenderingActivity extends MenuedActivity {
+public abstract class ContentRenderingActivity extends MenuedActivity implements FontResizingActivity {
 		
 	private static final String REMOVE_SAVED_ARTICLE = "Remove saved article";
 	private static final String SAVE_ARTICLE = "Save article";
@@ -82,6 +84,26 @@ public abstract class ContentRenderingActivity extends MenuedActivity {
 		images.clear();
 	}
 	
+	
+	@Override
+	public void setFontSize() {
+		super.setFontSize();
+		
+		TextView headline = (TextView) findViewById(R.id.Headline);
+		TextView pubDate = (TextView) findViewById(R.id.PubDate);
+		TextView byline = (TextView) findViewById(R.id.Byline);
+		TextView standfirst = (TextView) findViewById(R.id.Standfirst);
+		
+		headline.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize + 1);
+		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize - 2);
+		byline.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
+        standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
+        		
+		TextView tagLabel =  (TextView) findViewById(R.id.TagLabel);
+		if (tagLabel != null) {
+			tagLabel.setTextColor(colourScheme.getBodytext());
+		}
+	}
 	
 	protected abstract void populateContent(Article article, int bodytextColour, int headlineColour);
 	

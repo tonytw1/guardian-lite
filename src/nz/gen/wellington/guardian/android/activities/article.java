@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
 
-public class article extends ContentRenderingActivity implements FontResizingActivity {
+public class article extends ContentRenderingActivity {
 	
 	private MainImageUpdateHandler mainImageUpdateHandler;
 	private MainImageLoader mainImageLoader;
@@ -25,10 +25,10 @@ public class article extends ContentRenderingActivity implements FontResizingAct
 	}
 	
 	protected void populateContent(Article article, int bodytextColour, int headlineColour) {
-		if (article.isGallery()) {
-			setContentView(R.layout.gallery);
-		}
+		setContentView(R.layout.article);	// TODO you could probably pull these two lines up
+		setFontSize();
 		
+		// TODO pull up
 		if (article.getSection() != null) {
 			setHeading(article.getSection().getName());
 			setHeadingColour(article.getSection().getColour());
@@ -103,32 +103,16 @@ public class article extends ContentRenderingActivity implements FontResizingAct
 	public void setFontSize() {
 		super.setFontSize();
 		
-		TextView headline = (TextView) findViewById(R.id.Headline);
 		TextView caption = (TextView) findViewById(R.id.Caption);
-		TextView pubDate = (TextView) findViewById(R.id.PubDate);
-		TextView byline = (TextView) findViewById(R.id.Byline);
-		TextView standfirst = (TextView) findViewById(R.id.Standfirst);
-		TextView description = (TextView) findViewById(R.id.Description);
-		
-		headline.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize + 1);
-		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize - 2);
-		caption.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize -2);
-		byline.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
-		pubDate.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize - 2);
-        standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
-        description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
-        
+		caption.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize -2);		
 		caption.setTextColor(colourScheme.getBodytext());
-		
-		TextView tagLabel =  (TextView) findViewById(R.id.TagLabel);
-		if (tagLabel != null) {
-			tagLabel.setTextColor(colourScheme.getBodytext());
-		}
+
+		TextView description = (TextView) findViewById(R.id.Description);
+        description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);        
+		description.setTextColor(colourScheme.getBodytext());
 	}
 	
 	
-	
-
 	private void populateMainImage(String mainImageUrl) {
 		if (article != null && article.getMainImageUrl() != null && article.getMainImageUrl().equals(mainImageUrl)) {		
 			if (images.containsKey(mainImageUrl)) {		
