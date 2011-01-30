@@ -30,8 +30,8 @@ import android.widget.Toast;
 
 public abstract class ContentRenderingActivity extends MenuedActivity implements FontResizingActivity {
 		
-	private static final String REMOVE_SAVED_ARTICLE = "Remove saved article";
-	private static final String SAVE_ARTICLE = "Save article";
+	private static final String REMOVE_SAVED_ARTICLE = "Remove saved";
+	private static final String SAVE_ARTICLE = "Save";
 	
 	protected NetworkStatusService networkStatusService;
 	protected ImageDAO imageDAO;
@@ -169,13 +169,13 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 			if (favouriteSectionsAndTagsDAO.addSavedArticle(article)) {
 				saveArticleMenuItem.setTitle(REMOVE_SAVED_ARTICLE);
 			} else {
-				Toast.makeText(this, "Saved articles list is full", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, "The saved items list is full", Toast.LENGTH_LONG).show();
 			}			
 		} else {
 			if (favouriteSectionsAndTagsDAO.removeSavedArticle(article)) {
 				saveArticleMenuItem.setTitle(SAVE_ARTICLE);
 			} else {
-				Toast.makeText(this, "Saved articles list is full", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, "Could not remove item", Toast.LENGTH_LONG).show();
 			}
 		}
 	}

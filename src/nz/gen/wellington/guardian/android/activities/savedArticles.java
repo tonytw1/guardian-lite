@@ -19,7 +19,7 @@ public class savedArticles extends ArticleListActivity implements FontResizingAc
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		
-    	setHeading("Saved articles");
+    	setHeading("Saved items");
 		setFontSize();
 	}
 	

@@ -16,7 +16,7 @@ public class SavedArticlesArticleSet extends AbstractArticleSet implements Seria
 	
 	@Override
 	public String getName() {
-		return "Saved articles";
+		return "Saved items";
 	}
 	
 	@Override

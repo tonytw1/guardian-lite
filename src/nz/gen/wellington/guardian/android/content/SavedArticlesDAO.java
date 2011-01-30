@@ -43,8 +43,8 @@ public class SavedArticlesDAO implements ArticleSource {
 	}
 	
 	public ArticleBundle getArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
-		Log.i(TAG, "Fetching saved articles");		
-		LoggingBufferedInputStream input = httpFetcher.httpFetch(articleSet.getSourceUrl(), "Saved articles");
+		Log.i(TAG, "Fetching saved items");		
+		LoggingBufferedInputStream input = httpFetcher.httpFetch(articleSet.getSourceUrl(), "Saved items");
 		if (input != null) {
 			ArticleBundle results = contentXmlParser.parseArticlesXml(input, articleCallback);
 			if (results != null && !results.getArticles().isEmpty()) {

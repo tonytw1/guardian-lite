@@ -87,7 +87,7 @@ public class favourites extends ArticleListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MenuedActivity.HOME, 0, "Home");
 		menu.add(0, MenuedActivity.SECTIONS, 0, "Sections");
-		menu.add(0, MenuedActivity.SAVED, 0, "Saved articles");
+		menu.add(0, MenuedActivity.SAVED, 0, "Saved items");
 		MenuItem refreshOption = menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
 		enableMenuItemIfConnectionIsAvailable(refreshOption);
 	    return true;
