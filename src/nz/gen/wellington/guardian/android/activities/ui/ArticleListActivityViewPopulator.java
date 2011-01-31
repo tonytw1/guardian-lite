@@ -69,8 +69,7 @@ public class ArticleListActivityViewPopulator {
 		}
 		
 		if (trailImageUrl != null && isTrailImageAvailableLocally) {
-			boolean isMainImage = trailImageUrl != null && trailImageUrl.equals(article.getMainImageUrl());
-			populateTrailImage(trailImageUrl, view, isMainImage);
+			populateTrailImage(trailImageUrl, view);
 		}
 		
 		view.setOnClickListener(new ContentClicker(article));
@@ -111,16 +110,17 @@ public class ArticleListActivityViewPopulator {
 	}
 	
 	
-	public void populateTrailImage(final String url, View trailView, boolean isMainImage) {
+	public void populateTrailImage(final String url, View trailView) {
 		if (imageDAO.isAvailableLocally(url)) {
-			ImageView trialImage = (ImageView) trailView.findViewById(R.id.TrailImage);			
+			ImageView trailImage = (ImageView) trailView.findViewById(R.id.TrailImage);			
 			Bitmap image = imageDAO.getImage(url);
 			if (image != null) {
-				if (isMainImage) {
-					trialImage.setImageBitmap(imageStretchingService.stretchImageToFillView(image, trailView));
+				if (trailView.getId() == R.layout.featurelist) {
+					trailImage.setImageBitmap(imageStretchingService.stretchImageToFillView(image, trailImage));
+				} else {
+					trailImage.setImageBitmap(image);					
 				}
-				trialImage.setImageBitmap(image);
-				trialImage.setVisibility(View.VISIBLE);
+				trailImage.setVisibility(View.VISIBLE);
 			}
 		}
 	}
