@@ -23,7 +23,6 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
-import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
@@ -160,7 +159,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	private ArticleBundle loadArticles(ContentFetchType fetchType, ArticleSet articleSet) {
 		if (articleSet != null) {
-			return articleDAO.getArticleSetArticles(articleSet, ContentFetchType.UNCACHED);
+			return articleDAO.getArticleSetArticles(articleSet, fetchType);
 		}
 		return null;
 	}

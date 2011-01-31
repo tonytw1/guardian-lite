@@ -14,7 +14,20 @@ public class TagCombinerArticleSet extends AbstractArticleSet implements Article
 
 	@Override
 	public String getName() {
-		return leftTag + " + " + rightTag;
+		return leftTag.getName() + " + " + rightTag.getName();
+	}
+	
+	@Override
+	public Section getSection() {
+		return leftTag.getSection();
+	}
+	
+	@Deprecated
+	public String getHeadingColour() {
+		if (leftTag.getSection() != null) {
+			return leftTag.getSection().getColour();
+		}
+		return null;
 	}
 
 	public Tag getLeftTag() {

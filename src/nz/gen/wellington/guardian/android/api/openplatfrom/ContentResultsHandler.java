@@ -3,11 +3,9 @@ package nz.gen.wellington.guardian.android.api.openplatfrom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
@@ -32,7 +30,7 @@ public class ContentResultsHandler extends HandlerBase {
 
 	private static final String TAG = "ContentResultsHandler";
 	private static final String NO_REDISTRIBUTION_RIGHTS_BODY_TEXT = "<!-- Redistribution rights for this field are unavailable -->";
-	private static final List<String> TAG_TYPES_TO_TAKE = Arrays.asList("keyword", "type", "tone");
+	private static final List<String> TAG_TYPES_TO_TAKE = Arrays.asList("keyword", "type");
 	
 	public List<Article> articles;
 	public Map<String, List<Refinement>> refinements;

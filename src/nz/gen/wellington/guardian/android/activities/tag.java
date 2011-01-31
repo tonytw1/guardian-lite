@@ -27,12 +27,14 @@ public class tag extends ArticleListActivity {
 		articleSet = (ArticleSet) this.getIntent().getExtras().get("articleset");
 		
 		String name = articleSet.getName();		
-		//if (tag.getSection() != null) {
-		//	name = tag.getSection().getName() + " - " + name;
-		//}
+		if (articleSet.getSection() != null) {
+			name = articleSet.getSection().getName() + " - " + name;
+			if (articleSet.getHeadingColour() != null) {
+				setHeadingColour(articleSet.getHeadingColour());
+			}
+		}
 		
 		setHeading(name);
-		//setHeadingColour(articleSet.getHeadingColour());
 	}
 	
 	protected String getRefinementDescription(String refinementType) {
