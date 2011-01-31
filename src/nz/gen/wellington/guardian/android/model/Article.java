@@ -11,7 +11,7 @@ public class Article implements Serializable {
 
 	private static final int ARTICLE_MAIN_PICTURE_WIDTH = 460;
 
-	private static final long serialVersionUID = 8L;
+	private static final long serialVersionUID = 9L;
 	
 	private String id;
 	private String title;
@@ -22,8 +22,11 @@ public class Article implements Serializable {
 	private String thumbnail;
 	
 	private Section section;
+
+	@Deprecated
 	private List<Tag> authors;
-	private List<Tag> keywords;
+	
+	private List<Tag> tags;
 	private String webUrl;
 	private String shortUrl;
 	
@@ -33,7 +36,7 @@ public class Article implements Serializable {
  	
 	public Article() {
 		authors = new ArrayList<Tag>();
-		keywords = new ArrayList<Tag>();
+		tags = new ArrayList<Tag>();
 		mediaElements = new ArrayList<MediaElement>();
 	}
 	
@@ -89,12 +92,12 @@ public class Article implements Serializable {
 		return authors.toString();
 	}
 	
-	public List<Tag> getKeywords() {
-		return keywords;
+	public List<Tag> getTags() {
+		return tags;
 	}
 
-	public void addKeyword(Tag keyword) {
-		keywords.add(keyword);
+	public void addTag(Tag tag) {
+		tags.add(tag);
 	}
 	
 	public String getMainImageUrl() {

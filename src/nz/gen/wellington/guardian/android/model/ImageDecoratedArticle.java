@@ -36,8 +36,8 @@ public class ImageDecoratedArticle extends Article {
 		return article.getId();
 	}
 
-	public List<Tag> getKeywords() {
-		return article.getKeywords();
+	public List<Tag> getTags() {
+		return article.getTags();
 	}
 
 	public Date getPubDate() {

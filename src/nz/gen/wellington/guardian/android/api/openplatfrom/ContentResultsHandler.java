@@ -116,12 +116,17 @@ public class ContentResultsHandler extends HandlerBase {
 			if (attributes.getValue("type").equals("keyword")) {
 				Section tagSection = sectionDAO.getSectionById(attributes.getValue("section-id"));
 				Tag tag = new Tag(attributes.getValue("web-title"), attributes.getValue("id"), tagSection);
-				currentArticle.addKeyword(tag);
+				currentArticle.addTag(tag);
 			}
 
 			if (attributes.getValue("type").equals("contributor")) {
 				Tag tag = new Tag(attributes.getValue("web-title"), attributes.getValue("id"), null);
-				currentArticle.addAuthor(tag);
+				currentArticle.addAuthor(tag);	// TODO depricate and put into tags
+			}
+			
+			if (attributes.getValue("type").equals("type")) {
+				Tag tag = new Tag(attributes.getValue("web-title"), attributes.getValue("id"), null);
+				currentArticle.addTag(tag);
 			}
 		}
 
