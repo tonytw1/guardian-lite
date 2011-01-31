@@ -47,5 +47,9 @@ public class Tag implements Serializable {
 	public boolean isContributorTag() {
 		return id != null && id.startsWith("profile/");
 	}
+
+	public boolean isContentTypeTag() {
+		return id != null && id.startsWith("type/");
+	}
 	
 }

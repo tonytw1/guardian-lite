@@ -199,7 +199,17 @@ public class Article implements Serializable {
 	}
 
 	public boolean isGallery() {
-		return webUrl != null && webUrl.contains("gallery");	// TODO
+		Tag contentTag = this.getContentTag();
+		return contentTag != null && contentTag.getId().equals("type/gallery");
+	}
+
+	private Tag getContentTag() {
+		for (Tag tag : this.tags) {
+			if (tag.isContentTypeTag()) {
+				return tag;
+			}
+		}
+		return null;
 	}
 
 	public String getThumbnailUrl() {	// TODO rename to thumbnail to match content api

@@ -3,9 +3,11 @@ package nz.gen.wellington.guardian.android.api.openplatfrom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
@@ -30,6 +32,7 @@ public class ContentResultsHandler extends HandlerBase {
 
 	private static final String TAG = "ContentResultsHandler";
 	private static final String NO_REDISTRIBUTION_RIGHTS_BODY_TEXT = "<!-- Redistribution rights for this field are unavailable -->";
+	private static final List<String> TAG_TYPES_TO_TAKE = Arrays.asList("keyword", "type", "tone");
 	
 	public List<Article> articles;
 	public Map<String, List<Refinement>> refinements;
@@ -82,13 +85,14 @@ public class ContentResultsHandler extends HandlerBase {
 			throw new SAXException("Parser has been stopped");
 		}
 
+		String tagSectionId = attributes.getValue("section-id");
 		if (name.equals("content")) {
 			currentArticle = new Article();
 			currentElementContents = new StringBuilder();
 			currentArticle.setId(attributes.getValue("id"));
 			currentArticle.setWebUrl(attributes.getValue("web-url"));
 			
-			final String sectionId = attributes.getValue("section-id");
+			final String sectionId = tagSectionId;
 			Section section = sectionDAO.getSectionById(sectionId);
 			currentArticle.setSection(section);
 
@@ -111,23 +115,21 @@ public class ContentResultsHandler extends HandlerBase {
 			}
 		}
 		
-		if (name.equals("tag")) {
-
-			if (attributes.getValue("type").equals("keyword")) {
-				Section tagSection = sectionDAO.getSectionById(attributes.getValue("section-id"));
+		if (name.equals("tag")) {			
+			if (TAG_TYPES_TO_TAKE.contains(attributes.getValue("type"))) {
+				Section tagSection = null;
+				if (tagSectionId != null) {
+					tagSection = sectionDAO.getSectionById(tagSectionId);
+				}
 				Tag tag = new Tag(attributes.getValue("web-title"), attributes.getValue("id"), tagSection);
 				currentArticle.addTag(tag);
 			}
-
+			
 			if (attributes.getValue("type").equals("contributor")) {
 				Tag tag = new Tag(attributes.getValue("web-title"), attributes.getValue("id"), null);
 				currentArticle.addAuthor(tag);	// TODO depricate and put into tags
 			}
 			
-			if (attributes.getValue("type").equals("type")) {
-				Tag tag = new Tag(attributes.getValue("web-title"), attributes.getValue("id"), null);
-				currentArticle.addTag(tag);
-			}
 		}
 
 		if (name.equals("refinement-group")) {
