@@ -15,26 +15,24 @@ public class tag extends ArticleListActivity {
 
 	private static final String TAG = "tag";
 
-	private Tag tag;
 	private MenuItem favouriteMenuItem;
 	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
-	private TagArticleSet articleSet;
+	private ArticleSet articleSet;
 
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
 		this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
-		articleSet = (TagArticleSet) this.getIntent().getExtras().get("articleset");
-		tag = articleSet.getTag();
+		articleSet = (ArticleSet) this.getIntent().getExtras().get("articleset");
 		
 		String name = articleSet.getName();		
-		if (tag.getSection() != null) {
-			name = tag.getSection().getName() + " - " + name;
-		}
+		//if (tag.getSection() != null) {
+		//	name = tag.getSection().getName() + " - " + name;
+		//}
 		
 		setHeading(name);
-		setHeadingColour(articleSet.getHeadingColour());
+		//setHeadingColour(articleSet.getHeadingColour());
 	}
 	
 	protected String getRefinementDescription(String refinementType) {
@@ -56,12 +54,15 @@ public class tag extends ArticleListActivity {
 		MenuItem refreshOption = menu.add(0, MenuedActivity.REFRESH, 0, "Refresh");
 		enableMenuItemIfConnectionIsAvailable(refreshOption);
 		
-		if (favouriteSectionsAndTagsDAO.isFavourite(tag)) {
-			favouriteMenuItem = menu.add(0, MenuedActivity.ADD_REMOVE_FAVOURITE, 0, "Remove Favourite");
-		} else {
-			favouriteMenuItem = menu.add(0, MenuedActivity.ADD_REMOVE_FAVOURITE, 0, "Add to Favourites");
+		if (articleSet instanceof TagArticleSet) {
+			Tag tag = ((TagArticleSet) articleSet).getTag();
+			if (favouriteSectionsAndTagsDAO.isFavourite(tag)) {
+				favouriteMenuItem = menu.add(0, MenuedActivity.ADD_REMOVE_FAVOURITE, 0, "Remove Favourite");
+			} else {
+				favouriteMenuItem = menu.add(0, MenuedActivity.ADD_REMOVE_FAVOURITE, 0, "Add to Favourites");
+			}
 		}
-		
+			
 	    return true;
 	}
 	
@@ -79,20 +80,22 @@ public class tag extends ArticleListActivity {
 
 	
 	private void addToFavourites() {
-		
-		if (!favouriteSectionsAndTagsDAO.isFavourite(tag)) {
-			Log.i(TAG, "Adding current tag to favourites: " + tag.getName());
-			if (favouriteSectionsAndTagsDAO.addTag(tag)) {
-				favouriteMenuItem.setTitle("Remove Favourite");			
+		if (articleSet instanceof TagArticleSet) {
+			Tag tag = ((TagArticleSet) articleSet).getTag();
+			if (!favouriteSectionsAndTagsDAO.isFavourite(tag)) {
+				Log.i(TAG, "Adding current tag to favourites: " + tag.getName());
+				if (favouriteSectionsAndTagsDAO.addTag(tag)) {
+					favouriteMenuItem.setTitle("Remove Favourite");
+				} else {
+					Toast.makeText(this, "Favourites list is full", Toast.LENGTH_LONG).show();
+				}
+
 			} else {
-	        	Toast.makeText(this, "Favourites list is full", Toast.LENGTH_LONG).show();
+				Log.i(TAG, "Removing current tag from favourites: " + tag.getName());
+				favouriteSectionsAndTagsDAO.removeTag(tag);
+				favouriteMenuItem.setTitle("Add to Favourites");
 			}
-		
-		} else {
-			Log.i(TAG, "Removing current tag from favourites: " + tag.getName());			
-			favouriteSectionsAndTagsDAO.removeTag(tag);
-			favouriteMenuItem.setTitle("Add to Favourites");
-		}		
+		}
 	}
 	
 }

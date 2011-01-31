@@ -22,6 +22,8 @@ import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.android.model.SectionArticleSet;
+import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
@@ -158,7 +160,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	private ArticleBundle loadArticles(ContentFetchType fetchType, ArticleSet articleSet) {
 		if (articleSet != null) {
-			return articleDAO.getArticleSetArticles(articleSet, fetchType);
+			return articleDAO.getArticleSetArticles(articleSet, ContentFetchType.UNCACHED);
 		}
 		return null;
 	}
@@ -312,11 +314,11 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    		for (String refinementType : articleSet.getPermittedRefinements()) {
 			    			Log.d(TAG, "Processing refinement type: " + refinementType);
 			    			if (articleSet.getPermittedRefinements().contains(refinementType) && refinements.keySet().contains(refinementType)) {
-			    				if (!refinementType.equals("date") || showDateRefinements) {			    					
+			    				if (!refinementType.equals("date") || showDateRefinements) {
 			    					articleListActivityViewPopulator.populateRefinementType(
 												mainpane, inflater,
 												getRefinementDescription(refinementType),
-												getRefinementArticleSets(refinements, refinementType),
+												getRefinementArticleSets(refinements, refinementType, articleSet),
 												currentColourScheme);
 			    				}
 			    			}
@@ -347,14 +349,23 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			}
 		}
 
-		private List<ArticleSet> getRefinementArticleSets(
-				Map<String, List<Refinement>> refinements, String refinementType) {
+		private List<ArticleSet> getRefinementArticleSets(Map<String, List<Refinement>> refinements, String refinementType, ArticleSet articleSet) {
+
 			// TODO this is abit of a mess - could be method on refinement?
 			List<ArticleSet> refinementArticleSets = new ArrayList<ArticleSet>();
 			for (Refinement refinement : refinements.get(refinementType)) {
-				ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForRefinement(articleSet, refinement);
-				if (articleSetForRefinement != null) {
-					refinementArticleSets.add(articleSetForRefinement);
+				
+				if (refinementType.equals("type") && articleSet instanceof SectionArticleSet) {
+					ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForTagCombiner(((SectionArticleSet) articleSet).getSection().getTag(), refinement.getTag());
+					if (articleSetForRefinement != null) {
+						refinementArticleSets.add(articleSetForRefinement);
+					}
+					
+				} else {			
+					ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForRefinement(articleSet, refinement);
+					if (articleSetForRefinement != null) {
+						refinementArticleSets.add(articleSetForRefinement);
+					}
 				}
 			}
 			return refinementArticleSets;

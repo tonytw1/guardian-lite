@@ -2,14 +2,19 @@ package nz.gen.wellington.guardian.android.api.openplatfrom;
 
 import java.util.List;
 
+import android.util.Log;
+
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
+import nz.gen.wellington.guardian.android.model.TagCombinerArticleSet;
 
 public class ContentApiUrlService {
+	
+	private static final String TAG = "ContentApiUrlService";
 	
 	private static Tag articleContentType = new Tag("Article content type", "type/article", null);
 	private static Tag galleryContentType = new Tag("Gallery content type", "type/gallery", null);
@@ -80,6 +85,14 @@ public class ContentApiUrlService {
 			}
 		}
 		
+		if (articleSet instanceof TagCombinerArticleSet) {
+			TagCombinerArticleSet tagCombinerArticleSet = (TagCombinerArticleSet) articleSet;
+			Log.i(TAG, "Building url for tag combiner '" + tagCombinerArticleSet.getLeftTag().getName() + " + " + tagCombinerArticleSet.getRightTag().getName());
+			contentApiUrlBuilder.addTag(tagCombinerArticleSet.getLeftTag());
+			contentApiUrlBuilder.addContentType(tagCombinerArticleSet.getRightTag());
+		}
+		
+		
 		if (articleSet instanceof FavouriteTagsArticleSet) {
 			FavouriteTagsArticleSet favouriteStoriesArticleSet = (FavouriteTagsArticleSet) articleSet;
 			for (ArticleSet favouriteArticleSet : favouriteStoriesArticleSet.getArticleSets()) {
@@ -95,8 +108,8 @@ public class ContentApiUrlService {
 			contentApiUrlBuilder.setSearchTerm(((SearchResultsArticleSet) articleSet).getSearchTerm());
 		}
 		
-		contentApiUrlBuilder.addContentType(articleContentType);
-		contentApiUrlBuilder.addContentType(galleryContentType);
+		//contentApiUrlBuilder.addContentType(articleContentType);
+		//contentApiUrlBuilder.addContentType(galleryContentType);
 		
 		contentApiUrlBuilder.setPageSize(articleSet.getPageSize());
 		contentApiUrlBuilder.setShowMedia(true);	// TODO
