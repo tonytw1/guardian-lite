@@ -1,6 +1,7 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.activities.ui.ImageStretchingService;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import android.graphics.Bitmap;
@@ -17,11 +18,13 @@ public class article extends ContentRenderingActivity {
 	
 	private MainImageUpdateHandler mainImageUpdateHandler;
 	private MainImageLoader mainImageLoader;
+	private ImageStretchingService imageStretchingService;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
     	mainImageUpdateHandler = new MainImageUpdateHandler();
+		imageStretchingService = new ImageStretchingService();
 	}
 	
 	protected void populateContent(Article article, int bodytextColour, int headlineColour) {
@@ -88,19 +91,7 @@ public class article extends ContentRenderingActivity {
 		ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
 		imageView.setVisibility(View.VISIBLE);
 		imageView.setScaleType(ScaleType.FIT_START);
-
-		final boolean isImageThinnerThanView = bitmap.getWidth() < imageView.getWidth();
-		if (isImageThinnerThanView) {
-			final boolean isImageLandScaped = bitmap.getWidth() > bitmap.getHeight();
-			if (isImageLandScaped) {
-				int scaledWidth = imageView.getWidth();
-				float aspectRatio = new Float(bitmap.getWidth()) / new Float(bitmap.getHeight());
-				int scaledHeight = Math.round(scaledWidth / aspectRatio);
-				bitmap = Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, true);
-			}
-		}
-		
-		imageView.setImageBitmap(bitmap);					
+		imageView.setImageBitmap(imageStretchingService.stretchImageToFillView(bitmap, imageView));
 		populateCaption(article.getCaption());
 	}
 	
