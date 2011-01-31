@@ -82,6 +82,14 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 		images.clear();
 	}
 	
+	protected abstract int getLayout();
+	
+	public void populateContent(Article article, int bodytextColour, int headlineColour) {
+		setContentView(getLayout());
+		setFontSize();
+		populateCommonContentFields(article, bodytextColour, headlineColour);
+	}
+	
 	
 	@Override
 	public void setFontSize() {
@@ -102,11 +110,9 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 			tagLabel.setTextColor(colourScheme.getBodytext());
 		}
 	}
+		
 	
-	protected abstract void populateContent(Article article, int bodytextColour, int headlineColour);
-	
-	
-	protected void populateCommonContentFields(Article article, int bodytextColour, int headlineColour) {
+	private void populateCommonContentFields(Article article, int bodytextColour, int headlineColour) {
 		if (article.getSection() != null) {
 			setHeading(article.getSection().getName());
 			setHeadingColour(article.getSection().getColour());
@@ -145,9 +151,9 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 			populateTags(article, connectionAvailable);
 		}
 	}
-
 	
-	protected void populateTags(Article article, final boolean connectionAvailable) {
+	
+	private void populateTags(Article article, final boolean connectionAvailable) {
 		LayoutInflater inflater = LayoutInflater.from(this);
 		View tagLabel = findViewById(R.id.TagLabel);
 		if (tagLabel != null) {

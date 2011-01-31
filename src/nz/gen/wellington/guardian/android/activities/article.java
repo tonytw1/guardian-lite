@@ -27,22 +27,14 @@ public class article extends ContentRenderingActivity {
 		imageStretchingService = new ImageStretchingService();
 	}
 	
-	protected void populateContent(Article article, int bodytextColour, int headlineColour) {
-		setContentView(R.layout.article);	// TODO you could probably pull these two lines up
-		setFontSize();
-		
-		populateCommonContentFields(article, bodytextColour, headlineColour);	   
-        populateArticleView(article, bodytextColour, headlineColour);
+	protected int getLayout() {
+		return R.layout.article;
 	}
-
 	
-
-	private void populateArticleView(Article article, int bodytextColour, int headlineColour) {
+	public void populateContent(Article article, int bodytextColour, int headlineColour) {
+		super.populateContent(article, bodytextColour, headlineColour);
+		
 		TextView description = (TextView) findViewById(R.id.Description);
-		        
-		setFontSize();
-
-        description.setTextColor(bodytextColour);        
 		description.setVisibility(View.VISIBLE);
 		if (article.isRedistributionAllowed()) {
 			description.setText(article.getDescription());
@@ -50,14 +42,13 @@ public class article extends ContentRenderingActivity {
 			description.setText("Redistribution rights for this article are not available. "
 					+ "The full content cannot be downloaded but you should still be able to use the open in browser option to view the original article.");
 		}
-
+		
 		final String mainImageUrl = article.getMainImageUrl();
 		if (mainImageUrl != null && (imageDAO.isAvailableLocally(mainImageUrl) || imageDownloadDecisionService.isOkToDownloadMainImages())) {
 			mainImageLoader = new MainImageLoader(imageDAO, article.getMainImageUrl());
 			Thread loader = new Thread(mainImageLoader);
 			loader.start();
 		}
-
 	}
 
 	

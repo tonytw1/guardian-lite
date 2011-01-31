@@ -31,15 +31,18 @@ public class gallery extends ContentRenderingActivity {
 		super.onCreate(savedInstanceState);
     	galleryImageUpdateHandler = new GalleryImageUpdateHandler();
 	}
+
+	
+	@Override
+	protected int getLayout() {
+		return R.layout.gallery;
+	}
 	
 	
 	@Override
 	public void populateContent(Article article, int bodytextColour, int headlineColour) {
-		setContentView(R.layout.gallery);
-		setFontSize();
+		super.populateContent(article, bodytextColour, headlineColour);
 		
-		populateCommonContentFields(article, bodytextColour, headlineColour);
-
     	thumbnails = (GridView) findViewById(R.id.GalleryThumbnails);
 		imageAdapter = new ImageAdapter();
 		thumbnails.setAdapter(imageAdapter);
@@ -50,23 +53,17 @@ public class gallery extends ContentRenderingActivity {
 			loader.start();
 		}	
 	}
-	
-	
-	public void populateGalleryImage(String imageUrl) {
+
+		
+	private void populateGalleryImage(String imageUrl) {
 		ImageView imageView = new ImageView(this.getApplicationContext());
 		Bitmap image = images.get(imageUrl);
 		imageView.setImageBitmap(image);
 		imageView.setPadding(5, 5, 5, 5);
-		//imageView.setLayoutParams(new GridView.LayoutParams(50, 50));
 		
-		Log.i(TAG, "Adding view to gridview");
+		Log.d(TAG, "Adding view to gridview");
 		imageAdapter.add(imageView);
 		thumbnails.invalidateViews();
-		
-		// TODO
-		//TextView caption = new TextView(this.getApplicationContext());
-		//caption.setText(mediaElement.getCaption());
-		//authorList.addView(caption);		
 	}
 	
 	
