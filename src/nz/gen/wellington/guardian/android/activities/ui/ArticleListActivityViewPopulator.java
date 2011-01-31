@@ -26,14 +26,15 @@ public class ArticleListActivityViewPopulator {
 	private Context context;
 	private ImageDAO imageDAO;
 	private TagListPopulatingService tagListPopulatingService;
+	private ImageStretchingService imageStretchingService;
 
 	public ArticleListActivityViewPopulator(Context context) {
 		this.context = context;
 		this.imageDAO = SingletonFactory.getImageDao(context);
 		this.tagListPopulatingService = SingletonFactory.getTagListPopulator(context);
+		imageStretchingService = new ImageStretchingService();
 	}
-	
-		
+			
 	public View populateArticleListView(Article article, ColourScheme colourScheme, float baseFontSize, String trailImageUrl, boolean shouldUseFeatureTrail, boolean first, LayoutInflater mInflater, boolean isTrailImageAvailableLocally) {
 		View view = chooseTrailView(mInflater, shouldUseFeatureTrail, first);
 		
@@ -68,7 +69,8 @@ public class ArticleListActivityViewPopulator {
 		}
 		
 		if (trailImageUrl != null && isTrailImageAvailableLocally) {
-				populateTrailImage(trailImageUrl, view);
+			boolean isMainImage = trailImageUrl != null && trailImageUrl.equals(article.getMainImageUrl());
+			populateTrailImage(trailImageUrl, view, isMainImage);
 		}
 		
 		view.setOnClickListener(new ContentClicker(article));
@@ -77,7 +79,7 @@ public class ArticleListActivityViewPopulator {
 	
 	
 	
-	public View chooseTrailView(LayoutInflater mInflater, boolean shouldUseFeatureTrail, boolean hideDivider) {
+	private View chooseTrailView(LayoutInflater mInflater, boolean shouldUseFeatureTrail, boolean hideDivider) {
 		View view;
 		if (shouldUseFeatureTrail) {
 			view = mInflater.inflate(R.layout.featurelist, null);
@@ -109,11 +111,14 @@ public class ArticleListActivityViewPopulator {
 	}
 	
 	
-	public void populateTrailImage(final String url, View trailView) {
+	public void populateTrailImage(final String url, View trailView, boolean isMainImage) {
 		if (imageDAO.isAvailableLocally(url)) {
 			ImageView trialImage = (ImageView) trailView.findViewById(R.id.TrailImage);			
 			Bitmap image = imageDAO.getImage(url);
 			if (image != null) {
+				if (isMainImage) {
+					trialImage.setImageBitmap(imageStretchingService.stretchImageToFillView(image, trailView));
+				}
 				trialImage.setImageBitmap(image);
 				trialImage.setVisibility(View.VISIBLE);
 			}
