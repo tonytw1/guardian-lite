@@ -61,7 +61,7 @@ public class ArticleSetFactory {
 	
 	
 	public ArticleSet getArticleSetForTag(Tag tag, String dateDisplayName, String fromDate, String toDate) {
-		return addUrl(new TagArticleSet(tag, preferencesDAO.getPageSizePreference(), dateDisplayName, fromDate, toDate));
+		return addUrl(new TagArticleSet(tag, 50, dateDisplayName, fromDate, toDate));
 	}
 	
 	public ArticleSet getArticleSetForTagCombiner(Tag leftTag, Tag rightTag) {
