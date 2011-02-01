@@ -84,18 +84,19 @@ public class ArticleSetFactory {
 		return favouriteSectionsArticleSets;
 	}
 	
-	public List<ArticleSet> getArticleSetsForTags(List<Tag> favouriteTags) {
-		List<ArticleSet> favouriteTagsArticleSets = new ArrayList<ArticleSet>();
-		for (Tag tag : favouriteTags) {
-			
-			boolean isSectionTag = tag.isSectionKeyword();
-			if (isSectionTag) {
-				favouriteTagsArticleSets.add(getArticleSetForSection(tag.getSection()));				
-			} else {
-				favouriteTagsArticleSets.add(getArticleSetForTag(tag));
+	public List<ArticleSet> getArticleSetsForTags(List<Tag> tags) {
+		List<ArticleSet> articleSets = new ArrayList<ArticleSet>();
+		for (Tag tag : tags) {			
+			if (!tag.isContentTypeTag()) {
+				boolean isSectionTag = tag.isSectionKeyword();
+				if (isSectionTag) {
+					articleSets.add(getArticleSetForSection(tag.getSection()));				
+				} else {
+					articleSets.add(getArticleSetForTag(tag));
+				}
 			}
 		}
-		return favouriteTagsArticleSets;
+		return articleSets;
 	}
 	
 	// TODO Three different methods - can they be merged?
