@@ -51,5 +51,9 @@ public class Tag implements Serializable {
 	public boolean isContentTypeTag() {
 		return id != null && id.startsWith("type/");
 	}
+
+	public boolean isGalleryTag() {
+		return id != null && id.equals("type/gallery");
+	}
 	
 }
