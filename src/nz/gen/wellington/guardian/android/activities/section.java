@@ -40,8 +40,10 @@ public class section extends ArticleListActivity implements FontResizingActivity
 		} else if (refinementType.equals("contributor")) { 
 			return "These contributors have appeared recently in the " + getArticleSet().getName() + " section:";
 		} else if (refinementType.equals("date")) {
-			return "Articles have been tagged with " + getArticleSet().getName() + " on these dates:";
-		}	
+			return "Archived " + getArticleSet().getName() + " articles are available for these dates:";
+		} else if (refinementType.equals("type")) {
+			return "Other " + getArticleSet().getName() + " content types:";
+		}
 		return "These keywords have been used recently within the " + getArticleSet().getName() + " section:";
 	}
 	
