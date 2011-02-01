@@ -6,6 +6,7 @@ import java.util.List;
 public interface ArticleSet extends Serializable {
 	
 	public String getName();	
+	public String getShortName();
 	public List<String> getPermittedRefinements();	
 	public int getPageSize();
 	public String getSourceUrl();

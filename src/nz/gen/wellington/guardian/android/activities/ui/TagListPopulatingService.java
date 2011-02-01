@@ -9,7 +9,6 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
-import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -44,24 +43,22 @@ public class TagListPopulatingService {
 		
 		Set<String> allArticleSetNames = new HashSet<String>();
 		for (ArticleSet articleSet : articleSets) {
-			if (allArticleSetNames.contains(articleSet.getName())) {
-				duplicatedArticleSetNames.add(articleSet.getName());
+			final String shortName = articleSet.getShortName();
+			if (allArticleSetNames.contains(shortName)) {
+				duplicatedArticleSetNames.add(shortName);
 			}
-			allArticleSetNames.add(articleSet.getName());
+			allArticleSetNames.add(shortName);
 		}
 		return duplicatedArticleSetNames;
 	}
-	
-	
+		
 	private String getDeduplicatedArticleSetName(ArticleSet articleSet, Set<String> duplicatedArticleSetNames) {
-		boolean articleSetNameIsDuplicated = duplicatedArticleSetNames.contains(articleSet.getName());
+		final String articleSetShortName = articleSet.getShortName();
+		final boolean articleSetNameIsDuplicated = duplicatedArticleSetNames.contains(articleSetShortName);
 		if (articleSetNameIsDuplicated && articleSet instanceof TagArticleSet) {
-			Tag articleSetTag = ((TagArticleSet) articleSet).getTag();
-			if (articleSetTag.getSection() != null) {
-				return articleSetTag.getSection().getName() + " - " + articleSetTag.getName();
-			}
+			return articleSet.getName();
 		}
-		return articleSet.getName();
+		return articleSetShortName;
 	}
 
 }

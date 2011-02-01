@@ -21,6 +21,11 @@ public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	}
 	
 	@Override
+	public String getShortName() {
+		return getName();
+	}
+
+	@Override
 	public Section getSection() {
 		return null;
 	}

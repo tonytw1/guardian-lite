@@ -22,16 +22,25 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 		this.toDate = toDate;
 		this.dateDisplayName = dateDisplayName;
 	}
-
+	
 	@Override
 	public String getName() {
-		String name = tag.getName();
-		if (fromDate != null) {
-			name = name + " (" + dateDisplayName + ")";
+		StringBuilder name = new StringBuilder();
+		if (tag.getSection() != null) {
+			name.append(tag.getSection().getTag().getName() + " - ");
 		}
-		return name;
+		name.append(tag.getName());
+		if (fromDate != null) {
+			name.append(" (" + dateDisplayName + ")");
+		}
+		return name.toString();
 	}
 	
+	@Override
+	public String getShortName() {
+		return tag.getName();
+	}
+
 	@Override
 	public Section getSection() {
 		return tag.getSection();
