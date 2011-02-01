@@ -21,7 +21,7 @@ public class ContentApiStyleUrlBuilder {
 	private String format = "xml";
 
 	private List<Tag> tags;
-	private List<Tag> contentTypes;
+	private List<Tag> mustBeOneOfTags;
 	private List<String> tagTypes;
 	
 	private boolean showAll;
@@ -36,7 +36,7 @@ public class ContentApiStyleUrlBuilder {
 		this.apiHost = apiHost;
 		this.apiKey = apiKey;
 		this.tags = new ArrayList<Tag>();
-		this.contentTypes = new ArrayList<Tag>();
+		this.mustBeOneOfTags = new ArrayList<Tag>();
 		this.tagTypes = new ArrayList<String>();
 		this.showAll = false;
 		this.showRefinements = false;
@@ -51,13 +51,13 @@ public class ContentApiStyleUrlBuilder {
 		if (!tags.isEmpty()) {
 			appendTagsToBracketedCommaSeperatedList(tagsParameter, tags);
 			
-			if (!contentTypes.isEmpty()) {
+			if (!mustBeOneOfTags.isEmpty()) {
 				tagsParameter.append(",");
-				appendTagsToBracketedCommaSeperatedList(tagsParameter, contentTypes);		
+				appendTagsToBracketedCommaSeperatedList(tagsParameter, mustBeOneOfTags);		
 			}
 			
-		} else if (!contentTypes.isEmpty()) {
-			appendTagsToBracketedCommaSeperatedList(tagsParameter, contentTypes);			
+		} else if (!mustBeOneOfTags.isEmpty()) {
+			appendTagsToBracketedCommaSeperatedList(tagsParameter, mustBeOneOfTags);			
 		}
 		
 		if (tagsParameter.length() > 0) {
@@ -109,7 +109,7 @@ public class ContentApiStyleUrlBuilder {
 	
 
 	private void appendAllowedTagTypes(StringBuilder uri) {
-		if (!contentTypes.isEmpty()) {
+		if (!mustBeOneOfTags.isEmpty()) {
 			uri.append("&type=");
 			for (Iterator<String> iterator = tagTypes.iterator(); iterator.hasNext();) {
 				uri.append(iterator.next());
@@ -139,8 +139,8 @@ public class ContentApiStyleUrlBuilder {
 		tags.add(tag);
 	}
 	
-	public void addContentType(Tag contentTypeTag) {
-		contentTypes.add(contentTypeTag);
+	public void andMustBeOneOff(Tag tag) {
+		mustBeOneOfTags.add(tag);
 	}
 	
 	public void addTagType(String tagType) {
