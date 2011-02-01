@@ -1,5 +1,6 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
+import java.util.Arrays;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -14,7 +15,8 @@ public class ContentApiUrlService {
 		
 	private static Tag articleContentType = new Tag("Article content type", "type/article", null);
 	private static Tag galleryContentType = new Tag("Gallery content type", "type/gallery", null);
-
+	private static List<Tag> supportedContentTypes = Arrays.asList(articleContentType, galleryContentType);
+	
 	private String apiHost;
 	private String apiKey;
 	
@@ -68,11 +70,11 @@ public class ContentApiUrlService {
 			SectionArticleSet sectionArticleSet = (SectionArticleSet) articleSet;
 			contentApiUrlBuilder.addSection(((SectionArticleSet) articleSet).getSection());
 			if (sectionArticleSet.getFromDate() != null) {
-				contentApiUrlBuilder.setFromDate(sectionArticleSet.getFromDate());	// TODO this knowledge should be coming from the article set
+				contentApiUrlBuilder.setFromDate(sectionArticleSet.getFromDate());
 				contentApiUrlBuilder.setToDate(sectionArticleSet.getToDate());
-			}
-			contentApiUrlBuilder.andMustBeOneOff(articleContentType);
-			contentApiUrlBuilder.andMustBeOneOff(galleryContentType);
+			}			
+			// TODO this knowledge should be coming from the article set
+			contentApiUrlBuilder.andMustBeOneOff(supportedContentTypes);
 		}
 		
 		if (articleSet instanceof TagArticleSet) {
@@ -82,8 +84,7 @@ public class ContentApiUrlService {
 				contentApiUrlBuilder.setFromDate(tagArticleSet.getFromDate());
 				contentApiUrlBuilder.setToDate(tagArticleSet.getToDate());
 			}
-			contentApiUrlBuilder.andMustBeOneOff(articleContentType);
-			contentApiUrlBuilder.andMustBeOneOff(galleryContentType);
+			contentApiUrlBuilder.andMustBeOneOff(supportedContentTypes);
 		}
 		
 		if (articleSet instanceof TagCombinerArticleSet) {
@@ -102,8 +103,7 @@ public class ContentApiUrlService {
 					contentApiUrlBuilder.addTag(((TagArticleSet) favouriteArticleSet).getTag());
 				}
 			}
-			contentApiUrlBuilder.andMustBeOneOff(articleContentType);
-			contentApiUrlBuilder.andMustBeOneOff(galleryContentType);
+			contentApiUrlBuilder.andMustBeOneOff(supportedContentTypes);
 		}
 		
 		if (articleSet instanceof SearchResultsArticleSet) {

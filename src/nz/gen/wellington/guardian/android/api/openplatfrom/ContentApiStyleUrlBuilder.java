@@ -143,6 +143,10 @@ public class ContentApiStyleUrlBuilder {
 		mustBeOneOfTags.add(tag);
 	}
 	
+	public void andMustBeOneOff(List<Tag> tags) {
+		mustBeOneOfTags.addAll(tags);		
+	}
+		
 	public void addTagType(String tagType) {
 		tagTypes.add(tagType);
 	}
@@ -201,5 +205,5 @@ public class ContentApiStyleUrlBuilder {
 	public void setToDate(String date) {
 		this.toDate = date;		
 	}
-	
+
 }
