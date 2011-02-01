@@ -38,6 +38,9 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 	
 	@Override
 	public String getShortName() {
+		if (fromDate != null) {
+			return dateDisplayName;
+		}
 		return tag.getName();
 	}
 
