@@ -355,11 +355,12 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			for (Refinement refinement : refinements.get(refinementType)) {
 				
 				if (refinementType.equals("type") && articleSet instanceof SectionArticleSet) {
-					ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForTagCombiner(((SectionArticleSet) articleSet).getSection().getTag(), refinement.getTag());
-					if (articleSetForRefinement != null) {
-						refinementArticleSets.add(articleSetForRefinement);
-					}
-					
+					if (refinement.getTag().isGalleryTag()) {
+						ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForTagCombiner(((SectionArticleSet) articleSet).getSection().getTag(), refinement.getTag());
+						if (articleSetForRefinement != null) {
+							refinementArticleSets.add(articleSetForRefinement);
+						}
+					}					
 				} else {			
 					ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForRefinement(articleSet, refinement);
 					if (articleSetForRefinement != null) {
