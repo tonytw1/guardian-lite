@@ -26,15 +26,10 @@ public class tag extends ArticleListActivity {
 		this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		articleSet = (ArticleSet) this.getIntent().getExtras().get("articleset");
 		
-		String name = articleSet.getName();		
 		if (articleSet.getSection() != null) {
-			name = articleSet.getSection().getName() + " - " + name;
-			if (articleSet.getHeadingColour() != null) {
-				setHeadingColour(articleSet.getHeadingColour());
-			}
-		}
-		
-		setHeading(name);
+			setHeadingColour(articleSet.getSection().getColour());			
+		}	
+		setHeading(articleSet.getName());
 	}
 	
 	protected String getRefinementDescription(String refinementType) {

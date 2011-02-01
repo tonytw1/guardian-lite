@@ -36,14 +36,6 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 	public Section getSection() {
 		return tag.getSection();
 	}
-
-	@Deprecated
-	public String getHeadingColour() {
-		if (tag.getSection() != null) {
-			return tag.getSection().getColour();
-		}
-		return null;
-	}
 	
 	@Override
 	public List<String> getPermittedRefinements() {

@@ -24,7 +24,9 @@ public class section extends ArticleListActivity implements FontResizingActivity
         this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
         this.articleSet = (SectionArticleSet) this.getIntent().getExtras().get("articleset");
     	setHeading(articleSet.getName());
-    	setHeadingColour(articleSet.getHeadingColour());
+    	if (articleSet.getSection() != null) {
+    		setHeadingColour(articleSet.getSection().getColour());    		
+    	}
 	}
 	
 	protected ArticleSet getArticleSet() {

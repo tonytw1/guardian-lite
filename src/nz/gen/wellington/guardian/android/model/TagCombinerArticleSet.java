@@ -22,14 +22,6 @@ public class TagCombinerArticleSet extends AbstractArticleSet implements Article
 		return leftTag.getSection();
 	}
 	
-	@Deprecated
-	public String getHeadingColour() {
-		if (leftTag.getSection() != null) {
-			return leftTag.getSection().getColour();
-		}
-		return null;
-	}
-
 	public Tag getLeftTag() {
 		return leftTag;
 	}

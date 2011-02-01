@@ -24,11 +24,6 @@ public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	public Section getSection() {
 		return null;
 	}
-		
-	@Override
-	public String getHeadingColour() {	// TODO should be driven off section - remove this method
-		return null;
-	}
 
 	@Override
 	public int getPageSize() {
