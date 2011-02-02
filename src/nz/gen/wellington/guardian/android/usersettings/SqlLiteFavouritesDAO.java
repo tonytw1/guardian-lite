@@ -284,7 +284,13 @@ public class SqlLiteFavouritesDAO {
 		OpenHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		}
-			
+		
+		@Override
+		public synchronized SQLiteDatabase getReadableDatabase() {
+			Log.d(TAG, "getReadableDatabase called");
+			return super.getReadableDatabase();
+		}
+
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + TAG_TABLE + "(id INTEGER PRIMARY KEY, type, apiid, name, sectionid TEXT)");

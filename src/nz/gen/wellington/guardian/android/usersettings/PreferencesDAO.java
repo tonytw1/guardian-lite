@@ -16,6 +16,7 @@ public class PreferencesDAO {
 
 	private static final String TAG = "PreferencesDAO";
 	
+	// TODO suggests the need for a settings DAO in front of the preference doa.
 	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://2.guardian-lite.appspot.com";
 	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
 
@@ -24,37 +25,45 @@ public class PreferencesDAO {
 	
 	public PreferencesDAO(Context context) {
 		prefs =  PreferenceManager.getDefaultSharedPreferences(context);
-		setClientVersion(context);
+		setClientVersion(context);	// TODO is a setting, not a preference
 	}
 
 	public int getPageSizePreference() {
+		Log.d(TAG, "Looking up pageSize preference");
 		final String pageSizeString = prefs.getString("pageSize", "10");
 		return Integer.parseInt(pageSizeString);
 	}
 	
 
 	public String getTrailPicturesPreference() {
+		Log.d(TAG, "Looking up trailImagesOption preference");
+
 		return (String) prefs.getString("trailImagesOption", "ALWAYS");
 	}
 
 	public String getLargePicturesPreference() {
+		Log.d(TAG, "Looking up largeImagesOption preference");
 		return (String) prefs.getString("largeImagesOption", "WIFI_ONLY");
 	}
 	
 	public String getSyncPreference() {
+		Log.d(TAG, "Looking up syncType preference");
 		return (String) prefs.getString("syncType", "NEVER");
 	}
 
 	public int getBaseFontSize() {
+		Log.d(TAG, "Looking up baseFontSize preference");
 		final String baseSizeString = prefs.getString("baseFontSize", "7");
 		return Integer.parseInt(baseSizeString);
 	}
 	
 	public boolean useContentApi() {
+		Log.d(TAG, "Looking up useContentApi preference");
 		return prefs.getBoolean("useContentApi", false);		
 	}
 	
 	public boolean showDateRefinements() {
+		Log.d(TAG, "Looking up showDateDefinements preference");
 		return prefs.getBoolean("showDateDefinements", false);
 	}
 	
@@ -66,6 +75,7 @@ public class PreferencesDAO {
 	}
 
 	public String getApiKey() {
+		Log.d(TAG, "Looking up contentApiKey preference");
 		return (String) prefs.getString("contentApiKey", null);
 	}
 	
@@ -74,6 +84,7 @@ public class PreferencesDAO {
 	}
 
 	public ColourScheme getColourScheme() {
+		Log.d(TAG, "Looking up colourScheme preference");
 		final String colourSchemePreferences = (String) prefs.getString("colourScheme", "WHITE_ON_BLACK");
 		if (colourSchemePreferences.equals("BLACK_ON_WHITE")) {
 			return new BlackOnWhiteColourScheme();
