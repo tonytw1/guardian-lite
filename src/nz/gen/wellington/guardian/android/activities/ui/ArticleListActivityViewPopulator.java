@@ -77,7 +77,6 @@ public class ArticleListActivityViewPopulator {
 	}
 	
 	
-	
 	private View chooseTrailView(LayoutInflater mInflater, boolean shouldUseFeatureTrail, boolean hideDivider) {
 		View view;
 		if (shouldUseFeatureTrail) {
@@ -93,7 +92,6 @@ public class ArticleListActivityViewPopulator {
 	}
 	
 	
-
 	public boolean populateTagDescription(LinearLayout mainpane, String descripton, int fontSize, ColourScheme colourScheme) {
 		// TODO move to the layout file
 		TextView descriptionView = new TextView(context);
@@ -112,19 +110,14 @@ public class ArticleListActivityViewPopulator {
 	
 	public void populateTrailImage(final String url, View trailView) {
 		if (imageDAO.isAvailableLocally(url)) {
-			ImageView trailImage = (ImageView) trailView.findViewById(R.id.TrailImage);			
+			ImageView trailImageView = (ImageView) trailView.findViewById(R.id.TrailImage);			
 			Bitmap image = imageDAO.getImage(url);
 			if (image != null) {
-				if (trailView.getId() == R.layout.featurelist) {
-					trailImage.setImageBitmap(imageStretchingService.stretchImageToFillView(image, trailImage));
-				} else {
-					trailImage.setImageBitmap(image);					
-				}
-				trailImage.setVisibility(View.VISIBLE);
+				scaleAndPopulateTrailImage(trailView, trailImageView, image);
 			}
 		}
 	}
-	
+
 	
 	public void populateRefinementType(LinearLayout mainpane, LayoutInflater inflater, String description, List<ArticleSet> refinementArticleSets, ColourScheme colourScheme) {
 		View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);			
@@ -144,7 +137,6 @@ public class ArticleListActivityViewPopulator {
 	}
 	
 	
-	
 	public void addSeperator(LayoutInflater mInflater, LinearLayout mainpane, ArticleSet articleSetForSection, boolean contentIsAvailable, ColourScheme colourScheme, int fontSize) {
 		View seperator = mInflater.inflate(R.layout.seperator, null);
 			
@@ -157,6 +149,18 @@ public class ArticleListActivityViewPopulator {
 			
 		ClickerPopulatingService.populateTagClicker(articleSetForSection, seperator, contentIsAvailable, colourScheme.getAvailableTagOnSeperator(), colourScheme.getUnavailableTagOnSeperator());
 		mainpane.addView(seperator);		
+	}
+	
+		
+	private void scaleAndPopulateTrailImage(View trailView, ImageView trailImage, Bitmap image) {
+		boolean isFeatureTrail = trailView.getId() == R.layout.featurelist;	// TODO may not be working
+		if (isFeatureTrail) {
+			int featureTrailImageWidth = trailImage.getWidth();	// TODO getWidth returns 0 for inflated views?
+			trailImage.setImageBitmap(imageStretchingService.stretchImageToFillView(image, featureTrailImageWidth));					
+		} else {
+			trailImage.setImageBitmap(image);					
+		}
+		trailImage.setVisibility(View.VISIBLE);
 	}
 	
 }

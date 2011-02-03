@@ -82,7 +82,7 @@ public class article extends ContentRenderingActivity {
 		ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
 		imageView.setVisibility(View.VISIBLE);
 		imageView.setScaleType(ScaleType.FIT_START);
-		imageView.setImageBitmap(imageStretchingService.stretchImageToFillView(bitmap, imageView));
+		imageView.setImageBitmap(imageStretchingService.stretchImageToFillView(bitmap, imageView.getWidth()));
 		populateCaption(article.getCaption());
 	}
 	

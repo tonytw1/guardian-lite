@@ -1,19 +1,22 @@
 package nz.gen.wellington.guardian.android.activities.ui;
 
 import android.graphics.Bitmap;
-import android.view.View;
+import android.util.Log;
 
 public class ImageStretchingService {
 
-	public Bitmap stretchImageToFillView (Bitmap bitmap, View imageView) {
-		final boolean isImageThinnerThanView = bitmap.getWidth() < imageView.getWidth();
+	private static final String TAG = "ImageStretchingService";
+
+	public Bitmap stretchImageToFillView (Bitmap bitmap, int desiredWidth) {	
+		final boolean isImageThinnerThanView = bitmap.getWidth() < desiredWidth;
+		Log.d(TAG, "Image is thinner than view: " + isImageThinnerThanView + " (" + bitmap.getWidth() + " vs " + desiredWidth + ")");
 		if (isImageThinnerThanView) {
 			final boolean isImageLandScaped = bitmap.getWidth() > bitmap.getHeight();
 			if (isImageLandScaped) {
-				int scaledWidth = imageView.getWidth();
 				float aspectRatio = new Float(bitmap.getWidth()) / new Float(bitmap.getHeight());
-				int scaledHeight = Math.round(scaledWidth / aspectRatio);
-				return Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, true);
+				int scaledHeight = Math.round(desiredWidth / aspectRatio);
+				Log.d(TAG, "Scaling to " + desiredWidth + "x" + scaledHeight);
+				return Bitmap.createScaledBitmap(bitmap, desiredWidth, scaledHeight, true);
 			}
 		}
 		return bitmap;
