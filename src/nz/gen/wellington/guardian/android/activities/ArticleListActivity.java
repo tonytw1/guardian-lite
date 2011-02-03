@@ -56,8 +56,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	private Thread loader;
 	private Date loaded;
+	
+	private Integer currentFontSize;
 	private ColourScheme currentColourScheme;
-
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -124,6 +125,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			loader.start();
 
 			currentColourScheme = colourScheme;
+			currentFontSize = settingsDAO.getBaseFontSize();
 		}
 	}
 	
@@ -138,6 +140,10 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	
 	private boolean shouldRefreshView(LinearLayout mainPane) {		
+		if (currentFontSize == null || currentFontSize != settingsDAO.getBaseFontSize()) {
+			return true;
+		}
+		
 		if (currentColourScheme == null) {
 			return true;
 		}
