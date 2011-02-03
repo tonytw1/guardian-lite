@@ -14,50 +14,16 @@ public class PreferencesDAO {
 	public PreferencesDAO(Context context) {
 		prefs =  PreferenceManager.getDefaultSharedPreferences(context);
 	}
-
-	public String getPageSizePreference() {
-		Log.d(TAG, "Looking up pageSize preference");
-		return prefs.getString("pageSize", "10");
-	}
 	
-	public String getTrailPicturesPreference() {
-		Log.d(TAG, "Looking up trailImagesOption preference");
-		return (String) prefs.getString("trailImagesOption", "ALWAYS");
-	}
-
-	public String getLargePicturesPreference() {
-		Log.d(TAG, "Looking up largeImagesOption preference");
-		return (String) prefs.getString("largeImagesOption", "WIFI_ONLY");
-	}
-	
-	public String getSyncPreference() {
-		Log.d(TAG, "Looking up syncType preference");
-		return (String) prefs.getString("syncType", "NEVER");
-	}
-
-	public String getBaseFontSize() {
-		Log.d(TAG, "Looking up baseFontSize preference");
-		return prefs.getString("baseFontSize", "7");
-	}
-	
-	public boolean useContentApi() {
-		Log.d(TAG, "Looking up useContentApi preference");
-		return prefs.getBoolean("useContentApi", false);		
-	}
-	
-	public boolean showDateRefinements() {
-		Log.d(TAG, "Looking up showDateDefinements preference");
-		return prefs.getBoolean("showDateDefinements", false);
-	}
-	
-	public String getApiKey() {
-		Log.d(TAG, "Looking up contentApiKey preference");
-		return (String) prefs.getString("contentApiKey", null);
-	}
-	
-	public String getColourScheme() {
-		Log.d(TAG, "Looking up colourScheme preference");
-		return (String) prefs.getString("colourScheme", "WHITE_ON_BLACK");		
+	public String getPreference(String key, String defaultValue) {
+		Log.d(TAG, "Looking up preference: " + key);		
+		if (key.equals("useContentApi")) {			
+			return ((Boolean) prefs.getBoolean(key, false)).toString();
+		}
+		if (key.equals("showDateDefinements")) {			
+			return ((Boolean) prefs.getBoolean(key, false)).toString();
+		}
+		return (String) prefs.getString(key, defaultValue);		
 	}
 	
 }

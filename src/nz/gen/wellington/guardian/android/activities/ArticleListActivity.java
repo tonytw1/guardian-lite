@@ -24,7 +24,6 @@ import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import android.content.Context;
 import android.os.Bundle;
@@ -45,7 +44,6 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	protected ArticleDAO articleDAO;
 	protected ImageDAO imageDAO;
 	private NetworkStatusService networkStatusService;
-	private PreferencesDAO preferencesDAO;
 	private ImageDownloadDecisionService imageDownloadDecisionService;
 	
 	private UpdateArticlesHandler updateArticlesHandler;
@@ -70,9 +68,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		articleDAO = SingletonFactory.getArticleDao(this.getApplicationContext());
 		imageDAO = SingletonFactory.getImageDao(this.getApplicationContext());		
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
-		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
-		imageDownloadDecisionService = SingletonFactory.getImageDownloadDecisionService(this.getApplicationContext());
-		
+		imageDownloadDecisionService = SingletonFactory.getImageDownloadDecisionService(this.getApplicationContext());		
 	}
 	
 	
@@ -305,7 +301,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
 			    	Map<String, List<Refinement>> refinements = bundle.getRefinements();
 			    	
-			    	final boolean showDateRefinements = preferencesDAO.showDateRefinements();
+			    	final boolean showDateRefinements = settingsDAO.showDateRefinements();
 			    	
 			    	if (refinements != null && !refinements.isEmpty()) {
 			    		LayoutInflater inflater = LayoutInflater.from(context);
