@@ -15,7 +15,7 @@ import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
+import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import android.content.Context;
 import android.util.Log;
 
@@ -27,13 +27,13 @@ public class ContentApiStyleApi implements ContentSource {
 	private ContentApiStyleJSONParser contentJsonParser;
 	private HttpFetcher httpFetcher;
 	private ArticleSetUrlService articleSetUrlService;
-	private PreferencesDAO preferencesDAO;
+	private SettingsDAO settingsDAO;
 	
 	public ContentApiStyleApi(Context context) {
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
 		this.contentJsonParser = new ContentApiStyleJSONParser();
 		this.articleSetUrlService = new ArticleSetUrlService(context);		
-		this.preferencesDAO = SingletonFactory.getPreferencesDAO(context);
+		this.settingsDAO = SingletonFactory.getSettingsDAO(context);
 		this.httpFetcher = new HttpFetcher(context);
 	}
 	
@@ -42,7 +42,7 @@ public class ContentApiStyleApi implements ContentSource {
 	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
 		
-		final String contentApiUrl = articleSetUrlService.getUrlForArticleSet(articleSet) + "&v=" + preferencesDAO.getClientVersion();		
+		final String contentApiUrl = articleSetUrlService.getUrlForArticleSet(articleSet) + "&v=" + settingsDAO.getClientVersion();		
 		LoggingBufferedInputStream input = httpFetcher.httpFetch(contentApiUrl, articleSet.getName() + " article set");	
 		if (input != null) {
 			ArticleBundle results = contentXmlParser.parseArticlesXml(input, articleCallback);
@@ -72,7 +72,7 @@ public class ContentApiStyleApi implements ContentSource {
 	@Override
 	public List<Section> getSections() {
 		Log.i(TAG, "Fetching section list from live api");
-		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(preferencesDAO.getPreferedApiHost(), preferencesDAO.getApiKey());
+		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(settingsDAO.getPreferedApiHost(), settingsDAO.getApiKey());
 		String contentApiUrl = contentApiUrlService.getSectionsQueryUrl();
 		InputStream input = httpFetcher.httpFetch(contentApiUrl, "sections");
 		if (input != null) {
@@ -91,7 +91,7 @@ public class ContentApiStyleApi implements ContentSource {
 	@Override
 	public List<Tag> searchTags(String searchTerm, List<String> allowedTagSearchTypes, Map<String, Section> sections) {
 		Log.i(TAG, "Fetching tag list from live api: " + searchTerm);
-		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(preferencesDAO.getPreferedApiHost(), preferencesDAO.getApiKey());
+		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(settingsDAO.getPreferedApiHost(), settingsDAO.getApiKey());
 		
 		InputStream input = httpFetcher.httpFetch(contentApiUrlService.getTagSearchQueryUrl(searchTerm, allowedTagSearchTypes), "tag results");
 		if (input != null) {

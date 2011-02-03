@@ -15,7 +15,7 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.SavedArticlesArticleSet;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
+import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import android.content.Context;
 import android.util.Log;
@@ -27,7 +27,7 @@ public class ArticleDAO {
 	private FileBasedArticleCache fileBasedArticleCache;
 	private ArticleCallback articleCallback;
 	private SectionDAO sectionsDAO;
-	private PreferencesDAO preferencesDAO;
+	private SettingsDAO settingsDAO;
 	private NetworkStatusService networkStatusService;
 	private ArticleSource aboutArticlesDAO;
 	private ArticleSource savedArticlesDAO;
@@ -38,7 +38,7 @@ public class ArticleDAO {
 		this.context = context;
 		fileBasedArticleCache = new FileBasedArticleCache(context);		
 		sectionsDAO = SingletonFactory.getSectionDAO(context);
-		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
+		settingsDAO = SingletonFactory.getSettingsDAO(context);
 		networkStatusService = SingletonFactory.getNetworkStatusService(context);
 		aboutArticlesDAO = new AboutArticlesDAO(context);
 		savedArticlesDAO = new SavedArticlesDAO(context);
@@ -100,7 +100,7 @@ public class ArticleDAO {
 		
 	public String getArticleSetRemoteChecksum(ArticleSet articleSet) {
 		ContentSource openPlatformApi = getContentSource();
-		return openPlatformApi.getRemoteChecksum(articleSet, preferencesDAO.getPageSizePreference());		
+		return openPlatformApi.getRemoteChecksum(articleSet, settingsDAO.getPageSizePreference());		
 	}
 	
 		

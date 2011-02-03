@@ -3,7 +3,7 @@ package nz.gen.wellington.guardian.android.activities;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
+import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -14,20 +14,20 @@ public abstract class AbstractFontResizingActivity extends Activity implements F
 
 	protected ColourScheme colourScheme;
 	protected int baseFontSize;
-	protected PreferencesDAO preferencesDAO;
+	protected SettingsDAO settingsDAO;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		preferencesDAO = SingletonFactory.getPreferencesDAO(this.getApplicationContext());
-		populatePreferences();
+		settingsDAO = SingletonFactory.getSettingsDAO(this.getApplicationContext());
+		populateSettings();
 	}
 	
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		populatePreferences();
+		populateSettings();
 	}
 	
 	@Override
@@ -53,9 +53,9 @@ public abstract class AbstractFontResizingActivity extends Activity implements F
 		}
 	}
 
-	private void populatePreferences() {
-		colourScheme = preferencesDAO.getColourScheme();
-		baseFontSize = preferencesDAO.getBaseFontSize();
+	private void populateSettings() {
+		colourScheme = settingsDAO.getColourScheme();
+		baseFontSize = settingsDAO.getBaseFontSize();
 	}
 	
 }

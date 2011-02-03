@@ -14,6 +14,7 @@ import nz.gen.wellington.guardian.android.network.DownProgressAnnouncer;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
+import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import android.content.Context;
 
 public class SingletonFactory {
@@ -28,6 +29,7 @@ public class SingletonFactory {
 	private static DownProgressAnnouncer downloadProgressAnnouncer;
 	private static TagListPopulatingService tagListPopulatingService;
 	private static ImageDownloadDecisionService imageDownloadDecisionService;
+	private static SettingsDAO settingsDAO;
 	
 	public static ArticleDAO getArticleDao(Context context) {
 		return new ArticleDAO(context);	
@@ -71,6 +73,13 @@ public class SingletonFactory {
 		}
 		return preferencesDAO;
 	}
+	
+	public static SettingsDAO getSettingsDAO(Context context) {
+		if (settingsDAO == null) {
+			settingsDAO = new SettingsDAO(context);
+		}
+		return settingsDAO;
+	}	
 
 	public static ArticleSetFactory getArticleSetFactory(Context context) {
 		if (articleSetFactory == null) {

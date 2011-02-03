@@ -5,6 +5,7 @@ import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
+import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
@@ -35,12 +36,14 @@ public class ContentUpdateService extends Service {
    
 	private final IBinder mBinder = new ContentUpdateServiceBinder();
 	private ArticleSetFactory articleSetFactory;
+	private SettingsDAO settingsDAO;
 	
 	
     @Override
 	public void onCreate() {
 		super.onCreate();
 		this.articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
+		this.settingsDAO = SingletonFactory.getSettingsDAO(this.getApplicationContext());
 	}
 
 
@@ -49,7 +52,7 @@ public class ContentUpdateService extends Service {
 		super.onStart(intent, startId);
 		if (intent != null && intent.getAction() != null && intent.getAction().equals("RUN")) {
 			Log.i(TAG, "Got start command");
-			int pageSize = SingletonFactory.getPreferencesDAO(this.getApplicationContext()).getPageSizePreference();
+			int pageSize = settingsDAO.getPageSizePreference();
 			this.start(pageSize);
 		}
 	}

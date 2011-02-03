@@ -17,23 +17,23 @@ import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.TagCombinerArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
+import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import android.content.Context;
 
 public class ArticleSetFactory {
 	
-	private PreferencesDAO preferencesDAO;
+	private SettingsDAO settingsDAO;
 	private ArticleSetUrlService articleSetUrlService;
 	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
 	
 	public ArticleSetFactory(Context context) {
-		this.preferencesDAO = SingletonFactory.getPreferencesDAO(context);
+		this.settingsDAO = SingletonFactory.getSettingsDAO(context);
 		this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(context);
 		this.articleSetUrlService = new ArticleSetUrlService(context);
 	}
 
 	public ArticleSet getAboutArticleSet() {
-		return addUrl(new AboutArticleSet(preferencesDAO.getPageSizePreference()));
+		return addUrl(new AboutArticleSet(settingsDAO.getPageSizePreference()));
 	}
 	
 	public ArticleSet getSavedArticlesArticleSet(List<String> articleIds) {
@@ -43,20 +43,20 @@ public class ArticleSetFactory {
 	}
 	
 	public ArticleSet getArticleSetForSearchTerm(String searchTerm) {
-		return addUrl(new SearchResultsArticleSet(searchTerm, preferencesDAO.getPageSizePreference()));
+		return addUrl(new SearchResultsArticleSet(searchTerm, settingsDAO.getPageSizePreference()));
 	}
 	
 	public ArticleSet getFavouritesArticleSet() {
 		List<ArticleSet> favouriteArticleSets = favouriteSectionsAndTagsDAO.getFavouriteArticleSets();
-		return addUrl(new FavouriteTagsArticleSet(favouriteArticleSets, preferencesDAO.getPageSizePreference()));
+		return addUrl(new FavouriteTagsArticleSet(favouriteArticleSets, settingsDAO.getPageSizePreference()));
 	}
 	
 	public ArticleSet getTopStoriesArticleSet() {
-		return addUrl(new TopStoriesArticleSet(preferencesDAO.getPageSizePreference()));
+		return addUrl(new TopStoriesArticleSet(settingsDAO.getPageSizePreference()));
 	}
 
 	public ArticleSet getArticleSetForTag(Tag tag) {
-		return addUrl(new TagArticleSet(tag, preferencesDAO.getPageSizePreference()));
+		return addUrl(new TagArticleSet(tag, settingsDAO.getPageSizePreference()));
 	}
 	
 	
@@ -65,11 +65,11 @@ public class ArticleSetFactory {
 	}
 	
 	public ArticleSet getArticleSetForTagCombiner(Tag leftTag, Tag rightTag) {
-		return new TagCombinerArticleSet(leftTag, rightTag, preferencesDAO.getPageSizePreference());
+		return new TagCombinerArticleSet(leftTag, rightTag, settingsDAO.getPageSizePreference());
 	}
 	
 	public ArticleSet getArticleSetForSection(Section section) {
-		return addUrl(new SectionArticleSet(section, preferencesDAO.getPageSizePreference()));
+		return addUrl(new SectionArticleSet(section, settingsDAO.getPageSizePreference()));
 	}
 	
 	public ArticleSet getArticleSetForSection(Section section, String dateDisplayName, String fromDate, String toDate) {

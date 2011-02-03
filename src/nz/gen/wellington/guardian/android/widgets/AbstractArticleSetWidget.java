@@ -15,7 +15,7 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
+import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -38,7 +38,7 @@ public abstract class AbstractArticleSetWidget extends AppWidgetProvider {
 
 	protected ArticleSetFactory articleSetFactory;
 	private ImageDAO imageDAO;
-	private PreferencesDAO preferencesDAO;
+	private SettingsDAO settingsDAO;
 	private ArticleDAO articleDAO;
 	
 	@Override
@@ -48,7 +48,7 @@ public abstract class AbstractArticleSetWidget extends AppWidgetProvider {
 		// TODO is there a better place todo this - ie. a constructor method?
 		articleSetFactory = SingletonFactory.getArticleSetFactory(context);
 		imageDAO = SingletonFactory.getImageDao(context);
-		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
+		settingsDAO = SingletonFactory.getSettingsDAO(context);
 		articleDAO = SingletonFactory.getArticleDao(context);
 		
 		refresh(context, appWidgetIds);
@@ -103,7 +103,7 @@ public abstract class AbstractArticleSetWidget extends AppWidgetProvider {
 
 	
 	private ArticleBundle getArticles(Context context) {
-		ArticleSet articleSet = getArticleSet(preferencesDAO.getPageSizePreference(), context);
+		ArticleSet articleSet = getArticleSet(settingsDAO.getPageSizePreference(), context);
 		if (articleSet.isEmpty()) {
 			return null;
 		}
