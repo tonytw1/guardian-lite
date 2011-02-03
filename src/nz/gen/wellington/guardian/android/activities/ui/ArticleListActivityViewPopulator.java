@@ -113,7 +113,8 @@ public class ArticleListActivityViewPopulator {
 			ImageView trailImageView = (ImageView) trailView.findViewById(R.id.TrailImage);			
 			Bitmap image = imageDAO.getImage(url);
 			if (image != null) {
-				scaleAndPopulateTrailImage(trailView, trailImageView, image);
+				boolean isLandOriented = false; 	// TODO how to obtain this?
+				scaleAndPopulateTrailImage(trailView, trailImageView, image, isLandOriented);
 			}
 		}
 	}
@@ -152,13 +153,13 @@ public class ArticleListActivityViewPopulator {
 	}
 	
 		
-	private void scaleAndPopulateTrailImage(View trailView, ImageView trailImage, Bitmap image) {
+	private void scaleAndPopulateTrailImage(View trailView, ImageView trailImage, Bitmap image, boolean isLandspaceOriented) {
 		boolean isFeatureTrail = trailView.getId() == R.layout.featurelist;	// TODO may not be working
-		if (isFeatureTrail) {
+		if (isFeatureTrail && !isLandspaceOriented) {
 			int featureTrailImageWidth = trailImage.getWidth();	// TODO getWidth returns 0 for inflated views?
 			trailImage.setImageBitmap(imageStretchingService.stretchImageToFillView(image, featureTrailImageWidth));					
 		} else {
-			trailImage.setImageBitmap(image);					
+			trailImage.setImageBitmap(image);
 		}
 		trailImage.setVisibility(View.VISIBLE);
 	}
