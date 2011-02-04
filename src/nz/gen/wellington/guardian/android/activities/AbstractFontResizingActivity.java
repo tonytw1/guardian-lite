@@ -35,6 +35,12 @@ public abstract class AbstractFontResizingActivity extends Activity implements F
 		setBackgroundColour();
 		setStatusColour();
 	}
+	
+	
+	protected boolean isLandScrapeOrientation() {
+		return getWindowManager().getDefaultDisplay().getOrientation() == 1;	// TODO needs to deal with 180 and 270 degree orientations		
+	}
+
 
 	private void setStatusColour() {
 		TextView view = (TextView) findViewById(R.id.DownloadProgress);

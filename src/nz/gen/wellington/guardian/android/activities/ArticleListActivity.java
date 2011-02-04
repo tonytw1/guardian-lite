@@ -29,7 +29,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -117,8 +116,8 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 	
 	
 	private void populateArticles(ContentFetchType fetchType, int baseFontSize, ArticleSet articleSet) {			
-		if (loader == null || !loader.isAlive()) {
-			updateArticlesHandler = new UpdateArticlesHandler(this, articleSet, baseFontSize, getWindowManager().getDefaultDisplay().getOrientation());
+		if (loader == null || !loader.isAlive()) {			
+			updateArticlesHandler = new UpdateArticlesHandler(this, articleSet, baseFontSize, isLandScrapeOrientation());
 			updateArticlesRunner = new UpdateArticlesRunner(articleDAO, imageDAO, imageDownloadDecisionService, fetchType, articleSet);
 			updateArticlesHandler.init();
 			
@@ -224,9 +223,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		private int baseFontSize;
 		private ArticleSetFactory articleSetFactory;
 		private ArticleListActivityViewPopulator articleListActivityViewPopulator;
-		private int i;
+		private boolean isLandscapeOrientation;
 		
-		public UpdateArticlesHandler(Context context, ArticleSet articleSet, int baseFontSize, int i) {
+		public UpdateArticlesHandler(Context context, ArticleSet articleSet, int baseFontSize, boolean isLandscapeOrientation) {
 			super();
 			this.context = context;
 			this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
@@ -234,7 +233,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			this.articleSet = articleSet;
 			this.descriptionSet = false;
 			this.baseFontSize = baseFontSize;
-			this.i = i;
+			this.isLandscapeOrientation = isLandscapeOrientation;
 			init();
 		}
 				
@@ -266,8 +265,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	}
 			    	currentSection = article.getSection();
 			    	
-				final boolean isNotLandscapeOrientation = i != 1;
-				boolean shouldUseFeatureTrail = article.getMainImageUrl() != null && first && isNotLandscapeOrientation && articleSet.isFeatureTrailAllowed() && imageDAO.isAvailableLocally(article.getMainImageUrl());
+			    	boolean shouldUseFeatureTrail = article.getMainImageUrl() != null && first && !isLandscapeOrientation && articleSet.isFeatureTrailAllowed() && imageDAO.isAvailableLocally(article.getMainImageUrl());
 					String trailImageUrl = article.getThumbnailUrl();
 					if (shouldUseFeatureTrail) {
 						trailImageUrl = article.getMainImageUrl();
