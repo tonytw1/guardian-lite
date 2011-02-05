@@ -65,7 +65,7 @@ public class ArticleSetFactory {
 	}
 	
 	public ArticleSet getArticleSetForTagCombiner(Tag leftTag, Tag rightTag) {
-		return new TagCombinerArticleSet(leftTag, rightTag, settingsDAO.getPageSizePreference());
+		return addUrl(new TagCombinerArticleSet(leftTag, rightTag, settingsDAO.getPageSizePreference()));
 	}
 	
 	public ArticleSet getArticleSetForSection(Section section) {

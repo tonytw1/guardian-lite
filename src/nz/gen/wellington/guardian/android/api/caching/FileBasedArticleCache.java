@@ -118,6 +118,7 @@ public class FileBasedArticleCache {
 	}
 	
 	private String getLocalFilename(String url) {
+		Log.d(TAG, "Getting local filename for url: " + url);
 		return FileCacheLocalFilenameService.getLocalFilenameFor(url) + VERSION_SUFFIX;
 	}
 	

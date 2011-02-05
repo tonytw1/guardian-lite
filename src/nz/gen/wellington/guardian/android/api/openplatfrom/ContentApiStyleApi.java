@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
-import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
@@ -26,13 +25,11 @@ public class ContentApiStyleApi implements ContentSource {
 	private ContentApiStyleXmlParser contentXmlParser;
 	private ContentApiStyleJSONParser contentJsonParser;
 	private HttpFetcher httpFetcher;
-	private ArticleSetUrlService articleSetUrlService;
 	private SettingsDAO settingsDAO;
 	
 	public ContentApiStyleApi(Context context) {
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
 		this.contentJsonParser = new ContentApiStyleJSONParser();
-		this.articleSetUrlService = new ArticleSetUrlService(context);		
 		this.settingsDAO = SingletonFactory.getSettingsDAO(context);
 		this.httpFetcher = new HttpFetcher(context);
 	}
@@ -42,7 +39,7 @@ public class ContentApiStyleApi implements ContentSource {
 	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
 		
-		final String contentApiUrl = articleSetUrlService.getUrlForArticleSet(articleSet) + "&v=" + settingsDAO.getClientVersion();		
+		final String contentApiUrl = articleSet.getSourceUrl() + "&v=" + settingsDAO.getClientVersion();		
 		LoggingBufferedInputStream input = httpFetcher.httpFetch(contentApiUrl, articleSet.getName() + " article set");	
 		if (input != null) {
 			ArticleBundle results = contentXmlParser.parseArticlesXml(input, articleCallback);
@@ -64,7 +61,7 @@ public class ContentApiStyleApi implements ContentSource {
 	@Override
 	public String getRemoteChecksum(ArticleSet articleSet, int pageSize) {		
 		Log.i(TAG, "Fetching article set checksum for article set: " + articleSet.getName());		
-		final String contentApiUrl = articleSetUrlService.getUrlForArticleSet(articleSet);		
+		final String contentApiUrl = articleSet.getSourceUrl();	
 		return httpFetcher.httpEtag(contentApiUrl, articleSet.getName() + " article set checksum");
 	}
 	
