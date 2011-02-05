@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
@@ -22,6 +23,12 @@ public class ContentApiStyleJSONParser {
 	
 	private static final String TAG = "ContentApiStyleJSONParser";	
 	private static final String NEW_LINE = "\n";
+
+	private HtmlCleaner htmlCleaner;
+	
+	public ContentApiStyleJSONParser() {
+		htmlCleaner = new HtmlCleaner();
+	}
 	
 	public List<Section> parseSectionsJSON(InputStream input) {
 		try {
@@ -44,10 +51,9 @@ public class ContentApiStyleJSONParser {
 			List<Section> sections = new LinkedList<Section>();
 			for (int i = 0; i < results.length(); i++) {
 				JSONObject section = results.getJSONObject(i);
-				final String sectionName = section.getString("webTitle");
+				final String sectionName = htmlCleaner.stripHtml(section.getString("webTitle"));
 				final String id = section.getString("id");
-				sections.add(new Section(id, sectionName, SectionColourMap
-						.getColourForSection(id)));
+				sections.add(new Section(id, sectionName, SectionColourMap.getColourForSection(id)));
 			}
 			return sections;
 
