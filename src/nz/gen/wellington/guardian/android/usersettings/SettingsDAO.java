@@ -44,7 +44,7 @@ public class SettingsDAO {
 	}
 
 	public String getApiKey() {
-		return getPreference("useContentApi", null);
+		return getPreference("contentApiKey", null);
 	}
 
 	public int getBaseFontSize() {		
