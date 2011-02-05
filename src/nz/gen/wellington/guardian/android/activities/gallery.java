@@ -1,6 +1,5 @@
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
@@ -12,19 +11,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 
 public class gallery extends ContentRenderingActivity {
 	
-	private static final String TAG = "gallery";
-
+	private static final int THUMBNAILS_PER_ROW = 4;
+	
 	private GalleryImageUpdateHandler galleryImageUpdateHandler;
-    private ImageAdapter imageAdapter;
-	private GridView thumbnails;
+	private TableRow currentRow;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,9 +39,6 @@ public class gallery extends ContentRenderingActivity {
 	public void populateContent(Article article, int bodytextColour, int headlineColour) {
 		super.populateContent(article, bodytextColour, headlineColour);
 		
-    	thumbnails = (GridView) findViewById(R.id.GalleryThumbnails);
-		imageAdapter = new ImageAdapter();
-		thumbnails.setAdapter(imageAdapter);
 		
 		if (!article.getMediaElements().isEmpty()) {			
 			GalleryImageLoader galleryImageLoader = new GalleryImageLoader(imageDAO, article.getMediaElements());
@@ -61,9 +54,12 @@ public class gallery extends ContentRenderingActivity {
 		imageView.setImageBitmap(image);
 		imageView.setPadding(5, 5, 5, 5);
 		
-		Log.d(TAG, "Adding view to gridview");
-		imageAdapter.add(imageView);
-		thumbnails.invalidateViews();
+		TableLayout thumbnails = (TableLayout) findViewById(R.id.GalleryThumbnails);
+		if (currentRow == null || currentRow.getChildCount() >= THUMBNAILS_PER_ROW) {
+			currentRow =  new TableRow(this.getApplicationContext());
+			thumbnails.addView(currentRow);
+		}
+		currentRow.addView(imageView);
 	}
 	
 	
@@ -120,39 +116,4 @@ public class gallery extends ContentRenderingActivity {
 		}
 	}
 	
-	
-	
-	public class ImageAdapter extends BaseAdapter {
-
-		private List<View> views;
-
-		public ImageAdapter() {
-			views = new ArrayList<View>();
-		}
-
-		public int getCount() {
-			return views.size();
-		}
-
-		public Object getItem(int position) {
-			return null;
-		}
-
-		public long getItemId(int position) {
-			return position;
-		}
-
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {  
-				return views.get(position);
-			} else {
-				convertView = views.get(position);
-				return convertView;
-			}
-		}
-
-		public void add(View view) {
-			views.add(view);
-		}
-	}
 }
