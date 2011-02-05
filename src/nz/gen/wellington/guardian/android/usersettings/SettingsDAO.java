@@ -21,7 +21,7 @@ public class SettingsDAO {
 		
 	private static final String APP_PACKAGE = "nz.gen.wellington.guardian.android";
 
-	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://2.guardian-lite.appspot.com";
+	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://3.guardian-lite.appspot.com";
 	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
 	
 	private static Tag articleContentType = new Tag("Article content type", "type/article", null);
@@ -44,16 +44,19 @@ public class SettingsDAO {
 	}
 	
 	public String getPreferedApiHost() {
-		if (getPreference("useContentApi", "false").equals("true")) {
+		if (isUsingContentApi()) {
 			return CONTENT_API_URL;
 		}
 		return GUARDIAN_LITE_PROXY_API_PREFIX;
 	}
-
+	
 	public String getApiKey() {
-		return getPreference("contentApiKey", null);
+		if (isUsingContentApi()) {
+			return getPreference("contentApiKey", null);
+		}
+		return null;
 	}
-
+	
 	public int getBaseFontSize() {		
 		return Integer.parseInt(getPreference("baseFontSize", "7"));
 	}
@@ -103,7 +106,6 @@ public class SettingsDAO {
 			Log.w(TAG, "Failed to get client version: " + e.getMessage());
 		}
 	}
-
 	
 	private String getPreference(String key, String defaultValue) {
 		if (cache.containsKey(key)) {
@@ -111,6 +113,10 @@ public class SettingsDAO {
 		}
 		cache.put(key, preferencesDAO.getPreference(key, defaultValue));
 		return cache.get(key);
+	}
+	
+	private boolean isUsingContentApi() {
+		return getPreference("useContentApi", "false").equals("true");
 	}
 
 }
