@@ -10,6 +10,7 @@ import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.TagCombinerArticleSet;
+import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 
 public class ContentApiUrlService {
 		
@@ -108,8 +109,13 @@ public class ContentApiUrlService {
 		
 		if (articleSet instanceof SearchResultsArticleSet) {
 			contentApiUrlBuilder.setSearchTerm(((SearchResultsArticleSet) articleSet).getSearchTerm());
+			contentApiUrlBuilder.andMustBeOneOff(supportedContentTypes);
 		}
-			
+		
+		if (articleSet instanceof TopStoriesArticleSet) {
+			contentApiUrlBuilder.andMustBeOneOff(supportedContentTypes);
+		}
+					
 		contentApiUrlBuilder.setPageSize(articleSet.getPageSize());
 		contentApiUrlBuilder.setShowMedia(true);
 		contentApiUrlBuilder.setFormat("xml");
