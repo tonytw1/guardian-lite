@@ -1,6 +1,5 @@
 package nz.gen.wellington.guardian.android.api.openplatfrom;
 
-import java.util.Arrays;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -13,17 +12,15 @@ import nz.gen.wellington.guardian.android.model.TagCombinerArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 
 public class ContentApiUrlService {
-		
-	private static Tag articleContentType = new Tag("Article content type", "type/article", null);
-	private static Tag galleryContentType = new Tag("Gallery content type", "type/gallery", null);
-	private static List<Tag> supportedContentTypes = Arrays.asList(articleContentType, galleryContentType);
 	
 	private String apiHost;
 	private String apiKey;
+	private List<Tag> supportedContentTypes;
 	
-	public ContentApiUrlService(String apiHost, String apiKey) {
+	public ContentApiUrlService(String apiHost, String apiKey, List<Tag> supportedContentTypes) {
 		this.apiHost = apiHost;
 		this.apiKey = apiKey;
+		this.supportedContentTypes = supportedContentTypes;	// TODO should come from the article sets.
 	}
 
 	public String getContentApiUrlForArticleSet(ArticleSet articleSet) {

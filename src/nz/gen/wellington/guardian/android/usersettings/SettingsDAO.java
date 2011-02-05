@@ -1,11 +1,14 @@
 package nz.gen.wellington.guardian.android.usersettings;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.BlackOnWhiteColourScheme;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
+import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.WhiteOnBlackColourScheme;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -20,7 +23,11 @@ public class SettingsDAO {
 
 	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://2.guardian-lite.appspot.com";
 	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
-
+	
+	private static Tag articleContentType = new Tag("Article content type", "type/article", null);
+	private static Tag galleryContentType = new Tag("Gallery content type", "type/gallery", null);
+	private static List<Tag> supportedContentTypes = Arrays.asList(articleContentType, galleryContentType);
+	
 	private PreferencesDAO preferencesDAO;
 	private int clientVersion = 0;
 	private Map<String, String> cache;
@@ -79,6 +86,15 @@ public class SettingsDAO {
 		return new Boolean(getPreference("showDateDefinements", "true"));
 	}
 		
+	public void clearCache() {
+		Log.i(TAG, "Clearing cache");		
+		cache.clear();
+	}
+	
+	public List<Tag> getSupportedContentTypes() {
+		return supportedContentTypes;	// TODO immuntable
+	}
+	
 	private void setClientVersion(Context context) {
 		try {
 			PackageInfo pInfo = context.getPackageManager().getPackageInfo(APP_PACKAGE, PackageManager.GET_META_DATA);
@@ -88,10 +104,6 @@ public class SettingsDAO {
 		}
 	}
 
-	public void clearCache() {
-		Log.i(TAG, "Clearing cache");		
-		cache.clear();
-	}
 	
 	private String getPreference(String key, String defaultValue) {
 		if (cache.containsKey(key)) {
