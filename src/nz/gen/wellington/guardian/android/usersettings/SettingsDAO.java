@@ -17,6 +17,12 @@ import android.util.Log;
 
 public class SettingsDAO {
 
+	private static final String TRAIL_IMAGES_DOWNLOAD_DEFAULT = "ALWAYS";
+	private static final String DEFAULT_LARGE_IMAGES_DOWNLOAD_SETTING = "WIFI_ONLY";
+	private static final String DEFAULT_PAGE_SIZE = "10";
+	private static final String DEFAULT_COLOUR_SCHEME = "BLACK_ON_WHITE";
+	private static final String DEFAULT_BASE_FONT_SIZE = "7";
+
 	private static final String TAG = "SettingsDAO";
 		
 	private static final String APP_PACKAGE = "nz.gen.wellington.guardian.android";
@@ -58,23 +64,23 @@ public class SettingsDAO {
 	}
 	
 	public int getBaseFontSize() {		
-		return Integer.parseInt(getPreference("baseFontSize", "7"));
+		return Integer.parseInt(getPreference("baseFontSize", DEFAULT_BASE_FONT_SIZE));
 	}
 	
 	public ColourScheme getColourScheme() {		
-		final String colourSchemePreferences = getPreference("colourScheme", "BLACK_ON_WHITE");
-		if (colourSchemePreferences.equals("BLACK_ON_WHITE")) {
+		final String colourSchemePreferences = getPreference("colourScheme", DEFAULT_COLOUR_SCHEME);
+		if (colourSchemePreferences.equals(DEFAULT_COLOUR_SCHEME)) {
 			return new BlackOnWhiteColourScheme();
 		}
 		return new WhiteOnBlackColourScheme();		
 	}
 	
 	public String getLargePicturesPreference() {
-		return getPreference("largeImagesOption", "WIFI_ONLY");
+		return getPreference("largeImagesOption", DEFAULT_LARGE_IMAGES_DOWNLOAD_SETTING);
 	}
 
 	public int getPageSizePreference() {
-		return Integer.parseInt(getPreference("pageSize", "10"));
+		return Integer.parseInt(getPreference("pageSize", DEFAULT_PAGE_SIZE));
 	}
 	
 	public String getSyncPreference() {
@@ -82,7 +88,7 @@ public class SettingsDAO {
 	}
 
 	public String getTrailPicturesPreference() {
-		return getPreference("trailImagesOption", "ALWAYS");
+		return getPreference("trailImagesOption", TRAIL_IMAGES_DOWNLOAD_DEFAULT);
 	}
 
 	public boolean showDateRefinements() {
