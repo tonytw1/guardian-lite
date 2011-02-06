@@ -7,7 +7,8 @@ public class ImageStretchingService {
 
 	private static final String TAG = "ImageStretchingService";
 
-	public Bitmap stretchImageToFillView (Bitmap bitmap, int desiredWidth) {	
+	public Bitmap stretchImageToFillView (Bitmap bitmap, int desiredWidth) {
+		Log.d(TAG, "Asked to scale from " + bitmap.getWidth() + " to " + desiredWidth);
 		final boolean isImageThinnerThanView = bitmap.getWidth() < desiredWidth;
 		Log.d(TAG, "Image is thinner than view: " + isImageThinnerThanView + " (" + bitmap.getWidth() + " vs " + desiredWidth + ")");
 		if (isImageThinnerThanView) {

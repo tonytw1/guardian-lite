@@ -3,7 +3,6 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
-import nz.gen.wellington.guardian.android.activities.ui.ContentClicker;
 import nz.gen.wellington.guardian.android.activities.ui.PictureClicker;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
