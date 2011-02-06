@@ -59,7 +59,7 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 		images = new HashMap<String, Bitmap>();
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.article);
+		setContentView(R.layout.article);	// TODO really?
 		
 		this.article = (Article) this.getIntent().getExtras().get("article");		
 		if (article != null) {

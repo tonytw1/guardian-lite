@@ -3,9 +3,12 @@ package nz.gen.wellington.guardian.android.activities;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.activities.ui.ContentClicker;
+import nz.gen.wellington.guardian.android.activities.ui.PictureClicker;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.MediaElement;
+import nz.gen.wellington.guardian.android.model.Picture;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +20,7 @@ import android.widget.TableRow;
 
 public class gallery extends ContentRenderingActivity {
 	
-	private static final int THUMBNAILS_PER_ROW = 4;
+	private static final int THUMBNAILS_PER_ROW = 3;
 	
 	private GalleryImageUpdateHandler galleryImageUpdateHandler;
 	private TableRow currentRow;
@@ -48,11 +51,12 @@ public class gallery extends ContentRenderingActivity {
 	}
 
 		
-	private void populateGalleryImage(String imageUrl) {
-		ImageView imageView = new ImageView(this.getApplicationContext());
-		Bitmap image = images.get(imageUrl);
+	private void populateGalleryPicture(Picture picture) {
+		ImageView imageView = new ImageView(this);
+		Bitmap image = images.get(picture.getThumbnail());
 		imageView.setImageBitmap(image);
 		imageView.setPadding(5, 5, 5, 5);
+		imageView.setOnClickListener(new PictureClicker(picture));
 		
 		TableLayout thumbnails = (TableLayout) findViewById(R.id.GalleryThumbnails);
 		if (currentRow == null || currentRow.getChildCount() >= THUMBNAILS_PER_ROW) {
@@ -80,21 +84,24 @@ public class gallery extends ContentRenderingActivity {
 			Log.i(TAG, "Running gallery image loader with " + mediaElements + " media elements");
 			for (MediaElement mediaElement : mediaElements) {
 				
-				if (mediaElement != null && mediaElement.isPicture() && mediaElement.getThumbnail() != null) {
-					final String imageUrl = mediaElement.getThumbnail();
-					Bitmap image = imageDAO.getImage(imageUrl);
+				if (mediaElement != null && mediaElement.isPicture() && mediaElement.getThumbnail() != null) {					
+					Picture picture = new Picture(mediaElement.getThumbnail(), mediaElement.getFile(), mediaElement.getCaption());
+					Bitmap image = imageDAO.getImage(picture.getThumbnail());
 					if (image != null) {
-						images.put(imageUrl, image);
-						sendGalleryImageAvailableMessage(imageUrl);
+						images.put(picture.getThumbnail(), image);
+						sendThumbnailAvailableForPictureMessage(picture);
 					}					
 				}
 			}
 		}	
 
-		private void sendGalleryImageAvailableMessage(String imageUrl) {
+		private void sendThumbnailAvailableForPictureMessage(Picture picture) {
 			Message msg = new Message();
 			msg.what = GalleryImageUpdateHandler.GALLERY_IMAGE_AVAILABLE;
-			msg.getData().putString("imageUrl", imageUrl);
+			
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("picture", picture);			
+			msg.setData(bundle);	
 			galleryImageUpdateHandler.sendMessage(msg);
 		}
 		
@@ -109,9 +116,9 @@ public class gallery extends ContentRenderingActivity {
 			super.handleMessage(msg);
 			
 			switch (msg.what) {	   
-			    case GALLERY_IMAGE_AVAILABLE:
-			    final String mainImageUrl = msg.getData().getString("imageUrl");
-			    populateGalleryImage(mainImageUrl);
+			    case GALLERY_IMAGE_AVAILABLE:			    	
+			    final Picture picture = (Picture) msg.getData().get("picture");
+			    populateGalleryPicture(picture);
 			}
 		}
 	}

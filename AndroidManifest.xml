@@ -58,6 +58,7 @@
 <activity android:name=".activities.savedArticles"></activity>
 <activity android:name=".activities.search"></activity>
 <activity android:name=".activities.gallery"></activity>
+<activity android:name=".activities.picture"></activity>
 </application>
 	
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>
