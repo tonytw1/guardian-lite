@@ -5,11 +5,11 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.PictureClicker;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.MediaElement;
 import nz.gen.wellington.guardian.android.model.Picture;
-import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,16 +24,15 @@ public class gallery extends ContentRenderingActivity {
 	private static final int THUMBNAILS_PER_ROW = 3;
 	
 	private GalleryImageUpdateHandler galleryImageUpdateHandler;
-	private NetworkStatusService networkStatusService;
+	private ImageDownloadDecisionService imageDownloadDecisionService;
 	private TableRow currentRow;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
-    	galleryImageUpdateHandler = new GalleryImageUpdateHandler();    	
+		galleryImageUpdateHandler = new GalleryImageUpdateHandler();
+		imageDownloadDecisionService = SingletonFactory.getImageDownloadDecisionService(this.getApplicationContext());
 	}
-
 	
 	@Override
 	protected int getLayout() {
@@ -44,8 +43,6 @@ public class gallery extends ContentRenderingActivity {
 	@Override
 	public void populateContent(Article article, int bodytextColour, int headlineColour) {
 		super.populateContent(article, bodytextColour, headlineColour);
-		
-		
 		if (!article.getMediaElements().isEmpty()) {			
 			GalleryImageLoader galleryImageLoader = new GalleryImageLoader(imageDAO, article.getMediaElements());
 			Thread loader = new Thread(galleryImageLoader);
@@ -60,7 +57,7 @@ public class gallery extends ContentRenderingActivity {
 		imageView.setImageBitmap(image);
 		imageView.setPadding(5, 5, 5, 5);
 		
-		final boolean isFullImageAvailable = imageDAO.isAvailableLocally(picture.getFile()) || networkStatusService.isConnectionAvailable();
+		final boolean isFullImageAvailable = imageDAO.isAvailableLocally(picture.getFile()) || imageDownloadDecisionService.isOkToDownloadMainImages();
 		if (isFullImageAvailable) {
 			imageView.setOnClickListener(new PictureClicker(picture));
 		}

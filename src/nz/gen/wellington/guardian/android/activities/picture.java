@@ -2,6 +2,7 @@ package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Picture;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.widget.ImageView.ScaleType;
 
 public class picture extends AbstractFontResizingActivity {
 
+	private ImageDownloadDecisionService imageDownloadDecisionService;
 	private MainImageLoader mainImageLoader;
 	private MainImageUpdateHandler mainImageUpdateHandler;
 
@@ -28,13 +30,16 @@ public class picture extends AbstractFontResizingActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		this.imageDownloadDecisionService = SingletonFactory.getImageDownloadDecisionService(this.getApplicationContext());
+		this.imageDAO = SingletonFactory.getImageDao(this.getApplicationContext());
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.picture);
-		
-		this.picture = (Picture) this.getIntent().getExtras().get("picture");		
-		if (picture != null) {
+
+		this.picture = (Picture) this.getIntent().getExtras().get("picture");
+		if (picture != null && (imageDAO.isAvailableLocally(picture.getFile()) || imageDownloadDecisionService.isOkToDownloadMainImages())) {
 			populateMainImage();
-			imageDAO = SingletonFactory.getImageDao(this.getApplicationContext());
 			mainImageUpdateHandler = new MainImageUpdateHandler();
     	
 			final String mainImageUrl = picture.getFile();
