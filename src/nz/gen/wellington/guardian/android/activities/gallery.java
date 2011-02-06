@@ -5,9 +5,11 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.PictureClicker;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.MediaElement;
 import nz.gen.wellington.guardian.android.model.Picture;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,12 +24,14 @@ public class gallery extends ContentRenderingActivity {
 	private static final int THUMBNAILS_PER_ROW = 3;
 	
 	private GalleryImageUpdateHandler galleryImageUpdateHandler;
+	private NetworkStatusService networkStatusService;
 	private TableRow currentRow;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-    	galleryImageUpdateHandler = new GalleryImageUpdateHandler();
+		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
+    	galleryImageUpdateHandler = new GalleryImageUpdateHandler();    	
 	}
 
 	
@@ -55,13 +59,17 @@ public class gallery extends ContentRenderingActivity {
 		Bitmap image = images.get(picture.getThumbnail());
 		imageView.setImageBitmap(image);
 		imageView.setPadding(5, 5, 5, 5);
-		imageView.setOnClickListener(new PictureClicker(picture));
+		
+		final boolean isFullImageAvailable = imageDAO.isAvailableLocally(picture.getFile()) || networkStatusService.isConnectionAvailable();
+		if (isFullImageAvailable) {
+			imageView.setOnClickListener(new PictureClicker(picture));
+		}
 		
 		TableLayout thumbnails = (TableLayout) findViewById(R.id.GalleryThumbnails);
 		if (currentRow == null || currentRow.getChildCount() >= THUMBNAILS_PER_ROW) {
 			currentRow =  new TableRow(this.getApplicationContext());
 			thumbnails.addView(currentRow);
-		}
+		}		
 		currentRow.addView(imageView);
 	}
 	
