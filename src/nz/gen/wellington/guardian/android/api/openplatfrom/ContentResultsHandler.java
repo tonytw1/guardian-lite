@@ -187,7 +187,7 @@ public class ContentResultsHandler extends HandlerBase {
 			}
 			
 			if (currentField != null && currentField.equals("caption")) {
-				currentMediaElement.setCaption(currentElementContents.toString());
+				currentMediaElement.setCaption(htmlCleaner.stripHtml(currentElementContents.toString()));
 			}
 			
 			if (currentField != null && currentField.equals("width")) {

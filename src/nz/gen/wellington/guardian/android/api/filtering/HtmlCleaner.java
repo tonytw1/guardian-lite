@@ -6,7 +6,7 @@ public class HtmlCleaner {
 
 	private Pattern h2end = Pattern.compile("</h2>");
 	private Pattern p = Pattern.compile("</p>");
-	private Pattern br = Pattern.compile("<br />");
+	private Pattern br = Pattern.compile("<br ?/>");
 	private Pattern tags = Pattern.compile("<.*?>");
 	
 	public String stripHtml(String content) {
