@@ -155,10 +155,14 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 	
 	private void populateTags(Article article, final boolean connectionAvailable) {
 		LayoutInflater inflater = LayoutInflater.from(this);
+		if (!article.isTagged()) {
+			return;
+		}
+		
 		View tagLabel = findViewById(R.id.TagLabel);
 		if (tagLabel != null) {
 			tagLabel.setVisibility(View.VISIBLE);
-		}	
+		}
 		View authorList = findViewById(R.id.AuthorList);
 		if (authorList != null) {
 			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) authorList, articleSetFactory.getArticleSetsForTags(article.getAuthors()), colourScheme);

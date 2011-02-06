@@ -211,6 +211,18 @@ public class Article implements Serializable {
 		}
 		return null;
 	}
+	
+	public boolean isTagged() {
+		if (tags.isEmpty()) {
+			return false;
+		}
+		for (Tag tag : tags) {
+			if (!tag.isContentTypeTag()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public String getThumbnailUrl() {	// TODO rename to thumbnail to match content api
 		return thumbnail;
