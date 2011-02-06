@@ -1,45 +1,51 @@
-A basic Android based article viewer for the Guardian newspaper.
+Guardian Lite.
+An Android based article viewer for the Guardian newspaper.
 
 Provides the latest articles for each Guardian section and allows navigation to articles for specific contributors and keywords.
 Provides timed download functionality and on demand caching to the local file system.
-Uses a content sycning protocol which is broadly compatible with the Guardian Content API XML version.
+The content retrieval protocol used is broadly compatible with the Guardian Content XML API.
 
 Requirements
 - Android 1.5 or better
 
 Design goals:
 
-- Caching for offline use and fast page viewing
-Content needs to be available when offline (ie. on the Tube).
-Content needs to cached locally for quick navigation as online
-browsing feels frustrating.
-
-- Grab and go syncing.
-The client needs to be able to grab as much content, as quickly as possible, when prompted to. 
+Equally good online and offline experience:
 
 - Viewing of content should not be dependent on a full download completing fully.
-This is an acknowledgment that alot of users will be using the app 
-on an irregular basis - it needs to be able to fetch content and get itself into a usable state ASAP.
+	This is an acknowledgment that alot of users will be using the app on an irregular basis.
+   	Therefore we need to be able to fetch initial content as quickly as possible.
 
-- The user should be able to kill downloads at any point and still have access to what was actually downloaded.
-- The app should be usable (all be it without a full content set) while a download is in progress. 
-Use Android background processes to achieve this.
-- Downloads should fetch the bare minimum (ie. the article text) first and then go back for images as time permits.
+- Caching for offline use and fast page viewing
+	 Content needs to be available when offline (ie. on the Tube).
+
+Access to content
 
 - Regular updates
-Play to the strength of the Guardian's content, in that it constantly updated.
-Display news in descending date order and allow for it to be updated regularly.
-Provide a background process to apply refreshes.
+	Play to the strength of the Guardian's content, in that it is constantly updated.
+	Display news in descending date order and allow for it to be updated regularly.
+	Provide a background process to apply refreshes.
 
 - Make content discoverable.
-The Guardian offers thousands of keyword and contributer tags; too many to make discoverable through menus etc.
+	The Guardian offers thousands of keyword and contributer tags; too many to make discoverable through menus.
+	Related keyword and contributor links on articles should allow users to discover this content.
+	
+Economic use of network resources
 
-Therefore, display related keyword and contributor links on articles navigated to by top level section. 
-Allow users to download this content on demand, if it is not locally cached and a network link is available.
-Allow users to add these discovered tags to the list of content to sync.
+- Network traffic should be kept to the absolute minimum.
 
 
-TODO
+Copyright (C) 2011  Eel Pie Consulting Limited
 
-- Home page is favourites or most recent preference
-- Can't abort download correctly when the http connection is it the in establish phase
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
