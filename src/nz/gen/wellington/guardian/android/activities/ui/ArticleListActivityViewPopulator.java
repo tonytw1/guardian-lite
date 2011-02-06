@@ -119,7 +119,7 @@ public class ArticleListActivityViewPopulator {
 	}
 
 	
-	public void populateRefinementType(LinearLayout mainpane, LayoutInflater inflater, String description, List<ArticleSet> refinementArticleSets, ColourScheme colourScheme) {
+	public void populateRefinementType(LinearLayout mainpane, LayoutInflater inflater, String description, List<ArticleSet> refinementArticleSets, ColourScheme colourScheme, int fontSize) {
 		View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);			
 		TextView descriptionView = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);
 		descriptionView.setText(description);
@@ -132,7 +132,7 @@ public class ArticleListActivityViewPopulator {
 		tagGroup.setOrientation(LinearLayout.VERTICAL);
 		tagGroup.setPadding(2, 0, 2, 0);
 		
-		tagListPopulatingService.populateTags(inflater, true, tagGroup, refinementArticleSets, colourScheme);
+		tagListPopulatingService.populateTags(inflater, true, tagGroup, refinementArticleSets, colourScheme, fontSize);
 		mainpane.addView(tagGroup);
 	}
 	

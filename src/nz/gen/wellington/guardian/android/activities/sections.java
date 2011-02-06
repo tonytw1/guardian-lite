@@ -47,14 +47,14 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 		mainPane.removeAllViews();
 		
 		if (sectionDAO.areSectionsAvailable()) {
-			populateSections(baseFontSize);
+			populateSections();
 		} else {
-			outputNoSectionsWarning(baseFontSize);
+			outputNoSectionsWarning();
 		}
 	}
 
 				
-	private void populateSections(int baseSize) {
+	private void populateSections() {
 		List<Section> sections = sectionDAO.getSections();		
 		if (sections != null) {
 			sections = SectionSorter.sortByName(sections);	// TODO push this back behind the section dao for performance		
@@ -64,16 +64,16 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 			tagListPopulatingService.populateTags(inflater,
 					networkStatusService.isConnectionAvailable(), authorList,
 					articleSetFactory.getArticleSetsForSections(sections),
-					colourScheme
+					colourScheme, baseFontSize
 			);
 			
 		} else {
-        	outputNoSectionsWarning(baseSize);
+        	outputNoSectionsWarning();
 		}
 	}
 	
 	
-	private void outputNoSectionsWarning(float baseFontSize) {
+	private void outputNoSectionsWarning() {
 		LinearLayout mainpane;
 		mainpane = (LinearLayout) findViewById(R.id.MainPane);
 		TextView noArticlesMessage = new TextView(this.getApplicationContext());

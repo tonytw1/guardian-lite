@@ -11,6 +11,7 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +22,19 @@ public class TagListPopulatingService {
 	private ArticleDAO articleDAO;
 	
 	public TagListPopulatingService(Context context) {
-		articleDAO = SingletonFactory.getArticleDao(context);
+		this.articleDAO = SingletonFactory.getArticleDao(context);
 	}
 
-	public void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets, ColourScheme colourScheme) {
+	public void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets, ColourScheme colourScheme, int baseFontSize) {
 		Set<String> duplicatedArticleSetNames = getDuplicatedArticleSetNames(articleSets);		
 		for (ArticleSet articleSet : articleSets) {
-			final boolean isContentAvailable = articleDAO.isAvailable(articleSet);
+
 			View tagView = inflater.inflate(R.layout.authorslist, null);
-			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
-			
+			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);			
 			titleText.setText(getDeduplicatedArticleSetName(articleSet, duplicatedArticleSetNames));
+			titleText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
 			
+			final boolean isContentAvailable = articleDAO.isAvailable(articleSet);
 			ClickerPopulatingService.populateTagClicker(articleSet, tagView, isContentAvailable, colourScheme.getAvailableTag(), colourScheme.getUnavailableTag());
 			tagList.addView(tagView);
 		}
@@ -62,4 +64,3 @@ public class TagListPopulatingService {
 	}
 
 }
-

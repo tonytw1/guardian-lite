@@ -322,7 +322,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 												mainpane, inflater,
 												getRefinementDescription(refinementType),
 												getRefinementArticleSets(refinements, refinementType, articleSet),
-												currentColourScheme);
+												currentColourScheme, baseFontSize);
 			    				}
 			    			}
 						}

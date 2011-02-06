@@ -73,7 +73,7 @@ public class favourites extends ArticleListActivity {
 			tagGroup.setOrientation(LinearLayout.VERTICAL);
 			tagGroup.setPadding(2, 0, 2, 0);
 			
-			tagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), tagGroup, favouriteArticleSets, colourScheme);
+			tagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), tagGroup, favouriteArticleSets, colourScheme, baseFontSize);
 			authorList.addView(tagGroup);			
 			description.setText("The following sections and tags have been marked as favourites.");			
 			

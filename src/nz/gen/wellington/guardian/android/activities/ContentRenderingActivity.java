@@ -107,8 +107,9 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
         		
 		TextView tagLabel =  (TextView) findViewById(R.id.TagLabel);
 		if (tagLabel != null) {
+			tagLabel.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
 			tagLabel.setTextColor(colourScheme.getBodytext());
-		}
+		}				
 	}
 		
 	
@@ -165,11 +166,11 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 		}
 		View authorList = findViewById(R.id.AuthorList);
 		if (authorList != null) {
-			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) authorList, articleSetFactory.getArticleSetsForTags(article.getAuthors()), colourScheme);
+			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) authorList, articleSetFactory.getArticleSetsForTags(article.getAuthors()), colourScheme, baseFontSize);
 		}
 		View tagList = findViewById(R.id.TagList);
 		if (tagList != null) {
-			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) tagList, articleSetFactory.getArticleSetsForTags(article.getTags()), colourScheme);
+			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) tagList, articleSetFactory.getArticleSetsForTags(article.getTags()), colourScheme, baseFontSize);
 		}
 	}
 	
