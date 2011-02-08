@@ -139,6 +139,7 @@ public class ArticleListActivityViewPopulator {
 		View refinementsHeadingView = inflater.inflate(R.layout.refinements, null);			
 		TextView descriptionView = (TextView) refinementsHeadingView.findViewById(R.id.RefinementsDescription);
 		descriptionView.setText(description);
+		descriptionView.setText(fontSize);
 		descriptionView.setTextColor(colourScheme.getBodytext());
 		descriptionView.setPadding(2, 3, 2, 3);
 		mainpane.addView(refinementsHeadingView);
