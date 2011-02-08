@@ -324,24 +324,20 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    case DRAW_REFINEMENTS:			    	
 			    	mainpane = (LinearLayout) findViewById(R.id.MainPane);
 			    	Map<String, List<Refinement>> refinements = bundle.getRefinements();
-			    	
-			    	final boolean showDateRefinements = settingsDAO.showDateRefinements();
-			    	
+			    				    	
 			    	if (refinements != null && !refinements.isEmpty()) {
 			    		LayoutInflater inflater = LayoutInflater.from(context);
 			    		
 			    		for (String refinementType : articleSet.getPermittedRefinements()) {
 			    			Log.d(TAG, "Processing refinement type: " + refinementType);
 			    			if (articleSet.getPermittedRefinements().contains(refinementType) && refinements.keySet().contains(refinementType)) {
-			    				if (!refinementType.equals("date") || showDateRefinements) {			    					
-			    					List<ArticleSet> refinementArticleSets = getRefinementArticleSets(refinements, refinementType, articleSet);
-			    					if (!refinementArticleSets.isEmpty()) {
-			    						articleListActivityViewPopulator.populateRefinementType(
-			    								mainpane, inflater,
-												getRefinementDescription(refinementType),
-												refinementArticleSets,
-												currentColourScheme, baseFontSize);
-			    					}
+			    				List<ArticleSet> refinementArticleSets = getRefinementArticleSets(refinements, refinementType, articleSet);
+			    				if (!refinementArticleSets.isEmpty()) {
+			    					articleListActivityViewPopulator.populateRefinementType(
+			    							mainpane, inflater,
+											getRefinementDescription(refinementType),
+											refinementArticleSets,
+											currentColourScheme, baseFontSize);
 			    				}
 			    			}
 						}

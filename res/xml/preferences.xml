@@ -22,7 +22,6 @@
 	<PreferenceCategory android:title="Developer options">
 		<CheckBoxPreference android:title="Use Content API" android:key="useContentApi" android:summary="Access the Guardian Content API directly (Developers only)"></CheckBoxPreference>
 		<EditTextPreference android:summary="Your Guardian Content API key (Developers only)" android:title="Content API key" android:key="contentApiKey"></EditTextPreference>	
-		<CheckBoxPreference android:title="Date refinements" android:key="showDateDefinements" android:summary="Show date refinements (Developers only)"></CheckBoxPreference>	
 	</PreferenceCategory>
 	
 </PreferenceScreen>

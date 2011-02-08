@@ -106,11 +106,7 @@ public class SettingsDAO {
 	public String getTrailPicturesPreference() {
 		return getPreference("trailImagesOption", TRAIL_IMAGES_DOWNLOAD_DEFAULT);
 	}
-
-	public boolean showDateRefinements() {
-		return new Boolean(getPreference("showDateDefinements", "true"));
-	}
-		
+	
 	public void clearCache() {
 		Log.i(TAG, "Clearing cache");		
 		cache.clear();

@@ -44,7 +44,6 @@ public class preferences extends PreferenceActivity {
 		findPreference("useContentApi").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);		
 		findPreference("colourScheme").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
 		findPreference("baseFontSize").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
-		findPreference("showDateDefinements").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
 		findPreference("pageSize").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
 		findPreference("trailImagesOption").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
 		findPreference("largeImagesOption").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);

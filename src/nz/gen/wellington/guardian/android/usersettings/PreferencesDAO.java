@@ -36,9 +36,6 @@ public class PreferencesDAO {
 		if (key.equals("useContentApi")) {			
 			return ((Boolean) prefs.getBoolean(key, false)).toString();
 		}
-		if (key.equals("showDateDefinements")) {			
-			return ((Boolean) prefs.getBoolean(key, false)).toString();
-		}
 		return (String) prefs.getString(key, defaultValue);		
 	}
 	
