@@ -24,6 +24,7 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -49,12 +50,8 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 		description.setText("This unofficial application was developed by Tony McCrae of Eel Pie Consulting Limited.\n\n" +
 				"Articles are retreived from the Guardian's RSS feeds. Tag information is supplied by the Guardian Content API.\n\n" +
 				"For more information see:\nhttp://github.com/tonytw1/guardian-lite\n\n" +
-				"Application \u00A9 2010 Eel Pie Consulting Limited\n"
-				);
-				
-		ImageView poweredByTheGuardian = (ImageView) findViewById(R.id.PoweredByTheGuardian);
-		poweredByTheGuardian.setImageResource(R.drawable.poweredbyguardian);
-		
+				"Application \u00A9 2011 Eel Pie Consulting Limited\n"
+				);				
 	}
 	
 	@Override
@@ -67,6 +64,7 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 	protected void onResume() {
 		super.onResume();
 		setFontSize();
+		populatePoweredByIcon();
 	}
 	
 	@Override
@@ -107,6 +105,15 @@ public class about extends ArticleListActivity implements FontResizingActivity {
 		about.setTextColor(colourScheme.getBodytext());
 		contentCredit.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
 		contentCredit.setTextColor(colourScheme.getBodytext());
+	}
+	
+	private void populatePoweredByIcon() {
+		ImageView poweredByTheGuardian = (ImageView) findViewById(R.id.PoweredByTheGuardian);
+		if (colourScheme.getBackground().equals(Color.WHITE)) {
+			poweredByTheGuardian.setImageResource(R.drawable.poweredbyguardianblack);
+		} else {
+			poweredByTheGuardian.setImageResource(R.drawable.poweredbyguardian);
+		}
 	}
 	
 }
