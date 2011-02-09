@@ -21,6 +21,7 @@ import nz.gen.wellington.guardian.android.contentupdate.ContentUpdateService;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -45,11 +46,26 @@ public class notification extends AbstractFontResizingActivity implements OnClic
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		
 		Intent callingIntent = this.getIntent();
-		String report = (String) callingIntent.getExtras().getString("report");
+		String reportText = (String) callingIntent.getExtras().getString("report");
 		
-		TextView heading = (TextView) findViewById(R.id.Report);
-		heading.setText(report);
+		TextView reportTextView = (TextView) findViewById(R.id.Report);
+		reportTextView.setText(reportText);
 		notificationManager.cancel(ContentUpdateService.UPDATE_COMPLETE_NOTIFICATION_ID);
+	}
+	
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		setFontSize();
+	}
+	
+	@Override
+	public void setFontSize() {
+		super.setFontSize();
+		TextView reportTextView = (TextView) findViewById(R.id.Report);
+		reportTextView.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
+		reportTextView.setTextColor(colourScheme.getBackground());
 	}
 
 	@Override
@@ -63,7 +79,7 @@ public class notification extends AbstractFontResizingActivity implements OnClic
 		case R.id.Ok:			
 			Intent intent = new Intent(this, main.class);
 			this.startActivity(intent);
-		}		
+		}
 	}
 	
 }
