@@ -27,7 +27,7 @@ public class Article implements Serializable {
 
 	private static final int ARTICLE_MAIN_PICTURE_WIDTH = 460;
 
-	private static final long serialVersionUID = 9L;
+	private static final long serialVersionUID = 10L;
 	
 	private String id;
 	private String title;
