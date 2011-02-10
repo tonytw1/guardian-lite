@@ -75,7 +75,7 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 		images = new HashMap<String, Bitmap>();
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.article);	// TODO really?
+		setContentView(getLayout());
 		
 		this.article = (Article) this.getIntent().getExtras().get("article");		
 		if (article != null) {
@@ -101,7 +101,6 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 	protected abstract int getLayout();
 	
 	public void populateContent(Article article, int bodytextColour, int headlineColour) {
-		setContentView(getLayout());
 		setFontSize();
 		populateCommonContentFields(article, bodytextColour, headlineColour);
 	}
