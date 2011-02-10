@@ -38,9 +38,6 @@ public class Article implements Serializable {
 	private String thumbnail;
 	
 	private Section section;
-
-	@Deprecated
-	private List<Tag> authors;
 	
 	private List<Tag> tags;
 	private String webUrl;
@@ -51,7 +48,6 @@ public class Article implements Serializable {
 	private List<MediaElement> mediaElements;
  	
 	public Article() {
-		authors = new ArrayList<Tag>();
 		tags = new ArrayList<Tag>();
 		mediaElements = new ArrayList<MediaElement>();
 	}
@@ -94,18 +90,6 @@ public class Article implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public List<Tag> getAuthors() {
-		return authors;
-	}
-	
-	public void addAuthor(Tag author) {
-		authors.add(author);
-	}
-	
-	public String getAuthorNames() {
-		return authors.toString();
 	}
 	
 	public List<Tag> getTags() {

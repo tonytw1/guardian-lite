@@ -141,7 +141,7 @@ public class ContentResultsHandler extends HandlerBase {
 			
 			if (attributes.getValue("type").equals("contributor")) {
 				Tag tag = new Tag(attributes.getValue("web-title"), attributes.getValue("id"), null);
-				currentArticle.addAuthor(tag);	// TODO depricate and put into tags
+				currentArticle.addTag(tag);
 			}
 			
 		}

@@ -161,8 +161,7 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 			standfirst.setVisibility(View.GONE);
 		}
 		
-		final boolean isTagged = !article.getAuthors().isEmpty() || !article.getTags().isEmpty();
-		if (isTagged) {
+		if (article.isTagged()) {
 			final boolean connectionAvailable = networkStatusService.isConnectionAvailable();
 			populateTags(article, connectionAvailable);
 		}
@@ -178,11 +177,7 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 		View tagLabel = findViewById(R.id.TagLabel);
 		if (tagLabel != null) {
 			tagLabel.setVisibility(View.VISIBLE);
-		}
-		View authorList = findViewById(R.id.AuthorList);
-		if (authorList != null) {
-			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) authorList, articleSetFactory.getArticleSetsForTags(article.getAuthors()), colourScheme, baseFontSize);
-		}
+		}		
 		View tagList = findViewById(R.id.TagList);
 		if (tagList != null) {
 			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) tagList, articleSetFactory.getArticleSetsForTags(article.getTags()), colourScheme, baseFontSize);

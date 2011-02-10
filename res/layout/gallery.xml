@@ -20,7 +20,6 @@
 
  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="This gallery has been tagged with:" android:id="@+id/TagLabel" android:paddingTop="10px" android:visibility="gone" android:textSize="7pt" android:paddingLeft="0px" android:paddingRight="0px"></TextView>
  
- <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/AuthorList" android:orientation="vertical" android:paddingLeft="0px" android:paddingRight="0px"></LinearLayout>
  <LinearLayout android:layout_height="fill_parent" android:layout_width="fill_parent" android:orientation="vertical" android:id="@+id/TagList" android:paddingLeft="0px" android:paddingRight="0px"></LinearLayout>
 
 </LinearLayout>
