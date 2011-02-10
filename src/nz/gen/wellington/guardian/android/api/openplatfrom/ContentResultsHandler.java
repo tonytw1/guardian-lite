@@ -123,7 +123,7 @@ public class ContentResultsHandler extends HandlerBase {
 
 		if (name.equals("results")) {
 			checksum = attributes.getValue("checksum");
-			description = attributes.getValue("description");
+			description = htmlCleaner.stripHtml(attributes.getValue("description"));
 			if (articleCallback != null) {
 				articleCallback.descriptionReady(description);
 			}
