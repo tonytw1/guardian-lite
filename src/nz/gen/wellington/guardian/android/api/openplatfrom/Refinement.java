@@ -18,7 +18,6 @@ package nz.gen.wellington.guardian.android.api.openplatfrom;
 
 import java.io.Serializable;
 
-import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 
 public class Refinement implements Serializable {
@@ -33,11 +32,7 @@ public class Refinement implements Serializable {
 	public Refinement(Tag tag) {
 		this.tag = tag;
 	}
-
-	public Refinement(Section section) {
-		// TODO Auto-generated constructor stub
-	}
-
+	
 	public Refinement(String displayName, String fromDate, String toDate) {
 		this.displayName = displayName;
 		this.fromDate = fromDate;
