@@ -135,7 +135,7 @@ public class ArticleSetFactory {
 	}
 
 	public Refinement getRefinementForSection(Section section) {
-		return new Refinement(section);
+		return new Refinement(section.getTag());
 	}
 
 	public ArticleSet getArticleSetForRefinement(ArticleSet articleSet, Refinement refinement) {		
