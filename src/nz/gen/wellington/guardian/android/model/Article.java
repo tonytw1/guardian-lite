@@ -212,6 +212,18 @@ public class Article implements Serializable {
 		return null;
 	}
 	
+	
+	public List<Tag> getContributorTags() {
+		List<Tag> contributors = new ArrayList<Tag>();
+		for (Tag tag : tags) {
+			if (tag.isContributorTag()) {
+				contributors.add(tag);
+			}
+		}
+		return contributors;
+	}
+	
+	
 	public boolean isTagged() {
 		if (tags.isEmpty()) {
 			return false;

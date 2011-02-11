@@ -16,6 +16,7 @@
 
 package nz.gen.wellington.guardian.android.activities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -182,18 +183,23 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 		}		
 		View tagList = findViewById(R.id.TagList);
 		if (tagList != null) {
-			List<Tag> tags = addSectionTagIfNotAlreadyPresent(article);
+			List<Tag> tags = shuffleContributorsToTheFrontAndAdSectionTagIfNotAlreadyPresent(article);
 			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) tagList, articleSetFactory.getArticleSetsForTags(tags), colourScheme, baseFontSize);
 		}
 	}
 
-
-	private List<Tag> addSectionTagIfNotAlreadyPresent(Article article) {
-		List<Tag> tags = article.getTags();		
+	
+	private List<Tag> shuffleContributorsToTheFrontAndAdSectionTagIfNotAlreadyPresent(Article article) {
+		List<Tag> shuffledTags = new ArrayList<Tag>(article.getTags());
+		
 		if (!article.hasSectionTag()) {
-			tags.add(0, article.getSection().getTag());			
+			shuffledTags.add(0, article.getSection().getTag());			
 		}
-		return tags;
+		
+		final List<Tag> contributors = article.getContributorTags();
+		shuffledTags.removeAll(contributors);
+		shuffledTags.addAll(0, contributors);
+		return shuffledTags;
 	}
 	
 	
