@@ -17,6 +17,7 @@
 package nz.gen.wellington.guardian.android.activities;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.R;
@@ -26,6 +27,7 @@ import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.utils.ShareTextComposingService;
@@ -180,9 +182,20 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 		}		
 		View tagList = findViewById(R.id.TagList);
 		if (tagList != null) {
-			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) tagList, articleSetFactory.getArticleSetsForTags(article.getTags()), colourScheme, baseFontSize);
+			List<Tag> tags = addSectionTagIfNotAlreadyPresent(article);
+			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) tagList, articleSetFactory.getArticleSetsForTags(tags), colourScheme, baseFontSize);
 		}
 	}
+
+
+	private List<Tag> addSectionTagIfNotAlreadyPresent(Article article) {
+		List<Tag> tags = article.getTags();		
+		if (!article.hasSectionTag()) {
+			tags.add(0, article.getSection().getTag());			
+		}
+		return tags;
+	}
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

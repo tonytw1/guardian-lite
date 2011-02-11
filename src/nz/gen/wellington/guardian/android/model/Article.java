@@ -223,6 +223,15 @@ public class Article implements Serializable {
 		}
 		return false;
 	}
+	
+	public boolean hasSectionTag() {
+		for (Tag tag : tags) {
+			if (tag.isSectionKeyword()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public String getThumbnailUrl() {	// TODO rename to thumbnail to match content api
 		return thumbnail;
