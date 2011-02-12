@@ -65,7 +65,7 @@ public class notification extends AbstractFontResizingActivity implements OnClic
 		super.setFontSize();
 		TextView reportTextView = (TextView) findViewById(R.id.Report);
 		reportTextView.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
-		reportTextView.setTextColor(colourScheme.getBackground());
+		reportTextView.setTextColor(colourScheme.getBodytext());
 	}
 
 	@Override
