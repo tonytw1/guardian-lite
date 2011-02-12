@@ -28,6 +28,7 @@ import nz.gen.wellington.guardian.android.api.openplatfrom.ContentResultsHandler
 import nz.gen.wellington.guardian.android.contentupdate.TaskQueue;
 import nz.gen.wellington.guardian.android.network.DownProgressAnnouncer;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.tagging.TagShufflingService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
@@ -46,6 +47,7 @@ public class SingletonFactory {
 	private static TagListPopulatingService tagListPopulatingService;
 	private static ImageDownloadDecisionService imageDownloadDecisionService;
 	private static SettingsDAO settingsDAO;
+	private static TagShufflingService tagShufflingService;
 	
 	public static ArticleDAO getArticleDao(Context context) {
 		return new ArticleDAO(context);	
@@ -134,6 +136,13 @@ public class SingletonFactory {
 			imageDownloadDecisionService = new ImageDownloadDecisionService(context);
 		}
 		return imageDownloadDecisionService;
+	}
+
+	public static TagShufflingService getTagShufflingService() {
+		if (tagShufflingService == null) {
+			tagShufflingService = new TagShufflingService();
+		}
+		return tagShufflingService;
 	}
 	
 }

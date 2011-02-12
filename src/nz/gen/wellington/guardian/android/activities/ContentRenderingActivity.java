@@ -16,9 +16,7 @@
 
 package nz.gen.wellington.guardian.android.activities;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.R;
@@ -28,8 +26,8 @@ import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
-import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
+import nz.gen.wellington.guardian.android.tagging.TagShufflingService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.utils.ShareTextComposingService;
 import android.content.Intent;
@@ -56,13 +54,13 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 	protected ArticleSetFactory articleSetFactory;
 	protected FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
     protected Article article;
-       
-
+    
     protected Map<String, Bitmap> images;
     protected MenuItem saveArticleMenuItem;
     private String shareText;
     protected TagListPopulatingService tagListPopulatingService;
     protected ImageDownloadDecisionService imageDownloadDecisionService;
+	private TagShufflingService tagShufflingService;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,6 +72,7 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 		favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
 		tagListPopulatingService = SingletonFactory.getTagListPopulator(this.getApplicationContext());
 		imageDownloadDecisionService = SingletonFactory.getImageDownloadDecisionService(this.getApplicationContext());
+		tagShufflingService = SingletonFactory.getTagShufflingService();
 		
 		images = new HashMap<String, Bitmap>();
 
@@ -183,23 +182,8 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 		}		
 		View tagList = findViewById(R.id.TagList);
 		if (tagList != null) {
-			List<Tag> tags = shuffleContributorsToTheFrontAndAdSectionTagIfNotAlreadyPresent(article);
-			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) tagList, articleSetFactory.getArticleSetsForTags(tags), colourScheme, baseFontSize);
+			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) tagList, articleSetFactory.getArticleSetsForTags(tagShufflingService.shuffleContributorsToTheFrontAndAddSectionTagIfNotAlreadyPresent(article)), colourScheme, baseFontSize);
 		}
-	}
-
-	
-	private List<Tag> shuffleContributorsToTheFrontAndAdSectionTagIfNotAlreadyPresent(Article article) {
-		List<Tag> shuffledTags = new ArrayList<Tag>(article.getTags());
-		
-		if (!article.hasSectionTag()) {
-			shuffledTags.add(0, article.getSection().getTag());			
-		}
-		
-		final List<Tag> contributors = article.getContributorTags();
-		shuffledTags.removeAll(contributors);
-		shuffledTags.addAll(0, contributors);
-		return shuffledTags;
 	}
 	
 	
