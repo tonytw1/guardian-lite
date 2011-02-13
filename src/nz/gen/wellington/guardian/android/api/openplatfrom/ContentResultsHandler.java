@@ -25,7 +25,6 @@ import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
-import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
@@ -34,6 +33,7 @@ import nz.gen.wellington.guardian.android.model.MediaElement;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
+import nz.gen.wellington.guardian.contentapi.cleaning.HtmlCleaner;
 
 import org.xml.sax.AttributeList;
 import org.xml.sax.HandlerBase;

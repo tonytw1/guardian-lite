@@ -22,7 +22,6 @@ import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
-import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiStyleApi;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentResultsHandler;
 import nz.gen.wellington.guardian.android.contentupdate.TaskQueue;
@@ -32,6 +31,7 @@ import nz.gen.wellington.guardian.android.tagging.TagShufflingService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.PreferencesDAO;
 import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
+import nz.gen.wellington.guardian.contentapi.cleaning.HtmlCleaner;
 import android.content.Context;
 
 public class SingletonFactory {
