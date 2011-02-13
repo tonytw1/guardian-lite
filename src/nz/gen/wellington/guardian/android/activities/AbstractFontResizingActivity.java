@@ -23,6 +23,7 @@ import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.Surface;
 import android.view.View;
 import android.widget.TextView;
 
@@ -54,7 +55,8 @@ public abstract class AbstractFontResizingActivity extends Activity implements F
 	
 	
 	protected boolean isLandScrapeOrientation() {
-		return getWindowManager().getDefaultDisplay().getOrientation() == 1;	// TODO needs to deal with 180 and 270 degree orientations		
+		int orientation = getWindowManager().getDefaultDisplay().getOrientation();
+		return orientation == Surface.ROTATION_90 || orientation == Surface.ROTATION_270;		
 	}
 
 
