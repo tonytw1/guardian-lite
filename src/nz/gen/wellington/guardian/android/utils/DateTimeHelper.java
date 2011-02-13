@@ -26,7 +26,7 @@ import android.util.Log;
 public class DateTimeHelper {
 
 	private static final String TAG = "DateTimeHelper";
-	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 	
 	public static Date parseDate(String dateString) {
 		 SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
