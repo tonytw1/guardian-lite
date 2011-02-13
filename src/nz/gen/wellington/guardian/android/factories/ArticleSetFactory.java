@@ -77,7 +77,7 @@ public class ArticleSetFactory {
 	
 	
 	public ArticleSet getArticleSetForTag(Tag tag, String dateDisplayName, String fromDate, String toDate) {
-		return addUrl(new TagArticleSet(tag, 50, dateDisplayName, fromDate, toDate));
+		return addUrl(new TagArticleSet(tag, settingsDAO.getPageSizePreference(), dateDisplayName, fromDate, toDate));
 	}
 	
 	public ArticleSet getArticleSetForTagCombiner(Tag leftTag, Tag rightTag) {
@@ -89,7 +89,7 @@ public class ArticleSetFactory {
 	}
 	
 	public ArticleSet getArticleSetForSection(Section section, String dateDisplayName, String fromDate, String toDate) {
-		return addUrl(new SectionArticleSet(section, 50, dateDisplayName, fromDate, toDate));
+		return addUrl(new SectionArticleSet(section, settingsDAO.getPageSizePreference(), dateDisplayName, fromDate, toDate));
 	}
 		
 	public List<ArticleSet> getArticleSetsForSections(List<Section> favouriteSections) {
