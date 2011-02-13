@@ -46,7 +46,7 @@ public class ContentResultsHandler extends HandlerBase {
 
 	private static final String TAG = "ContentResultsHandler";
 	private static final String NO_REDISTRIBUTION_RIGHTS_BODY_TEXT = "<!-- Redistribution rights for this field are unavailable -->";
-	private static final List<String> TAG_TYPES_TO_TAKE = Arrays.asList("keyword", "type");
+	private static final List<String> TAG_TYPES_TO_TAKE = Arrays.asList("keyword", "type", "contributor", "series");
 	
 	public List<Article> articles;
 	public Map<String, List<Refinement>> refinements;
@@ -111,7 +111,9 @@ public class ContentResultsHandler extends HandlerBase {
 			currentArticle.setSection(section);
 
 			final String dateString = attributes.getValue("web-publication-date");
-			currentArticle.setPubDate(DateTimeHelper.parseDate(dateString));
+			if (dateString != null) {
+				currentArticle.setPubDate(DateTimeHelper.parseDate(dateString));
+			}
 		}
 
 		if (name.equals("field")) {
@@ -138,12 +140,6 @@ public class ContentResultsHandler extends HandlerBase {
 				Tag tag = new Tag(attributes.getValue("web-title"), attributes.getValue("id"), tagSection);
 				currentArticle.addTag(tag);
 			}
-			
-			if (attributes.getValue("type").equals("contributor")) {
-				Tag tag = new Tag(attributes.getValue("web-title"), attributes.getValue("id"), null);
-				currentArticle.addTag(tag);
-			}
-			
 		}
 
 		if (name.equals("refinement-group")) {
