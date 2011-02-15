@@ -24,10 +24,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import nz.gen.wellington.guardian.android.api.filtering.HtmlCleaner;
 import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.contentapi.cleaning.HtmlCleaner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
