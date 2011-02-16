@@ -21,11 +21,12 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
-import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
+import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
+import nz.gen.wellington.guardian.model.Article;
 import nz.gen.wellington.guardian.model.Section;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -70,9 +71,9 @@ public class ArticleListActivityViewPopulator {
 		if (caption != null) {
 			caption.setTextColor(colourScheme.getBodytext());
 		}
-		titleText.setText(article.getTitle());			
+		titleText.setText(article.getHeadline());			
 		if (article.getPubDate() != null) {
-			pubDateText.setText(article.getPubDateString());
+			pubDateText.setText(DateTimeHelper.format(article.getPubDate(), DateTimeHelper.WEB_PUBLICATION_DATE_FORMAT));
 		}
 		
 		if (article.getStandfirst() != null) {

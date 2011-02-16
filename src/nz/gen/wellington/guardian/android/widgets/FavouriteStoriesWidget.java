@@ -17,8 +17,8 @@
 package nz.gen.wellington.guardian.android.widgets;
 
 import nz.gen.wellington.guardian.android.activities.widgets.favouritewidget;
-import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.model.Article;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;

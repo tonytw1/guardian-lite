@@ -27,10 +27,10 @@ import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
-import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import nz.gen.wellington.guardian.contentapi.cleaning.HtmlCleaner;
+import nz.gen.wellington.guardian.model.Article;
 import nz.gen.wellington.guardian.model.MediaElement;
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
@@ -165,7 +165,7 @@ public class ContentResultsHandler extends HandlerBase {
 		if (currentField != null && currentMediaElement == null) {
 
 			if (currentField.equals("headline")) {
-				currentArticle.setTitle(htmlCleaner.stripHtml(currentElementContents.toString()));
+				currentArticle.setHeadline(htmlCleaner.stripHtml(currentElementContents.toString()));
 			}
 
 			if (currentField.equals("byline")) {
@@ -225,7 +225,7 @@ public class ContentResultsHandler extends HandlerBase {
 				}
 				
 			} else {
-				Log.w(TAG, "Ignoring invalid article: " + currentArticle.getTitle());
+				Log.w(TAG, "Ignoring invalid article: " + currentArticle.getHeadline());
 			}
 		}
 	}

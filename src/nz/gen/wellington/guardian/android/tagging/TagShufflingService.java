@@ -3,7 +3,7 @@ package nz.gen.wellington.guardian.android.tagging;
 import java.util.ArrayList;
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.model.Article;
 import nz.gen.wellington.guardian.model.Tag;
 
 public class TagShufflingService {

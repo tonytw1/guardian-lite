@@ -19,7 +19,7 @@ package nz.gen.wellington.guardian.android.activities;
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ImageStretchingService;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
-import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.model.Article;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;

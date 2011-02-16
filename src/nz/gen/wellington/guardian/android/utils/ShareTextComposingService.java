@@ -16,7 +16,7 @@
 
 package nz.gen.wellington.guardian.android.utils;
 
-import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.model.Article;
 
 public class ShareTextComposingService {
 	
@@ -28,9 +28,9 @@ public class ShareTextComposingService {
 		if (url == null) {
 			url = article.getWebUrl();
 		}
-		if (article.getTitle() != null && url != null) {
-			if (article.getTitle().length() + SPACE.length() + url.length() <= MAX_LENGTH) {
-				return article.getTitle() + SPACE + url;
+		if (article.getHeadline() != null && url != null) {
+			if (article.getHeadline().length() + SPACE.length() + url.length() <= MAX_LENGTH) {
+				return article.getHeadline() + SPACE + url;
 			}
 		}
 		return null;

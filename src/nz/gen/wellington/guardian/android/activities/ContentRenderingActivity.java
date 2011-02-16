@@ -25,12 +25,13 @@ import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
-import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.tagging.TagShufflingService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
+import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import nz.gen.wellington.guardian.android.utils.ShareTextComposingService;
+import nz.gen.wellington.guardian.model.Article;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -147,9 +148,9 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 		byline.setTextColor(bodytextColour);
 		standfirst.setTextColor(bodytextColour);
 				
-		headline.setText(article.getTitle());
+		headline.setText(article.getHeadline());
 		if (article.getPubDate() != null) {
-			pubDate.setText(article.getPubDateString());
+			pubDate.setText(DateTimeHelper.format(article.getPubDate(), DateTimeHelper.WEB_PUBLICATION_DATE_FORMAT));
 		}
 		
 		if (article.getByline() != null && !article.getByline().trim().equals("")) {

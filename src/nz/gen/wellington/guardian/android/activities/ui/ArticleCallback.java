@@ -16,7 +16,7 @@
 
 package nz.gen.wellington.guardian.android.activities.ui;
 
-import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.model.Article;
 
 public interface ArticleCallback {
 	

@@ -24,10 +24,10 @@ import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.contentupdate.TaskQueue;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
-import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
+import nz.gen.wellington.guardian.model.Article;
 import android.content.Context;
 
 public class UpdateArticleSetTask implements ContentUpdateTaskRunnable {
@@ -78,11 +78,11 @@ public class UpdateArticleSetTask implements ContentUpdateTaskRunnable {
 		if (articles != null) {
 			for (Article article : articles) {
 				if (article.getThumbnailUrl() != null && imageDownloadDecisionService.isOkToDownloadTrailImages()) {
-					String description = article.getTitle() + " - trail image";
+					String description = article.getHeadline() + " - trail image";
 					queueImageDownloadIfNotAvailableLocally(article.getThumbnailUrl(), description);
 				}
 				if (article.getMainImageUrl() != null && imageDownloadDecisionService.isOkToDownloadMainImages()) {
-					String description = article.getTitle() + " - main image";
+					String description = article.getHeadline() + " - main image";
 					if (article.getCaption() != null) {
 						description = article.getCaption();
 					}

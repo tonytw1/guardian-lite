@@ -28,10 +28,10 @@ import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
-import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
+import nz.gen.wellington.guardian.model.Article;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -106,7 +106,7 @@ public abstract class AbstractArticleSetWidget extends AppWidgetProvider {
 	
 	private void showNoArticlesMessage(Context context, ImageDAO imageDAO, RemoteViews widgetView) {
 		Article errorMessage = new Article();
-		errorMessage.setTitle("No articles available");
+		errorMessage.setHeadline("No articles available");
 		errorMessage.setStandfirst(getNoArticlesExplainationText());
 		populateArticle(widgetView, imageDAO, errorMessage, context, firstArticleViews);
 		
@@ -151,7 +151,7 @@ public abstract class AbstractArticleSetWidget extends AppWidgetProvider {
 	}
 	
 	private void populateArticle(RemoteViews widgetView, ImageDAO imageDAO, Article article, Context context, ArticleViews articleViews) {
-		widgetView.setTextViewText(articleViews.headline, article.getTitle());
+		widgetView.setTextViewText(articleViews.headline, article.getHeadline());
 		widgetView.setTextViewText(articleViews.standfirst, article.getStandfirst());
 		
 		if (article.getThumbnailUrl() != null && imageDAO.isAvailableLocally(article.getThumbnailUrl())) {				

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.api.openplatfrom.Refinement;
+import nz.gen.wellington.guardian.model.Article;
 
 public class ArticleBundle implements Serializable {
 	

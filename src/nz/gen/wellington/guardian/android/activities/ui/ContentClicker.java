@@ -18,7 +18,7 @@ package nz.gen.wellington.guardian.android.activities.ui;
 
 import nz.gen.wellington.guardian.android.activities.article;
 import nz.gen.wellington.guardian.android.activities.gallery;
-import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.model.Article;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
