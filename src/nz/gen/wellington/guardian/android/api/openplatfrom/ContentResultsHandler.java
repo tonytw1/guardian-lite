@@ -29,9 +29,9 @@ import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
-import nz.gen.wellington.guardian.android.model.MediaElement;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import nz.gen.wellington.guardian.contentapi.cleaning.HtmlCleaner;
+import nz.gen.wellington.guardian.model.MediaElement;
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
 
