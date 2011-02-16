@@ -24,10 +24,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.SectionColourMap;
-import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.contentapi.cleaning.HtmlCleaner;
+import nz.gen.wellington.guardian.model.Section;
+import nz.gen.wellington.guardian.model.Tag;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,7 +68,7 @@ public class ContentApiStyleJSONParser {
 				JSONObject section = results.getJSONObject(i);
 				final String sectionName = htmlCleaner.stripHtml(section.getString("webTitle"));
 				final String id = section.getString("id");
-				sections.add(new Section(id, sectionName, SectionColourMap.getColourForSection(id)));
+				sections.add(new Section(id, sectionName));
 			}
 			return sections;
 
@@ -109,13 +108,13 @@ public class ContentApiStyleJSONParser {
 
 				Section section = null;
 				if (type.equals("contributor")) {
-					tags.add(new Tag(tagName, id, null));
+					tags.add(new Tag(tagName, id, null, type));
 				} else {
 					if (tag.has("sectionId")) {
 						final String sectionId = tag.getString("sectionId");
 						section = sections.get(sectionId);
 						if (section != null) {
-							tags.add(new Tag(tagName, id, section));
+							tags.add(new Tag(tagName, id, section, type));
 						}
 					}
 				}

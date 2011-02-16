@@ -29,10 +29,10 @@ import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.SavedArticlesArticleSet;
-import nz.gen.wellington.guardian.android.model.Section;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
+import nz.gen.wellington.guardian.model.Section;
 import android.content.Context;
 import android.util.Log;
 

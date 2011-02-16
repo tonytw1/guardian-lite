@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.model.Article;
-import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.model.Tag;
 
 public class TagShufflingService {
 

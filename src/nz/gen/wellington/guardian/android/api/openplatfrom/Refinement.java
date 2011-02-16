@@ -18,7 +18,7 @@ package nz.gen.wellington.guardian.android.api.openplatfrom;
 
 import java.io.Serializable;
 
-import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.model.Tag;
 
 public class Refinement implements Serializable {
 

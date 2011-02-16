@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.model.Article;
-import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.model.Section;
+import nz.gen.wellington.guardian.model.Tag;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;

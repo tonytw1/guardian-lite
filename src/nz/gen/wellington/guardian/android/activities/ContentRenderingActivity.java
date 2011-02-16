@@ -26,6 +26,7 @@ import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
+import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.tagging.TagShufflingService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
@@ -133,7 +134,7 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 	private void populateCommonContentFields(Article article, int bodytextColour, int headlineColour) {
 		if (article.getSection() != null) {
 			setHeading(article.getSection().getName());
-			setHeadingColour(article.getSection().getColour());
+			setHeadingColour(SectionColourMap.getColourForSection(article.getSection().getId()));
 		}
 		
 		TextView headline = (TextView) findViewById(R.id.Headline);

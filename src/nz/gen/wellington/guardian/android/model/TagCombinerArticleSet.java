@@ -16,6 +16,9 @@
 
 package nz.gen.wellington.guardian.android.model;
 
+import nz.gen.wellington.guardian.model.Section;
+import nz.gen.wellington.guardian.model.Tag;
+
 public class TagCombinerArticleSet extends AbstractArticleSet implements ArticleSet {
 
 	private static final long serialVersionUID = 1L;

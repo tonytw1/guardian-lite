@@ -19,6 +19,7 @@ package nz.gen.wellington.guardian.android.activities;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
+import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,7 +42,7 @@ public class section extends ArticleListActivity implements FontResizingActivity
         this.articleSet = (SectionArticleSet) this.getIntent().getExtras().get("articleset");
     	setHeading(articleSet.getName());
     	if (articleSet.getSection() != null) {
-    		setHeadingColour(articleSet.getSection().getColour());    		
+    		setHeadingColour(SectionColourMap.getColourForSection(articleSet.getSection().getId()));    		
     	}
 	}
 	

@@ -19,7 +19,7 @@ package nz.gen.wellington.guardian.android.api.caching;
 import java.util.ArrayList;
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.model.Section;
 
 public class InMemorySectionCache {
 	

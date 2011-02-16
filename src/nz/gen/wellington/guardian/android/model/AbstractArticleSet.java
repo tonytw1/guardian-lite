@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+import nz.gen.wellington.guardian.model.Section;
+
 public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	
 	private static final long serialVersionUID = 3L;

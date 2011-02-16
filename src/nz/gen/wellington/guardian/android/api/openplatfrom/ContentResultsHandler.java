@@ -30,10 +30,10 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.MediaElement;
-import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import nz.gen.wellington.guardian.contentapi.cleaning.HtmlCleaner;
+import nz.gen.wellington.guardian.model.Section;
+import nz.gen.wellington.guardian.model.Tag;
 
 import org.xml.sax.AttributeList;
 import org.xml.sax.HandlerBase;
@@ -131,13 +131,14 @@ public class ContentResultsHandler extends HandlerBase {
 			}
 		}
 		
-		if (name.equals("tag")) {			
-			if (TAG_TYPES_TO_TAKE.contains(attributes.getValue("type"))) {
+		if (name.equals("tag")) {
+			final String tagType = attributes.getValue("type");
+			if (TAG_TYPES_TO_TAKE.contains(tagType)) {
 				Section tagSection = null;
 				if (tagSectionId != null) {
 					tagSection = sectionDAO.getSectionById(tagSectionId);
 				}
-				Tag tag = new Tag(attributes.getValue("web-title"), attributes.getValue("id"), tagSection);
+				Tag tag = new Tag(attributes.getValue("web-title"), attributes.getValue("id"), tagSection, tagType);
 				currentArticle.addTag(tag);
 			}
 		}
@@ -252,10 +253,13 @@ public class ContentResultsHandler extends HandlerBase {
 		boolean isTagRefinement = tagRefinementTypes.contains(currentRefinementGroupType);
 		if (isTagRefinement) {
 			final String tagId = attributes.getValue("id");
+			final String tagType = attributes.getValue("type");
+
 			final String sectionId = tagId.split("/")[0];
 			Section section = sectionDAO.getSectionById(sectionId);
-			final Tag refinementTag = new Tag(displayName, tagId, section);
-						
+
+			final Tag refinementTag = new Tag(displayName, tagId, section, tagType);
+			
 			List<Refinement> refinementGroup = getRefinementGroup();		
 			if (!refinementTag.isSectionKeyword()) {
 				Log.d(TAG, "Adding refinement for tag: " + refinementTag.getName());
@@ -270,8 +274,8 @@ public class ContentResultsHandler extends HandlerBase {
 			final String tagId = attributes.getValue("id");
 			Log.d(TAG, "Adding content type: " + tagId);
 			List<Refinement> refinementGroup = getRefinementGroup();
-			final Tag refinementTag = new Tag(displayName, tagId, null);
-			refinementGroup.add(articleSetFactory.getRefinementForTag(refinementTag));			
+			final Tag refinementTag = new Tag(displayName, tagId, null, "type");
+			refinementGroup.add(articleSetFactory.getRefinementForTag(refinementTag));
 		}
 		
 		boolean isSectionRefinement = currentRefinementGroupType.equals("section");

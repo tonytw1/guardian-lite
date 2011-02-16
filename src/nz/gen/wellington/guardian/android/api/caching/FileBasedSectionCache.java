@@ -23,7 +23,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-import nz.gen.wellington.guardian.android.model.Section;
+import nz.gen.wellington.guardian.model.Section;
 import android.content.Context;
 import android.util.Log;
 

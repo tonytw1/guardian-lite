@@ -25,8 +25,8 @@ import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.Article;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.Section;
-import nz.gen.wellington.guardian.android.model.Tag;
+import nz.gen.wellington.guardian.model.Section;
+import nz.gen.wellington.guardian.model.Tag;
 import android.content.Context;
 
 public class FavouriteSectionsAndTagsDAO {
@@ -117,7 +117,7 @@ public class FavouriteSectionsAndTagsDAO {
 	private ArticleSet rowToArticleSet(Map<String, String> row) {
 		if(row.get(SqlLiteFavouritesDAO.TYPE).equals("tag")) {				
 			Section section = sectionDAO.getSectionById(row.get(SqlLiteFavouritesDAO.SECTIONID));
-			Tag tag = new Tag(row.get(SqlLiteFavouritesDAO.NAME), row.get(SqlLiteFavouritesDAO.APIID), section);
+			Tag tag = new Tag(row.get(SqlLiteFavouritesDAO.NAME), row.get(SqlLiteFavouritesDAO.APIID), section, null);	// TODO Do we know the types of favourited tags?
 			return articleSetFactory.getArticleSetForTag(tag);
 			
 		} else if (row.get(SqlLiteFavouritesDAO.TYPE).equals("section")) {				

@@ -19,6 +19,8 @@ package nz.gen.wellington.guardian.android.model;
 import java.io.Serializable;
 import java.util.List;
 
+import nz.gen.wellington.guardian.model.Section;
+
 public interface ArticleSet extends Serializable {
 	
 	public String getName();	

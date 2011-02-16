@@ -24,8 +24,8 @@ import java.util.Map;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.BlackOnWhiteColourScheme;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
-import nz.gen.wellington.guardian.android.model.Tag;
 import nz.gen.wellington.guardian.android.model.WhiteOnBlackColourScheme;
+import nz.gen.wellington.guardian.model.Tag;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -46,8 +46,8 @@ public class SettingsDAO {
 	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://3.guardian-lite.appspot.com";
 	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
 	
-	private static Tag articleContentType = new Tag("Article content type", "type/article", null);
-	private static Tag galleryContentType = new Tag("Gallery content type", "type/gallery", null);
+	private static Tag articleContentType = new Tag("Article content type", "type/article", null, "type");
+	private static Tag galleryContentType = new Tag("Gallery content type", "type/gallery", null, "type");
 	private static List<Tag> supportedContentTypes = Arrays.asList(articleContentType, galleryContentType);
 	
 	private PreferencesDAO preferencesDAO;
