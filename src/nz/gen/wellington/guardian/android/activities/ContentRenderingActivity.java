@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.activities.ui.DateFormatter;
 import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
@@ -29,7 +30,6 @@ import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.tagging.TagShufflingService;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
-import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import nz.gen.wellington.guardian.android.utils.ShareTextComposingService;
 import nz.gen.wellington.guardian.model.Article;
 import android.content.Intent;
@@ -150,7 +150,7 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 				
 		headline.setText(article.getHeadline());
 		if (article.getPubDate() != null) {
-			pubDate.setText(DateTimeHelper.format(article.getPubDate(), DateTimeHelper.WEB_PUBLICATION_DATE_FORMAT));
+			pubDate.setText(DateFormatter.formatAsWebPublicationDate(article.getPubDate()));
 		}
 		
 		if (article.getByline() != null && !article.getByline().trim().equals("")) {

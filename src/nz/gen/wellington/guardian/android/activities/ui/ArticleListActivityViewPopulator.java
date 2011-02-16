@@ -25,7 +25,6 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ColourScheme;
 import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
-import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import nz.gen.wellington.guardian.model.Article;
 import nz.gen.wellington.guardian.model.Section;
 import android.content.Context;
@@ -73,7 +72,7 @@ public class ArticleListActivityViewPopulator {
 		}
 		titleText.setText(article.getHeadline());			
 		if (article.getPubDate() != null) {
-			pubDateText.setText(DateTimeHelper.format(article.getPubDate(), DateTimeHelper.WEB_PUBLICATION_DATE_FORMAT));
+			pubDateText.setText(DateFormatter.formatAsWebPublicationDate(article.getPubDate()));
 		}
 		
 		if (article.getStandfirst() != null) {
