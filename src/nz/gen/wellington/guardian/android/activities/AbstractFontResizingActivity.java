@@ -18,7 +18,7 @@ package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
-import nz.gen.wellington.guardian.android.model.ColourScheme;
+import nz.gen.wellington.guardian.android.model.colourscheme.ColourScheme;
 import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import android.app.Activity;
 import android.os.Bundle;

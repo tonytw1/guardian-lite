@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
-import nz.gen.wellington.guardian.android.model.BlackOnWhiteColourScheme;
-import nz.gen.wellington.guardian.android.model.ColourScheme;
-import nz.gen.wellington.guardian.android.model.WhiteOnBlackColourScheme;
+import nz.gen.wellington.guardian.android.model.colourscheme.BlackOnWhiteColourScheme;
+import nz.gen.wellington.guardian.android.model.colourscheme.ColourScheme;
+import nz.gen.wellington.guardian.android.model.colourscheme.WhiteOnBlackColourScheme;
 import nz.gen.wellington.guardian.model.Tag;
 import android.content.Context;
 import android.content.pm.PackageInfo;

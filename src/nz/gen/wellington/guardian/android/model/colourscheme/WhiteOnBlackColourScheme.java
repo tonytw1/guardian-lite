@@ -14,25 +14,40 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.	*/
 
-package nz.gen.wellington.guardian.android.model;
+package nz.gen.wellington.guardian.android.model.colourscheme;
 
 import android.graphics.Color;
 
-public abstract class ColourScheme {
-
-	public abstract Integer getBackground();
-	public abstract Integer getBodytext();
-	public abstract Integer getHeadline();
+public class WhiteOnBlackColourScheme extends ColourScheme {
 	
-	public abstract Integer getAvailableTag();
-	public abstract Integer getUnavailableTag();
-	public abstract Integer getStatus();
+	@Override
+	public Integer getBackground() {
+		return Color.BLACK;
+	}
 
-	public int getAvailableTagOnSeperator() {
+	@Override
+	public Integer getBodytext() {
+		return Color.LTGRAY;
+	}
+
+	@Override
+	public Integer getHeadline() {
 		return Color.WHITE;
 	}
-	public int getUnavailableTagOnSeperator() {
+	
+	@Override
+	public Integer getAvailableTag() {
+		return Color.WHITE;
+	}
+
+	@Override
+	public Integer getUnavailableTag() {
 		return Color.DKGRAY;
+	}
+	
+	@Override
+	public Integer getStatus() {
+		return Color.LTGRAY;
 	}
 	
 }
