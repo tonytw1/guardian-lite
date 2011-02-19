@@ -32,6 +32,7 @@ import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import nz.gen.wellington.guardian.contentapi.cleaning.HtmlCleaner;
 import nz.gen.wellington.guardian.model.Article;
 import nz.gen.wellington.guardian.model.MediaElement;
+import nz.gen.wellington.guardian.model.Refinement;
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
 
@@ -249,33 +250,23 @@ public class ContentResultsHandler extends HandlerBase {
 	private void processRefinement(AttributeList attributes, SectionDAO sectionDAO) {		
 		final String displayName = attributes.getValue("display-name");
 		
+		final String tagId = attributes.getValue("id");
+		final String refinedUrl = attributes.getValue("refined-url");
+		final String refinementType = attributes.getValue("type");
+		
 		List<String> tagRefinementTypes = Arrays.asList("blog", "contributor", "keyword", "series");		
-		boolean isTagRefinement = tagRefinementTypes.contains(currentRefinementGroupType);
-		if (isTagRefinement) {
-			final String tagId = attributes.getValue("id");
-			final String tagType = attributes.getValue("type");
-
-			final String sectionId = tagId.split("/")[0];
-			Section section = sectionDAO.getSectionById(sectionId);
-
-			final Tag refinementTag = new Tag(displayName, tagId, section, tagType);
-			
-			List<Refinement> refinementGroup = getRefinementGroup();		
-			if (!refinementTag.isSectionKeyword()) {
-				Log.d(TAG, "Adding refinement for tag: " + refinementTag.getName());
-				refinementGroup.add(articleSetFactory.getRefinementForTag(refinementTag));
-			} else {
-				refinementGroup.add(articleSetFactory.getRefinementForSection(refinementTag.getSection()));
-			}
+		boolean isTagRefinement = tagRefinementTypes.contains(refinementType);
+		if (isTagRefinement) {			
+			List<Refinement> refinementGroup = getRefinementGroup();
+			Log.d(TAG, "Adding refinement for tag: " + tagId);
+			refinementGroup.add(new Refinement(refinementType, tagId, displayName, refinedUrl, 0));	// TODO count			
 		}
 		
 		boolean isContentTypeRefinement = currentRefinementGroupType.equals("type");
 		if (isContentTypeRefinement) {
-			final String tagId = attributes.getValue("id");
 			Log.d(TAG, "Adding content type: " + tagId);
 			List<Refinement> refinementGroup = getRefinementGroup();
-			final Tag refinementTag = new Tag(displayName, tagId, null, "type");
-			refinementGroup.add(articleSetFactory.getRefinementForTag(refinementTag));
+			refinementGroup.add(new Refinement(currentRefinementGroupType, tagId, displayName, refinedUrl, 0));	// TODO count
 		}
 		
 		boolean isSectionRefinement = currentRefinementGroupType.equals("section");
@@ -285,22 +276,21 @@ public class ContentResultsHandler extends HandlerBase {
 			if (section != null) {
 				Log.d(TAG, "Adding refinement for section: " + section.getName());
 				List<Refinement> refinementGroup = getRefinementGroup();
-				refinementGroup.add(articleSetFactory.getRefinementForSection(section));
+				refinementGroup.add(new Refinement(refinementType, tagId, displayName, refinedUrl, 0));	// TODO count			
 			}
 		}
 		
-		
+		/*
 		boolean isDateRefinement = currentRefinementGroupType.equals("date");
 		if (isDateRefinement) {
-			Log.d(TAG, "Adding date refinement: " + displayName);
-			
-			String refinedUrl = attributes.getValue("refined-url");
+			Log.d(TAG, "Adding date refinement: " + displayName);			
 			final String fromDate = refinedUrl.split("from-date=")[1].substring(0, 10);			
 			final String toDate = refinedUrl.split("to-date=")[1].substring(0, 10);
 			
 			List<Refinement> refinementGroup = getRefinementGroup();
 			refinementGroup.add(articleSetFactory.getRefinementForDate(displayName, fromDate, toDate));
 		}
+		*/
 		
 	}
 	

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
-import nz.gen.wellington.guardian.android.api.openplatfrom.Refinement;
+import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
@@ -32,6 +32,7 @@ import nz.gen.wellington.guardian.android.model.TagCombinerArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
+import nz.gen.wellington.guardian.model.Refinement;
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
 import android.content.Context;
@@ -41,10 +42,12 @@ public class ArticleSetFactory {
 	private SettingsDAO settingsDAO;
 	private ArticleSetUrlService articleSetUrlService;
 	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
+	private SectionDAO sectionDAO;
 	
 	public ArticleSetFactory(Context context) {
 		this.settingsDAO = SingletonFactory.getSettingsDAO(context);
 		this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(context);
+		this.sectionDAO = new SingletonFactory().getSectionDAO(context);
 		this.articleSetUrlService = new ArticleSetUrlService(context);
 	}
 
@@ -129,20 +132,17 @@ public class ArticleSetFactory {
 		articleSet.setSourceUrl(articleSetUrlService.getUrlForArticleSet(articleSet));
 		return articleSet;
 	}
-
-	public Refinement getRefinementForTag(Tag tag) {
-		return new Refinement(tag);
-	}
-
-	public Refinement getRefinementForSection(Section section) {
-		return new Refinement(section.getTag());
-	}
-
-	public ArticleSet getArticleSetForRefinement(ArticleSet articleSet, Refinement refinement) {		
-		if (refinement.getTag() != null) {
-			return getArticleSetForTag(refinement.getTag());		
+	
+	public ArticleSet getArticleSetForRefinement(Refinement refinement) {
+		if (refinement.getType() != null && refinement.getType().equals("keyword")) {	// TODO all permitted			
+			final String sectionId = refinement.getId().split("/")[0];
+			Section section = sectionDAO.getSectionById(sectionId);
+			
+			final Tag refinementTag = new Tag(refinement.getDisplayName(), refinement.getId(), section, refinement.getType());		
+			return getArticleSetForTag(refinementTag);		
 		}
 		
+		/*	TODO reimplement
 		if (refinement.getFromDate() != null && articleSet instanceof TagArticleSet) {
 			return getArticleSetForTag(((TagArticleSet) articleSet).getTag(), refinement.getDisplayName(), refinement.getFromDate(), refinement.getToDate());			
 		}
@@ -150,12 +150,9 @@ public class ArticleSetFactory {
 		if (refinement.getFromDate() != null && articleSet instanceof SectionArticleSet) {
 			return getArticleSetForSection(((SectionArticleSet) articleSet).getSection(), refinement.getDisplayName(), refinement.getFromDate(), refinement.getToDate());			
 		}
+		*/
 				
 		return null;
-	}
-
-	public Refinement getRefinementForDate(String displayName, String fromDate, String toDate) {
-		return new Refinement(displayName, fromDate, toDate);
 	}
 	
 }

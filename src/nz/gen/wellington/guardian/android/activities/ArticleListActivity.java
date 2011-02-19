@@ -30,7 +30,6 @@ import nz.gen.wellington.guardian.android.api.ArticleDAO;
 import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
-import nz.gen.wellington.guardian.android.api.openplatfrom.Refinement;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
@@ -40,6 +39,7 @@ import nz.gen.wellington.guardian.android.model.colourscheme.ColourScheme;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import nz.gen.wellington.guardian.model.Article;
+import nz.gen.wellington.guardian.model.Refinement;
 import nz.gen.wellington.guardian.model.Section;
 import android.content.Context;
 import android.os.Bundle;
@@ -374,14 +374,18 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			for (Refinement refinement : refinements.get(refinementType)) {
 				
 				if (refinementType.equals("type") && articleSet instanceof SectionArticleSet) {
-					if (refinement.getTag().isGalleryTag()) {
+					/*
+					final boolean isGalleryRefinement = refinement.getType().equals("type") && refinement.getId().equals("type/gallery");	// TODO check what the id is for gallery combiners					
+					if (isGalleryRefinement) {
 						ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForTagCombiner(((SectionArticleSet) articleSet).getSection().getTag(), refinement.getTag());
 						if (articleSetForRefinement != null) {
 							refinementArticleSets.add(articleSetForRefinement);
 						}
-					}					
-				} else {			
-					ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForRefinement(articleSet, refinement);
+					}
+					*/
+					
+				} else {
+					ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForRefinement(refinement);
 					if (articleSetForRefinement != null) {
 						refinementArticleSets.add(articleSetForRefinement);
 					}

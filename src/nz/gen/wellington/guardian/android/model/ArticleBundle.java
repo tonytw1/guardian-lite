@@ -20,8 +20,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import nz.gen.wellington.guardian.android.api.openplatfrom.Refinement;
 import nz.gen.wellington.guardian.model.Article;
+import nz.gen.wellington.guardian.model.Refinement;
 
 public class ArticleBundle implements Serializable {
 	

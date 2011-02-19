@@ -22,6 +22,7 @@ import java.util.List;
 
 import nz.gen.wellington.guardian.model.Section;
 
+@Deprecated // TODO should be the same as tag article set - implies permittedRefinements should not be on the article set as it's a UI decision
 public class SectionArticleSet extends AbstractArticleSet implements ArticleSet, Serializable {
 	
 	private static final long serialVersionUID = 1L;
