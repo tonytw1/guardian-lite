@@ -18,6 +18,7 @@ package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.model.Tag;
@@ -43,8 +44,8 @@ public class tag extends ArticleListActivity {
 		articleSet = (ArticleSet) this.getIntent().getExtras().get("articleset");
 		
 		if (articleSet.getSection() != null) {
-			setHeadingColour(articleSet.getSection().getId());			
-		}	
+			setHeadingColour(SectionColourMap.getColourForSection(articleSet.getSection().getId()));
+		}
 		setHeading(articleSet.getName());
 	}
 	
