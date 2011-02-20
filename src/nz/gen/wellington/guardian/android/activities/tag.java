@@ -41,19 +41,24 @@ public class tag extends ArticleListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
 		this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());
-		articleSet = (ArticleSet) this.getIntent().getExtras().get("articleset");
-		
+		articleSet = (ArticleSet) this.getIntent().getExtras().get("articleset");		
 		if (articleSet.getSection() != null) {
 			setHeadingColour(SectionColourMap.getColourForSection(articleSet.getSection().getId()));
 		}
 		setHeading(articleSet.getName());
 	}
 	
+	@Override
 	protected String getRefinementDescription(String refinementType) {
 		if (refinementType.equals("keyword")) {
 			return "Articles tagged with " + getArticleSet().getName() + " have also been tagged with:";
-		}
-		if (refinementType.equals("date")) {
+		} else if (refinementType.equals("blog")) {
+			return "Articles tagged with " + getArticleSet().getName() + " have been tagged with these blog tags:";
+		} else if (refinementType.equals("contributor")) { 
+			return "Articles tagged with  " + getArticleSet().getName() + " have been tagged with these contributors:";
+		} else if (refinementType.equals("type")) {
+			return "Other " + getArticleSet().getName() + " content types:";
+		} else if (refinementType.equals("date")) {
 			return "Articles have been tagged with " + getArticleSet().getName() + " on these dates:";
 		}
 		return null;

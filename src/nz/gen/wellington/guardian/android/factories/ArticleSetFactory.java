@@ -26,7 +26,6 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.model.SavedArticlesArticleSet;
 import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
-import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.TagCombinerArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
@@ -91,11 +90,11 @@ public class ArticleSetFactory {
 	}
 	
 	public ArticleSet getArticleSetForSection(Section section) {
-		return addUrl(new SectionArticleSet(section, settingsDAO.getPageSizePreference()));
+		return addUrl(new TagArticleSet(section.getTag(), settingsDAO.getPageSizePreference()));
 	}
 	
 	public ArticleSet getArticleSetForSection(Section section, String dateDisplayName, String fromDate, String toDate) {
-		return addUrl(new SectionArticleSet(section, settingsDAO.getPageSizePreference(), dateDisplayName, fromDate, toDate));
+		return addUrl(new TagArticleSet(section.getTag(), settingsDAO.getPageSizePreference(), dateDisplayName, fromDate, toDate));
 	}
 		
 	public List<ArticleSet> getArticleSetsForSections(List<Section> favouriteSections) {

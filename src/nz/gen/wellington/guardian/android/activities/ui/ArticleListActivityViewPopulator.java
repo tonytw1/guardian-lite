@@ -22,8 +22,8 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.SectionColourMap;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.colourscheme.ColourScheme;
 import nz.gen.wellington.guardian.model.Article;
 import nz.gen.wellington.guardian.model.Section;
@@ -156,8 +156,8 @@ public class ArticleListActivityViewPopulator {
 	
 	public void addSeperator(LayoutInflater mInflater, LinearLayout mainpane, ArticleSet articleSetForSection, boolean contentIsAvailable, ColourScheme colourScheme, int fontSize) {
 		View seperator = mInflater.inflate(R.layout.seperator, null);
-			
-		final Section section = ((SectionArticleSet) articleSetForSection).getSection();
+		
+		final Section section = ((TagArticleSet) articleSetForSection).getSection();
 		seperator.setBackgroundColor(Color.parseColor(SectionColourMap.getColourForSection(section.getId())));		
 
 		TextView heading = (TextView) seperator.findViewById(R.id.TagName);

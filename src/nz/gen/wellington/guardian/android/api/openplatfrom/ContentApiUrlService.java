@@ -21,7 +21,6 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
-import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.TagCombinerArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
@@ -80,17 +79,6 @@ public class ContentApiUrlService {
 	
 	private void populateContentApiUrlBuilderForArticleSet(ContentApiStyleUrlBuilder contentApiUrlBuilder, ArticleSet articleSet) {
 		
-		if (articleSet instanceof SectionArticleSet) {
-			SectionArticleSet sectionArticleSet = (SectionArticleSet) articleSet;
-			contentApiUrlBuilder.addSection(((SectionArticleSet) articleSet).getSection());
-			if (sectionArticleSet.getFromDate() != null) {
-				contentApiUrlBuilder.setFromDate(sectionArticleSet.getFromDate());
-				contentApiUrlBuilder.setToDate(sectionArticleSet.getToDate());
-			}			
-			// TODO this knowledge should be coming from the article set
-			contentApiUrlBuilder.andMustBeOneOff(supportedContentTypes);
-		}
-		
 		if (articleSet instanceof TagArticleSet) {
 			TagArticleSet tagArticleSet = (TagArticleSet) articleSet;
 			contentApiUrlBuilder.addTag(tagArticleSet.getTag());
@@ -111,11 +99,7 @@ public class ContentApiUrlService {
 		if (articleSet instanceof FavouriteTagsArticleSet) {
 			FavouriteTagsArticleSet favouriteStoriesArticleSet = (FavouriteTagsArticleSet) articleSet;
 			for (ArticleSet favouriteArticleSet : favouriteStoriesArticleSet.getArticleSets()) {
-				if (favouriteArticleSet instanceof SectionArticleSet) {
-					contentApiUrlBuilder.addSection(((SectionArticleSet) favouriteArticleSet).getSection());					
-				} else if (favouriteArticleSet instanceof TagArticleSet) {
-					contentApiUrlBuilder.addTag(((TagArticleSet) favouriteArticleSet).getTag());
-				}
+				contentApiUrlBuilder.addTag(((TagArticleSet) favouriteArticleSet).getTag());				
 			}
 			contentApiUrlBuilder.andMustBeOneOff(supportedContentTypes);
 		}

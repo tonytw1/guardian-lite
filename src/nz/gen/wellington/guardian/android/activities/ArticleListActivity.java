@@ -34,7 +34,6 @@ import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
-import nz.gen.wellington.guardian.android.model.SectionArticleSet;
 import nz.gen.wellington.guardian.android.model.colourscheme.ColourScheme;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
@@ -377,7 +376,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			List<ArticleSet> refinementArticleSets = new ArrayList<ArticleSet>();
 			for (Refinement refinement : refinements.get(refinementType)) {
 				
-				if (refinementType.equals("type") && articleSet instanceof SectionArticleSet) {
+				//if (refinementType.equals("type") && articleSet instanceof SectionArticleSet) {
 					/*
 					final boolean isGalleryRefinement = refinement.getType().equals("type") && refinement.getId().equals("type/gallery");	// TODO check what the id is for gallery combiners					
 					if (isGalleryRefinement) {
@@ -388,12 +387,12 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					}
 					*/
 					
-				} else {
+				//} else {
 					ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForRefinement(refinement);
 					if (articleSetForRefinement != null) {
 						refinementArticleSets.add(articleSetForRefinement);
 					}
-				}
+				//}
 			}
 			return refinementArticleSets;
 		}

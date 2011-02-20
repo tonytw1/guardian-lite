@@ -27,7 +27,7 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 	private static final long serialVersionUID = 2L;
 	private Tag tag;
 	
-	private String[] permittedRefinements = {"keyword", "date"};
+	private String[] permittedRefinements = {"keyword", "contributor", "blog", "date"};
 
 	public TagArticleSet(Tag tag, int pageSize) {
 		super(pageSize);
