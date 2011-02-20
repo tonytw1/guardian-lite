@@ -36,8 +36,11 @@ import nz.gen.wellington.guardian.model.Refinement;
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
 import android.content.Context;
+import android.util.Log;
 
 public class ArticleSetFactory {
+	
+	private static final String TAG = "ArticleSetFactory";
 	
 	private SettingsDAO settingsDAO;
 	private ArticleSetUrlService articleSetUrlService;
@@ -133,15 +136,19 @@ public class ArticleSetFactory {
 		return articleSet;
 	}
 	
-	public ArticleSet getArticleSetForRefinement(Refinement refinement) {
-		if (refinement.getType() != null && refinement.getType().equals("keyword")) {	// TODO all permitted			
+	public ArticleSet getArticleSetForRefinement(Refinement refinement) {		
+		Log.d(TAG, "Making article set for refinement: type='" + refinement.getType() + "' id='" + refinement.getId() + "'");		
+		if (refinement.getType() != null && (refinement.getType().equals("keyword") || refinement.getType().equals("blog"))) {	// TODO all permitted			
 			final String sectionId = refinement.getId().split("/")[0];
-			Section section = sectionDAO.getSectionById(sectionId);
-			
+			Section section = sectionDAO.getSectionById(sectionId);			
 			final Tag refinementTag = new Tag(refinement.getDisplayName(), refinement.getId(), section, refinement.getType());		
+			return getArticleSetForTag(refinementTag);
+			
+		} else if (refinement.getType() != null && refinement.getType().equals("contributor")) {
+			final Tag refinementTag = new Tag(refinement.getDisplayName(), refinement.getId(), null, refinement.getType());		
 			return getArticleSetForTag(refinementTag);		
 		}
-		
+ 		
 		/*	TODO reimplement
 		if (refinement.getFromDate() != null && articleSet instanceof TagArticleSet) {
 			return getArticleSetForTag(((TagArticleSet) articleSet).getTag(), refinement.getDisplayName(), refinement.getFromDate(), refinement.getToDate());			

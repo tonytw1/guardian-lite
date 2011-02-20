@@ -25,7 +25,6 @@ import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.SectionDAO;
-import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
@@ -60,7 +59,6 @@ public class ContentResultsHandler extends HandlerBase {
 	public String currentRefinementGroupType;
 	public ArticleCallback articleCallback;
 	private HtmlCleaner htmlCleaner;
-	private ArticleSetFactory articleSetFactory;
 
 	private boolean running = true;
 	private Context context;
@@ -69,7 +67,6 @@ public class ContentResultsHandler extends HandlerBase {
 	public ContentResultsHandler(Context context, HtmlCleaner htmlCleaner) {
 		this.htmlCleaner = htmlCleaner;
 		this.context = context;
-		this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
 	}
 	
 	public void setArticleCallback(ArticleCallback articleCallback) {
@@ -248,25 +245,25 @@ public class ContentResultsHandler extends HandlerBase {
 	
 		
 	private void processRefinement(AttributeList attributes, SectionDAO sectionDAO) {		
+		final String refinementId = attributes.getValue("id");
 		final String displayName = attributes.getValue("display-name");
-		
-		final String tagId = attributes.getValue("id");
 		final String refinedUrl = attributes.getValue("refined-url");
-		final String refinementType = attributes.getValue("type");
 		
+		Log.d(TAG, "Processing refinement: type='" + currentRefinementGroupType + "', id='" + refinementId + "'");
+			
 		List<String> tagRefinementTypes = Arrays.asList("blog", "contributor", "keyword", "series");		
-		boolean isTagRefinement = tagRefinementTypes.contains(refinementType);
+		boolean isTagRefinement = tagRefinementTypes.contains(currentRefinementGroupType);
 		if (isTagRefinement) {			
 			List<Refinement> refinementGroup = getRefinementGroup();
-			Log.d(TAG, "Adding refinement for tag: " + tagId);
-			refinementGroup.add(new Refinement(refinementType, tagId, displayName, refinedUrl, 0));	// TODO count			
+			Log.d(TAG, "Adding refinement for tag: " + refinementId);
+			refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, 0));	// TODO count			
 		}
 		
 		boolean isContentTypeRefinement = currentRefinementGroupType.equals("type");
 		if (isContentTypeRefinement) {
-			Log.d(TAG, "Adding content type: " + tagId);
+			Log.d(TAG, "Adding content type refinement: " + refinementId);
 			List<Refinement> refinementGroup = getRefinementGroup();
-			refinementGroup.add(new Refinement(currentRefinementGroupType, tagId, displayName, refinedUrl, 0));	// TODO count
+			refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, 0));	// TODO count
 		}
 		
 		boolean isSectionRefinement = currentRefinementGroupType.equals("section");
@@ -274,9 +271,9 @@ public class ContentResultsHandler extends HandlerBase {
 			final String sectionId = attributes.getValue("id");
 			Section section = sectionDAO.getSectionById(sectionId);
 			if (section != null) {
-				Log.d(TAG, "Adding refinement for section: " + section.getName());
+				Log.d(TAG, "Adding section refinement: " + section.getName());
 				List<Refinement> refinementGroup = getRefinementGroup();
-				refinementGroup.add(new Refinement(refinementType, tagId, displayName, refinedUrl, 0));	// TODO count			
+				refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, 0));	// TODO count			
 			}
 		}
 		

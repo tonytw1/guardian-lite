@@ -328,9 +328,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	if (refinements != null && !refinements.isEmpty()) {
 			    		LayoutInflater inflater = LayoutInflater.from(context);
 			    		
-			    		for (String refinementType : articleSet.getPermittedRefinements()) {
-			    			Log.d(TAG, "Processing refinement type: " + refinementType);
-			    			if (articleSet.getPermittedRefinements().contains(refinementType) && refinements.keySet().contains(refinementType)) {
+			    		for (String refinementType : refinements.keySet()) {
+			    			Log.d(TAG, "Processing refinements of type: " + refinementType);
+			    			if (articleSet.getPermittedRefinements().contains(refinementType)) {
 			    				List<ArticleSet> refinementArticleSets = getRefinementArticleSets(refinements, refinementType, articleSet);
 			    				if (!refinementArticleSets.isEmpty()) {
 			    					articleListActivityViewPopulator.populateRefinementType(
@@ -338,7 +338,11 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 											getRefinementDescription(refinementType),
 											refinementArticleSets,
 											currentColourScheme, baseFontSize);
+			    				} else {		 	    				
+			    					Log.d(TAG, "Refinements article set was empty for this refinement type");
 			    				}
+			    			} else {
+			    				Log.d(TAG, "Ignoring refines of type which is not permitted for this article set: " + refinementType);
 			    			}
 						}
 			    		
