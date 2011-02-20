@@ -45,7 +45,7 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 	@Override
 	public String getName() {
 		StringBuilder name = new StringBuilder();
-		if (tag.getSection() != null) {
+		if (!tag.isSectionKeyword() && tag.getSection() != null) {
 			name.append(tag.getSection().getTag().getName() + " - ");
 		}
 		name.append(tag.getName());
