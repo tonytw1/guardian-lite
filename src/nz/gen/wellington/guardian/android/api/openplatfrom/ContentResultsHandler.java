@@ -147,7 +147,7 @@ public class ContentResultsHandler extends HandlerBase {
 
 		if (name.equals("refinement")) {
 			if (currentRefinementGroupType != null) {
-				processRefinement(attributes, sectionDAO);
+				processRefinementTag(attributes);
 			}
 		}
 
@@ -243,49 +243,22 @@ public class ContentResultsHandler extends HandlerBase {
 		this.running = false;
 	}
 	
-		
-	private void processRefinement(AttributeList attributes, SectionDAO sectionDAO) {		
+	
+	private void processRefinementTag(AttributeList attributes) {		
 		final String refinementId = attributes.getValue("id");
 		final String displayName = attributes.getValue("display-name");
 		final String refinedUrl = attributes.getValue("refined-url");
-		final int refinementCount = 0;	// TODO implement and make use of
 		
-		Log.d(TAG, "Processing refinement: type='" + currentRefinementGroupType + "', id='" + refinementId + "'");
-
-		// TODO this looks like it should collapse into one general block
-		List<String> tagRefinementTypes = Arrays.asList("blog", "contributor", "keyword", "series");		
-		boolean isTagRefinement = tagRefinementTypes.contains(currentRefinementGroupType);
-		if (isTagRefinement) {			
-			List<Refinement> refinementGroup = getRefinementGroup();
-			Log.d(TAG, "Adding refinement for tag: " + refinementId);
-			refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, refinementCount));			
+		int refinementCount = 0;
+		final String refinementCountString = attributes.getValue("count");
+		try {
+			refinementCount = Integer.parseInt(refinementCountString);
+		} catch (NumberFormatException e) {
+			Log.i(TAG, "NumberFormatException while parsing refinement count: " + refinementCount);
 		}
 		
-		boolean isContentTypeRefinement = currentRefinementGroupType.equals("type");
-		if (isContentTypeRefinement) {
-			Log.d(TAG, "Adding content type refinement: " + refinementId);
-			List<Refinement> refinementGroup = getRefinementGroup();
-			refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, refinementCount));
-		}
-		
-		boolean isSectionRefinement = currentRefinementGroupType.equals("section");
-		if (isSectionRefinement) {
-			final String sectionId = attributes.getValue("id");
-			Section section = sectionDAO.getSectionById(sectionId);
-			if (section != null) {
-				Log.d(TAG, "Adding section refinement: " + section.getName());
-				List<Refinement> refinementGroup = getRefinementGroup();
-				refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, refinementCount));			
-			}
-		}
-		
-		boolean isDateRefinement = currentRefinementGroupType.equals("date");
-		if (isDateRefinement) {
-			Log.d(TAG, "Adding date refinement: " + displayName);			
-			List<Refinement> refinementGroup = getRefinementGroup();
-			refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, refinementCount));
-		}
-		
+		Log.d(TAG, "Adding refinement: type='" + currentRefinementGroupType + "', id='" + refinementId + "'");	
+		getRefinementGroup().add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, refinementCount));		
 	}
 	
 	
