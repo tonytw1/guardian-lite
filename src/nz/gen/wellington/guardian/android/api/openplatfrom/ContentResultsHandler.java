@@ -248,22 +248,24 @@ public class ContentResultsHandler extends HandlerBase {
 		final String refinementId = attributes.getValue("id");
 		final String displayName = attributes.getValue("display-name");
 		final String refinedUrl = attributes.getValue("refined-url");
+		final int refinementCount = 0;	// TODO implement and make use of
 		
 		Log.d(TAG, "Processing refinement: type='" + currentRefinementGroupType + "', id='" + refinementId + "'");
-			
+
+		// TODO this looks like it should collapse into one general block
 		List<String> tagRefinementTypes = Arrays.asList("blog", "contributor", "keyword", "series");		
 		boolean isTagRefinement = tagRefinementTypes.contains(currentRefinementGroupType);
 		if (isTagRefinement) {			
 			List<Refinement> refinementGroup = getRefinementGroup();
 			Log.d(TAG, "Adding refinement for tag: " + refinementId);
-			refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, 0));	// TODO count			
+			refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, refinementCount));			
 		}
 		
 		boolean isContentTypeRefinement = currentRefinementGroupType.equals("type");
 		if (isContentTypeRefinement) {
 			Log.d(TAG, "Adding content type refinement: " + refinementId);
 			List<Refinement> refinementGroup = getRefinementGroup();
-			refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, 0));	// TODO count
+			refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, refinementCount));
 		}
 		
 		boolean isSectionRefinement = currentRefinementGroupType.equals("section");
@@ -273,21 +275,16 @@ public class ContentResultsHandler extends HandlerBase {
 			if (section != null) {
 				Log.d(TAG, "Adding section refinement: " + section.getName());
 				List<Refinement> refinementGroup = getRefinementGroup();
-				refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, 0));	// TODO count			
+				refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, refinementCount));			
 			}
 		}
 		
-		/*
 		boolean isDateRefinement = currentRefinementGroupType.equals("date");
 		if (isDateRefinement) {
 			Log.d(TAG, "Adding date refinement: " + displayName);			
-			final String fromDate = refinedUrl.split("from-date=")[1].substring(0, 10);			
-			final String toDate = refinedUrl.split("to-date=")[1].substring(0, 10);
-			
 			List<Refinement> refinementGroup = getRefinementGroup();
-			refinementGroup.add(articleSetFactory.getRefinementForDate(displayName, fromDate, toDate));
+			refinementGroup.add(new Refinement(currentRefinementGroupType, refinementId, displayName, refinedUrl, refinementCount));
 		}
-		*/
 		
 	}
 	
