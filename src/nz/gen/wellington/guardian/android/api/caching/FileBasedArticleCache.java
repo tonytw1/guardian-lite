@@ -43,7 +43,7 @@ public class FileBasedArticleCache {
 	
 	
 	public void putArticleSetArticles(ArticleSet articleSet, ArticleBundle bundle) {
-		 Log.i(TAG, "Writing to disk '" + articleSet.getName() + "' with checksum: " + bundle.getChecksum());
+		 Log.d(TAG, "Writing to disk '" + articleSet.getName() + "' with checksum: " + bundle.getChecksum());
 		 try {
 			 FileOutputStream fos = FileService.getFileOutputStream(context, getLocalFilename(getUrlFor(articleSet)));
 			 ObjectOutputStream out = new ObjectOutputStream(fos);
@@ -54,6 +54,7 @@ public class FileBasedArticleCache {
 			 Log.e(TAG, "IO Exception while writing article set: " + articleSet.getName());
 			 Log.e(TAG, ex.getMessage());
 		 }
+		 Log.d(TAG, "Finished writing to disk '" + articleSet.getName());
 	}
 	
 	public void touchArticleSet(ArticleSet articleSet, Date modTime) {
