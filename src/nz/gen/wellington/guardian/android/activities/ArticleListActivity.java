@@ -31,6 +31,7 @@ import nz.gen.wellington.guardian.android.api.ContentFetchType;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.api.ImageDownloadDecisionService;
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
+import nz.gen.wellington.guardian.android.factories.RefinementArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -93,7 +94,9 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		super.onResume();
 		
 		LinearLayout mainPane = (LinearLayout) findViewById(R.id.MainPane);		
-		if (shouldRefreshView(mainPane)) {
+		final boolean shouldRefreshView = shouldRefreshView(mainPane);
+		Log.d(TAG, "Should refresh view: " + shouldRefreshView);
+		if (shouldRefreshView) {
 			setFontSize();
 			mainPane.removeAllViews();
 			
@@ -237,6 +240,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		private boolean descriptionSet;
 		private int baseFontSize;
 		private ArticleSetFactory articleSetFactory;
+		private RefinementArticleSetFactory refinementArticleSetFactory;
 		private ArticleListActivityViewPopulator articleListActivityViewPopulator;
 		private boolean isLandscapeOrientation;
 		
@@ -244,6 +248,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			super();
 			this.context = context;
 			this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
+			this.refinementArticleSetFactory = SingletonFactory.getRefinementArticleSetFactory(context);
 			this.articleListActivityViewPopulator = new ArticleListActivityViewPopulator(context);
 			this.articleSet = articleSet;
 			this.descriptionSet = false;
@@ -388,7 +393,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 					*/
 					
 				//} else {
-					ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForRefinement(refinement);
+					ArticleSet articleSetForRefinement = refinementArticleSetFactory.getArticleSetForRefinement(refinement);
 					if (articleSetForRefinement != null) {
 						refinementArticleSets.add(articleSetForRefinement);
 					}

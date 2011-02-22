@@ -48,6 +48,7 @@ public class SingletonFactory {
 	private static ImageDownloadDecisionService imageDownloadDecisionService;
 	private static SettingsDAO settingsDAO;
 	private static TagShufflingService tagShufflingService;
+	private static RefinementArticleSetFactory refimentArticleSetFactory;
 	
 	public static ArticleDAO getArticleDao(Context context) {
 		return new ArticleDAO(context);	
@@ -143,6 +144,13 @@ public class SingletonFactory {
 			tagShufflingService = new TagShufflingService();
 		}
 		return tagShufflingService;
+	}
+
+	public static RefinementArticleSetFactory getRefinementArticleSetFactory(Context context) {
+		if (refimentArticleSetFactory == null) {
+			refimentArticleSetFactory = new RefinementArticleSetFactory(context);
+		}
+		return refimentArticleSetFactory;
 	}
 	
 }
