@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
-import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
@@ -31,25 +30,19 @@ import nz.gen.wellington.guardian.android.model.TagCombinerArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
-import nz.gen.wellington.guardian.model.Refinement;
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
 import android.content.Context;
-import android.util.Log;
 
 public class ArticleSetFactory {
-	
-	private static final String TAG = "ArticleSetFactory";
-	
+		
 	private SettingsDAO settingsDAO;
 	private ArticleSetUrlService articleSetUrlService;
 	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
-	private SectionDAO sectionDAO;
 	
 	public ArticleSetFactory(Context context) {
 		this.settingsDAO = SingletonFactory.getSettingsDAO(context);
 		this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(context);
-		this.sectionDAO = new SingletonFactory().getSectionDAO(context);
 		this.articleSetUrlService = new ArticleSetUrlService(context);
 	}
 
