@@ -16,8 +16,12 @@
 
 package nz.gen.wellington.guardian.android.factories;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.model.Refinement;
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
@@ -36,7 +40,7 @@ public class RefinementArticleSetFactory {
 		this.articleSetFactory = SingletonFactory.getArticleSetFactory(context);
 	}
 	
-	public ArticleSet getArticleSetForRefinement(Refinement refinement) {		
+	public ArticleSet getArticleSetForRefinement(Refinement refinement, ArticleSet articleSet) {		
 		final String refinementType = refinement.getType();
 		final String refinementId = refinement.getId();
 		final String refinedUrl = refinement.getRefinedUrl();			
@@ -45,7 +49,15 @@ public class RefinementArticleSetFactory {
 			return null;
 		}
 		
-		Log.d(TAG, "Making article set for refinement: type='" + refinementType + "' id='" + refinementId + "'" + " refinedUrl='" + refinedUrl + "'");
+		Log.d(TAG, "Making article set for refinement: type='" + refinementType + "' id='" + refinementId + "'" + " refinedUrl='" + refinedUrl + "'");		
+		if (refinementType.equals("type")) {
+			final boolean isGalleryRefinement = refinement.getType().equals("type") && refinement.getId().equals("type/gallery");	// TODO check what the id is for gallery combiners
+			if (isGalleryRefinement && articleSet instanceof TagArticleSet) {				
+				Tag galleryContentType = new Tag("Gallery content type", "type/gallery", null, "type");				
+				return articleSetFactory.getArticleSetForTagCombiner(((TagArticleSet) articleSet).getTag(), galleryContentType);				
+			}
+		}
+		
 		final boolean isSectionBasedTagRefinement = refinementType.equals("keyword") || refinementType.equals("blog") || refinementType.equals("series");
 		if (isSectionBasedTagRefinement) { 	
 			final String sectionId = refinementId.split("/")[0];
@@ -58,27 +70,29 @@ public class RefinementArticleSetFactory {
 			return articleSetFactory.getArticleSetForTag(refinementTag);
 			
 		} else if (refinementType.equals("date")) {
-			/*
-			 *  <refinement count="6" 
-			 *  	refined-url="http://content.guardianapis.com/search?callback=jsonp1298191201356&format=xml&from-date=2011-02-20&order-by=newest&section=money&show-refinements=all&to-date=2011-02-20"  
-			 *  	display-name="Today" id="date/today" api-ur
-			 *  <refinement count="7" 
-			 *  	refined-url="http://content.guardianapis.com/search?callback=jsonp1298191201357&format=xml&from-date=2011-02-20&order-by=newest&show-refinements=all&tag=money/money&to-date=2011-02-20"  
-			 *  	display-name="Today" id="date/today" api-url="http://content.guardianapis.com/search?from-date=2011-02-20&to-date=2011-02-20"></refinement>
-			 */			
-			final String tagId = "football/football";	// TODO
+			final String tagId = getUrlTagParameterValue(refinedUrl);
+			Log.d(TAG, "Refined url tag paramater is: " + refinedUrl);
 			if (tagId != null && isSingleSectionBasedTag(tagId)) {
 				// TODO duplicateion and yuck
 				final String sectionId = tagId.split("/")[0];
 				Section section = sectionDAO.getSectionById(sectionId);			
 				final Tag refinementTag = new Tag(refinement.getDisplayName(), tagId, section, null);	// TODO is a null type allowed?
 				
-				final String fromDate = getUrlParameterValue(refinedUrl, "from-date");
-				final String toDate = getUrlParameterValue(refinedUrl, "to-date");
+				final String fromDate = getUrlDateParameterValue(refinedUrl, "from-date");
+				final String toDate = getUrlDateParameterValue(refinedUrl, "to-date");
 				return articleSetFactory.getArticleSetForTag(refinementTag, refinement.getDisplayName(), fromDate, toDate);
 			}
 		}
 		
+		return null;
+	}
+
+	private String getUrlTagParameterValue(String refinedUrl) {
+		Pattern pattern = Pattern.compile("^.*?tag=(.*?)&.*?$");
+		Matcher matcher = pattern.matcher(refinedUrl);
+		if (matcher.matches()) {
+			return matcher.group(1);
+		}
 		return null;
 	}
 
@@ -87,7 +101,7 @@ public class RefinementArticleSetFactory {
 	}
 
 	// TODO fully implement
-	private String getUrlParameterValue(final String refinedUrl, String parameter) {
+	private String getUrlDateParameterValue(final String refinedUrl, String parameter) {
 		return refinedUrl.split(parameter + "=")[1].substring(0, 10);
 	}
 	

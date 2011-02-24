@@ -376,28 +376,12 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 		}
 
 		private List<ArticleSet> getRefinementArticleSets(Map<String, List<Refinement>> refinements, String refinementType, ArticleSet articleSet) {
-
-			// TODO this is abit of a mess - could be method on refinement?
 			List<ArticleSet> refinementArticleSets = new ArrayList<ArticleSet>();
 			for (Refinement refinement : refinements.get(refinementType)) {
-				
-				//if (refinementType.equals("type") && articleSet instanceof SectionArticleSet) {
-					/*
-					final boolean isGalleryRefinement = refinement.getType().equals("type") && refinement.getId().equals("type/gallery");	// TODO check what the id is for gallery combiners					
-					if (isGalleryRefinement) {
-						ArticleSet articleSetForRefinement = articleSetFactory.getArticleSetForTagCombiner(((SectionArticleSet) articleSet).getSection().getTag(), refinement.getTag());
-						if (articleSetForRefinement != null) {
-							refinementArticleSets.add(articleSetForRefinement);
-						}
-					}
-					*/
-					
-				//} else {
-					ArticleSet articleSetForRefinement = refinementArticleSetFactory.getArticleSetForRefinement(refinement);
-					if (articleSetForRefinement != null) {
-						refinementArticleSets.add(articleSetForRefinement);
-					}
-				//}
+				ArticleSet articleSetForRefinement = refinementArticleSetFactory.getArticleSetForRefinement(refinement, articleSet);
+				if (articleSetForRefinement != null) {
+					refinementArticleSets.add(articleSetForRefinement);
+				}				
 			}
 			return refinementArticleSets;
 		}
