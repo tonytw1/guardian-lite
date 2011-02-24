@@ -85,7 +85,7 @@ public class ContentApiStyleApi implements ContentSource {
 	@Override
 	public List<Section> getSections() {
 		Log.i(TAG, "Fetching section list from live api");
-		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(settingsDAO.getPreferedApiHost(), settingsDAO.getApiKey(), settingsDAO.getSupportedContentTypes());
+		ContentApiUrlService contentApiUrlService = initContentApiUrlService();
 		String contentApiUrl = contentApiUrlService.getSectionsQueryUrl();
 		InputStream input = httpFetcher.httpFetch(contentApiUrl, "sections");
 		if (input != null) {
@@ -104,7 +104,7 @@ public class ContentApiStyleApi implements ContentSource {
 	@Override
 	public List<Tag> searchTags(String searchTerm, List<String> allowedTagSearchTypes, Map<String, Section> sections) {
 		Log.i(TAG, "Fetching tag list from live api: " + searchTerm);
-		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(settingsDAO.getPreferedApiHost(), settingsDAO.getApiKey(), settingsDAO.getSupportedContentTypes());
+		ContentApiUrlService contentApiUrlService = initContentApiUrlService();
 		
 		InputStream input = httpFetcher.httpFetch(contentApiUrlService.getTagSearchQueryUrl(searchTerm, allowedTagSearchTypes), "tag results");
 		if (input != null) {
@@ -125,6 +125,11 @@ public class ContentApiStyleApi implements ContentSource {
 		Log.i(TAG, "Stopping content api loading");
 		contentXmlParser.stop();
 		httpFetcher.stopLoading();
+	}
+	
+	
+	private ContentApiUrlService initContentApiUrlService() {
+		return new ContentApiUrlService(settingsDAO.getPreferedApiHost(), settingsDAO.getApiKey(), settingsDAO.getSupportedContentTypes(), settingsDAO.shouldShowMedia());
 	}
 	
 }

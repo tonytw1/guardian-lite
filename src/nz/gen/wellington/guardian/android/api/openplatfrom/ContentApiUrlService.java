@@ -31,11 +31,13 @@ public class ContentApiUrlService {
 	private String apiHost;
 	private String apiKey;
 	private List<Tag> supportedContentTypes;
+	private boolean showMedia;
 	
-	public ContentApiUrlService(String apiHost, String apiKey, List<Tag> supportedContentTypes) {
+	public ContentApiUrlService(String apiHost, String apiKey, List<Tag> supportedContentTypes, boolean showMedia) {
 		this.apiHost = apiHost;
 		this.apiKey = apiKey;
 		this.supportedContentTypes = supportedContentTypes;	// TODO should come from the article sets.
+		this.showMedia = showMedia;
 	}
 
 	public String getContentApiUrlForArticleSet(ArticleSet articleSet) {
@@ -114,7 +116,7 @@ public class ContentApiUrlService {
 		}
 					
 		contentApiUrlBuilder.setPageSize(articleSet.getPageSize());
-		contentApiUrlBuilder.setShowMedia(true);
+		contentApiUrlBuilder.setShowMedia(showMedia);
 		contentApiUrlBuilder.setFormat("xml");
 	}
 	

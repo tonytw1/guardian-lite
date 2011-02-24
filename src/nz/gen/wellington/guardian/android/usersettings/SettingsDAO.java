@@ -137,4 +137,8 @@ public class SettingsDAO {
 		return getPreference("useContentApi", "false").equals("true");
 	}
 
+	public boolean shouldShowMedia() {
+		return !this.isUsingContentApi();	// TODO need a preference to override this
+	}
+
 }

@@ -39,7 +39,7 @@ public class ArticleSetUrlService {
 	}
 	
 	public String getUrlForArticleSet(ArticleSet articleSet) {
-		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(settingsDAO.getPreferedApiHost(), settingsDAO.getApiKey(), settingsDAO.getSupportedContentTypes());
+		ContentApiUrlService contentApiUrlService = new ContentApiUrlService(settingsDAO.getPreferedApiHost(), settingsDAO.getApiKey(), settingsDAO.getSupportedContentTypes(), settingsDAO.shouldShowMedia());
 		if (articleSet instanceof AboutArticleSet) {
 			return aboutArticlesDAO.getArticleSetUrl();
 		}
