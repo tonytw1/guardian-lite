@@ -16,9 +16,6 @@
 
 package nz.gen.wellington.guardian.android.factories;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
@@ -69,37 +66,16 @@ public class RefinementArticleSetFactory {
 			final Tag refinementTag = new Tag(refinement.getDisplayName(), refinementId, null, refinementType);		
 			return articleSetFactory.getArticleSetForTag(refinementTag);
 			
-		} else if (refinementType.equals("date")) {
-			final String tagId = getUrlTagParameterValue(refinedUrl);
+		} else if (refinementType.equals("date") && articleSet instanceof TagArticleSet) {
 			Log.d(TAG, "Refined url tag paramater is: " + refinedUrl);
-			if (tagId != null && isSingleSectionBasedTag(tagId)) {
-				// TODO duplicateion and yuck
-				final String sectionId = tagId.split("/")[0];
-				Section section = sectionDAO.getSectionById(sectionId);			
-				final Tag refinementTag = new Tag(refinement.getDisplayName(), tagId, section, null);	// TODO is a null type allowed?
-				
-				final String fromDate = getUrlDateParameterValue(refinedUrl, "from-date");
-				final String toDate = getUrlDateParameterValue(refinedUrl, "to-date");
-				return articleSetFactory.getArticleSetForTag(refinementTag, refinement.getDisplayName(), fromDate, toDate);
-			}
+			final String fromDate = getUrlDateParameterValue(refinedUrl, "from-date");
+			final String toDate = getUrlDateParameterValue(refinedUrl, "to-date");
+			return articleSetFactory.getArticleSetForTag(((TagArticleSet) articleSet).getTag(), refinement.getDisplayName(), fromDate, toDate);			
 		}
 		
 		return null;
 	}
-
-	private String getUrlTagParameterValue(String refinedUrl) {
-		Pattern pattern = Pattern.compile("^.*?tag=(.*?)&.*?$");
-		Matcher matcher = pattern.matcher(refinedUrl);
-		if (matcher.matches()) {
-			return matcher.group(1);
-		}
-		return null;
-	}
-
-	private boolean isSingleSectionBasedTag(String tagId) {
-		return true;	// TODO implement
-	}
-
+	
 	// TODO fully implement
 	private String getUrlDateParameterValue(final String refinedUrl, String parameter) {
 		return refinedUrl.split(parameter + "=")[1].substring(0, 10);
