@@ -27,6 +27,8 @@ public interface ArticleSet extends Serializable {
 	public String getShortName();
 	public List<String> getPermittedRefinements();	
 	public int getPageSize();
+	public boolean getShowMedia();
+	public void setShowMedia(boolean showMedia);	
 	public String getSourceUrl();
 	void setSourceUrl(String urlForArticleSet);
 	boolean isEmpty();

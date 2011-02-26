@@ -21,8 +21,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.client.UserTokenHandler;
-
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
@@ -146,9 +144,8 @@ public class ContentApiStyleApi implements ContentSource {
 		httpFetcher.stopLoading();
 	}
 	
-	
 	private ContentApiUrlService initContentApiUrlService() {
-		return new ContentApiUrlService(settingsDAO.getPreferedApiHost(), settingsDAO.getApiKey(), settingsDAO.getSupportedContentTypes(), settingsDAO.shouldShowMedia());
+		return new ContentApiUrlService(settingsDAO.getPreferedApiHost(), settingsDAO.getApiKey(), settingsDAO.getSupportedContentTypes());
 	}
 	
 }

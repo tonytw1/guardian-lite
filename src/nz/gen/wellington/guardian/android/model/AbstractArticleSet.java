@@ -31,11 +31,13 @@ public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	protected String fromDate;
 	protected String toDate;
 	protected String dateDisplayName;
+	protected boolean showMedia;
 	
 	private String[] permittedRefinements = {};
 
 	public AbstractArticleSet(int pageSize) {
 		this.pageSize = pageSize;
+		this.showMedia = true;
 	}
 	
 	@Override
@@ -57,10 +59,20 @@ public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	public String getSourceUrl() {
 		return sourceUrl;
 	}
-
+	
 	@Override
 	public void setSourceUrl(String sourceUrl) {
 		this.sourceUrl = sourceUrl;
+	}
+	
+	@Override	
+	public boolean getShowMedia() {
+		return showMedia;
+	}
+
+	@Override 
+	public void setShowMedia(boolean showMedia) {
+		this.showMedia = showMedia;
 	}
 	
 	@Override
