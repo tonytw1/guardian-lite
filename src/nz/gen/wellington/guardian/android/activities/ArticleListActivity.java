@@ -35,6 +35,7 @@ import nz.gen.wellington.guardian.android.factories.RefinementArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.colourscheme.ColourScheme;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
@@ -377,9 +378,13 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 
 		private List<ArticleSet> getRefinementArticleSets(Map<String, List<Refinement>> refinements, String refinementType, ArticleSet articleSet) {
 			List<ArticleSet> refinementArticleSets = new ArrayList<ArticleSet>();
-			for (Refinement refinement : refinements.get(refinementType)) {
+			for (Refinement refinement : refinements.get(refinementType)) {				
 				ArticleSet articleSetForRefinement = refinementArticleSetFactory.getArticleSetForRefinement(refinement, articleSet);
 				if (articleSetForRefinement != null) {
+					if (articleSetForRefinement instanceof TagArticleSet && ((TagArticleSet) articleSetForRefinement).getTag().isSectionKeyword()) {
+						Log.d(TAG, "Omitting section tag refinement: " + refinement.getDisplayName());
+						continue;
+					}
 					refinementArticleSets.add(articleSetForRefinement);
 				}				
 			}
