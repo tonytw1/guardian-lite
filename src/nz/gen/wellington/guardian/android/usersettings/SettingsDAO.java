@@ -138,7 +138,11 @@ public class SettingsDAO {
 	}
 
 	public boolean shouldShowMedia() {
-		return !this.isUsingContentApi();	// TODO need a preference to override this
+		return !this.isUsingContentApi() || isUsingParnterTierApikey();
+	}
+
+	private boolean isUsingParnterTierApikey() {
+		return false;	// TODO implement show how
 	}
 
 }

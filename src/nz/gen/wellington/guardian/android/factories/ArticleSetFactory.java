@@ -22,6 +22,7 @@ import java.util.List;
 import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.ContributorArticleSet;
 import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.model.SavedArticlesArticleSet;
 import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
@@ -70,9 +71,14 @@ public class ArticleSetFactory {
 	}
 
 	public ArticleSet getArticleSetForTag(Tag tag) {
-		return addUrl(new TagArticleSet(tag, settingsDAO.getPageSizePreference()));
+		ArticleSet articleSet;
+		if (tag.isContributorTag()) {
+			articleSet = new ContributorArticleSet(tag, settingsDAO.getPageSizePreference());
+		} else {
+			articleSet = new TagArticleSet(tag, settingsDAO.getPageSizePreference());			
+		}
+		return addUrl(articleSet);
 	}
-	
 	
 	public ArticleSet getArticleSetForTag(Tag tag, String dateDisplayName, String fromDate, String toDate) {
 		return addUrl(new TagArticleSet(tag, settingsDAO.getPageSizePreference(), dateDisplayName, fromDate, toDate));

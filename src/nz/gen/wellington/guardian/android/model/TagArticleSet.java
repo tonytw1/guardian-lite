@@ -19,15 +19,17 @@ package nz.gen.wellington.guardian.android.model;
 import java.util.Arrays;
 import java.util.List;
 
+import android.util.Log;
+
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
 
 public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 	
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 	private Tag tag;
 	
-	private String[] permittedRefinements = {"keyword", "contributor", "blog", "date", "type"};
+	protected String[] permittedRefinements = {"keyword", "contributor", "blog", "date", "type"};
 
 	public TagArticleSet(Tag tag, int pageSize) {
 		super(pageSize);
@@ -73,7 +75,8 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 		if (isDateRefinedArticleSet()) {
 			return Arrays.asList("date");
 		}
-		return Arrays.asList(permittedRefinements);
+		List<String> asList = Arrays.asList(permittedRefinements);
+		return asList;
 	}
 	
 	public Tag getTag() {
@@ -82,7 +85,7 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 	
 	@Override
 	public boolean isFeatureTrailAllowed() {
-		return !tag.isContributorTag();
+		return true;
 	}
 	
 }
