@@ -31,9 +31,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 public class gallery extends ContentRenderingActivity {
 	
@@ -63,10 +66,26 @@ public class gallery extends ContentRenderingActivity {
 			GalleryImageLoader galleryImageLoader = new GalleryImageLoader(imageDAO, article.getMediaElements());
 			Thread loader = new Thread(galleryImageLoader);
 			loader.start();
-		}	
+			
+		} else {
+			TextView description = (TextView) findViewById(R.id.Description);
+			description.setVisibility(View.VISIBLE);
+			description.setText("Redistribution rights for this gallery are not available. "
+				+ "The full content cannot be downloaded but you should still be able to use the open in browser option to view the original.");
+		}
 	}
-
+	
+	
+	@Override
+	public void setFontSize() {
+		super.setFontSize();
 		
+		TextView description = (TextView) findViewById(R.id.Description);
+        description.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);        
+		description.setTextColor(colourScheme.getBodytext());
+	}
+	
+	
 	private void populateGalleryPicture(Picture picture) {
 		ImageView imageView = new ImageView(this);
 		Bitmap image = images.get(picture.getThumbnail());
