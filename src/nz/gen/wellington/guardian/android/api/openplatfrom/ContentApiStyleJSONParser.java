@@ -45,6 +45,43 @@ public class ContentApiStyleJSONParser {
 		htmlCleaner = new HtmlCleaner();
 	}
 	
+	
+	public String parseUserTier(InputStream input) {
+		try {
+			StringBuilder content = new StringBuilder();
+			
+			// TODO duplication
+			BufferedReader in = new BufferedReader(new InputStreamReader(input));
+			String str;
+			while ((str = in.readLine()) != null) {
+				content.append(str);
+				content.append(NEW_LINE);
+			}
+			in.close();
+
+			JSONObject json = new JSONObject(content.toString());
+			if (!isResponseOk(json)) {
+				return null;
+			}
+			
+			try {
+				JSONObject response = json.getJSONObject("response");
+				if (json.has("userTier")) {
+					return response.getString("userTier");
+				}
+			} catch (JSONException e) {
+				return null;
+			}
+
+		} catch (JSONException e) {
+			Log.w(TAG, "JSONException while parsing: " + e.getMessage());
+		} catch (IOException e) {
+			Log.e(TAG, "IOException while parsing: " + e.getMessage());
+		}
+		return null;
+	}
+	
+	
 	public List<Section> parseSectionsJSON(InputStream input) {
 		try {
 			StringBuilder content = new StringBuilder();
@@ -140,5 +177,5 @@ public class ContentApiStyleJSONParser {
 			return false;
 		}
 	}
-
+	
 }

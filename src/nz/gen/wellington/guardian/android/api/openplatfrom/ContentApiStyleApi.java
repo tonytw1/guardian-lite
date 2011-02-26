@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.client.UserTokenHandler;
+
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
@@ -82,12 +84,29 @@ public class ContentApiStyleApi implements ContentSource {
 	}
 	
 	
+	public String getUserTierForKey() {
+		Log.i(TAG, "Fetching empty item query from live api to check user tier");
+		final String contentApiUrl = "http://content.guardianapis.com/?format=json&order-by=newest";	// TODO push to builder		
+		InputStream input = httpFetcher.httpFetch(contentApiUrl, "sections");
+		if (input != null) {
+			final String userTier = contentJsonParser.parseUserTier(input);
+			try {
+				input.close();
+			} catch (IOException e) {
+				Log.w(TAG, "Failed to close input stream");
+			}
+			return userTier;
+		}
+		return null;
+	}
+	
+	
 	@Override
 	public List<Section> getSections() {
 		Log.i(TAG, "Fetching section list from live api");
 		ContentApiUrlService contentApiUrlService = initContentApiUrlService();
 		String contentApiUrl = contentApiUrlService.getSectionsQueryUrl();
-		InputStream input = httpFetcher.httpFetch(contentApiUrl, "sections");
+		InputStream input = httpFetcher.httpFetch(contentApiUrl, "api user tier");
 		if (input != null) {
 			List<Section> results = contentJsonParser.parseSectionsJSON(input);
 			try {
