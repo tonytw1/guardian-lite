@@ -8,11 +8,17 @@
 <string-array name="pageSizeOptionLabels">
 <item>10</item>
 <item>15</item>
+<item>20</item>
+<item>25</item>
+<item>30</item>
 </string-array>
 
 <string-array name="pageSizeOptionValues">
 <item>10</item>
 <item>15</item>
+<item>20</item>
+<item>25</item>
+<item>30</item>
 </string-array>
 
 <string-array name="fontBaseSizeOptionLabels">
