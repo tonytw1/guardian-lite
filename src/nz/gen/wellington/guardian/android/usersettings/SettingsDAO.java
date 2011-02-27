@@ -43,7 +43,7 @@ public class SettingsDAO {
 		
 	private static final String APP_PACKAGE = "nz.gen.wellington.guardian.android";
 
-	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://3.guardian-lite.appspot.com";
+	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://4.guardian-lite.appspot.com";
 	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
 	
 	private static Tag articleContentType = new Tag("Article content type", "type/article", null, "type");
