@@ -37,7 +37,7 @@ public class SettingsDAO {
 	private static final String DEFAULT_LARGE_IMAGES_DOWNLOAD_SETTING = "ALWAYS";
 	private static final String DEFAULT_PAGE_SIZE = "15";
 	private static final String DEFAULT_COLOUR_SCHEME = "WHITE_ON_BLACK";
-	private static final String DEFAULT_BASE_FONT_SIZE = "7";
+	private static final String DEFAULT_BASE_FONT_SIZE = "9";
 
 	private static final String TAG = "SettingsDAO";
 		
