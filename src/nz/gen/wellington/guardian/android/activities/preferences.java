@@ -31,7 +31,7 @@ public class preferences extends PreferenceActivity {
 		
 	private ContentUpdateAlarmSetter alarmSetter;
 	private SectionDAO sectionDAO;
-	public SettingsDAO settingsDAO;
+	private SettingsDAO settingsDAO;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,8 @@ public class preferences extends PreferenceActivity {
 		ApiKeyPreferenceChangeListener apiKeyPreferenceChangeListener = new ApiKeyPreferenceChangeListener();
 		
 		findPreference("syncType").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);		
-		findPreference("useContentApi").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);		
+		findPreference("useContentApi").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
+		findPreference("contentApiKey").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
 		findPreference("colourScheme").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
 		findPreference("baseFontSize").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
 		findPreference("pageSize").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
@@ -54,7 +55,7 @@ public class preferences extends PreferenceActivity {
 	}
 			
 	class ApiKeyPreferenceChangeListener implements OnPreferenceChangeListener {
-
+		
 		@Override
 		public boolean onPreferenceChange(Preference preference, Object newValue) {			
 			Log.i("PreferenceActivity", "Preference has been updated: " + preference.getKey());

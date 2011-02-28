@@ -54,8 +54,11 @@ public class SingletonFactory {
 		return new ArticleDAO(context);	
 	}
 	
-	public static ContentSource getOpenPlatformApi(Context context) {
-		return new ContentApiStyleApi(context);
+	public static ContentSource getOpenPlatformApi(Context context) {		
+		return new ContentApiStyleApi(context, getSettingsDAO(context).getClientVersion(),
+				getSettingsDAO(context).getPreferedApiHost(),
+				getSettingsDAO(context).getApiKey(),
+				getSettingsDAO(context).getSupportedContentTypes());
 	}
 	
 	public static TaskQueue getTaskQueue(Context context) {

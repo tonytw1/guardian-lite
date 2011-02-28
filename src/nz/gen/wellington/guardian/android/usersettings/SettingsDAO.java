@@ -21,10 +21,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import nz.gen.wellington.guardian.android.api.ContentSource;
+import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiStyleApi;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.colourscheme.BlackOnWhiteColourScheme;
 import nz.gen.wellington.guardian.android.model.colourscheme.ColourScheme;
 import nz.gen.wellington.guardian.android.model.colourscheme.WhiteOnBlackColourScheme;
+import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.model.Tag;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -51,13 +54,18 @@ public class SettingsDAO {
 	private static List<Tag> supportedContentTypes = Arrays.asList(articleContentType, galleryContentType);
 	
 	private PreferencesDAO preferencesDAO;
+	private NetworkStatusService networkStatusService;
+	
 	private int clientVersion = 0;
 	private Map<String, String> cache;
+	private Context context;
 	
 	public SettingsDAO(Context context) {
 		super();
 		preferencesDAO = SingletonFactory.getPreferencesDAO(context);
+		networkStatusService = SingletonFactory.getNetworkStatusService(context);
 		setClientVersion(context);
+		this.context = context;
 		cache = new HashMap<String, String>();
 	}
 
@@ -142,7 +150,23 @@ public class SettingsDAO {
 	}
 
 	private boolean isUsingParnterTierApikey() {
-		return false;	// TODO implement show how
+		if (!cache.containsKey("userTier")) {
+			updateApiKeyUserTier();
+		}		
+		if (cache.get("userTier") != null && (cache.get("userTier").equals("partner") || cache.get("userTier").equals("internal"))) {
+			return true;
+		}
+		return false;
+	}
+
+	private void updateApiKeyUserTier() {
+		Log.i(TAG, "Updating api key");
+		if (networkStatusService.isConnectionAvailable()) {			
+			ContentSource contentApi = new ContentApiStyleApi(this.context, getClientVersion(), CONTENT_API_URL, getApiKey(), this.getSupportedContentTypes());			
+			final String userTier = contentApi.getUserTierForKey();
+			Log.i(TAG, "Key use tier is: " + userTier);
+			cache.put("userTier",  userTier);
+		}		
 	}
 
 }

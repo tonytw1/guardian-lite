@@ -23,12 +23,10 @@ import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ContentSource;
-import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
-import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
 import android.content.Context;
@@ -41,13 +39,19 @@ public class ContentApiStyleApi implements ContentSource {
 	private ContentApiStyleXmlParser contentXmlParser;
 	private ContentApiStyleJSONParser contentJsonParser;
 	private HttpFetcher httpFetcher;
-	private SettingsDAO settingsDAO;
+	final private int clientVersion;
+	final private String apiHost;
+	final private String apiKey;
+	final private List<Tag> supportedContentTypes;
 	
-	public ContentApiStyleApi(Context context) {
+	public ContentApiStyleApi(Context context, int clientVersion, String apiHost, String apiKey, List<Tag> supportedContentTypes) {
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
 		this.contentJsonParser = new ContentApiStyleJSONParser();
-		this.settingsDAO = SingletonFactory.getSettingsDAO(context);
 		this.httpFetcher = new HttpFetcher(context);
+		this.clientVersion = clientVersion;
+		this.apiHost = apiHost;
+		this.apiKey = apiKey;
+		this.supportedContentTypes = supportedContentTypes;
 	}
 	
 	
@@ -55,7 +59,7 @@ public class ContentApiStyleApi implements ContentSource {
 	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
 		
-		final String contentApiUrl = articleSet.getSourceUrl() + "&v=" + settingsDAO.getClientVersion();		
+		final String contentApiUrl = articleSet.getSourceUrl() + "&v=" + clientVersion;
 		LoggingBufferedInputStream input = httpFetcher.httpFetch(contentApiUrl, articleSet.getName() + " article set");	
 		if (input != null) {
 			ArticleBundle results = contentXmlParser.parseArticlesXml(input, articleCallback);
@@ -84,8 +88,8 @@ public class ContentApiStyleApi implements ContentSource {
 	
 	public String getUserTierForKey() {
 		Log.i(TAG, "Fetching empty item query from live api to check user tier");
-		final String contentApiUrl = "http://content.guardianapis.com/?format=json&order-by=newest";	// TODO push to builder		
-		InputStream input = httpFetcher.httpFetch(contentApiUrl, "sections");
+		final String contentApiUrl = "http://content.guardianapis.com/?format=json&order-by=newest&api-key=" + apiKey;	// TODO push to builder		
+		InputStream input = httpFetcher.httpFetch(contentApiUrl, "api user tier");
 		if (input != null) {
 			final String userTier = contentJsonParser.parseUserTier(input);
 			try {
@@ -104,7 +108,7 @@ public class ContentApiStyleApi implements ContentSource {
 		Log.i(TAG, "Fetching section list from live api");
 		ContentApiUrlService contentApiUrlService = initContentApiUrlService();
 		String contentApiUrl = contentApiUrlService.getSectionsQueryUrl();
-		InputStream input = httpFetcher.httpFetch(contentApiUrl, "api user tier");
+		InputStream input = httpFetcher.httpFetch(contentApiUrl, "sections");
 		if (input != null) {
 			List<Section> results = contentJsonParser.parseSectionsJSON(input);
 			try {
@@ -145,7 +149,7 @@ public class ContentApiStyleApi implements ContentSource {
 	}
 	
 	private ContentApiUrlService initContentApiUrlService() {
-		return new ContentApiUrlService(settingsDAO.getPreferedApiHost(), settingsDAO.getApiKey(), settingsDAO.getSupportedContentTypes());
+		return new ContentApiUrlService(apiHost, apiKey, supportedContentTypes);
 	}
 	
 }

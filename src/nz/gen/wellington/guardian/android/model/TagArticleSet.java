@@ -19,8 +19,6 @@ package nz.gen.wellington.guardian.android.model;
 import java.util.Arrays;
 import java.util.List;
 
-import android.util.Log;
-
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
 

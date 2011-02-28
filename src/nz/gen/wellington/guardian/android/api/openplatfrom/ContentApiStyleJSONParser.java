@@ -66,7 +66,7 @@ public class ContentApiStyleJSONParser {
 			
 			try {
 				JSONObject response = json.getJSONObject("response");
-				if (json.has("userTier")) {
+				if (response.has("userTier")) {
 					return response.getString("userTier");
 				}
 			} catch (JSONException e) {

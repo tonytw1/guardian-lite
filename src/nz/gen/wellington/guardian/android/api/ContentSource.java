@@ -37,5 +37,6 @@ public interface ContentSource {
 	public String getRemoteChecksum(ArticleSet articleSet, int pageSize);
 	public void stopLoading();
 	public List<Tag> searchTags(String searchTerm, List<String> allowedTagSearchTypes, Map<String, Section> sections);
+	public String getUserTierForKey();
 	
 }
