@@ -379,7 +379,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			for (Refinement refinement : refinements.get(refinementType)) {				
 				ArticleSet articleSetForRefinement = refinementArticleSetFactory.getArticleSetForRefinement(refinement, articleSet);
 				if (articleSetForRefinement != null) {
-					if (articleSetForRefinement instanceof TagArticleSet && ((TagArticleSet) articleSetForRefinement).getTag().isSectionKeyword()) {
+					if (refinementType.equals("keyword") && articleSetForRefinement instanceof TagArticleSet && ((TagArticleSet) articleSetForRefinement).getTag().isSectionKeyword()) {
 						Log.d(TAG, "Omitting section tag refinement: " + refinement.getDisplayName());
 						continue;
 					}
