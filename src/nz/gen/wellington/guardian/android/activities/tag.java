@@ -59,7 +59,7 @@ public class tag extends ArticleListActivity {
 		} else if (refinementType.equals("type")) {
 			return "Other " + getArticleSet().getName() + " content types:";
 		} else if (refinementType.equals("date")) {
-			return "Articles have been tagged with " + getArticleSet().getName() + " on these dates:";
+			return "Archived " + getArticleSet().getName() + " articles are available for these dates:";
 		}
 		return null;
 	}
