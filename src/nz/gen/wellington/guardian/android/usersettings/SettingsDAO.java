@@ -50,6 +50,8 @@ public class SettingsDAO {
 	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://4.guardian-lite.appspot.com";
 	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
 	
+	private static List<String> API_USER_TIERS_WHICH_ALLOW_SHOW_MEDIA = Arrays.asList("partner", "internal");
+	
 	private static List<Tag> supportedContentTypes = Arrays.asList(ContentTags.articleContentType, ContentTags.galleryContentType);
 	
 	private PreferencesDAO preferencesDAO;
@@ -145,17 +147,14 @@ public class SettingsDAO {
 	}
 
 	public boolean shouldShowMedia() {
-		return !this.isUsingContentApi() || isUsingPartnerOrInternalTierApikey();
+		return !this.isUsingContentApi() || isUsingApiKeyWithUserTierWhichSupportsShowMedia();
 	}
 
-	private boolean isUsingPartnerOrInternalTierApikey() {
+	private boolean isUsingApiKeyWithUserTierWhichSupportsShowMedia() {
 		if (!cache.containsKey("userTier")) {
 			updateApiKeyUserTier();
-		}		
-		if (cache.get("userTier") != null && (cache.get("userTier").equals("partner") || cache.get("userTier").equals("internal"))) {
-			return true;
 		}
-		return false;
+		return cache.get("userTier") != null && API_USER_TIERS_WHICH_ALLOW_SHOW_MEDIA.contains(cache.get("userTier"));		
 	}
 
 	private void updateApiKeyUserTier() {
