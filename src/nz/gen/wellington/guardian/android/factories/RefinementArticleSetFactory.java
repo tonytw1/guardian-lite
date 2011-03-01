@@ -18,6 +18,7 @@ package nz.gen.wellington.guardian.android.factories;
 
 import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.ContentTags;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.model.Refinement;
 import nz.gen.wellington.guardian.model.Section;
@@ -48,10 +49,9 @@ public class RefinementArticleSetFactory {
 		
 		Log.d(TAG, "Making article set for refinement: type='" + refinementType + "' id='" + refinementId + "'" + " refinedUrl='" + refinedUrl + "'");		
 		if (refinementType.equals("type")) {
-			final boolean isGalleryRefinement = refinement.getType().equals("type") && refinement.getId().equals("type/gallery");	// TODO check what the id is for gallery combiners
-			if (isGalleryRefinement && articleSet instanceof TagArticleSet) {				
-				Tag galleryContentType = new Tag("Gallery content type", "type/gallery", null, "type");				
-				return articleSetFactory.getArticleSetForTagCombiner(((TagArticleSet) articleSet).getTag(), galleryContentType);				
+			final boolean isGalleryRefinement = refinement.getType().equals("type") && refinement.getId().equals(ContentTags.galleryContentType.getId());	// TODO check what the id is for gallery combiners
+			if (isGalleryRefinement && articleSet instanceof TagArticleSet) {
+				return articleSetFactory.getArticleSetForTagCombiner(((TagArticleSet) articleSet).getTag(), ContentTags.galleryContentType);
 			}
 		}
 		

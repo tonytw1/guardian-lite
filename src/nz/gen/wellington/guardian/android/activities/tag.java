@@ -48,7 +48,7 @@ public class tag extends ArticleListActivity {
 		setHeading(articleSet.getName());
 	}
 	
-	@Override
+	@Override	// TODO should be on the article sets
 	protected String getRefinementDescription(String refinementType) {
 		if (refinementType.equals("keyword")) {
 			return "Articles tagged with " + getArticleSet().getName() + " have also been tagged with:";

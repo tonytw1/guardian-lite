@@ -24,6 +24,7 @@ import java.util.Map;
 import nz.gen.wellington.guardian.android.api.ContentSource;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiStyleApi;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
+import nz.gen.wellington.guardian.android.model.ContentTags;
 import nz.gen.wellington.guardian.android.model.colourscheme.BlackOnWhiteColourScheme;
 import nz.gen.wellington.guardian.android.model.colourscheme.ColourScheme;
 import nz.gen.wellington.guardian.android.model.colourscheme.WhiteOnBlackColourScheme;
@@ -49,9 +50,7 @@ public class SettingsDAO {
 	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://4.guardian-lite.appspot.com";
 	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
 	
-	private static Tag articleContentType = new Tag("Article content type", "type/article", null, "type");
-	private static Tag galleryContentType = new Tag("Gallery content type", "type/gallery", null, "type");
-	private static List<Tag> supportedContentTypes = Arrays.asList(articleContentType, galleryContentType);
+	private static List<Tag> supportedContentTypes = Arrays.asList(ContentTags.articleContentType, ContentTags.galleryContentType);
 	
 	private PreferencesDAO preferencesDAO;
 	private NetworkStatusService networkStatusService;
@@ -146,10 +145,10 @@ public class SettingsDAO {
 	}
 
 	public boolean shouldShowMedia() {
-		return !this.isUsingContentApi() || isUsingParnterTierApikey();
+		return !this.isUsingContentApi() || isUsingPartnerOrInternalTierApikey();
 	}
 
-	private boolean isUsingParnterTierApikey() {
+	private boolean isUsingPartnerOrInternalTierApikey() {
 		if (!cache.containsKey("userTier")) {
 			updateApiKeyUserTier();
 		}		
