@@ -41,7 +41,7 @@ public class RefinementArticleSetFactory {
 	public ArticleSet getArticleSetForRefinement(Refinement refinement, ArticleSet articleSet) {		
 		final String refinementType = refinement.getType();
 		final String refinementId = refinement.getId();
-		final String refinedUrl = refinement.getRefinedUrl();			
+		final String refinedUrl = refinement.getRefinedUrl();
 		
 		if (refinementType == null) {
 			return null;
@@ -56,21 +56,22 @@ public class RefinementArticleSetFactory {
 		}
 		
 		final boolean isSectionBasedTagRefinement = refinementType.equals("keyword") || refinementType.equals("blog") || refinementType.equals("series");
-		if (isSectionBasedTagRefinement) { 	
+		final String displayName = refinement.getDisplayName() + "(" + refinement.getCount() + ")";
+		if (isSectionBasedTagRefinement) {
 			final String sectionId = refinementId.split("/")[0];
 			Section section = sectionDAO.getSectionById(sectionId);			
-			final Tag refinementTag = new Tag(refinement.getDisplayName(), refinementId, section, refinementType);		
+			final Tag refinementTag = new Tag(displayName, refinementId, section, refinementType);		
 			return articleSetFactory.getArticleSetForTag(refinementTag);
 			
 		} else if (refinementType.equals("contributor")) {
-			final Tag refinementTag = new Tag(refinement.getDisplayName(), refinementId, null, refinementType);		
+			final Tag refinementTag = new Tag(displayName, refinementId, null, refinementType);		
 			return articleSetFactory.getArticleSetForTag(refinementTag);
 			
 		} else if (refinementType.equals("date") && articleSet instanceof TagArticleSet) {
 			Log.d(TAG, "Refined url tag paramater is: " + refinedUrl);
 			final String fromDate = getUrlDateParameterValue(refinedUrl, "from-date");
 			final String toDate = getUrlDateParameterValue(refinedUrl, "to-date");
-			return articleSetFactory.getArticleSetForTag(((TagArticleSet) articleSet).getTag(), refinement.getDisplayName(), fromDate, toDate);			
+			return articleSetFactory.getArticleSetForTag(((TagArticleSet) articleSet).getTag(), displayName, fromDate, toDate);			
 		}
 		
 		return null;
