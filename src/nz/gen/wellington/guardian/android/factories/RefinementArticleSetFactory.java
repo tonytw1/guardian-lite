@@ -56,7 +56,7 @@ public class RefinementArticleSetFactory {
 		}
 		
 		final boolean isSectionBasedTagRefinement = refinementType.equals("keyword") || refinementType.equals("blog") || refinementType.equals("series");
-		final String displayName = refinement.getDisplayName() + "(" + refinement.getCount() + ")";
+		final String displayName = refinement.getDisplayName();
 		if (isSectionBasedTagRefinement) {
 			final String sectionId = refinementId.split("/")[0];
 			Section section = sectionDAO.getSectionById(sectionId);			
@@ -71,7 +71,7 @@ public class RefinementArticleSetFactory {
 			Log.d(TAG, "Refined url tag paramater is: " + refinedUrl);
 			final String fromDate = getUrlDateParameterValue(refinedUrl, "from-date");
 			final String toDate = getUrlDateParameterValue(refinedUrl, "to-date");
-			return articleSetFactory.getArticleSetForTag(((TagArticleSet) articleSet).getTag(), displayName, fromDate, toDate);			
+			return articleSetFactory.getArticleSetForTag(((TagArticleSet) articleSet).getTag(), displayName, fromDate, toDate, refinement.getCount());			
 		}
 		
 		return null;

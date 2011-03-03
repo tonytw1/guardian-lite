@@ -42,6 +42,11 @@ public class TagArticleSet extends AbstractArticleSet implements ArticleSet {
 		this.dateDisplayName = dateDisplayName;
 	}
 	
+	public TagArticleSet(Tag tag, int pageSizePreference, String dateDisplayName, String fromDate, String toDate, int count) {
+		this(tag, pageSizePreference, dateDisplayName, fromDate, toDate);
+		this.count = count;
+	}
+	
 	@Override
 	public String getName() {
 		StringBuilder name = new StringBuilder();

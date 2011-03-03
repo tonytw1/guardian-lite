@@ -47,13 +47,21 @@ public class TagListPopulatingService {
 
 			View tagView = inflater.inflate(R.layout.authorslist, null);
 			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);			
-			titleText.setText(getDeduplicatedArticleSetName(articleSet, duplicatedArticleSetNames));
+			titleText.setText(composeTitleText(duplicatedArticleSetNames, articleSet));
 			titleText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
 			
 			final boolean isContentAvailable = articleDAO.isAvailable(articleSet);
 			ClickerPopulatingService.populateTagClicker(articleSet, tagView, isContentAvailable, colourScheme.getAvailableTag(), colourScheme.getUnavailableTag());
 			tagList.addView(tagView);
 		}
+	}
+
+	private String composeTitleText(Set<String> duplicatedArticleSetNames, ArticleSet articleSet) {
+		String title = getDeduplicatedArticleSetName(articleSet, duplicatedArticleSetNames);
+		if (articleSet.getCount() > 0) {
+			title = title + " (" + articleSet.getCount() + ")";
+		}
+		return title;
 	}
 	
 	private Set<String> getDuplicatedArticleSetNames(List<ArticleSet> articleSets) {

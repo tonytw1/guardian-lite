@@ -32,8 +32,7 @@ public class ClickerPopulatingService {
 		
 	}
 
-	private static void populateClicker(ArticleSet articleSet, View tagView,
-			boolean contentIsAvailable) {
+	private static void populateClicker(ArticleSet articleSet, View tagView, boolean contentIsAvailable) {
 		if (contentIsAvailable) {		
 			// TODO suggests article sets should have knowledge about which activity renders them?
 			if (articleSet instanceof SearchResultsArticleSet) {

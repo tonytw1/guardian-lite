@@ -80,8 +80,8 @@ public class ArticleSetFactory {
 		return addUrl(articleSet);
 	}
 	
-	public ArticleSet getArticleSetForTag(Tag tag, String dateDisplayName, String fromDate, String toDate) {
-		return addUrl(new TagArticleSet(tag, settingsDAO.getPageSizePreference(), dateDisplayName, fromDate, toDate));
+	public ArticleSet getArticleSetForTag(Tag tag, String dateDisplayName, String fromDate, String toDate, int count) {
+		return addUrl(new TagArticleSet(tag, settingsDAO.getPageSizePreference(), dateDisplayName, fromDate, toDate, count));
 	}
 	
 	public ArticleSet getArticleSetForTagCombiner(Tag leftTag, Tag rightTag) {

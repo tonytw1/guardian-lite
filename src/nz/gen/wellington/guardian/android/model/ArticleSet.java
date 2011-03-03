@@ -34,5 +34,6 @@ public interface ArticleSet extends Serializable {
 	boolean isEmpty();
 	boolean isFeatureTrailAllowed();
 	public Section getSection();
+	public int getCount();
 	
 }

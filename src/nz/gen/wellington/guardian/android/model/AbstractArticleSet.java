@@ -32,6 +32,7 @@ public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 	protected String toDate;
 	protected String dateDisplayName;
 	protected boolean showMedia;
+	protected int count;
 	
 	private String[] permittedRefinements = {};
 
@@ -100,6 +101,10 @@ public abstract class AbstractArticleSet implements ArticleSet, Serializable {
 
 	protected boolean isDateRefinedArticleSet() {
 		return toDate != null;
+	}
+	
+	public int getCount() {
+		return count;
 	}
 	
 }
