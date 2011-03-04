@@ -143,7 +143,7 @@ public abstract class AbstractArticleSetWidget extends AppWidgetProvider {
 	private List<Article> selectArticlesWithTrailImages(List<Article> articles) {
 		List<Article> articleWithTrailImages = new ArrayList<Article>();
 		for (Article article : articles) {
-			if (article.getThumbnailUrl() != null) {
+			if (article.getThumbnail() != null) {
 				articleWithTrailImages.add(article);
 			}
 		}
@@ -154,8 +154,8 @@ public abstract class AbstractArticleSetWidget extends AppWidgetProvider {
 		widgetView.setTextViewText(articleViews.headline, article.getHeadline());
 		widgetView.setTextViewText(articleViews.standfirst, article.getStandfirst());
 		
-		if (article.getThumbnailUrl() != null && imageDAO.isAvailableLocally(article.getThumbnailUrl())) {				
-			Bitmap trailImage = imageDAO.getImage(article.getThumbnailUrl());
+		if (article.getThumbnail() != null && imageDAO.isAvailableLocally(article.getThumbnail())) {				
+			Bitmap trailImage = imageDAO.getImage(article.getThumbnail());
 			widgetView.setViewVisibility(articleViews.image, View.VISIBLE);
 			widgetView.setImageViewBitmap(articleViews.image, trailImage);
 		} else {

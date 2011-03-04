@@ -19,6 +19,7 @@ package nz.gen.wellington.guardian.android.activities.ui;
 import java.util.List;
 
 import nz.gen.wellington.guardian.android.R;
+import nz.gen.wellington.guardian.android.activities.main;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
@@ -26,6 +27,7 @@ import nz.gen.wellington.guardian.android.model.SectionColourMap;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.colourscheme.ColourScheme;
 import nz.gen.wellington.guardian.model.Article;
+import nz.gen.wellington.guardian.model.MediaElement;
 import nz.gen.wellington.guardian.model.Section;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -52,12 +54,11 @@ public class ArticleListActivityViewPopulator {
 	}
 			
 	public View populateArticleListView(Article article, ColourScheme colourScheme, float baseFontSize, String trailImageUrl, boolean shouldUseFeatureTrail, boolean first, LayoutInflater mInflater, boolean isTrailImageAvailableLocally) {
-		View view = chooseTrailView(mInflater, shouldUseFeatureTrail, first);
+		View trailView = chooseTrailView(mInflater, shouldUseFeatureTrail, first);
 		
-		TextView titleText = (TextView) view.findViewById(R.id.Headline);
-		TextView pubDateText = (TextView) view.findViewById(R.id.Pubdate);
-		TextView standfirst = (TextView) view.findViewById(R.id.Standfirst);
-		TextView caption = (TextView) view.findViewById(R.id.Caption);
+		TextView titleText = (TextView) trailView.findViewById(R.id.Headline);
+		TextView pubDateText = (TextView) trailView.findViewById(R.id.Pubdate);
+		TextView standfirst = (TextView) trailView.findViewById(R.id.Standfirst);
 		
 		titleText.setTextColor(colourScheme.getHeadline());
 		pubDateText.setTextColor(colourScheme.getBodytext());			
@@ -67,9 +68,6 @@ public class ArticleListActivityViewPopulator {
 		pubDateText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize -2);
 		standfirst.setTextSize(TypedValue.COMPLEX_UNIT_PT, new Float(baseFontSize - 0.75));
 
-		if (caption != null) {
-			caption.setTextColor(colourScheme.getBodytext());
-		}
 		titleText.setText(article.getHeadline());			
 		if (article.getPubDate() != null) {
 			pubDateText.setText(DateFormatter.formatAsWebPublicationDate(article.getPubDate()));
@@ -78,20 +76,24 @@ public class ArticleListActivityViewPopulator {
 		if (article.getStandfirst() != null) {
 			standfirst.setText(article.getStandfirst());
 		}
-					
-		if (caption != null && article.getCaption() != null) {
-			caption.setText(article.getCaption());
-			caption.setVisibility(View.VISIBLE);
-		}
 		
 		if (trailImageUrl != null && isTrailImageAvailableLocally) {
-			populateTrailImage(trailImageUrl, view);
+			populateTrailImage(trailImageUrl, trailView);
+			
+			TextView captionView = (TextView) trailView.findViewById(R.id.Caption);
+			MediaElement mainPicture = article.getMainPictureMediaElement();
+			if (captionView != null && mainPicture != null) {
+				captionView.setTextColor(colourScheme.getBodytext());
+				if (mainPicture.getCaption() != null && mainPicture.getCaption().trim() != "") {
+					captionView.setText(mainPicture.getCaption());
+					captionView.setVisibility(View.VISIBLE);
+				}
+			}			
 		}
 		
-		view.setOnClickListener(new ContentClicker(article));
-		return view;
+		trailView.setOnClickListener(new ContentClicker(article));
+		return trailView;
 	}
-	
 	
 	private View chooseTrailView(LayoutInflater mInflater, boolean shouldUseFeatureTrail, boolean hideDivider) {
 		View view;

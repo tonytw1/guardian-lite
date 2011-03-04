@@ -287,7 +287,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	currentSection = article.getSection();
 			    	
 			    	boolean shouldUseFeatureTrail = article.getMainImageUrl() != null && first && !isLandscapeOrientation && articleSet.isFeatureTrailAllowed() && imageDAO.isAvailableLocally(article.getMainImageUrl());
-					String trailImageUrl = article.getThumbnailUrl();
+					String trailImageUrl = article.getThumbnail();
 					if (shouldUseFeatureTrail) {
 						trailImageUrl = article.getMainImageUrl();
 					}					
@@ -463,7 +463,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				if (first && mainImageIsAvailableLocally) {						
 					imageUrl = article.getMainImageUrl();
 				} else {
-					imageUrl = article.getThumbnailUrl();
+					imageUrl = article.getThumbnail();
 				}
 				
 				if (imageUrl != null) {
@@ -490,13 +490,13 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			
 			if (running) {
 				for (Article article : articlesToDownloadTrailImagesFor) {
-					imageDAO.getImage(article.getThumbnailUrl());
+					imageDAO.getImage(article.getThumbnail());
 					
 					m = new Message();
 					m.what = UpdateArticlesHandler.TRAIL_IMAGE_IS_AVAILABLE_FOR_ARTICLE;
 					Bundle bundle = new Bundle();
 					bundle.putString("id", article.getTrailImageCallBackLabelForArticle());
-					bundle.putString("url", article.getThumbnailUrl());
+					bundle.putString("url", article.getThumbnail());
 					
 					m.setData(bundle);
 					updateArticlesHandler.sendMessage(m);																				

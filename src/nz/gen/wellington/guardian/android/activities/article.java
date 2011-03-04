@@ -20,6 +20,7 @@ import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ImageStretchingService;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.model.Article;
+import nz.gen.wellington.guardian.model.MediaElement;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -99,11 +100,15 @@ public class article extends ContentRenderingActivity {
 		imageView.setVisibility(View.VISIBLE);
 		imageView.setScaleType(ScaleType.FIT_START);
 		imageView.setImageBitmap(imageStretchingService.stretchImageToFillView(bitmap, imageView.getWidth()));
-		populateCaption(article.getCaption());
+
+		MediaElement mainPicture = article.getMainPictureMediaElement();
+		if (mainPicture != null) {
+			populateCaption(mainPicture.getCaption());
+		}
 	}
 	
 	private void populateCaption(String caption) {
-		if (caption != null && !caption.trim().equals("")) {
+		if (caption != null && !caption.trim().equals("")) {	// TODO empty
 			TextView captionView = (TextView) findViewById(R.id.Caption);
 			captionView.setVisibility(View.VISIBLE);
 			captionView.setText(caption);

@@ -28,6 +28,7 @@ import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ContentUpdateReport;
 import nz.gen.wellington.guardian.model.Article;
+import nz.gen.wellington.guardian.model.MediaElement;
 import android.content.Context;
 
 public class UpdateArticleSetTask implements ContentUpdateTaskRunnable {
@@ -77,14 +78,15 @@ public class UpdateArticleSetTask implements ContentUpdateTaskRunnable {
 	private void processArticles(List<Article> articles) {
 		if (articles != null) {
 			for (Article article : articles) {
-				if (article.getThumbnailUrl() != null && imageDownloadDecisionService.isOkToDownloadTrailImages()) {
+				if (article.getThumbnail() != null && imageDownloadDecisionService.isOkToDownloadTrailImages()) {
 					String description = article.getHeadline() + " - trail image";
-					queueImageDownloadIfNotAvailableLocally(article.getThumbnailUrl(), description);
+					queueImageDownloadIfNotAvailableLocally(article.getThumbnail(), description);
 				}
 				if (article.getMainImageUrl() != null && imageDownloadDecisionService.isOkToDownloadMainImages()) {
-					String description = article.getHeadline() + " - main image";
-					if (article.getCaption() != null) {
-						description = article.getCaption();
+					String description = article.getHeadline() + " - main image";					
+					final MediaElement mainPicture = article.getMainPictureMediaElement();
+					if (mainPicture != null && mainPicture.getCaption() != null) {
+						description = mainPicture.getCaption();
 					}
 					queueImageDownloadIfNotAvailableLocally(article.getMainImageUrl(), description);
 				}
