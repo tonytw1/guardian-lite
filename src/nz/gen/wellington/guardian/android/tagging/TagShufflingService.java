@@ -11,9 +11,7 @@ public class TagShufflingService {
 	public List<Tag> shuffleContributorsToTheFrontAndAddSectionTagIfNotAlreadyPresent(Article article) {
 		List<Tag> shuffledTags = new ArrayList<Tag>(article.getTags());
 		
-		if (!article.hasSectionTag()) {
-			shuffledTags.add(0, article.getSection().getTag());			
-		}
+		addArticleSectionIfSectionTagNotAlreadyPresent(article, shuffledTags);
 		
 		final List<Tag> contributors = article.getContributorTags();
 		shuffledTags.removeAll(contributors);
@@ -21,4 +19,9 @@ public class TagShufflingService {
 		return shuffledTags;
 	}
 	
+	private void addArticleSectionIfSectionTagNotAlreadyPresent(Article article, List<Tag> shuffledTags) {
+		if (!article.hasSectionTag() && article.getSection() != null) {
+			shuffledTags.add(0, article.getSection().getTag());			
+		}
+	}
 }
