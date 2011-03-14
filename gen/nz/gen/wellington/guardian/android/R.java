@@ -110,10 +110,12 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f060000;
         public static final int favourites_widget_name=0x7f060002;
+        public static final int search_hint=0x7f060003;
         public static final int widget_name=0x7f060001;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;
-        public static final int widget=0x7f040001;
+        public static final int searchable=0x7f040001;
+        public static final int widget=0x7f040002;
     }
 }

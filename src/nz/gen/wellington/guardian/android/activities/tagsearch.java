@@ -29,7 +29,9 @@ import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -67,7 +69,8 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tagsearch);		
+		setContentView(R.layout.tagsearch);
+		
 		
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
@@ -82,6 +85,12 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		search.setOnClickListener(this);
 		
 		populateView();
+		
+		Intent intent = getIntent();
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			doSearch(query);
+		}
 	}
 
 	
@@ -121,14 +130,20 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 				final String searchTerm = input.getText().toString().trim();
 				
 				if (!(searchTerm.trim().equals(""))) {					
-					hideKeyboard(input);
-					Thread loader = new Thread(new TagSearchRunner(searchTerm, this.getApplicationContext()));
-					loader.start();
+					doSearch(searchTerm);
 				}
 				return;								
 			}
 		}
 		return;
+	}
+
+
+	private void doSearch(final String searchTerm) {
+		EditText input = (EditText) findViewById(R.id.Input);
+		hideKeyboard(input);
+		Thread loader = new Thread(new TagSearchRunner(searchTerm, this.getApplicationContext()));
+		loader.start();
 	}
 
 	

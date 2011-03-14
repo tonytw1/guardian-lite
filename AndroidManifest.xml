@@ -33,11 +33,17 @@
 		<activity android:name=".activities.preferences" ></activity>
 		<activity android:name=".activities.favourites" ></activity>
 		<activity android:name=".activities.notification" android:noHistory="true"></activity>
-		<activity android:name=".activities.tagsearch" ></activity>
+		
+		<activity android:name=".activities.tagsearch" >
+			<intent-filter>
+            	<action android:name="android.intent.action.SEARCH" />
+	        </intent-filter>
+    	    <meta-data android:name="android.app.searchable"
+                   android:resource="@xml/searchable"/>
+		</activity>
 
 		<receiver android:name=".contentupdate.alarms.ContentUpdateAlarmReceiver"></receiver>
-		
-		
+				
 		<receiver android:name=".widgets.TopStoriesWidget" android:label="@string/widget_name">
 		    <intent-filter>
     		    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -55,11 +61,14 @@
 		<activity android:name=".activities.widgets.mainwidget" android:noHistory="true" />
 		<activity android:name=".activities.widgets.favouritewidget" android:noHistory="true" />
 		
-<activity android:name=".activities.savedArticles"></activity>
-<activity android:name=".activities.search"></activity>
-<activity android:name=".activities.gallery"></activity>
-<activity android:name=".activities.picture"></activity>
-</application>
+		<activity android:name=".activities.savedArticles"></activity>
+		<activity android:name=".activities.search"></activity>
+		<activity android:name=".activities.gallery"></activity>
+		<activity android:name=".activities.picture"></activity>
+		
+		<meta-data android:name="android.app.default_searchable" android:value=".activities.tagsearch" />
+		
+	</application>
 	
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>
 	
