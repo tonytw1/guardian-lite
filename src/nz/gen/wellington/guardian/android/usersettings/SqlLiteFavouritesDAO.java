@@ -73,7 +73,7 @@ public class SqlLiteFavouritesDAO {
 		return total > 0;	
 	}
 	
-	public synchronized long insertFavouriteTag(String type, String apiid, String name, String sectionid) {
+	private synchronized boolean insertFavouriteTag(String type, String apiid, String name, String sectionid) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
 		SQLiteStatement insertStmt = db.compileStatement(INSERT_FAVOURITE_TAG);
 		insertStmt.bindString(1, type);
@@ -82,27 +82,27 @@ public class SqlLiteFavouritesDAO {
 		insertStmt.bindString(4, sectionid);
 		long result = insertStmt.executeInsert();
 		db.close();
-		return result;
+		return result != -1;
 	}
 	
 	
-	private synchronized long insertFavouriteSearchTerm(String searchTerm) {
+	private synchronized boolean insertFavouriteSearchTerm(String searchTerm) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
 		SQLiteStatement insertStmt = db.compileStatement(INSERT_FAVOURITE_SEARCH_TERM);
 		insertStmt.bindString(1, searchTerm);		
 		long result = insertStmt.executeInsert();
 		db.close();
-		return result;
+		return result != -1;
 	}
 	
 	
-	private synchronized long insertSavedArticle(String articleId) {
+	private synchronized boolean insertSavedArticle(String articleId) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
 		SQLiteStatement insertStmt = db.compileStatement(INSERT_SAVED_ARTICLE);
 		insertStmt.bindString(1, articleId);		
 		long result = insertStmt.executeInsert();
 		db.close();
-		return result;
+		return result != -1;
 		
 	}
 	
@@ -246,8 +246,7 @@ public class SqlLiteFavouritesDAO {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		boolean result = false;
 		if (this.haveRoom(db)) {
-			this.insertFavouriteTag("section", section.getId(), section.getName(), section.getId());
-			result = true;
+			result = insertFavouriteTag("section", section.getId(), section.getName(), section.getId());
 		}
 		db.close();
 		return result;
@@ -257,8 +256,7 @@ public class SqlLiteFavouritesDAO {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		boolean result = false;
 		if (this.haveRoom(db)) {
-			this.insertFavouriteSearchTerm(searchTerm);	// TODO Meh - assumes success
-			result = true;
+			result = this.insertFavouriteSearchTerm(searchTerm);
 		}
 		db.close();
 		return result;
@@ -268,8 +266,7 @@ public class SqlLiteFavouritesDAO {
 		SQLiteDatabase db = openHelper.getReadableDatabase();
 		boolean result = false;
 		if (this.haveRoomForSavedArticle(db)) {
-			this.insertSavedArticle(article.getId());
-			result = true;
+			result = insertSavedArticle(article.getId());
 		}
 		db.close();
 		return result;
