@@ -64,15 +64,6 @@ public class SqlLiteFavouritesDAO {
 		openHelper = new OpenHelper(context);
 	}
 	
-	public synchronized boolean hasFavourites() {	// TODO count query rather than select all
-		SQLiteDatabase db = openHelper.getReadableDatabase();		
-		Cursor cursor = db.query(TAG_TABLE, new String[] { TYPE, APIID, NAME,SECTIONID }, null, null, null, null, NAME_ASC);		
-		int total = cursor.getCount();
-		closeCursor(cursor);
-		db.close();
-		return total > 0;	
-	}
-	
 	private synchronized boolean insertFavouriteTag(String type, String apiid, String name, String sectionid) {
 		SQLiteDatabase db = openHelper.getWritableDatabase();
 		SQLiteStatement insertStmt = db.compileStatement(INSERT_FAVOURITE_TAG);
