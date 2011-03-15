@@ -39,7 +39,6 @@ public abstract class MenuedActivity extends AbstractFontResizingActivity {
 	protected static final int SAVED = 1010;
 	protected static final int REMOVE_ALL_SAVED = 1011;
 	protected static final int ADD_REMOVE_FAVOURITE = 1012;
-	protected static final int SEARCH_TAGS = 1013;
 	protected static final int SEARCH = 1014;
 	
 	@Override
@@ -62,9 +61,6 @@ public abstract class MenuedActivity extends AbstractFontResizingActivity {
 			return true;
 		case MenuedActivity.ABOUT:
 			switchToAbout();
-			return true;
-		case MenuedActivity.SEARCH_TAGS:
-			switchToTagSearch();
 			return true;
 		case MenuedActivity.SAVED:
 			switchToSavedArticles();

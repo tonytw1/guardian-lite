@@ -37,15 +37,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class tagsearch extends DownloadProgressAwareActivity implements OnClickListener, FontResizingActivity {
+public class tagsearch extends DownloadProgressAwareActivity implements FontResizingActivity {
 	
 	private static final String NETWORK_CONNECTION_REQUIRED_WARNING = "A network connection is required to be able to search for tags.";
 	private static final String NO_MATCHING_TAGS_WARNING = "No matching tags were found.";
@@ -70,8 +66,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tagsearch);
-		
-		
+				
 		networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
 		articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
 		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
@@ -80,10 +75,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		
 		sections = sectionDAO.getSectionsMap();
 		searchResults = null;		
-		
-		search = (Button) findViewById(R.id.Search);        
-		search.setOnClickListener(this);
-		
+			
 		populateView();
 		
 		Intent intent = getIntent();
@@ -121,27 +113,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	}
 	
 
-	@Override
-	public void onClick(View src) {
-		switch (src.getId()) {		
-			case R.id.Search:	{
-				
-				EditText input = (EditText) findViewById(R.id.Input);
-				final String searchTerm = input.getText().toString().trim();
-				
-				if (!(searchTerm.trim().equals(""))) {					
-					doSearch(searchTerm);
-				}
-				return;								
-			}
-		}
-		return;
-	}
-
-
 	private void doSearch(final String searchTerm) {
-		EditText input = (EditText) findViewById(R.id.Input);
-		hideKeyboard(input);
 		Thread loader = new Thread(new TagSearchRunner(searchTerm, this.getApplicationContext()));
 		loader.start();
 	}
@@ -198,13 +170,6 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		}
 
 	}
-
-
-	private void hideKeyboard(EditText input) {
-		InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		mgr.hideSoftInputFromWindow(input.getWindowToken(), 0);
-	}
-
 	
 	private void populateSearchResults(List<Tag> results) {
 		if (results.isEmpty()) {
@@ -215,9 +180,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		LayoutInflater inflater = LayoutInflater.from(this);
 		tagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), resultsPane, articleSetFactory.getArticleSetsForTags(results), colourScheme, baseFontSize);
 	}
-	
-	
-	
+		
 	private void outputErrorWarning(String message) {
 		LinearLayout resultsScroller = (LinearLayout) findViewById(R.id.TagList);		
 		resultsScroller.removeAllViews();
