@@ -22,9 +22,7 @@ import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import android.content.Context;
 
 public class ImageDownloadDecisionService {
-	
-	private static final String ALWAYS = "ALWAYS";	// TODO can this be obtained from the preferences file
-	
+		
 	private SettingsDAO settingsDAO;
 	private NetworkStatusService networkStatusService;
 
@@ -35,11 +33,11 @@ public class ImageDownloadDecisionService {
 	}
 
 	public boolean isOkToDownloadTrailImages() {
-		return settingsDAO.getTrailPicturesPreference().equals(ALWAYS) || networkStatusService.isWifiConnection();
+		return settingsDAO.isAlwaysDownloadTrailImagesSet() || networkStatusService.isWifiConnection();
 	}
 
 	public boolean isOkToDownloadMainImages() {
-		return settingsDAO.getLargePicturesPreference().equals(ALWAYS) || networkStatusService.isWifiConnection();
+		return settingsDAO.isAlwaysDownloadLargePicturesSet() || networkStatusService.isWifiConnection();
 	}
 	
 }
