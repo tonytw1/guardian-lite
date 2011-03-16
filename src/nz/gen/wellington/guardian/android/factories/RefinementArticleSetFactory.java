@@ -68,7 +68,7 @@ public class RefinementArticleSetFactory {
 			return articleSetFactory.getArticleSetForTag(refinementTag);
 			
 		} else if (refinementType.equals("date") && articleSet instanceof TagArticleSet) {
-			Log.d(TAG, "Refined url tag paramater is: " + refinedUrl);
+			Log.d(TAG, "Refined url tag parameter is: " + refinedUrl);
 			final String fromDate = getUrlDateParameterValue(refinedUrl, "from-date");
 			final String toDate = getUrlDateParameterValue(refinedUrl, "to-date");
 			return articleSetFactory.getArticleSetForTag(((TagArticleSet) articleSet).getTag(), displayName, fromDate, toDate, refinement.getCount());			

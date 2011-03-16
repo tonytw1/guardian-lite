@@ -109,7 +109,7 @@ public class FileBasedArticleCache {
 	}
 	
 	public void clearExpiredFiles(Context context) {
-		FileService.clearExpiredCacheFiles(context);
+		FileService.deleteFilesOlderThanTwentyFourHours(context);
 	}
 	
 	public void clear(ArticleSet articleSet) {

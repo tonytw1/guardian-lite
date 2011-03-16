@@ -88,7 +88,7 @@ public class FileService {
 	}
 
 	// TODO is this in the right class - should be in a cache?
-	static void clearExpiredCacheFiles(Context context) {
+	static void deleteFilesOlderThanTwentyFourHours(Context context) {
 		Log.i(TAG, "Clearing all article set cache files more than 24 hours old");
 		FileFilter jsonFilesFilter = new FileFilter() {				
 			@Override
