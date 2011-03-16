@@ -84,17 +84,17 @@ public class SettingsDAO {
 	
 	public String getApiKey() {
 		if (isUsingContentApi()) {
-			return getPreference("contentApiKey", null);
+			return getPreferenceThroughCache("contentApiKey", null);
 		}
 		return null;
 	}
 	
 	public int getBaseFontSize() {		
-		return Integer.parseInt(getPreference("baseFontSize", DEFAULT_BASE_FONT_SIZE));
+		return Integer.parseInt(getPreferenceThroughCache("baseFontSize", DEFAULT_BASE_FONT_SIZE));
 	}
 	
 	public ColourScheme getColourScheme() {		
-		final String colourSchemePreferences = getPreference("colourScheme", DEFAULT_COLOUR_SCHEME);
+		final String colourSchemePreferences = getPreferenceThroughCache("colourScheme", DEFAULT_COLOUR_SCHEME);
 		if (colourSchemePreferences.equals(DEFAULT_COLOUR_SCHEME)) {
 			return new BlackOnWhiteColourScheme();
 		}
@@ -102,19 +102,19 @@ public class SettingsDAO {
 	}
 	
 	public boolean isAlwaysDownloadLargePicturesSet() {
-		return getPreference("largeImagesOption", DEFAULT_LARGE_IMAGES_DOWNLOAD_SETTING).equals(ALWAYS);
+		return getPreferenceThroughCache("largeImagesOption", DEFAULT_LARGE_IMAGES_DOWNLOAD_SETTING).equals(ALWAYS);
 	}
 
 	public int getPageSizePreference() {
-		return Integer.parseInt(getPreference("pageSize", DEFAULT_PAGE_SIZE));
+		return Integer.parseInt(getPreferenceThroughCache("pageSize", DEFAULT_PAGE_SIZE));
 	}
 	
 	public String getSyncPreference() {
-		return getPreference("syncType", "NEVER");
+		return getPreferenceThroughCache("syncType", "NEVER");
 	}
 
 	public boolean isAlwaysDownloadTrailImagesSet() {
-		return getPreference("trailImagesOption", TRAIL_IMAGES_DOWNLOAD_DEFAULT).equals(ALWAYS);
+		return getPreferenceThroughCache("trailImagesOption", TRAIL_IMAGES_DOWNLOAD_DEFAULT).equals(ALWAYS);
 	}
 	
 	public void clearCache() {
@@ -135,7 +135,7 @@ public class SettingsDAO {
 		}
 	}
 	
-	private String getPreference(String key, String defaultValue) {
+	private String getPreferenceThroughCache(String key, String defaultValue) {
 		if (cache.containsKey(key)) {
 			return cache.get(key);
 		}
@@ -144,7 +144,7 @@ public class SettingsDAO {
 	}
 	
 	private boolean isUsingContentApi() {
-		return getPreference("useContentApi", "false").equals("true");
+		return getPreferenceThroughCache("useContentApi", "false").equals("true");
 	}
 
 	public boolean shouldShowMedia() {
