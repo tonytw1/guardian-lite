@@ -27,7 +27,7 @@ import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
 import nz.gen.wellington.guardian.model.Tag;
 
 public class ContentApiUrlService {
-	
+		
 	private String apiHost;
 	private String apiKey;
 	private List<Tag> supportedContentTypes;
@@ -65,9 +65,9 @@ public class ContentApiUrlService {
 		return contentApiUrlBuilder.totUserTierCheckUrl();
 	}
 	
-	public String getTagSearchQueryUrl(String searchTerm, List<String> allowedTypes) {
+	public String getTagSearchQueryUrl(String searchTerm, List<String> allowedTypes, int numberOfResultsToFetch) {
 		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
-		contentApiUrlBuilder.setPageSize(20);		
+		contentApiUrlBuilder.setPageSize(numberOfResultsToFetch);		
 		contentApiUrlBuilder.setFormat("json");
 		contentApiUrlBuilder.setSearchTerm(searchTerm);
 		

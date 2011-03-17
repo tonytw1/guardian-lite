@@ -36,7 +36,7 @@ public interface ContentSource {
 	ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback);
 	public String getRemoteChecksum(ArticleSet articleSet, int pageSize);
 	public void stopLoading();
-	public List<Tag> searchTags(String searchTerm, List<String> allowedTagSearchTypes, Map<String, Section> sections);
+	public List<Tag> searchTags(String searchTerm, List<String> allowedTagSearchTypes, Map<String, Section> sections, int numberOfResultsToFetch);
 	public String getUserTierForKey();
 	
 }

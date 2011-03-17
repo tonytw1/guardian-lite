@@ -125,11 +125,11 @@ public class ContentApiStyleApi implements ContentSource {
 	
 	
 	@Override
-	public List<Tag> searchTags(String searchTerm, List<String> allowedTagSearchTypes, Map<String, Section> sections) {
+	public List<Tag> searchTags(String searchTerm, List<String> allowedTagSearchTypes, Map<String, Section> sections, int numberOfResultsToFetch) {
 		Log.i(TAG, "Fetching tag list from live api: " + searchTerm);
 		ContentApiUrlService contentApiUrlService = initContentApiUrlService();
 		
-		InputStream input = httpFetcher.httpFetch(contentApiUrlService.getTagSearchQueryUrl(searchTerm, allowedTagSearchTypes), "tag results");
+		InputStream input = httpFetcher.httpFetch(contentApiUrlService.getTagSearchQueryUrl(searchTerm, allowedTagSearchTypes, numberOfResultsToFetch), "tag results");
 		if (input != null) {
 			List<Tag> results = contentJsonParser.parseTagsJSON(input, sections);
 			try {

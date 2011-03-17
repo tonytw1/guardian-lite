@@ -51,6 +51,8 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 	private static final int RESULTS_LOADED = 1;
 	private static final int ERROR = 2;
 	
+	private static final int MAXIMUM_RESULTS_TO_FETCH = 20;
+	
 	private static final List<String> allowedTagSearchTypes = Arrays.asList("keyword", "contributor", "blog", "series");
 	
 	private Button search;
@@ -178,7 +180,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements OnClickL
 		}
 			
 		private List<Tag> fetchTagResults(final String searchTerm) {
-			List<Tag> results = api.searchTags(searchTerm, allowedTagSearchTypes, sections);
+			List<Tag> results = api.searchTags(searchTerm, allowedTagSearchTypes, sections, MAXIMUM_RESULTS_TO_FETCH);
 			return results;
 		}
 
