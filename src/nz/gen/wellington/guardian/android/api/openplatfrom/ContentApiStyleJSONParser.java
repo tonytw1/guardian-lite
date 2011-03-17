@@ -48,17 +48,8 @@ public class ContentApiStyleJSONParser {
 	
 	public String parseUserTier(InputStream input) {
 		try {
-			StringBuilder content = new StringBuilder();
+			final StringBuilder content = readInputStreamToStringBuffer(input);
 			
-			// TODO duplication
-			BufferedReader in = new BufferedReader(new InputStreamReader(input));
-			String str;
-			while ((str = in.readLine()) != null) {
-				content.append(str);
-				content.append(NEW_LINE);
-			}
-			in.close();
-
 			JSONObject json = new JSONObject(content.toString());
 			if (!isResponseOk(json)) {
 				return null;
@@ -84,14 +75,7 @@ public class ContentApiStyleJSONParser {
 	
 	public List<Section> parseSectionsJSON(InputStream input) {
 		try {
-			StringBuilder content = new StringBuilder();
-			BufferedReader in = new BufferedReader(new InputStreamReader(input));
-			String str;
-			while ((str = in.readLine()) != null) {
-				content.append(str);
-				content.append(NEW_LINE);
-			}
-			in.close();
+			StringBuilder content = readInputStreamToStringBuffer(input);
 
 			JSONObject json = new JSONObject(content.toString());
 			if (!isResponseOk(json)) {
@@ -120,14 +104,7 @@ public class ContentApiStyleJSONParser {
 	
 	public List<Tag> parseTagsJSON(InputStream input, Map<String, Section> sections) {
 		try {
-			StringBuilder content = new StringBuilder();
-			BufferedReader in = new BufferedReader(new InputStreamReader(input));
-			String str;
-			while ((str = in.readLine()) != null) {
-				content.append(str);
-				content.append(NEW_LINE);
-			}
-			in.close();
+			StringBuilder content = readInputStreamToStringBuffer(input);
 
 			JSONObject json = new JSONObject(content.toString());
 			if (!isResponseOk(json)) {
@@ -156,9 +133,8 @@ public class ContentApiStyleJSONParser {
 					}
 				}
 			}
-
 			return tags;
-
+			
 		} catch (JSONException e) {
 			Log.e(TAG, "JSONException while parsing articles: " + e.getMessage());
 		} catch (IOException e) {
@@ -176,6 +152,20 @@ public class ContentApiStyleJSONParser {
 		} catch (JSONException e) {
 			return false;
 		}
+	}
+	
+	
+	// TODO There's an argument to say that this stream reading shouldn't be in a parsing class.
+	private StringBuilder readInputStreamToStringBuffer(InputStream input) throws IOException {
+		StringBuilder content = new StringBuilder();		
+		BufferedReader inputBuffer = new BufferedReader(new InputStreamReader(input));
+		String str;
+		while ((str = inputBuffer.readLine()) != null) {
+			content.append(str);
+			content.append(NEW_LINE);
+		}
+		inputBuffer.close();
+		return content;
 	}
 	
 }
