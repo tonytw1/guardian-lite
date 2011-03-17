@@ -60,6 +60,11 @@ public class ContentApiUrlService {
 		return contentApiUrlBuilder.toSectionsQueryUrl();
 	}
 	
+	public String getUserTierCheckUrl() {
+		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
+		return contentApiUrlBuilder.totUserTierCheckUrl();
+	}
+	
 	public String getTagSearchQueryUrl(String searchTerm, List<String> allowedTypes) {
 		ContentApiStyleUrlBuilder contentApiUrlBuilder = getContentApiUrlBuilder();
 		contentApiUrlBuilder.setPageSize(20);		

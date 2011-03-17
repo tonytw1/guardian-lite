@@ -88,7 +88,9 @@ public class ContentApiStyleApi implements ContentSource {
 	
 	public String getUserTierForKey() {
 		Log.i(TAG, "Fetching empty item query from live api to check user tier");
-		final String contentApiUrl = "http://content.guardianapis.com/?format=json&order-by=newest&api-key=" + apiKey;	// TODO push to builder		
+		
+		ContentApiUrlService contentApiUrlService = initContentApiUrlService();
+		final String contentApiUrl = contentApiUrlService.getUserTierCheckUrl();		
 		InputStream input = httpFetcher.httpFetch(contentApiUrl, "api user tier");
 		if (input != null) {
 			final String userTier = contentJsonParser.parseUserTier(input);

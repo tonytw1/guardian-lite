@@ -142,7 +142,15 @@ public class ContentApiStyleUrlBuilder {
 		appendCoreParameters(uri);
 		return prependHost(uri.toString());
 	}
-	
+		
+	public String totUserTierCheckUrl() {
+		//ie. http://content.guardianapis.com/?format=json&api-key=apiKey
+		StringBuilder uri = new StringBuilder("/" + SECTIONS_QUERY);
+		this.format = "json";
+		appendCoreParameters(uri);
+		return prependHost(uri.toString());
+	}
+		
 	private String prependHost(String uri) {
 		return apiHost + uri;
 	}
