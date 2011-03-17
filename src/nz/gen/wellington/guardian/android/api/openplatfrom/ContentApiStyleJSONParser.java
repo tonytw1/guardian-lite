@@ -36,15 +36,20 @@ import android.util.Log;
 
 public class ContentApiStyleJSONParser {
 	
+	private static final String SECTION_ID = "sectionId";
+	private static final String USER_TIER = "userTier";
+	private static final String OK = "ok";
+	private static final String STATUS = "status";
+	private static final String RESULTS = "results";
+	private static final String RESPONSE = "response";
 	private static final String TAG = "ContentApiStyleJSONParser";	
 	private static final String NEW_LINE = "\n";
-
+	
 	private HtmlCleaner htmlCleaner;
 	
 	public ContentApiStyleJSONParser() {
 		htmlCleaner = new HtmlCleaner();
 	}
-	
 	
 	public String parseUserTier(InputStream input) {
 		try {
@@ -56,9 +61,9 @@ public class ContentApiStyleJSONParser {
 			}
 			
 			try {
-				JSONObject response = json.getJSONObject("response");
-				if (response.has("userTier")) {
-					return response.getString("userTier");
+				JSONObject response = json.getJSONObject(RESPONSE);
+				if (response.has(USER_TIER)) {
+					return response.getString(USER_TIER);
 				}
 			} catch (JSONException e) {
 				return null;
@@ -81,8 +86,8 @@ public class ContentApiStyleJSONParser {
 			if (!isResponseOk(json)) {
 				return null;
 			}
-			JSONObject response = json.getJSONObject("response");
-			JSONArray results = response.getJSONArray("results");
+			JSONObject response = json.getJSONObject(RESPONSE);
+			JSONArray results = response.getJSONArray(RESULTS);
 
 			List<Section> sections = new LinkedList<Section>();
 			for (int i = 0; i < results.length(); i++) {
@@ -110,8 +115,8 @@ public class ContentApiStyleJSONParser {
 			if (!isResponseOk(json)) {
 				return null;
 			}
-			JSONObject response = json.getJSONObject("response");
-			JSONArray results = response.getJSONArray("results");
+			JSONObject response = json.getJSONObject(RESPONSE);
+			JSONArray results = response.getJSONArray(RESULTS);
 
 			List<Tag> tags = new LinkedList<Tag>();
 			for (int i = 0; i < results.length(); i++) {
@@ -124,8 +129,8 @@ public class ContentApiStyleJSONParser {
 				if (type.equals("contributor")) {
 					tags.add(new Tag(tagName, id, null, type));
 				} else {
-					if (tag.has("sectionId")) {
-						final String sectionId = tag.getString("sectionId");
+					if (tag.has(SECTION_ID)) {
+						final String sectionId = tag.getString(SECTION_ID);
 						section = sections.get(sectionId);
 						if (section != null) {
 							tags.add(new Tag(tagName, id, section, type));
@@ -146,9 +151,9 @@ public class ContentApiStyleJSONParser {
 	
 	public boolean isResponseOk(JSONObject json) {
 		try {
-			JSONObject response = json.getJSONObject("response");
-			String status = response.getString("status");
-			return status != null && status.equals("ok");
+			JSONObject response = json.getJSONObject(RESPONSE);
+			String status = response.getString(STATUS);
+			return status != null && status.equals(OK);
 		} catch (JSONException e) {
 			return false;
 		}
