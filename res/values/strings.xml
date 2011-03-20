@@ -3,4 +3,5 @@
     <string name="app_name">Guardian Lite</string>
     <string name="widget_name">Top stories</string>
     <string name="favourites_widget_name">Favourites</string>
+    <string name="search_hint">Tag name</string>
 </resources>

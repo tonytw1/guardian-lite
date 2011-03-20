@@ -3,10 +3,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/Main">
   	
-  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/DownloadProgress" android:visibility="gone" android:textSize="7pt"></TextView>
-  
-<LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="horizontal" android:paddingLeft="2px" android:paddingRight="2px" android:paddingTop="2px" android:paddingBottom="2px" android:id="@+id/MainPane"><EditText android:layout_height="wrap_content" android:id="@+id/Input" android:layout_width="wrap_content" android:width="200px" android:isScrollContainer="false" android:maxLines="1" android:inputType="text"></EditText><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Search" android:id="@+id/Search"></Button>
-</LinearLayout><ScrollView android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/ResultsScroller"><LinearLayout android:id="@+id/TagList" android:layout_height="fill_parent" android:orientation="vertical" android:layout_width="fill_parent">
+  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/DownloadProgress" android:visibility="gone" android:textSize="7pt"></TextView><ScrollView android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/ResultsScroller"><LinearLayout android:id="@+id/TagList" android:layout_height="fill_parent" android:orientation="vertical" android:layout_width="fill_parent">
 </LinearLayout></ScrollView>
 
 
