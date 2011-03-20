@@ -70,7 +70,7 @@
 		
 	</application>
 	
-	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>
+	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="4"/>
 	
 	<supports-screens android:largeScreens="true" android:normalScreens="true" android:smallScreens="false" anyDensity="true" />	
 	
