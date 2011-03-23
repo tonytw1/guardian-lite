@@ -37,7 +37,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -53,7 +52,6 @@ public class tagsearch extends DownloadProgressAwareActivity implements FontResi
 	
 	private static final List<String> allowedTagSearchTypes = Arrays.asList("keyword", "contributor", "blog", "series");
 	
-	private Button search;
 	private NetworkStatusService networkStatusService;
 	
 	private List<Tag> searchResults;
@@ -98,7 +96,6 @@ public class tagsearch extends DownloadProgressAwareActivity implements FontResi
 	private void populateView() {
 		setFontSize();        
         final boolean isConnectionAvailable = networkStatusService.isConnectionAvailable();
-        search.setEnabled(isConnectionAvailable);
 		if (!isConnectionAvailable) {
         	outputErrorWarning(NETWORK_CONNECTION_REQUIRED_WARNING);
         } else {       
