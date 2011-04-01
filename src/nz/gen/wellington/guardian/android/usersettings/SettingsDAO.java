@@ -75,6 +75,10 @@ public class SettingsDAO {
 		return clientVersion;
 	}
 	
+	public String getGuardianLiteProxyHost() {
+		return GUARDIAN_LITE_PROXY_API_PREFIX;
+	}
+	
 	public String getPreferedApiHost() {
 		if (isUsingContentApi()) {
 			return CONTENT_API_URL;
