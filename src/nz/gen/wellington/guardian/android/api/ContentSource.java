@@ -34,11 +34,8 @@ import nz.gen.wellington.guardian.model.Tag;
 public interface ContentSource {
 
 	public List<Section> getSections();
-	ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback);
-	
-	// TODO pagesize is a field of articleset - why is this been past in?
-	public String getRemoteChecksum(ArticleSet articleSet, int pageSize);
-	
+	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback);
+	public String getRemoteChecksum(ArticleSet articleSet);	
 	public void stopLoading();
 	public List<Tag> searchTags(String searchTerm, List<String> allowedTagSearchTypes, Map<String, Section> sections, int numberOfResultsToFetch);
 	public String getUserTierForKey();

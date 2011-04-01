@@ -79,10 +79,9 @@ public class ContentApiStyleApi implements ContentSource {
 	
 	
 	@Override
-	public String getRemoteChecksum(ArticleSet articleSet, int pageSize) {		
-		Log.i(TAG, "Fetching article set checksum for article set: " + articleSet.getName());		
-		final String contentApiUrl = articleSet.getSourceUrl();	
-		return httpFetcher.httpEtag(contentApiUrl, articleSet.getName() + " article set checksum");
+	public String getRemoteChecksum(ArticleSet articleSet) {
+		Log.i(TAG, "Fetching article set checksum for article set: " + articleSet.getName());
+		return httpFetcher.httpEtag(articleSet.getSourceUrl(), articleSet.getName() + " article set checksum");
 	}
 	
 	

@@ -30,7 +30,6 @@ import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.SavedArticlesArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import nz.gen.wellington.guardian.model.Section;
 import android.content.Context;
@@ -43,7 +42,6 @@ public class ArticleDAO {
 	private FileBasedArticleCache fileBasedArticleCache;
 	private ArticleCallback articleCallback;
 	private SectionDAO sectionsDAO;
-	private SettingsDAO settingsDAO;
 	private NetworkStatusService networkStatusService;
 	private ArticleSource aboutArticlesDAO;
 	private ArticleSource savedArticlesDAO;
@@ -54,7 +52,6 @@ public class ArticleDAO {
 		this.context = context;
 		fileBasedArticleCache = new FileBasedArticleCache(context);		
 		sectionsDAO = SingletonFactory.getSectionDAO(context);
-		settingsDAO = SingletonFactory.getSettingsDAO(context);
 		networkStatusService = SingletonFactory.getNetworkStatusService(context);
 		aboutArticlesDAO = new AboutArticlesDAO(context);
 		savedArticlesDAO = new SavedArticlesDAO(context);
@@ -116,10 +113,10 @@ public class ArticleDAO {
 		
 	public String getArticleSetRemoteChecksum(ArticleSet articleSet) {
 		ContentSource openPlatformApi = getContentSource();
-		return openPlatformApi.getRemoteChecksum(articleSet, settingsDAO.getPageSizePreference());		
+		return openPlatformApi.getRemoteChecksum(articleSet);
 	}
 	
-		
+	
 	private ArticleBundle getLocalBundle(ArticleSet articleSet) {
 		return fileBasedArticleCache.getArticleSetArticles(articleSet, articleCallback);
 	}
