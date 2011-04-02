@@ -17,19 +17,20 @@ public class ArticleSetFetcher {
 	
 	private HttpFetcher httpFetcher;
 	private ContentApiStyleXmlParser contentXmlParser;	
-		
-	public ArticleSetFetcher(Context context) {
+	
+	private int clientVersion;
+	
+	public ArticleSetFetcher(Context context, int clientVersion) {
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
 		this.httpFetcher = new HttpFetcher(context);
+		this.clientVersion = clientVersion;
 	}
 		
 	public ArticleBundle getArticles(ArticleSet articleSet, ArticleCallback articleCallback) {		
 		Log.i(TAG, "Fetching article for article set: " + articleSet.getName());
 		
-		// TODO reimplement
-		//final String contentApiUrl = articleSet.getSourceUrl() + "&v=" + clientVersion;
-		
-		LoggingBufferedInputStream input = httpFetcher.httpFetch(articleSet.getSourceUrl(), articleSet.getName());
+		final String contentApiUrl = articleSet.getSourceUrl() + "&v=" + clientVersion;		
+		LoggingBufferedInputStream input = httpFetcher.httpFetch(contentApiUrl, articleSet.getName());
 		if (input != null) {
 			ArticleBundle results = contentXmlParser.parseArticlesXml(input, articleCallback);
 			if (results != null && !results.getArticles().isEmpty()) {

@@ -17,7 +17,6 @@
 package nz.gen.wellington.guardian.android.api;
 
 import java.util.Date;
-import java.util.List;
 
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.caching.FileBasedArticleCache;
@@ -30,7 +29,6 @@ import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.SavedArticlesArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
-import nz.gen.wellington.guardian.model.Section;
 import android.content.Context;
 import android.util.Log;
 
@@ -40,7 +38,6 @@ public class ArticleDAO {
 	
 	private FileBasedArticleCache fileBasedArticleCache;
 	private ArticleCallback articleCallback;
-	private SectionDAO sectionsDAO;
 	private NetworkStatusService networkStatusService;
 	private ArticleSource articleSetDAO;
 	private Context context;
@@ -49,7 +46,6 @@ public class ArticleDAO {
 	public ArticleDAO(Context context) {
 		this.context = context;
 		fileBasedArticleCache = new FileBasedArticleCache(context);		
-		sectionsDAO = SingletonFactory.getSectionDAO(context);
 		networkStatusService = SingletonFactory.getNetworkStatusService(context);
 		articleSetDAO = new ArticleSetDAO(context);
 	}
@@ -131,11 +127,8 @@ public class ArticleDAO {
 			bundle = articleSetDAO.getArticles(articleSet, articleCallback);
 			
 		} else {
-			List<Section> sections = sectionsDAO.getSections();
-			if (sections != null) {
-				ContentSource openPlatformApi = getContentSource();
-				bundle = openPlatformApi.getArticles(articleSet, sections, articleCallback);
-			}
+			ContentSource openPlatformApi = getContentSource();
+			bundle = openPlatformApi.getArticles(articleSet, articleCallback);			
 		}
 		
 		if (bundle != null) {
