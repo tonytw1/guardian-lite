@@ -18,33 +18,23 @@ package nz.gen.wellington.guardian.android.content;
 
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.openplatfrom.ContentApiStyleXmlParser;
-import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
 import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
-import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import android.content.Context;
 import android.util.Log;
 
 public class AboutArticlesDAO implements ArticleSource {
 	
 	static final String TAG = "AboutArticlesDAO";
-	static final String ABOUT_ENDPOINT_URI = "/about";
 	
 	private HttpFetcher httpFetcher;
 	private ContentApiStyleXmlParser contentXmlParser;
-	private SettingsDAO settingsDAO;
 	
 	public AboutArticlesDAO(Context context) {
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
 		this.httpFetcher = new HttpFetcher(context);
-		this.settingsDAO = SingletonFactory.getSettingsDAO(context);
-	}
-	
-	// TODO This one should probably be on the article url service.
-	public String getArticleSetUrl() {
-		return settingsDAO.getGuardianLiteProxyHost() + ABOUT_ENDPOINT_URI;
 	}
 	
 	// TODO Now that source url information is on the article set, this may while be a duplication.

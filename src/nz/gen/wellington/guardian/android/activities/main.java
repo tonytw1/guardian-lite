@@ -26,8 +26,7 @@ import android.view.MenuItem;
 public class main extends ArticleListActivity {
 		
 	private ArticleSetFactory articleSetFactory;
-
-
+	
 	public main() {
 	}
 
