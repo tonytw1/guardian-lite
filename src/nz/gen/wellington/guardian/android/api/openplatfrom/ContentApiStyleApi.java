@@ -23,10 +23,10 @@ import java.util.Map;
 
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
 import nz.gen.wellington.guardian.android.api.ContentSource;
+import nz.gen.wellington.guardian.android.content.ArticleSetFetcher;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.network.HttpFetcher;
-import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
 import android.content.Context;
@@ -39,6 +39,8 @@ public class ContentApiStyleApi implements ContentSource {
 	private ContentApiStyleXmlParser contentXmlParser;
 	private ContentApiStyleJSONParser contentJsonParser;
 	private HttpFetcher httpFetcher;
+	private ArticleSetFetcher articleSetFetcher;
+	
 	final private int clientVersion;
 	final private String apiHost;
 	final private String apiKey;
@@ -48,6 +50,8 @@ public class ContentApiStyleApi implements ContentSource {
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
 		this.contentJsonParser = new ContentApiStyleJSONParser();
 		this.httpFetcher = new HttpFetcher(context);
+		this.articleSetFetcher = new ArticleSetFetcher(context);
+		
 		this.clientVersion = clientVersion;
 		this.apiHost = apiHost;
 		this.apiKey = apiKey;
@@ -55,27 +59,9 @@ public class ContentApiStyleApi implements ContentSource {
 	}
 	
 	
-	// TODO duplication with ArticleSetDAO.
 	@Override
 	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {
-		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
-		
-		final String contentApiUrl = articleSet.getSourceUrl() + "&v=" + clientVersion;
-		LoggingBufferedInputStream input = httpFetcher.httpFetch(contentApiUrl, articleSet.getName() + " article set");	
-		if (input != null) {
-			ArticleBundle results = contentXmlParser.parseArticlesXml(input, articleCallback);
-			if (results != null && !results.getArticles().isEmpty()) {
-				String checksum = input.getEtag();
-				results.setChecksum(checksum);
-				try {
-					input.close();
-				} catch (IOException e) {
-					Log.w(TAG, "Failed to close input stream");
-				}
-				return results;
-			}
-		}
-		return null;
+		return articleSetFetcher.getArticles(articleSet, articleCallback);
 	}
 	
 	
