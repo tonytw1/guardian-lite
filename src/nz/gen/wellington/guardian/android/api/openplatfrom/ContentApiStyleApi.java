@@ -55,6 +55,7 @@ public class ContentApiStyleApi implements ContentSource {
 	}
 	
 	
+	// TODO duplication with ArticleSetDAO.
 	@Override
 	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {
 		Log.i(TAG, "Fetching articles for: " + articleSet.getName());
