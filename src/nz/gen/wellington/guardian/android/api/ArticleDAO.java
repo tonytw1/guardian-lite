@@ -75,7 +75,7 @@ public class ArticleDAO {
 		
 		if (fetchType.equals(ContentFetchType.CHECKSUM)) {
 			ArticleBundle localCopy = fileBasedArticleCache.getArticleSetArticles(articleSet, null);
-			if (localCopy != null && localCopy.getChecksum() != null) {				
+			if (localCopy != null && localCopy.getChecksum() != null) {
 				Log.i(TAG, "Checking for checksum sync - local article set has checksum: " + localCopy.getChecksum());
 				final String remoteChecksum = getArticleSetRemoteChecksum(articleSet);
 				Log.i(TAG, "Remote checksum is: " + remoteChecksum);
@@ -119,6 +119,7 @@ public class ArticleDAO {
 	}
 	
 		
+	// TODO Not thread safe
 	private ArticleBundle fetchFromLive(ArticleSet articleSet) {
 		Log.i(TAG, "Fetching from live");
 		
