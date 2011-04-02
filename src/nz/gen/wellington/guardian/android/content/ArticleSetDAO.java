@@ -25,14 +25,14 @@ import nz.gen.wellington.guardian.android.network.LoggingBufferedInputStream;
 import android.content.Context;
 import android.util.Log;
 
-public class SavedArticlesDAO implements ArticleSource {
+public class ArticleSetDAO implements ArticleSource {
 	
 	private static final String TAG = "SavedArticlesDAO";
 	
 	private HttpFetcher httpFetcher;
 	private ContentApiStyleXmlParser contentXmlParser;	
 		
-	public SavedArticlesDAO(Context context) {
+	public ArticleSetDAO(Context context) {
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
 		this.httpFetcher = new HttpFetcher(context);
 	}
