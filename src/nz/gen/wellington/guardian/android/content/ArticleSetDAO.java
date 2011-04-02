@@ -17,16 +17,20 @@
 package nz.gen.wellington.guardian.android.content;
 
 import nz.gen.wellington.guardian.android.activities.ui.ArticleCallback;
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleBundle;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import android.content.Context;
 
 public class ArticleSetDAO implements ArticleSource {
 		
 	private ArticleSetFetcher articleSetFetcher;
+	private SettingsDAO settingsDAO;
 	
 	public ArticleSetDAO(Context context) {
-		this.articleSetFetcher = new ArticleSetFetcher(context);
+		this.settingsDAO = SingletonFactory.getSettingsDAO(context);
+		this.articleSetFetcher = new ArticleSetFetcher(context, settingsDAO.getClientVersion());
 	}
 	
 	public ArticleBundle getArticles(ArticleSet articleSet, ArticleCallback articleCallback) {

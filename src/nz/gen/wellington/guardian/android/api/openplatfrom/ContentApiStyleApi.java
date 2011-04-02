@@ -41,7 +41,6 @@ public class ContentApiStyleApi implements ContentSource {
 	private HttpFetcher httpFetcher;
 	private ArticleSetFetcher articleSetFetcher;
 	
-	final private int clientVersion;
 	final private String apiHost;
 	final private String apiKey;
 	final private List<Tag> supportedContentTypes;
@@ -50,9 +49,8 @@ public class ContentApiStyleApi implements ContentSource {
 		this.contentXmlParser = new ContentApiStyleXmlParser(context);
 		this.contentJsonParser = new ContentApiStyleJSONParser();
 		this.httpFetcher = new HttpFetcher(context);
-		this.articleSetFetcher = new ArticleSetFetcher(context);
+		this.articleSetFetcher = new ArticleSetFetcher(context, clientVersion);
 		
-		this.clientVersion = clientVersion;
 		this.apiHost = apiHost;
 		this.apiKey = apiKey;
 		this.supportedContentTypes = supportedContentTypes;
@@ -60,7 +58,7 @@ public class ContentApiStyleApi implements ContentSource {
 	
 	
 	@Override
-	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback) {
+	public ArticleBundle getArticles(ArticleSet articleSet, ArticleCallback articleCallback) {
 		return articleSetFetcher.getArticles(articleSet, articleCallback);
 	}
 	

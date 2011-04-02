@@ -34,7 +34,7 @@ import nz.gen.wellington.guardian.model.Tag;
 public interface ContentSource {
 
 	public List<Section> getSections();
-	public ArticleBundle getArticles(ArticleSet articleSet, List<Section> sections, ArticleCallback articleCallback);
+	public ArticleBundle getArticles(ArticleSet articleSet, ArticleCallback articleCallback);
 	public String getRemoteChecksum(ArticleSet articleSet);	
 	public void stopLoading();
 	public List<Tag> searchTags(String searchTerm, List<String> allowedTagSearchTypes, Map<String, Section> sections, int numberOfResultsToFetch);
