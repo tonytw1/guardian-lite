@@ -23,8 +23,8 @@ import nz.gen.wellington.guardian.android.activities.ui.TagListPopulatingService
 import nz.gen.wellington.guardian.android.factories.ArticleSetFactory;
 import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
+import nz.gen.wellington.guardian.android.model.FavouriteTagsArticleSet;
 import nz.gen.wellington.guardian.android.network.NetworkStatusService;
-import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -38,15 +38,13 @@ public class favourites extends ArticleListActivity {
     private ArticleSetFactory articleSetFactory;
     private NetworkStatusService networkStatusService;
 	private TagListPopulatingService tagListPopulatingService;
-	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
-
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         articleSetFactory = SingletonFactory.getArticleSetFactory(this.getApplicationContext());
         networkStatusService = SingletonFactory.getNetworkStatusService(this.getApplicationContext());
         tagListPopulatingService = SingletonFactory.getTagListPopulator(this.getApplicationContext());
-        favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(this.getApplicationContext());		
         
         setContentView(R.layout.favourites);        
         setHeading("Favourites");
@@ -74,8 +72,8 @@ public class favourites extends ArticleListActivity {
 	private void populateFavourites() {
 		TextView description = (TextView) findViewById(R.id.Description);
 
-		List<ArticleSet> favouriteArticleSets = favouriteSectionsAndTagsDAO.getFavouriteArticleSets();		
-		if (favouriteArticleSets == null) {		
+		List<ArticleSet> favouriteArticleSets = ((FavouriteTagsArticleSet) articleSetFactory.getFavouritesArticleSet()).getArticleSets();
+		if (favouriteArticleSets == null) {
 			description.setText("There was a problem loading your favorite sections and tags.");			
 			return;
 		}

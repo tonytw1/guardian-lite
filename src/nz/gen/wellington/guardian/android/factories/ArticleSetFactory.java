@@ -18,8 +18,10 @@ package nz.gen.wellington.guardian.android.factories;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import nz.gen.wellington.guardian.android.api.ArticleSetUrlService;
+import nz.gen.wellington.guardian.android.api.SectionDAO;
 import nz.gen.wellington.guardian.android.model.AboutArticleSet;
 import nz.gen.wellington.guardian.android.model.ArticleSet;
 import nz.gen.wellington.guardian.android.model.ContributorArticleSet;
@@ -29,8 +31,8 @@ import nz.gen.wellington.guardian.android.model.SearchResultsArticleSet;
 import nz.gen.wellington.guardian.android.model.TagArticleSet;
 import nz.gen.wellington.guardian.android.model.TagCombinerArticleSet;
 import nz.gen.wellington.guardian.android.model.TopStoriesArticleSet;
-import nz.gen.wellington.guardian.android.usersettings.FavouriteSectionsAndTagsDAO;
 import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
+import nz.gen.wellington.guardian.android.usersettings.SqlLiteFavouritesDAO;
 import nz.gen.wellington.guardian.model.Section;
 import nz.gen.wellington.guardian.model.Tag;
 import android.content.Context;
@@ -39,14 +41,16 @@ public class ArticleSetFactory {
 		
 	private SettingsDAO settingsDAO;
 	private ArticleSetUrlService articleSetUrlService;
-	private FavouriteSectionsAndTagsDAO favouriteSectionsAndTagsDAO;
+	private SqlLiteFavouritesDAO sqlLiteDAO;
+	private SectionDAO sectionDAO;
 	
 	public ArticleSetFactory(Context context) {
 		this.settingsDAO = SingletonFactory.getSettingsDAO(context);
-		this.favouriteSectionsAndTagsDAO = SingletonFactory.getFavouriteSectionsAndTagsDAO(context);
 		this.articleSetUrlService = new ArticleSetUrlService(context);
+		this.sqlLiteDAO = new SqlLiteFavouritesDAO(context);
+		this.sectionDAO = SingletonFactory.getSectionDAO(context);
 	}
-
+	
 	public ArticleSet getAboutArticleSet() {
 		return addUrl(new AboutArticleSet(settingsDAO.getPageSizePreference()));
 	}
@@ -62,7 +66,7 @@ public class ArticleSetFactory {
 	}
 	
 	public ArticleSet getFavouritesArticleSet() {
-		List<ArticleSet> favouriteArticleSets = favouriteSectionsAndTagsDAO.getFavouriteArticleSets();
+		List<ArticleSet> favouriteArticleSets = getFavouriteArticleSets();
 		return addUrl(new FavouriteTagsArticleSet(favouriteArticleSets, settingsDAO.getPageSizePreference()));
 	}
 	
@@ -132,6 +136,38 @@ public class ArticleSetFactory {
 	private ArticleSet addUrl(ArticleSet articleSet) {
 		articleSet.setSourceUrl(articleSetUrlService.getUrlForArticleSet(articleSet));
 		return articleSet;
+	}
+	
+	
+	private List<ArticleSet> getFavouriteArticleSets() {	
+		List<ArticleSet> favouriteArticleSets = new ArrayList<ArticleSet>();	
+		List<Map<String, String>> favouriteRows = sqlLiteDAO.getFavouriteRows();	// TODO would be nice to be able to push sqllite depend back to favorites DAO.
+		for (Map<String, String> row : favouriteRows) {
+			ArticleSet articleSet = favouriteTagRowToArticleSet(row);
+			if (articleSet != null) {
+				favouriteArticleSets.add(articleSet);
+			}
+		}
+		return favouriteArticleSets;
+	}
+	
+	
+	private ArticleSet favouriteTagRowToArticleSet(Map<String, String> row) {
+		if(row.get(SqlLiteFavouritesDAO.TYPE).equals("tag")) {				
+			Section section = sectionDAO.getSectionById(row.get(SqlLiteFavouritesDAO.SECTIONID));
+			Tag tag = new Tag(row.get(SqlLiteFavouritesDAO.NAME), row.get(SqlLiteFavouritesDAO.APIID), section, null);	// TODO Do we know the types of favourited tags?
+			return getArticleSetForTag(tag);
+			
+		} else if (row.get(SqlLiteFavouritesDAO.TYPE).equals("section")) {				
+			Section section = sectionDAO.getSectionById(row.get(SqlLiteFavouritesDAO.SECTIONID));
+			if (section != null) {
+				return getArticleSetForSection(section);
+			}
+			
+		} else if (row.get(SqlLiteFavouritesDAO.TYPE).equals("searchterm")) {
+			return getArticleSetForSearchTerm(row.get(SqlLiteFavouritesDAO.SEARCHTERM));
+		}
+		return null;
 	}
 	
 }
