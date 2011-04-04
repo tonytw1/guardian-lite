@@ -29,7 +29,7 @@ public class ArticleSetFetcher {
 	public ArticleBundle getArticles(ArticleSet articleSet, ArticleCallback articleCallback) {		
 		Log.i(TAG, "Fetching article for article set: " + articleSet.getName());
 		
-		final String contentApiUrl = articleSet.getSourceUrl() + "&v=" + clientVersion;		
+		final String contentApiUrl = appendClientVersion(articleSet.getSourceUrl());
 		LoggingBufferedInputStream input = httpFetcher.httpFetch(contentApiUrl, articleSet.getName());
 		if (input != null) {
 			ArticleBundle results = contentXmlParser.parseArticlesXml(input, articleCallback);
@@ -45,6 +45,15 @@ public class ArticleSetFetcher {
 			}
 		}
 		return null;
+	}
+	
+	private String appendClientVersion(String url) {
+		// TODO somewhat rubbish implementation
+		if (url.contains("?")) {
+			return url + "&v=" + clientVersion;			
+		} else {
+			return url + "?v=" + clientVersion;
+		}
 	}
 	
 }
