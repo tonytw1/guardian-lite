@@ -184,7 +184,7 @@ public abstract class ContentRenderingActivity extends MenuedActivity implements
 		}		
 		View tagList = findViewById(R.id.TagList);
 		if (tagList != null) {
-			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) tagList, articleSetFactory.getArticleSetsForTags(tagShufflingService.shuffleContributorsToTheFrontAndAddSectionTagIfNotAlreadyPresent(article)), colourScheme, baseFontSize);
+			tagListPopulatingService.populateTags(inflater, connectionAvailable, (LinearLayout) tagList, articleSetFactory.getArticleSetsForTags(tagShufflingService.shuffleContributorsToTheFrontAndAddSectionTagIfNotAlreadyPresent(article)), colourScheme, baseFontSize, false);
 		}
 	}
 	

@@ -40,6 +40,7 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+// TODO should not download results again if screen is rotated
 public class tagsearch extends DownloadProgressAwareActivity implements FontResizingActivity {
 	
 	private static final String NETWORK_CONNECTION_REQUIRED_WARNING = "A network connection is required to be able to search for tags.";
@@ -177,7 +178,7 @@ public class tagsearch extends DownloadProgressAwareActivity implements FontResi
 		LinearLayout resultsPane = (LinearLayout) findViewById(R.id.TagList);
 		resultsPane.removeAllViews();
 		LayoutInflater inflater = LayoutInflater.from(this);
-		tagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), resultsPane, articleSetFactory.getArticleSetsForTags(results), colourScheme, baseFontSize);
+		tagListPopulatingService.populateTags(inflater, networkStatusService.isConnectionAvailable(), resultsPane, articleSetFactory.getArticleSetsForTags(results), colourScheme, baseFontSize, true);
 	}
 		
 	private void outputErrorWarning(String message) {

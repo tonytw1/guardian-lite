@@ -150,7 +150,7 @@ public class ArticleListActivityViewPopulator {
 		tagGroup.setOrientation(LinearLayout.VERTICAL);
 		tagGroup.setPadding(2, 0, 2, 0);
 		
-		tagListPopulatingService.populateTags(inflater, true, tagGroup, refinementArticleSets, colourScheme, fontSize);
+		tagListPopulatingService.populateTags(inflater, true, tagGroup, refinementArticleSets, colourScheme, fontSize, false);
 		mainpane.addView(tagGroup);
 	}
 	

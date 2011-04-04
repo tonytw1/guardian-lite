@@ -41,13 +41,18 @@ public class TagListPopulatingService {
 		this.articleDAO = SingletonFactory.getArticleDao(context);
 	}
 
-	public void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets, ColourScheme colourScheme, int baseFontSize) {
-		Set<String> duplicatedArticleSetNames = getDuplicatedArticleSetNames(articleSets);		
+	public void populateTags(LayoutInflater inflater, boolean connectionIsAvailable, ViewGroup tagList, List<ArticleSet> articleSets, ColourScheme colourScheme, int baseFontSize, boolean alwaysShowArticleSetSection) {
+		Set<String> duplicatedArticleSetNames = getDuplicatedArticleSetNames(articleSets);
+				
 		for (ArticleSet articleSet : articleSets) {
 
 			View tagView = inflater.inflate(R.layout.authorslist, null);
-			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);			
-			titleText.setText(composeTitleText(duplicatedArticleSetNames, articleSet));
+			TextView titleText = (TextView) tagView.findViewById(R.id.TagName);
+			if (alwaysShowArticleSetSection) {
+				titleText.setText(articleSet.getName());
+			} else {
+				titleText.setText(composeTitleText(duplicatedArticleSetNames, articleSet));
+			}
 			titleText.setTextSize(TypedValue.COMPLEX_UNIT_PT, baseFontSize);
 			
 			final boolean isContentAvailable = articleDAO.isAvailable(articleSet);

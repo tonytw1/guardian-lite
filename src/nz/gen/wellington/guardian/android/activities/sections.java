@@ -80,7 +80,7 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 			tagListPopulatingService.populateTags(inflater,
 					networkStatusService.isConnectionAvailable(), authorList,
 					articleSetFactory.getArticleSetsForSections(sections),
-					colourScheme, baseFontSize
+					colourScheme, baseFontSize, false
 			);
 			
 		} else {
