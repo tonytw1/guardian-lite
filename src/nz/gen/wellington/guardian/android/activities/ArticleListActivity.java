@@ -288,9 +288,14 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	
 			    	boolean shouldUseFeatureTrail = article.getMainImageUrl() != null && first && !isLandscapeOrientation && articleSet.isFeatureTrailAllowed() && imageDAO.isAvailableLocally(article.getMainImageUrl());
 					String trailImageUrl = article.getThumbnail();
+					// TODO duplication
+					if (trailImageUrl == null && article.isGallery() && article.getMediaElements().size() > 0) {
+						trailImageUrl = article.getMediaElements().get(0).getThumbnail();
+					}
+					
 					if (shouldUseFeatureTrail) {
 						trailImageUrl = article.getMainImageUrl();
-					}					
+					}
 					
 					boolean isTrailImageAvailableLocally = trailImageUrl != null && imageDAO.isAvailableLocally(trailImageUrl);
 					View articleTrailView = articleListActivityViewPopulator.populateArticleListView(article, colourScheme, baseFontSize, trailImageUrl, shouldUseFeatureTrail, first, mInflater, isTrailImageAvailableLocally);
@@ -306,7 +311,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			    	Bundle data = msg.getData();
 			    	if (data.containsKey("id")) {
 			    		final String id = data.getString("id");
-			    		final String url = data.getString("url");
+			    		final String url = data.getString("url");			    		
 			    		if( viewsWaitingForTrailImages.containsKey(id)) {
 			    			View view = viewsWaitingForTrailImages.get(id);
 			    			articleListActivityViewPopulator.populateTrailImage(url, view);
@@ -460,10 +465,14 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 				
 				String imageUrl;
 				boolean mainImageIsAvailableLocally = article.getMainImageUrl() != null && imageDAO.isAvailableLocally(article.getMainImageUrl());
-				if (first && mainImageIsAvailableLocally) {						
+				if (first && mainImageIsAvailableLocally) {				// TODO only for feature trails?		
 					imageUrl = article.getMainImageUrl();
 				} else {
 					imageUrl = article.getThumbnail();
+				}
+				
+				if (article.isGallery() && article.getMediaElements().size() > 0) {
+					imageUrl = article.getMediaElements().get(0).getThumbnail();
 				}
 				
 				if (imageUrl != null) {
@@ -479,6 +488,7 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 						
 					} else {
 						if (isOkToDownloadTrailImages) {
+							Log.i(TAG, "Queuing article for trail image download: " + article.getId());
 							articlesToDownloadTrailImagesFor.add(article);
 						}
 					}					
@@ -490,13 +500,21 @@ public abstract class ArticleListActivity extends DownloadProgressAwareActivity 
 			
 			if (running) {
 				for (Article article : articlesToDownloadTrailImagesFor) {
-					imageDAO.getImage(article.getThumbnail());
+					Log.i(TAG, "Downloading queued trailimage for article: " + article.getId());
+					
+					// TODO should be on the model - duplication
+					String thumbnail = article.getThumbnail();
+					if (thumbnail == null && article.isGallery() && article.getMediaElements().size() > 0) {
+						thumbnail = article.getMediaElements().get(0).getThumbnail();
+					}
+					
+					imageDAO.getImage(thumbnail);
 					
 					m = new Message();
 					m.what = UpdateArticlesHandler.TRAIL_IMAGE_IS_AVAILABLE_FOR_ARTICLE;
 					Bundle bundle = new Bundle();
 					bundle.putString("id", article.getTrailImageCallBackLabelForArticle());
-					bundle.putString("url", article.getThumbnail());
+					bundle.putString("url", thumbnail);
 					
 					m.setData(bundle);
 					updateArticlesHandler.sendMessage(m);																				
