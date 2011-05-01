@@ -162,6 +162,7 @@ public class SettingsDAO {
 		return cache.get("userTier") != null && API_USER_TIERS_WHICH_ALLOW_SHOW_MEDIA.contains(cache.get("userTier"));		
 	}
 
+	// TODO this is a thread blocker
 	private void updateApiKeyUserTier() {
 		Log.i(TAG, "Updating api key");
 		if (networkStatusService.isConnectionAvailable()) {			
