@@ -18,6 +18,7 @@ package nz.gen.wellington.guardian.android.activities;
 
 import nz.gen.wellington.guardian.android.R;
 import nz.gen.wellington.guardian.android.activities.ui.ImageStretchingService;
+import nz.gen.wellington.guardian.android.activities.ui.LeftToRightFlingDetector;
 import nz.gen.wellington.guardian.android.api.ImageDAO;
 import nz.gen.wellington.guardian.model.Article;
 import nz.gen.wellington.guardian.model.MediaElement;
@@ -26,22 +27,40 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.TypedValue;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
 
-public class article extends ContentRenderingActivity {
+public class article extends ContentRenderingActivity implements OnTouchListener {
 	
 	private MainImageUpdateHandler mainImageUpdateHandler;
 	private MainImageLoader mainImageLoader;
 	private ImageStretchingService imageStretchingService;
+	private GestureDetector flingDetector;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
     	mainImageUpdateHandler = new MainImageUpdateHandler();
 		imageStretchingService = new ImageStretchingService();
+		
+		flingDetector = new GestureDetector(new LeftToRightFlingDetector());
+		final View findViewById = findViewById(R.id.ScrollView01);
+		findViewById.setOnTouchListener(this);
+	}
+	
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		if (flingDetector.onTouchEvent(event)) {
+			finish();
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	protected int getLayout() {
@@ -67,7 +86,6 @@ public class article extends ContentRenderingActivity {
 			loader.start();
 		}
 	}
-
 	
 	@Override
 	public void setFontSize() {
@@ -82,7 +100,6 @@ public class article extends ContentRenderingActivity {
 		description.setTextColor(colourScheme.getBodytext());
 	}
 	
-	
 	private void populateMainImage(String mainImageUrl) {
 		if (article != null && article.getMainImageUrl() != null && article.getMainImageUrl().equals(mainImageUrl)) {		
 			if (images.containsKey(mainImageUrl)) {		
@@ -93,7 +110,6 @@ public class article extends ContentRenderingActivity {
 			}
 		}
 	}
-
 	
 	private void populateMainImage(Bitmap bitmap) {
 		ImageView imageView = (ImageView) findViewById(R.id.ArticleImage);
@@ -157,5 +173,5 @@ public class article extends ContentRenderingActivity {
 			}
 		}
 	}
-		
+	
 }
