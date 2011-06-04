@@ -24,20 +24,25 @@ import java.util.Date;
 import android.util.Log;
 
 public class DateTimeHelper {
-
-	private static final String TAG = "DateTimeHelper";
-	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 	
-	public static Date parseDate(String dateString) {
-		 SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
-		 try {
-			 if (dateString.endsWith("Z")) {
-				 dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-				 dateFormat.setTimeZone(java.util.TimeZone.getTimeZone("Zulu"));
-			 }		 
-			 return dateFormat.parse(dateString);
+	private static final String TAG = "DateTimeHelper";
+	
+	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+	private static final String ZULU_DATA_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+	private static final String ZULU_TIME_ZONE = "Zulu";
+	
+	public static Date parseDate(String dateString) {		
+		// The Guardian Content API does something slightly interesting with daylight savings and GMT times.
+		SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
+		if (dateString.endsWith("Z")) {
+			dateFormat = new SimpleDateFormat(ZULU_DATA_TIME_FORMAT);
+			dateFormat.setTimeZone(java.util.TimeZone.getTimeZone(ZULU_TIME_ZONE));
+		}	
+		 
+		try {
+			return dateFormat.parse(dateString);
 		} catch (ParseException e) {
-			 Log.e(TAG, "Failed to parse date '" + dateString +  "': " + e.getMessage());
+			Log.e(TAG, "Failed to parse date '" + dateString +  "': " + e.getMessage());
 		}
 		return null;
 	}
@@ -63,7 +68,7 @@ public class DateTimeHelper {
 		if (seconds < 60) {
 			return Long.toString(seconds) + " seconds";
 		}
-	
+		
 		StringBuilder output = new StringBuilder();
 		int minutes = (seconds / 60);
 		int remainer = (seconds % 60);
@@ -73,13 +78,11 @@ public class DateTimeHelper {
 		}
 		return output.toString();
 	}
-	
-	
+		
 	public static boolean isMoreThanHoursOld(Date then, int hours) {
 		int seconds = durationInSecords(then, now());
 		return (seconds > (hours * 3600));
 	}
-
 	
 	private static int durationInSecords(Date startTime, Date now) {
 		long mills = now.getTime() - startTime.getTime();
