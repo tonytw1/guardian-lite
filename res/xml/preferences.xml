@@ -3,18 +3,18 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<PreferenceCategory android:title="Appearance and Syncing">	
-		<ListPreference android:entryValues="@array/pageSizeOptionValues" android:entries="@array/pageSizeOptionLabels" android:summary="Number of articles to include in each article set" android:title="Page size" android:key="pageSize" android:defaultValue="10"></ListPreference>
+		<ListPreference android:entryValues="@array/pageSizeOptionValues" android:entries="@array/pageSizeOptionLabels" android:summary="Number of articles to include in each article set" android:title="Page size" android:key="pageSize" android:defaultValue="15"></ListPreference>
 		
 		<ListPreference android:entryValues="@array/largeImageOptionValues" android:entries="@array/largeImageOptionLabels" 
 	android:summary="When should trail images be downloaded" android:title="Load trail images" android:key="trailImagesOption" android:defaultValue="ALWAYS"></ListPreference>
 				
 		<ListPreference android:entryValues="@array/largeImageOptionValues" android:entries="@array/largeImageOptionLabels" 
-	android:summary="When should large article images be downloaded" android:title="Load large images" android:key="largeImagesOption" android:defaultValue="WIFI_ONLY"></ListPreference>
+	android:summary="When should large article images be downloaded" android:title="Load large images" android:key="largeImagesOption" android:defaultValue="ALWAYS"></ListPreference>
 
 		<ListPreference android:entryValues="@array/colourSchemeOptionValues" android:entries="@array/colourSchemeOptionLabels" android:summary="Preferred colour scheme" android:title="Colour scheme" android:key="colourScheme" android:defaultValue="WHITE_ON_BLACK"></ListPreference>	
 
 
-		<ListPreference android:entryValues="@array/fontBaseSizeOptionValues" android:entries="@array/fontBaseSizeOptionLabels" android:summary="Preferred body text size" android:title="Font size" android:key="baseFontSize" android:defaultValue="7"></ListPreference>
+		<ListPreference android:entryValues="@array/fontBaseSizeOptionValues" android:entries="@array/fontBaseSizeOptionLabels" android:summary="Preferred body text size" android:title="Font size" android:key="baseFontSize" android:defaultValue="9"></ListPreference>
 		<ListPreference android:entryValues="@array/syncTypeOptionValues" android:entries="@array/syncTypeOptionLabels" 
 	android:summary="When to automatically download top stories and favourites (requires background data)" android:title="Automatic syncing" android:key="syncType" android:defaultValue="NEVER"></ListPreference>
 	</PreferenceCategory>
