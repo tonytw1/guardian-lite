@@ -22,6 +22,7 @@ import nz.gen.wellington.guardian.android.model.colourscheme.ColourScheme;
 import nz.gen.wellington.guardian.android.usersettings.SettingsDAO;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Surface;
 import android.view.View;
@@ -29,6 +30,8 @@ import android.widget.TextView;
 
 public abstract class AbstractFontResizingActivity extends Activity implements FontResizingActivity {
 
+	private static final String TAG = "AbstractFontResizingActivity";
+	
 	protected ColourScheme colourScheme;
 	protected int baseFontSize;
 	protected SettingsDAO settingsDAO;
@@ -39,8 +42,7 @@ public abstract class AbstractFontResizingActivity extends Activity implements F
 		settingsDAO = SingletonFactory.getSettingsDAO(this.getApplicationContext());
 		populateSettings();
 	}
-	
-	
+		
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -53,13 +55,14 @@ public abstract class AbstractFontResizingActivity extends Activity implements F
 		setStatusColour();
 	}
 	
-	
 	protected boolean isLandScrapeOrientation() {
-		int orientation = getWindowManager().getDefaultDisplay().getOrientation();
-		return orientation == Surface.ROTATION_90 || orientation == Surface.ROTATION_270;		
+		int width = getWindowManager().getDefaultDisplay().getWidth();
+		int height = getWindowManager().getDefaultDisplay().getHeight();
+		boolean isLandscape = width > height;
+		Log.d(TAG, "Is landscape: " + isLandscape);
+		return isLandscape;
 	}
-
-
+	
 	private void setStatusColour() {
 		TextView view = (TextView) findViewById(R.id.DownloadProgress);
 		if (view != null) {
