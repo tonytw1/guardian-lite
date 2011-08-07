@@ -140,7 +140,10 @@ public class gallery extends ContentRenderingActivity {
 			
 			Bundle bundle = new Bundle();
 			bundle.putSerializable("picture", picture);			
-			msg.setData(bundle);	
+			msg.setData(bundle);
+			if (galleryImageUpdateHandler == null) {
+				galleryImageUpdateHandler = new GalleryImageUpdateHandler();
+			}
 			galleryImageUpdateHandler.sendMessage(msg);
 		}
 		
