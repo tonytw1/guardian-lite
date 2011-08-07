@@ -24,7 +24,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Surface;
 import android.view.View;
 import android.widget.TextView;
 
