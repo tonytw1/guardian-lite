@@ -25,6 +25,7 @@ import java.util.Date;
 
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 public class FileService {
@@ -120,8 +121,21 @@ public class FileService {
 		}
 	}
 		
-	private static File getCacheDir(Context context) {				
-		return context.getCacheDir();
+	private static File getCacheDir(Context context) {
+		Log.d(TAG, "External media state: " + Environment.MEDIA_MOUNTED);
+	    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {	    	
+	    	File externalCacheFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/guardian-lite");
+	    	if (!externalCacheFolder.exists()) {
+	    		Log.i(TAG, "Creating external cache folder");
+	    		if (!externalCacheFolder.mkdir()) {
+		    		Log.e(TAG, "Failed to create external cache folder");
+	    			return null;
+	    		}
+	    	}
+			return externalCacheFolder;
+	    }
+	    return null;
+		//return context.getCacheDir();
 	}
 		
 	private static Date calculateFileModTime(File localFile) {
