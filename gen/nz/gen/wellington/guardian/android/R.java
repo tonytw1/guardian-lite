@@ -9,8 +9,8 @@ package nz.gen.wellington.guardian.android;
 
 public final class R {
     public static final class array {
-        public static final int apiLocationLabels=0x7f05000c;
-        public static final int apiLocationValues=0x7f05000d;
+        public static final int apiLocationLabels=0x7f05000e;
+        public static final int apiLocationValues=0x7f05000f;
         public static final int cacheLocationOptionLabels=0x7f050000;
         public static final int cacheLocationOptionValues=0x7f050001;
         public static final int colourSchemeOptionLabels=0x7f05000a;
@@ -21,6 +21,8 @@ public final class R {
         public static final int largeImageOptionValues=0x7f050009;
         public static final int pageSizeOptionLabels=0x7f050002;
         public static final int pageSizeOptionValues=0x7f050003;
+        public static final int storageOptionLabels=0x7f05000c;
+        public static final int storageOptionValues=0x7f05000d;
         public static final int syncTypeOptionLabels=0x7f050006;
         public static final int syncTypeOptionValues=0x7f050007;
     }

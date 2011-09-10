@@ -150,6 +150,10 @@ public class SettingsDAO {
 	private boolean isUsingContentApi() {
 		return getPreferenceThroughCache("useContentApi", "false").equals("true");
 	}
+	
+	public boolean isUsingExternalStorage() {
+		return getPreferenceThroughCache("storageOption", "INTERNAL").equals("EXTERNAL");
+	}
 
 	public boolean shouldShowMedia() {
 		return !this.isUsingContentApi() || isUsingApiKeyWithUserTierWhichSupportsShowMedia();

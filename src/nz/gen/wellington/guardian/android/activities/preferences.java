@@ -48,7 +48,8 @@ public class preferences extends PreferenceActivity {
 		findPreference("pageSize").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
 		findPreference("trailImagesOption").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
 		findPreference("largeImagesOption").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
-		
+		findPreference("storageOption").setOnPreferenceChangeListener(apiKeyPreferenceChangeListener);
+
 		alarmSetter = new ContentUpdateAlarmSetter(this.getApplicationContext());
 		sectionDAO = SingletonFactory.getSectionDAO(this.getApplicationContext());
 		settingsDAO = SingletonFactory.getSettingsDAO(this.getApplicationContext());

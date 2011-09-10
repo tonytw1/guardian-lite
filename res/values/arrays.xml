@@ -80,6 +80,15 @@
 <item>BLACK_ON_WHITE</item>
 </string-array>
 
+<string-array name="storageOptionLabels">
+	<item>Internal storage</item>
+	<item>SD Card</item>
+</string-array>
+
+<string-array name="storageOptionValues">
+	<item>INTERNAL</item>
+	<item>EXTERNAL</item>
+</string-array>
 
 <string-array name="apiLocationLabels">
 <item>Guardian Lite proxy</item>

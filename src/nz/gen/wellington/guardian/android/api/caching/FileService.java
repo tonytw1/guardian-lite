@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Date;
 
+import nz.gen.wellington.guardian.android.factories.SingletonFactory;
 import nz.gen.wellington.guardian.android.utils.DateTimeHelper;
 import android.content.Context;
 import android.os.Environment;
@@ -100,14 +101,14 @@ public class FileService {
 		deleteFiles(context, jsonFilesFilter);
 	}
 	
-	private static void deleteFiles(Context context, FileFilter jsonFilesFilter) {		
+	private static void deleteFiles(Context context, FileFilter fileFilter) {		
 		File cacheDir = getCacheDir(context);
 		if (cacheDir == null) {
 			Log.w(TAG, "No cache folder found");
 			return;
 		}
 		
-		File[] listFiles = cacheDir.listFiles(jsonFilesFilter);
+		File[] listFiles = cacheDir.listFiles(fileFilter);
 		if (listFiles == null) {
 			Log.w(TAG, "listFiles was null - indicates cache dir is a file not a folder?");
 			return;
@@ -122,20 +123,22 @@ public class FileService {
 	}
 		
 	private static File getCacheDir(Context context) {
-		Log.d(TAG, "External media state: " + Environment.MEDIA_MOUNTED);
-	    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {	    	
-	    	File externalCacheFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/guardian-lite");
-	    	if (!externalCacheFolder.exists()) {
-	    		Log.i(TAG, "Creating external cache folder");
-	    		if (!externalCacheFolder.mkdir()) {
-		    		Log.e(TAG, "Failed to create external cache folder");
-	    			return null;
-	    		}
-	    	}
-			return externalCacheFolder;
-	    }
-	    return null;
-		//return context.getCacheDir();
+		if (SingletonFactory.getSettingsDAO(context).isUsingExternalStorage()) {
+			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {	    	
+				File externalCacheFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/guardian-lite");
+				if (!externalCacheFolder.exists()) {
+					Log.i(TAG, "Creating external cache folder");
+					if (!externalCacheFolder.mkdir()) {
+						Log.e(TAG, "Failed to create external cache folder");
+						return null;
+					}
+				}
+				return externalCacheFolder;
+			}
+			return null;
+		}
+		
+		return context.getCacheDir();
 	}
 		
 	private static Date calculateFileModTime(File localFile) {
