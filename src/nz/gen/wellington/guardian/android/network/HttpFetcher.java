@@ -33,6 +33,8 @@ import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.HttpEntityWrapper;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -50,7 +52,7 @@ public class HttpFetcher {
 	private static final int HTTP_TIMEOUT = 15000;
     public static final String DOWNLOAD_PROGRESS = "nz.gen.wellington.guardian.android.network.DOWNLOAD_PROGRESS";
     
-    private HttpGet activeGet;
+    private HttpRequestBase activeRequest;
 	private HttpClient client;
 	private DownProgressAnnouncer downProgressAnnouncer;
 	private Context context;
@@ -84,14 +86,15 @@ public class HttpFetcher {
 					final HttpContext context)
 					throws HttpException, IOException {
 				HttpEntity entity = response.getEntity();
-				Header ceheader = entity.getContentEncoding();
-				if (ceheader != null) {
-					HeaderElement[] codecs = ceheader.getElements();
-					for (int i = 0; i < codecs.length; i++) {
-						if (codecs[i].getName().equalsIgnoreCase("gzip")) {
-							response.setEntity(new GzipDecompressingEntity(
-									response.getEntity()));
-							return;
+				if (entity != null) {
+					Header ceheader = entity.getContentEncoding();
+					if (ceheader != null) {
+						HeaderElement[] codecs = ceheader.getElements();
+						for (int i = 0; i < codecs.length; i++) {
+							if (codecs[i].getName().equalsIgnoreCase("gzip")) {
+								response.setEntity(new GzipDecompressingEntity(response.getEntity()));
+								return;
+							}
 						}
 					}
 				}
@@ -120,7 +123,7 @@ public class HttpFetcher {
 			if (label != null) {
 				downProgressAnnouncer.announceDownloadStarted(label);
 			}
-			HttpResponse execute = executeGet(get);
+			HttpResponse execute = executeRequest(get);
 			final int statusCode = execute.getStatusLine().getStatusCode();
 			if (statusCode == 200) {
 				
@@ -146,9 +149,9 @@ public class HttpFetcher {
 	}
 
 
-	private HttpResponse executeGet(HttpGet get) throws IOException, ClientProtocolException {
-		activeGet = get;
-		return client.execute(get);
+	private HttpResponse executeRequest(HttpRequestBase request) throws IOException, ClientProtocolException {
+		activeRequest = request;
+		return client.execute(request);
 	}
 
 	
@@ -156,7 +159,7 @@ public class HttpFetcher {
 		try {
 			Log.i(TAG, "Making http fetch of image: " + uri);
 			HttpGet get = new HttpGet(uri);		
-			return EntityUtils.toByteArray(executeGet(get).getEntity());
+			return EntityUtils.toByteArray(executeRequest(get).getEntity());
 									
 		} catch (Exception e) {
 			Log.e(TAG, "Http exception: " + e.getMessage());
@@ -174,11 +177,12 @@ public class HttpFetcher {
 	public String httpEtag(String url, String label) {
 		try {
 			Log.i(TAG, "Making http etag head fetch of url: " + url);
-			HttpGet get = new HttpGet(url);
+			HttpRequestBase head = new HttpHead(url);
 			if (label != null) {
 				downProgressAnnouncer.announceDownloadStarted(label);
 			}
-			HttpResponse execute = executeGet(get);
+			HttpResponse execute = executeRequest(head);
+			Log.d(TAG, "Response status: " + execute.getStatusLine().getStatusCode());
 			if (execute.getStatusLine().getStatusCode() == 200) {
 				Header[] etags = execute.getHeaders("Etag");
 				if (etags.length == 1) {
@@ -189,7 +193,7 @@ public class HttpFetcher {
 			}
 			
 		} catch (Exception e) {
-			Log.e(TAG, "Http exception: " + e.getMessage());
+			Log.e(TAG, "Http exception while fetching: url", e);
 		}
 		
 		downProgressAnnouncer.announceDownloadFailed(url);
@@ -198,8 +202,8 @@ public class HttpFetcher {
 	
 	public void stopLoading() {
 		Log.i(TAG, "Stopping loading");
-		if (activeGet != null) {
-			activeGet.abort();
+		if (activeRequest != null) {
+			activeRequest.abort();
 		}
 	}
 	
