@@ -105,13 +105,6 @@ public class HttpFetcher {
 		client.getParams().setParameter("http.connection.timeout", new Integer(HTTP_TIMEOUT));
 	}
 	
-	
-	@Deprecated
-	public LoggingBufferedInputStream httpFetch(String sourceUrl) {
-		return httpFetch(sourceUrl, null);
-	}
-	
-	
 	public LoggingBufferedInputStream httpFetch(String uri, String label) {
 		try {
 			Log.i(TAG, "Making http fetch of: " + uri);						
