@@ -145,13 +145,6 @@ public class HttpFetcher {
 		return null;
 	}
 
-
-	private HttpResponse executeRequest(HttpRequestBase request) throws IOException, ClientProtocolException {
-		activeRequest = request;
-		return client.execute(request);
-	}
-
-	
 	public byte[] httpFetchStream(String uri) {
 		try {
 			Log.i(TAG, "Making http fetch of image: " + uri);
@@ -163,13 +156,6 @@ public class HttpFetcher {
 		}
 		return null;
 	}
-	
-	
-	@Deprecated
-	public String httpEtag(String contentApiUrl) {
-		return httpEtag(contentApiUrl, null);
-	}
-	
 	
 	public String httpEtag(String url, String label) {
 		try {
@@ -204,7 +190,11 @@ public class HttpFetcher {
 		}
 	}
 	
-	
+	private HttpResponse executeRequest(HttpRequestBase request) throws IOException, ClientProtocolException {
+		activeRequest = request;
+		return client.execute(request);
+	}
+
 	static class GzipDecompressingEntity extends HttpEntityWrapper {
 
         public GzipDecompressingEntity(final HttpEntity entity) {
@@ -212,9 +202,7 @@ public class HttpFetcher {
         }
     
         @Override
-        public InputStream getContent()
-            throws IOException, IllegalStateException {
-
+        public InputStream getContent() throws IOException, IllegalStateException {
             // the wrapped entity's getContent() decides about repeatability
             InputStream wrappedin = wrappedEntity.getContent();
             return new GZIPInputStream(wrappedin);
