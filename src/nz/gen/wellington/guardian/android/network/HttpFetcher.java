@@ -107,6 +107,10 @@ public class HttpFetcher {
 	
 	public LoggingBufferedInputStream httpFetch(String uri, String label) {
 		try {
+			if (activeRequest != null) {
+				Log.w(TAG, "Aborting already running request to start new fetch.");	// Do not believe this is happening
+			}
+						
 			Log.i(TAG, "Making http fetch of: " + uri);						
 			HttpGet get = new HttpGet(uri);	
 			
