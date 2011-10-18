@@ -48,7 +48,7 @@ public class SettingsDAO {
 		
 	private static final String APP_PACKAGE = "nz.gen.wellington.guardian.android";
 
-	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://5.guardian-lite.appspot.com";
+	private static final String GUARDIAN_LITE_PROXY_API_PREFIX = "http://guardian-lite.eelpieconsulting.co.uk";
 	private static final String CONTENT_API_URL = "http://content.guardianapis.com";
 	
 	private static List<String> API_USER_TIERS_WHICH_ALLOW_SHOW_MEDIA = Arrays.asList("partner", "internal");
