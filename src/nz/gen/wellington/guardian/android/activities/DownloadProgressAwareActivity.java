@@ -89,9 +89,11 @@ public class DownloadProgressAwareActivity extends MenuedActivity {
 		}	
 	}
 	
-	
 	final protected void updateDownloadProgress(int received, long  expected, TextView status) {
-		final String statusMessage =  received + " / " +  Long.toString(expected);
+		String statusMessage =  Integer.toString(received);
+		if (expected > 0) {
+			statusMessage = statusMessage + " / " +  Long.toString(expected);
+		}
 		status.setText(statusMessage);
 		status.setVisibility(View.VISIBLE);
 	}
