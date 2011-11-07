@@ -27,19 +27,21 @@ import android.util.Log;
 
 public class ContentUpdateAlarmSetter {
 	
+
 	private static final String TAG = "ContentUpdateAlarmSetter";
 	
 	private static final long ONE_MINUTE = 60000;
 	private static final long ONE_HOUR = ONE_MINUTE * 60;
 	private static final long ONE_DAY = ONE_HOUR * 24;
 	
+	private static final long SIX_AM_SYNC_SPREAD = ONE_MINUTE * 10;
+	
 	private Context context;
 	
 	public ContentUpdateAlarmSetter(Context context) {
 		this.context = context;
 	}
-	
-	
+		
 	public void setAlarmFor(String syncType) {
 		Log.i(TAG, "Setting sync alarm for preference: " + syncType);
 		if (syncType.equals("DAILY")) {
@@ -95,7 +97,13 @@ public class ContentUpdateAlarmSetter {
 		if (!isToday) {
 			timeInMillis = timeInMillis + ONE_DAY;
 		}
+		
+		timeInMillis = timeInMillis - generateRandomOffsetToSpendLoad();		
 		return timeInMillis;
+	}
+	
+	private long generateRandomOffsetToSpendLoad() {
+		return new Double(Math.random() * SIX_AM_SYNC_SPREAD).longValue();
 	}
 	
 }
