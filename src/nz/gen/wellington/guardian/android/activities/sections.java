@@ -105,6 +105,7 @@ public class sections extends DownloadProgressAwareActivity implements FontResiz
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MenuedActivity.HOME, 0, "Home");
 		menu.add(0, MenuedActivity.FAVOURITES, 0, "Favourites");
+		menu.add(0, MenuedActivity.SEARCH, 0, "Search");
 	    return true;
 	}
 	

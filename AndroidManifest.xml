@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="nz.gen.wellington.guardian.android" 
-	android:versionName="2.12" android:versionCode="50" 
-	android:installLocation="auto">
+	android:versionName="2.14" android:versionCode="52" android:installLocation="auto" >
 	
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="false" android:name=".application.GuardianLite">
+    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="8"/>
+   	<supports-screens android:largeScreens="true" android:normalScreens="true" android:smallScreens="true" anyDensity="true" />	
+    
+   	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:name=".application.GuardianLite">
     		    	 	        	 	     
     	<activity android:name=".activities.about" />   	
     	 	     
@@ -14,18 +21,11 @@
             </intent-filter>    	
         </activity>
       	
-    	<activity android:label="View Article" android:name=".activities.article" >
-    		<intent-filter>
-    		</intent-filter>
-		</activity>
-
-		<activity android:label="Sections" android:name=".activities.sections"  >
-			<intent-filter>
-			</intent-filter>
-		</activity>
-
-		<activity android:name=".activities.section"  ><intent-filter></intent-filter>
-		</activity>
+    	<activity android:label="View Article" android:name=".activities.article" />
+    		
+		<activity android:label="Sections" android:name=".activities.sections" />
+	
+		<activity android:name=".activities.section" />
 
 		<activity android:name=".activities.sync" ></activity>
 
@@ -71,14 +71,5 @@
 		<meta-data android:name="android.app.default_searchable" android:value=".activities.tagsearch" />
 		
 	</application>
-	
-	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="8"/>
-	
-	<supports-screens android:largeScreens="true" android:normalScreens="true" android:smallScreens="true" anyDensity="true" />	
-	
-	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 		
 </manifest> 

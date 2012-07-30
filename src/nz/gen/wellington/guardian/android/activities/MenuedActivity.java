@@ -66,15 +66,10 @@ public abstract class MenuedActivity extends AbstractFontResizingActivity {
 			switchToSavedArticles();
 			return true;
 		case MenuedActivity.SEARCH:
-			switchToSearch();
-			return true;
+			onSearchRequested();
+			return true;		
 		}
 		return false;
-	}
-		
-	private void switchToSearch() {
-		Intent intent = new Intent(this, search.class);
-		this.startActivity(intent);	
 	}
 
 	protected final void swichToSync() {
