@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="nz.gen.wellington.guardian.android" 
-	android:versionName="2.14" android:versionCode="52" android:installLocation="auto" >
+	android:versionName="2.15" android:versionCode="53" android:installLocation="auto" >
 	
-    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="8"/>
+    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="11"/>
    	<supports-screens android:largeScreens="true" android:normalScreens="true" android:smallScreens="true" anyDensity="true" />	
     
    	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
@@ -72,4 +72,4 @@
 		
 	</application>
 		
-</manifest> 
+</manifest>
